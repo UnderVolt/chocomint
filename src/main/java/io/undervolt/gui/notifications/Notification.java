@@ -1,4 +1,4 @@
-package io.undervolt.client.gui.notifications;
+package io.undervolt.gui.notifications;
 
 import io.netty.util.concurrent.Promise;
 

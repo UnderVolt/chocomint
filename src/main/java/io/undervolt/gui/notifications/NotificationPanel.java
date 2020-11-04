@@ -1,10 +1,9 @@
-package io.undervolt.client.gui.notifications;
+package io.undervolt.gui.notifications;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 
 import java.awt.*;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class NotificationPanel extends Gui {

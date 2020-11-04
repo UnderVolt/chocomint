@@ -1,9 +1,8 @@
-package io.undervolt.client.gui;
+package io.undervolt.gui;
 
-import io.undervolt.client.gui.notifications.NotificationPanel;
+import io.undervolt.gui.notifications.NotificationPanel;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
 
 import java.awt.*;
 import java.io.IOException;
@@ -29,7 +28,7 @@ public class GameBar extends GuiScreen {
     public GameBar(final GuiScreen previousScreen) {
         this.previousScreen = previousScreen;
         this.notificationPanel = new NotificationPanel(this.mc, false,
-                this.mc.getClient().getNotificationManager());
+                this.mc.getChocomint().getNotificationManager());
     }
 
     @Override

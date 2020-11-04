@@ -1266,6 +1266,10 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         }
     }
 
+    public ChocoMintClient getChocomint() {
+        return this.mint;
+    }
+
     public int getLimitFramerate()
     {
         return this.theWorld == null && this.currentScreen != null ? 30 : this.gameSettings.limitFramerate;
