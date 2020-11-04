@@ -35,6 +35,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import javax.imageio.ImageIO;
+
+import io.undervolt.client.Client;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.audio.MusicTicker;
@@ -196,6 +198,9 @@ public class Minecraft implements IThreadListener, IPlayerUsage
     private static final List<DisplayMode> macDisplayModes = Lists.newArrayList(new DisplayMode[] {new DisplayMode(2560, 1600), new DisplayMode(2880, 1800)});
     private final File fileResourcepacks;
     private final PropertyMap twitchDetails;
+
+    /** Initialize Client */
+    private final Client client;
 
     /** The player's GameProfile properties */
     private final PropertyMap profileProperties;
@@ -386,6 +391,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
         this.fullscreen = gameConfig.displayInfo.fullscreen;
         this.jvm64bit = isJvm64bit();
         this.theIntegratedServer = new IntegratedServer(this);
+        this.client = new Client(this);
 
         if (gameConfig.serverInfo.serverName != null)
         {
@@ -567,6 +573,8 @@ public class Minecraft implements IThreadListener, IPlayerUsage
         this.effectRenderer = new EffectRenderer(this.theWorld, this.renderEngine);
         this.checkGLError("Post startup");
         this.ingameGUI = new GuiIngame(this);
+
+        this.client.startClient();
 
         if (this.serverName != null)
         {
@@ -1040,6 +1048,13 @@ public class Minecraft implements IThreadListener, IPlayerUsage
                 logger.error(i + ": " + s);
             }
         }
+    }
+
+    /**
+     * Returns the main Client class
+     */
+    public final Client getClient() {
+        return this.client;
     }
 
     /**
