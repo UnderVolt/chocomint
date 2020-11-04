@@ -1,6 +1,10 @@
 package io.undervolt.gui;
 
+import io.netty.util.concurrent.Promise;
+import io.undervolt.gui.notifications.Notification;
+import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.gui.notifications.NotificationPanel;
+import io.undervolt.instance.Chocomint;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
@@ -9,8 +13,12 @@ import java.io.IOException;
 
 public class GameBar extends GuiScreen {
 
+    /** Declare Chocomint */
+    private final Chocomint chocomint;
+
     /** Declare panel status */
-    public final NotificationPanel notificationPanel;
+    private final NotificationManager notificationManager;
+    public NotificationPanel notificationPanel;
 
     /** Declare screen resolution */
     // private ScaledResolution sr = new ScaledResolution(this.mc);
@@ -25,16 +33,36 @@ public class GameBar extends GuiScreen {
     private final GuiScreen previousScreen;
 
     /** Constructor */
-    public GameBar(final GuiScreen previousScreen) {
+    public GameBar(final GuiScreen previousScreen, final Chocomint chocomint) {
         this.previousScreen = previousScreen;
-        this.notificationPanel = new NotificationPanel(this.mc, false,
-                this.mc.getChocomint().getNotificationManager());
+        this.chocomint = chocomint;
+        this.notificationManager = this.chocomint.getNotificationManager();
     }
 
     @Override
     public void initGui() {
 
         super.initGui();
+
+        // Initialize Notifications
+        this.notificationPanel = new NotificationPanel(this.mc, true,
+                this.chocomint.getNotificationManager());
+
+        // Add mock notifications
+        this.chocomint.getNotificationManager().addNotification(
+                new Notification(
+                        Notification.Priority.WARNING,
+                        "Test Notification",
+                        "Description"
+                )
+        );
+        this.chocomint.getNotificationManager().addNotification(
+                new Notification(
+                        Notification.Priority.WARNING,
+                        "Test Notification",
+                        "Description"
+                )
+        );
 
         // Add buttons to the buttonList variable
         this.buttonList.add(this.notificationsButton = new GuiButton(
@@ -68,6 +96,8 @@ public class GameBar extends GuiScreen {
         // Draw logo placeholder until resources are loaded
         drawRect(4, 4, 19, 19, Color.RED.getRGB());
         drawString(this.mc.fontRendererObj, "chocomint", 24, 8, Color.WHITE.getRGB());
+
+        this.notificationPanel.drawPanel(this.width, this.height);
     }
 
     @Override
@@ -77,5 +107,12 @@ public class GameBar extends GuiScreen {
                 this.notificationPanel.toggleActive();
                 break;
         }
+    }
+
+    @Override
+    public void onGuiClosed() {
+        this.notificationManager.updateNotifications(
+                this.notificationManager.clearNotifications()
+        );
     }
 }
