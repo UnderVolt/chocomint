@@ -18,8 +18,7 @@ public class NotificationManager {
     }
 
     public List<Notification> deleteNotification(Notification notification) {
-        if(this.notificationList.contains(notification))
-            this.notificationList.remove(notification);
+        this.notificationList.remove(notification);
         return this.notificationList;
     }
 }
