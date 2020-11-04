@@ -6,7 +6,12 @@ import java.util.List;
 
 public class NotificationManager {
 
-    private final List<Notification> notificationList = Lists.newArrayList();
+    private List<Notification> notificationList = Lists.newArrayList();
+
+    public void updateNotifications(final List<Notification> notifications) {
+        this.clearNotifications();
+        this.notificationList = notifications;
+    }
 
     public final List<Notification> getNotifications() {
         return this.notificationList;
@@ -19,6 +24,11 @@ public class NotificationManager {
 
     public List<Notification> deleteNotification(Notification notification) {
         this.notificationList.remove(notification);
+        return this.notificationList;
+    }
+
+    public List<Notification> clearNotifications() {
+        this.notificationList.clear();
         return this.notificationList;
     }
 }
