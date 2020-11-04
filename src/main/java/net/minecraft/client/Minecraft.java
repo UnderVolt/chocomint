@@ -36,7 +36,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import javax.imageio.ImageIO;
 
-import io.undervolt.client.Client;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.audio.MusicTicker;
@@ -187,8 +186,11 @@ import org.lwjgl.opengl.OpenGLException;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
 
-public class Minecraft implements IThreadListener, IPlayerUsage
-{
+import io.undervolt.bridge.GameBridge;
+import io.undervolt.instance.ChocoMintClient;
+import io.undervolt.instance.LaunchType;
+
+public class Minecraft implements IThreadListener, IPlayerUsage {
     private static final Logger logger = LogManager.getLogger();
     private static final ResourceLocation locationMojangPng = new ResourceLocation("textures/gui/title/mojang.png");
     public static final boolean isRunningOnMac = Util.getOSType() == Util.EnumOS.OSX;
@@ -198,9 +200,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage
     private static final List<DisplayMode> macDisplayModes = Lists.newArrayList(new DisplayMode[] {new DisplayMode(2560, 1600), new DisplayMode(2880, 1800)});
     private final File fileResourcepacks;
     private final PropertyMap twitchDetails;
-
-    /** Initialize Client */
-    private final Client client;
 
     /** The player's GameProfile properties */
     private final PropertyMap profileProperties;
@@ -368,8 +367,10 @@ public class Minecraft implements IThreadListener, IPlayerUsage
     /** Profiler currently displayed in the debug screen pie chart */
     private String debugProfilerName = "root";
 
-    public Minecraft(GameConfiguration gameConfig)
-    {
+    /** Initialize Mint */
+    public ChocoMintClient mint;
+
+    public Minecraft(GameConfiguration gameConfig) {
         theMinecraft = this;
         this.mcDataDir = gameConfig.folderInfo.mcDataDir;
         this.fileAssets = gameConfig.folderInfo.assetsDir;
@@ -391,7 +392,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage
         this.fullscreen = gameConfig.displayInfo.fullscreen;
         this.jvm64bit = isJvm64bit();
         this.theIntegratedServer = new IntegratedServer(this);
-        this.client = new Client(this);
 
         if (gameConfig.serverInfo.serverName != null)
         {
@@ -510,7 +510,10 @@ public class Minecraft implements IThreadListener, IPlayerUsage
         this.mcSoundHandler = new SoundHandler(this.mcResourceManager, this.gameSettings);
         this.mcResourceManager.registerReloadListener(this.mcSoundHandler);
         this.mcMusicTicker = new MusicTicker(this);
-        this.fontRendererObj = new FontRenderer(this.gameSettings, new ResourceLocation("textures/font/ascii.png"), this.renderEngine, false);
+        this.fontRendererObj = new FontRenderer(this.gameSettings, new ResourceLocation("textures/font/ascii.png"), this.renderEngine, false);        
+
+        //[Mint]: Instance
+        this.mint = new ChocoMintClient();
 
         if (this.gameSettings.forceUnicodeFont != null)
         {
@@ -538,6 +541,8 @@ public class Minecraft implements IThreadListener, IPlayerUsage
             }
         });
         this.mouseHelper = new MouseHelper();
+        //[Mint]: Pre Init
+        this.mint.init(LaunchType.PREINIT);
         this.checkGLError("Pre startup");
         GlStateManager.enableTexture2D();
         GlStateManager.shadeModel(7425);
@@ -551,6 +556,8 @@ public class Minecraft implements IThreadListener, IPlayerUsage
         GlStateManager.loadIdentity();
         GlStateManager.matrixMode(5888);
         this.checkGLError("Startup");
+        //[Mint]: Init
+        this.mint.init(LaunchType.INIT);
         this.textureMapBlocks = new TextureMap("textures");
         this.textureMapBlocks.setMipmapLevels(this.gameSettings.mipmapLevels);
         this.renderEngine.loadTickableTexture(TextureMap.locationBlocksTexture, this.textureMapBlocks);
@@ -574,7 +581,8 @@ public class Minecraft implements IThreadListener, IPlayerUsage
         this.checkGLError("Post startup");
         this.ingameGUI = new GuiIngame(this);
 
-        this.client.startClient();
+        //[Mint]: Post Init
+        this.mint.init(LaunchType.POSTINIT);
 
         if (this.serverName != null)
         {
@@ -1048,13 +1056,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage
                 logger.error(i + ": " + s);
             }
         }
-    }
-
-    /**
-     * Returns the main Client class
-     */
-    public final Client getClient() {
-        return this.client;
     }
 
     /**

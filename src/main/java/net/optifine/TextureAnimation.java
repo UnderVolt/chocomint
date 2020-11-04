@@ -185,7 +185,7 @@ public class TextureAnimation
                                 {
                                     TextureAnimationFrame textureanimationframe1 = this.getFrame(this.currentFrameIndex + 1);
                                     double d0 = 1.0D * (double)textureanimationframe.counter / (double)textureanimationframe.duration;
-                                    this.updateTextureInerpolate(textureanimationframe, textureanimationframe1, d0);
+                                    this.updateTextureInterpolate(textureanimationframe, textureanimationframe1, d0);
                                 }
                             }
                             else
@@ -203,7 +203,7 @@ public class TextureAnimation
 
     //TODO: Validate This
 
-    private void updateTextureInerpolate(TextureAnimationFrame frame1, TextureAnimationFrame frame2, double k2)
+    private void updateTextureInterpolate(TextureAnimationFrame frame1, TextureAnimationFrame frame2, double k2)
     {
         int i = this.frameWidth * this.frameHeight * 4;
         int j = i * frame1.index;
