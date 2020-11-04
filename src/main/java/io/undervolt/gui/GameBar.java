@@ -7,6 +7,7 @@ import io.undervolt.gui.notifications.NotificationPanel;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
 
 import java.awt.*;
 import java.io.IOException;
@@ -21,7 +22,7 @@ public class GameBar extends GuiScreen {
     public NotificationPanel notificationPanel;
 
     /** Declare screen resolution */
-    // private ScaledResolution sr = new ScaledResolution(this.mc);
+    private ScaledResolution sr;
 
     /** Declare buttons */
     private GuiButton notificationsButton;
@@ -36,7 +37,8 @@ public class GameBar extends GuiScreen {
     public GameBar(final GuiScreen previousScreen, final Chocomint chocomint) {
         this.previousScreen = previousScreen;
         this.chocomint = chocomint;
-        this.notificationManager = this.chocomint.getNotificationManager();
+        this.notificationManager = chocomint.getNotificationManager();
+        this.sr = chocomint.getGameBridge().getScaledResolution();
     }
 
     @Override
@@ -45,24 +47,8 @@ public class GameBar extends GuiScreen {
         super.initGui();
 
         // Initialize Notifications
-        this.notificationPanel = new NotificationPanel(this.mc, true,
+        this.notificationPanel = new NotificationPanel(this.mc, false,
                 this.chocomint.getNotificationManager());
-
-        // Add mock notifications
-        this.chocomint.getNotificationManager().addNotification(
-                new Notification(
-                        Notification.Priority.WARNING,
-                        "Test Notification",
-                        "Description"
-                )
-        );
-        this.chocomint.getNotificationManager().addNotification(
-                new Notification(
-                        Notification.Priority.WARNING,
-                        "Test Notification",
-                        "Description"
-                )
-        );
 
         // Add buttons to the buttonList variable
         this.buttonList.add(this.notificationsButton = new GuiButton(
