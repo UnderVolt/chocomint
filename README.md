@@ -4,7 +4,7 @@
 
 # chocomint
 [![CodeFactor](https://www.codefactor.io/repository/github/undervolt/chocomint/badge)](https://www.codefactor.io/repository/github/undervolt/chocomint)
-[![dev chat](https://discordapp.com/api/guilds/646132850302779405/widget.png?style=shield)](https://discord.gg/https://discord.gg/PYdEpXp)
+[![dev chat](https://discordapp.com/api/guilds/646132850302779405/widget.png?style=shield)](https://discord.gg/PYdEpXp)
 
 In-development Minecraft ModLoader, Client and Optimizer.
 
