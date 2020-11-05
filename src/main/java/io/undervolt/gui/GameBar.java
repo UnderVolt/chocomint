@@ -102,6 +102,25 @@ public class GameBar extends GuiScreen {
     }
 
     @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+
+        // Toggle off userCard's visibility if clicked outside of rendered area
+        if(this.userCard.isActive()) {
+            if (mouseX < this.width - 132 || mouseX > this.width - 2
+                    || mouseY > 60)
+                this.userCard.setActive(false);
+        }
+
+        // Same as above, but with Notifications
+        if(this.notificationPanel.isActive()) {
+            if (mouseX < this.width - 120)
+                this.notificationPanel.setActive(false);
+        }
+
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+    }
+
+    @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         switch (button.id) {
             case 101:
