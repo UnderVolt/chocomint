@@ -655,7 +655,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
             }
             catch (InterruptedException var3)
             {
-                ;
+                var3.printStackTrace();
             }
 
             if (this.fullscreen)
@@ -754,7 +754,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                     }
                     catch (InterruptedException var2)
                     {
-                        ;
+                        var2.printStackTrace();
                     }
                 }
             }
@@ -1074,7 +1074,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
             }
             catch (Throwable var5)
             {
-                ;
+                var5.printStackTrace();
             }
 
             this.mcSoundHandler.unloadSounds();
@@ -1298,7 +1298,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         }
         catch (Throwable var2)
         {
-            ;
+            var2.printStackTrace();
         }
 
         System.gc();
@@ -1977,31 +1977,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                             this.refreshResources();
                         }
 
-                        if (k == 17 && Keyboard.isKeyDown(61))
-                        {
-                            ;
-                        }
-
-                        if (k == 18 && Keyboard.isKeyDown(61))
-                        {
-                            ;
-                        }
-
-                        if (k == 47 && Keyboard.isKeyDown(61))
-                        {
-                            ;
-                        }
-
-                        if (k == 38 && Keyboard.isKeyDown(61))
-                        {
-                            ;
-                        }
-
-                        if (k == 22 && Keyboard.isKeyDown(61))
-                        {
-                            ;
-                        }
-
                         if (k == 20 && Keyboard.isKeyDown(61))
                         {
                             this.refreshResources();
@@ -2144,21 +2119,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 if (!this.gameSettings.keyBindDrop.isKeyDown())
                 {
                     this.playerController.onStoppedUsingItem(this.thePlayer);
-                }
-
-                while (this.gameSettings.keyBindPickBlock.isPressed())
-                {
-                    ;
-                }
-
-                while (this.gameSettings.keyBindDrop.isPressed())
-                {
-                    ;
-                }
-
-                while (this.gameSettings.keyBindChat.isPressed())
-                {
-                    ;
                 }
             }
             else
@@ -2340,13 +2300,11 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 this.loadingScreen.displayLoadingString("");
             }
 
-            try
-            {
+            try {
                 Thread.sleep(200L);
             }
-            catch (InterruptedException var9)
-            {
-                ;
+            catch (InterruptedException var9) {
+                var9.printStackTrace();
             }
         }
 
