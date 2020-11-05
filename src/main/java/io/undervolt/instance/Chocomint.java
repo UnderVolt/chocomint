@@ -1,18 +1,23 @@
 package io.undervolt.instance;
 
 import io.undervolt.bridge.GameBridge;
+import io.undervolt.gui.RenderUtils;
 import io.undervolt.gui.notifications.NotificationManager;
+import io.undervolt.gui.user.User;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.Session;
 
 public class Chocomint {
 
     private final NotificationManager notificationManager;
     private GameBridge gameBridge;
+    private final RenderUtils renderUtils;
 
     /** Initialize constructor */
-    public Chocomint() {
+    public Chocomint(final Minecraft mc) {
         //TODO: Find out why it won't load inside init method
         this.notificationManager = new NotificationManager();
+        this.renderUtils = new RenderUtils(mc);
     }
 
     public void init(LaunchType type){
