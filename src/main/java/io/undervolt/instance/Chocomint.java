@@ -9,15 +9,13 @@ import net.minecraft.util.Session;
 
 public class Chocomint {
 
-    private final NotificationManager notificationManager;
+    private NotificationManager notificationManager;
     private final User user;
     private GameBridge gameBridge;
     private final RenderUtils renderUtils;
 
     /** Initialize constructor */
     public Chocomint(final Minecraft mc) {
-        //TODO: Find out why it won't load inside init method
-        this.notificationManager = new NotificationManager();
         this.user = new User(mc.getSession().getUsername(), User.Status.ONLINE);
         this.renderUtils = new RenderUtils(mc);
     }
@@ -26,7 +24,7 @@ public class Chocomint {
         switch(type){
             case PREINIT:
                 this.gameBridge = new GameBridge();
-                //this.notificationManager = new NotificationManager();
+                this.notificationManager = new NotificationManager();
                 //TODO: Load heavy stuff
                 //TODO: Load external mods
                 break;
