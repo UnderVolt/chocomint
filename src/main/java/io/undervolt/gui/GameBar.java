@@ -92,7 +92,8 @@ public class GameBar extends GuiScreen {
         drawRect(0, 0, this.width, 20, new Color(22, 22, 22).getRGB());
 
         // Draw logo placeholder until resources are loaded
-        drawRect(4, 4, 16, 16, Color.RED.getRGB());
+        drawRect(4, 4, 10, 16, new Color(65, 44, 25).getRGB());
+        drawRect(10, 4, 16, 16, new Color(63, 222, 160).getRGB());
         drawString(this.mc.fontRendererObj, "chocomint", 20, 6, Color.WHITE.getRGB());
 
         this.userCard.drawCard(this.width, this.height);
