@@ -16,9 +16,7 @@ In those, try to include every possible detail, since it will improve productivi
 
 ## Running chocomint
 Until releases start flowing, you can run chocomint if you have Gradle knowledge.
-In order to launch the game, you must follow these steps on your first run:
- - Run ``unzipNatives`` to properly set up the Minecraft environment
- - Run the ``startGame`` script to launch the game.
+In order to launch the game, you must run the ``startGame`` script.
 
 ## Developing chocomint
 Make sure you have the following before beginning:
