@@ -186,8 +186,7 @@ import org.lwjgl.opengl.OpenGLException;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
 
-import io.undervolt.bridge.GameBridge;
-import io.undervolt.instance.ChocoMintClient;
+import io.undervolt.instance.Chocomint;
 import io.undervolt.instance.LaunchType;
 
 public class Minecraft implements IThreadListener, IPlayerUsage {
@@ -368,7 +367,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
     private String debugProfilerName = "root";
 
     /** Initialize Mint */
-    public ChocoMintClient mint;
+    public Chocomint mint;
 
     public Minecraft(GameConfiguration gameConfig) {
         theMinecraft = this;
@@ -513,7 +512,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         this.fontRendererObj = new FontRenderer(this.gameSettings, new ResourceLocation("textures/font/ascii.png"), this.renderEngine, false);        
 
         //[Mint]: Instance
-        this.mint = new ChocoMintClient();
+        this.mint = new Chocomint(this);
 
         if (this.gameSettings.forceUnicodeFont != null)
         {
@@ -1264,6 +1263,10 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 this.resize(this.displayWidth, this.displayHeight);
             }
         }
+    }
+
+    public Chocomint getChocomint() {
+        return this.mint;
     }
 
     public int getLimitFramerate()
