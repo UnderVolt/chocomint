@@ -512,7 +512,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         this.fontRendererObj = new FontRenderer(this.gameSettings, new ResourceLocation("textures/font/ascii.png"), this.renderEngine, false);        
 
         //[Mint]: Instance
-        this.mint = new Chocomint();
+        this.mint = new Chocomint(this);
 
         if (this.gameSettings.forceUnicodeFont != null)
         {
