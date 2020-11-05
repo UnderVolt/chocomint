@@ -10,6 +10,7 @@ import net.minecraft.util.Session;
 public class Chocomint {
 
     private final NotificationManager notificationManager;
+    private final User user;
     private GameBridge gameBridge;
     private final RenderUtils renderUtils;
 
@@ -17,6 +18,7 @@ public class Chocomint {
     public Chocomint(final Minecraft mc) {
         //TODO: Find out why it won't load inside init method
         this.notificationManager = new NotificationManager();
+        this.user = new User(mc.getSession().getUsername(), User.Status.ONLINE);
         this.renderUtils = new RenderUtils(mc);
     }
 
@@ -43,6 +45,14 @@ public class Chocomint {
 
     public NotificationManager getNotificationManager() {
         return notificationManager;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public RenderUtils getRenderUtils() {
+        return renderUtils;
     }
 
 }
