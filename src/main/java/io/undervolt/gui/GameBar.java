@@ -58,7 +58,7 @@ public class GameBar extends GuiScreen {
                 this.chocomint.getNotificationManager());
 
         // Initialize User Card
-        this.userCard = new UserCard(this.mc, this.user, false);
+        this.userCard = new UserCard(this.chocomint, this.mc, this.user, false);
 
         // Add buttons to the buttonList variable
         this.buttonList.add(this.notificationsButton = new GameBarButton(
