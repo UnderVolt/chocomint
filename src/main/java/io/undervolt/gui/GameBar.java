@@ -4,6 +4,8 @@ import io.netty.util.concurrent.Promise;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.gui.notifications.NotificationPanel;
+import io.undervolt.gui.user.User;
+import io.undervolt.gui.user.UserCard;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -21,14 +23,18 @@ public class GameBar extends GuiScreen {
     private final NotificationManager notificationManager;
     public NotificationPanel notificationPanel;
 
+    /** Declare User card */
+    public UserCard userCard;
+    private final User user;
+
     /** Declare screen resolution */
     private ScaledResolution sr;
 
     /** Declare buttons */
-    private GuiButton notificationsButton;
-    private GuiButton userButton;
-    private GuiButton musicButton;
-    private GuiButton friendsButton;
+    private GameBarButton notificationsButton;
+    private GameBarButton userButton;
+    private GameBarButton musicButton;
+    private GameBarButton friendsButton;
 
     /** Declare requirement for previous screen, to prevent accumulation of cached Guis*/
     private final GuiScreen previousScreen;
@@ -39,34 +45,40 @@ public class GameBar extends GuiScreen {
         this.chocomint = chocomint;
         this.notificationManager = chocomint.getNotificationManager();
         this.sr = chocomint.getGameBridge().getScaledResolution();
+        // This is only a mock user under Minecraft's credentials.
+        // Will make use of the UnderVolt API in the future.
+        this.user = chocomint.getUser();
     }
 
     @Override
     public void initGui() {
 
-        super.initGui();
-
         // Initialize Notifications
         this.notificationPanel = new NotificationPanel(this.mc, false,
                 this.chocomint.getNotificationManager());
 
+        // Initialize User Card
+        this.userCard = new UserCard(this.mc, this.user, false);
+
         // Add buttons to the buttonList variable
-        this.buttonList.add(this.notificationsButton = new GuiButton(
+        this.buttonList.add(this.notificationsButton = new GameBarButton(
                 101,
-                22, 2, 20, 20, "N"
+                this.width - 20, 0, 20, 20, "N"
         ));
-        this.buttonList.add(this.userButton = new GuiButton(
+        this.buttonList.add(this.userButton = new GameBarButton(
                 102,
-                104, 2, 60, 20, "[] Usuario"
+                this.width - 84, 0, 62, 20, "[ ] Usuario"
         ));
-        this.buttonList.add(this.musicButton = new GuiButton(
+        this.buttonList.add(this.musicButton = new GameBarButton(
                 103,
-                130, 2, 20, 20, "M"
+                this.width - 108, 0, 20, 20, "M"
         ));
-        this.buttonList.add(this.notificationsButton = new GuiButton(
+        this.buttonList.add(this.notificationsButton = new GameBarButton(
                 104,
-                152, 2, 20, 20, "F"
+                this.width - 130, 0, 20, 20, "F"
         ));
+
+        super.initGui();
     }
 
     @Override
@@ -77,13 +89,16 @@ public class GameBar extends GuiScreen {
         drawRect(0, 0, this.width, this.height, new Color(138, 102, 102).getRGB());
 
         // Draw main rectangle (width x 20 res, #222)
-        drawRect(0, 0, this.width, 24, new Color(22, 22, 22).getRGB());
+        drawRect(0, 0, this.width, 20, new Color(22, 22, 22).getRGB());
 
         // Draw logo placeholder until resources are loaded
-        drawRect(4, 4, 19, 19, Color.RED.getRGB());
-        drawString(this.mc.fontRendererObj, "chocomint", 24, 8, Color.WHITE.getRGB());
+        drawRect(4, 4, 16, 16, Color.RED.getRGB());
+        drawString(this.mc.fontRendererObj, "chocomint", 20, 6, Color.WHITE.getRGB());
 
+        this.userCard.drawCard(this.width, this.height);
         this.notificationPanel.drawPanel(this.width, this.height);
+
+        super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     @Override
@@ -91,6 +106,11 @@ public class GameBar extends GuiScreen {
         switch (button.id) {
             case 101:
                 this.notificationPanel.toggleActive();
+                this.userCard.setActive(false);
+                break;
+            case 102:
+                this.userCard.toggleActive();
+                this.notificationPanel.setActive(false);
                 break;
         }
     }
