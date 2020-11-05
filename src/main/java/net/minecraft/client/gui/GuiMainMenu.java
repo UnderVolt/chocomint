@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import io.undervolt.gui.GameBar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -312,7 +314,7 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
 
         if (button.id == 1)
         {
-            this.mc.displayGuiScreen(new GuiSelectWorld(this));
+            this.mc.displayGuiScreen(new GameBar(this, this.mc.mint));
         }
 
         if (button.id == 2)

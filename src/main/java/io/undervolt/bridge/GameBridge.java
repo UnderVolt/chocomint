@@ -8,23 +8,23 @@ import net.minecraft.client.renderer.texture.TextureManager;
 
 public class GameBridge {
     
-    public static Minecraft getMinecraft() {
+    public Minecraft getMinecraft() {
         return Minecraft.getMinecraft();
     }
 
-    public static FontRenderer getFontRenderer() {
-        return GameBridge.getMinecraft().fontRendererObj;
+    public FontRenderer getFontRenderer() {
+        return this.getMinecraft().fontRendererObj;
     }
 
-    public static TextureManager getTextureManager() {
-        return GameBridge.getMinecraft().getTextureManager();
+    public TextureManager getTextureManager() {
+        return this.getMinecraft().getTextureManager();
     }
 
-    public static RenderManager getRenderManager() {
-        return GameBridge.getMinecraft().getRenderManager();
+    public RenderManager getRenderManager() {
+        return this.getMinecraft().getRenderManager();
     }
 
-    public static ScaledResolution getScaledResolution() {
-        return new ScaledResolution(GameBridge.getMinecraft());
+    public ScaledResolution getScaledResolution() {
+        return new ScaledResolution(this.getMinecraft());
     }
 }
