@@ -1,8 +1,11 @@
 package io.undervolt.gui.notifications;
 
-import io.netty.util.concurrent.Promise;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 
-public class Notification {
+import java.awt.*;
+
+public class Notification extends Gui {
 
     public enum Priority {
         NOTICE, SOCIAL, WARNING, ALERT, CRITICAL
@@ -16,4 +19,10 @@ public class Notification {
         this.description = description;
         this.priority = priority;
     }
+
+    public void draw(final FontRenderer fontRenderer, int x, int y) {
+        drawRect(x, y, x + 110, y + 20, Color.WHITE.getRGB());
+        fontRenderer.drawString(this.title, x + 2, y + 2, Color.BLACK.getRGB());
+    }
+
 }
