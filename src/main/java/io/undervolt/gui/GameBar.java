@@ -1,7 +1,5 @@
 package io.undervolt.gui;
 
-import io.netty.util.concurrent.Promise;
-import io.undervolt.gui.notifications.Notification;
 import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.gui.notifications.NotificationPanel;
 import io.undervolt.gui.user.User;
@@ -10,6 +8,7 @@ import io.undervolt.instance.Chocomint;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
 import java.io.IOException;
@@ -31,7 +30,7 @@ public class GameBar extends GuiScreen {
     private ScaledResolution sr;
 
     /** Declare buttons */
-    private GameBarButton notificationsButton;
+    private TextureGameBarButton notificationsButton;
     private GameBarButton userButton;
     private GameBarButton musicButton;
     private GameBarButton friendsButton;
@@ -61,9 +60,9 @@ public class GameBar extends GuiScreen {
         this.userCard = new UserCard(this.chocomint, this.mc, this.user, false);
 
         // Add buttons to the buttonList variable
-        this.buttonList.add(this.notificationsButton = new GameBarButton(
+        this.buttonList.add(this.notificationsButton = new TextureGameBarButton(
                 101,
-                this.width - 20, 0, 20, 20, "N"
+                this.width - 20, 0, 20, 20, "notifications"
         ));
         this.buttonList.add(this.userButton = new GameBarButton(
                 102,
@@ -73,7 +72,7 @@ public class GameBar extends GuiScreen {
                 103,
                 this.width - 108, 0, 20, 20, "M"
         ));
-        this.buttonList.add(this.notificationsButton = new GameBarButton(
+        this.buttonList.add(this.friendsButton = new GameBarButton(
                 104,
                 this.width - 130, 0, 20, 20, "F"
         ));
