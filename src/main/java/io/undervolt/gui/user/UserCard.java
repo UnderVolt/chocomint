@@ -24,11 +24,11 @@ public class UserCard extends Gui {
         if(this.isActive()) {
             this.chocomint.getRenderUtils().
                     drawRoundedRect(screenWidth - 132, 22, 130,
-                    38, 6, new Color(22, 22, 22).getRGB());
+                    38, 4, new Color(22, 22, 22).getRGB());
             // Placeholder for avatar
             this.chocomint.getRenderUtils().
                 drawRoundedRect(screenWidth - 128, 26, 30,
-                    30, 4, Color.RED.getRGB());
+                    30, 3, Color.RED.getRGB());
             drawString(mc.fontRendererObj, this.user.getUsername(), screenWidth - 94,
                     30, Color.WHITE.getRGB());
             drawString(mc.fontRendererObj, this.user.getStatusString().toUpperCase(),
