@@ -36,7 +36,7 @@ public class GameBar extends GuiScreen {
     private GameBarButton musicButton;
     private GameBarButton friendsButton;
 
-    /** Declare requirement for previous screen, to prevent accumulation of cached Guis*/
+    /** Declare requirement for previous screen, to prevent accumulation of cached Guis */
     private final GuiScreen previousScreen;
 
     /** Constructor */
