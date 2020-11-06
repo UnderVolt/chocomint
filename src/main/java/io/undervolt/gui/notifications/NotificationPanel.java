@@ -10,6 +10,7 @@ public class NotificationPanel extends Gui {
 
     private final Minecraft mc;
     private boolean isActive;
+    private boolean read;
 
     private final NotificationManager notificationManager;
 
@@ -27,13 +28,13 @@ public class NotificationPanel extends Gui {
                     29, Color.WHITE.getRGB());
             AtomicInteger x = new AtomicInteger();
             this.notificationManager.getNotifications().forEach(notification -> {
-                drawRect(screenWidth - 115, 40 + x.get(),
-                        screenWidth - 5, 60 + x.get(), Color.WHITE.getRGB());
-                this.mc.fontRendererObj.drawString(notification.title, screenWidth - 113,
-                        42 + x.get(), Color.BLACK.getRGB()
-                );
-                x.set(x.get() + 28);
+                notification.draw(this.mc, screenWidth - 115, 45 + x.get());
+                x.set(x.get() + 35);
             });
+        } else {
+            if(!this.read || this.notificationManager.getNotifications().size() > 0) {
+                //TODO: Modify icon with "unread notification"
+            }
         }
     }
 
@@ -43,10 +44,14 @@ public class NotificationPanel extends Gui {
 
     public void toggleActive() {
         this.isActive = !this.isActive;
+        this.setRead();
     }
-
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public void setRead() {
+        this.read = true;
     }
 }
