@@ -1,5 +1,6 @@
 package io.undervolt.gui.notifications;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 
@@ -20,9 +21,29 @@ public class Notification extends Gui {
         this.priority = priority;
     }
 
-    public void draw(final FontRenderer fontRenderer, int x, int y) {
-        drawRect(x, y, x + 110, y + 20, Color.WHITE.getRGB());
-        fontRenderer.drawString(this.title, x + 2, y + 2, Color.BLACK.getRGB());
+    public int getPriorityColor() {
+        switch(this.priority) {
+            case ALERT:
+                return new Color(255, 80, 0).getRGB();
+            case NOTICE:
+                return Color.GREEN.getRGB();
+            case SOCIAL:
+                return Color.CYAN.getRGB();
+            case WARNING:
+                return Color.ORANGE.getRGB();
+            case CRITICAL:
+                return Color.RED.getRGB();
+            default:
+                return Color.GRAY.getRGB();
+        }
+    }
+
+    public void draw(final Minecraft mc, int x, int y) {
+        mc.getChocomint().getRenderUtils()
+            .drawRoundedRect(x, y, 110, 30, 3, Color.WHITE.getRGB());
+        mc.getChocomint().getRenderUtils()
+            .drawFilledCircle(x + 12, y + 15, 8, this.getPriorityColor());
+        mc.fontRendererObj.drawString(this.title, x + 24, y + 4, Color.BLACK.getRGB());
     }
 
 }

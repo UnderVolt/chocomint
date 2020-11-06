@@ -27,8 +27,8 @@ public class NotificationPanel extends Gui {
                     29, Color.WHITE.getRGB());
             AtomicInteger x = new AtomicInteger();
             this.notificationManager.getNotifications().forEach(notification -> {
-                notification.draw(this.mc.fontRendererObj, screenWidth - 115, 40 + x.get());
-                x.set(x.get() + 28);
+                notification.draw(this.mc, screenWidth - 115, 45 + x.get());
+                x.set(x.get() + 35);
             });
         }
     }
