@@ -1,5 +1,6 @@
 package io.undervolt.instance;
 
+import io.undervolt.api.event.EventManager;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.RenderUtils;
 import io.undervolt.gui.notifications.NotificationManager;
@@ -13,6 +14,7 @@ public class Chocomint {
     private final User user;
     private GameBridge gameBridge;
     private final RenderUtils renderUtils;
+    private EventManager eventManager;
 
     /** Initialize constructor */
     public Chocomint(final Minecraft mc) {
@@ -25,6 +27,7 @@ public class Chocomint {
             case PREINIT:
                 this.gameBridge = new GameBridge();
                 this.notificationManager = new NotificationManager();
+                this.eventManager = new EventManager();
                 //TODO: Load heavy stuff
                 //TODO: Load external mods
                 break;
@@ -51,6 +54,10 @@ public class Chocomint {
 
     public RenderUtils getRenderUtils() {
         return renderUtils;
+    }
+
+    public EventManager getEventManager() {
+        return eventManager;
     }
 
 }
