@@ -17,14 +17,13 @@ import java.util.function.Consumer;
 public class RestUtils {
 
     private static RestUtils instance;
-    private String baseUrl = "http://api.undervolt.io/";
 
     public void sendJsonRequest(String endpoint, JSONObject obj, Consumer<String> callback) {
         try {
             HttpClient httpclient = HttpClients.createDefault();
             StringEntity requestEntity = new StringEntity(obj.toString(), ContentType.APPLICATION_JSON);
 
-            HttpPost postMethod = new HttpPost(baseUrl + endpoint);
+            HttpPost postMethod = new HttpPost(endpoint);
             postMethod.setEntity(requestEntity);
 
             HttpResponse response = httpclient.execute(postMethod);
@@ -44,7 +43,7 @@ public class RestUtils {
             HttpClient httpclient = HttpClients.createDefault();
             StringEntity requestEntity = new StringEntity(obj.toString(), ContentType.APPLICATION_JSON);
 
-            HttpPost postMethod = new HttpPost(baseUrl + endpoint);
+            HttpPost postMethod = new HttpPost(endpoint);
             postMethod.setEntity(requestEntity);
 
             HttpResponse response = httpclient.execute(postMethod);
@@ -65,7 +64,7 @@ public class RestUtils {
             HttpClient httpclient = HttpClients.createDefault();
             StringEntity requestEntity = new StringEntity(obj, ContentType.APPLICATION_JSON);
 
-            HttpPost postMethod = new HttpPost(baseUrl + endpoint);
+            HttpPost postMethod = new HttpPost(endpoint);
             postMethod.setEntity(requestEntity);
 
             HttpResponse response = httpclient.execute(postMethod);
