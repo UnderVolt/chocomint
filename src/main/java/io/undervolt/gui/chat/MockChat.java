@@ -84,15 +84,15 @@ public class MockChat extends GuiScreen {
         this.drawDefaultBackground();
         drawRect(0, 0, this.width, this.height, new Color(138, 102, 102).getRGB());
 
-        drawRect(0, this.height - 100, this.width, this.height,
-                Color.BLACK.getRGB());
-
-        drawRect(0, this.width - 100, this.width, this.height - 82,
-                new Color(36, 36, 36, 100).getRGB());
+        drawRect(0, this.height - 82, this.width, this.height, new Color(36, 36, 36, 100).getRGB());
 
         this.textField.drawTextBox();
         drawString(this.fontRendererObj, ">", 3, this.height - 10, Color.CYAN.getRGB());
 
+        GL11.glPushMatrix();
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        GL11.glScissor(0, 0, this.width, this.height - 82);
+        GL11.glColor3f(255,255,255);
 
         if(selectedTab != null) {
             int i = this.height - 21;
@@ -103,9 +103,12 @@ public class MockChat extends GuiScreen {
                 i = i - 12;
             }
         }
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+        GL11.glPopMatrix();
 
-        GL11.glScissor(0, this.height - 100, this.width, this.height);
-        GL11.glColor3f(255,255,255);
+        drawRect(0, this.height - 100, this.width, this.height - 82,
+                Color.BLACK.getRGB());
+
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
