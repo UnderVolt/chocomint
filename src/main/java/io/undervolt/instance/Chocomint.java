@@ -3,6 +3,7 @@ package io.undervolt.instance;
 import io.undervolt.api.event.EventManager;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.RenderUtils;
+import io.undervolt.gui.chat.ChatManager;
 import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.gui.user.User;
 import io.undervolt.utils.RestUtils;
@@ -12,6 +13,7 @@ import net.minecraft.util.Session;
 public class Chocomint {
 
     private NotificationManager notificationManager;
+    private ChatManager chatManager;
     private final User user;
     private GameBridge gameBridge;
     private final RenderUtils renderUtils;
@@ -35,6 +37,7 @@ public class Chocomint {
                 //TODO: Load external mods
                 break;
             case INIT:
+                this.chatManager = new ChatManager();
                 //TODO: Register events & hooks
                 break;
             case POSTINIT:
@@ -66,4 +69,9 @@ public class Chocomint {
     public EventManager getEventManager() {
         return eventManager;
     }
+  
+    public ChatManager getChatManager() {
+        return chatManager;
+    }
+
 }

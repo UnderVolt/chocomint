@@ -13,6 +13,7 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import io.undervolt.gui.GameBar;
+import io.undervolt.gui.chat.MockChat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -314,7 +315,7 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
 
         if (button.id == 1)
         {
-            this.mc.displayGuiScreen(new GameBar(this, this.mc.mint));
+            this.mc.displayGuiScreen(new MockChat(this, this.mc.getChocomint()));
         }
 
         if (button.id == 2)
