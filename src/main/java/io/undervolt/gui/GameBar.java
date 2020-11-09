@@ -32,8 +32,8 @@ public class GameBar extends GuiScreen {
     /** Declare buttons */
     private TextureGameBarButton notificationsButton;
     private GameBarButton userButton;
-    private GameBarButton musicButton;
-    private GameBarButton friendsButton;
+    private TextureGameBarButton musicButton;
+    private TextureGameBarButton friendsButton;
 
     /** Declare requirement for previous screen, to prevent accumulation of cached Guis */
     private final GuiScreen previousScreen;
@@ -68,13 +68,13 @@ public class GameBar extends GuiScreen {
                 102,
                 this.width - 84, 0, 62, 20, "[ ] Usuario"
         ));
-        this.buttonList.add(this.musicButton = new GameBarButton(
+        this.buttonList.add(this.musicButton = new TextureGameBarButton(
                 103,
-                this.width - 108, 0, 20, 20, "M"
+                this.width - 108, 0, 20, 20, "music"
         ));
-        this.buttonList.add(this.friendsButton = new GameBarButton(
+        this.buttonList.add(this.friendsButton = new TextureGameBarButton(
                 104,
-                this.width - 130, 0, 20, 20, "F"
+                this.width - 130, 0, 20, 20, "friends"
         ));
 
         super.initGui();
