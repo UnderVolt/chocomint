@@ -315,7 +315,7 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
 
         if (button.id == 1)
         {
-            this.mc.displayGuiScreen(new MockChat(this.mc.getChocomint()));
+            this.mc.displayGuiScreen(new MockChat(this, this.mc.getChocomint()));
         }
 
         if (button.id == 2)
