@@ -1,6 +1,7 @@
 package io.undervolt.gui.chat;
 
 import com.google.common.collect.Lists;
+import io.undervolt.gui.GameBarButton;
 import io.undervolt.gui.user.User;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.gui.GuiButton;
@@ -68,7 +69,7 @@ public class MockChat extends GuiScreen {
         AtomicInteger i = new AtomicInteger(0);
         AtomicInteger x = new AtomicInteger(0);
         this.chatManager.getOpenTabs().forEach(tab -> {
-            this.buttonList.add(new GuiButton(i.get(), x.get(), this.height - 100,
+            this.buttonList.add(new GameBarButton(i.get(), x.get(), (int)(this.height * 0.66) - 18,
                     10 + this.fontRendererObj.getStringWidth(tab.getName()),
                     18, tab.getName()));
             x.set(x.get() + 10 + this.fontRendererObj.getStringWidth(tab.getName()));
@@ -84,15 +85,15 @@ public class MockChat extends GuiScreen {
         this.drawDefaultBackground();
         drawRect(0, 0, this.width, this.height, new Color(138, 102, 102).getRGB());
 
-        drawRect(0, this.height - 100, this.width, this.height,
-                Color.BLACK.getRGB());
-
-        drawRect(0, this.width - 100, this.width, this.height - 82,
-                new Color(36, 36, 36, 100).getRGB());
+        drawRect(0, (int)(this.height * 0.66), this.width, this.height, new Color(36, 36, 36, 100).getRGB());
 
         this.textField.drawTextBox();
         drawString(this.fontRendererObj, ">", 3, this.height - 10, Color.CYAN.getRGB());
 
+        GL11.glPushMatrix();
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        GL11.glScissor(0, 0, this.width * 2, (int) (this.height * 0.66));
+        GL11.glColor3f(255,255,255);
 
         if(selectedTab != null) {
             int i = this.height - 21;
@@ -103,9 +104,12 @@ public class MockChat extends GuiScreen {
                 i = i - 12;
             }
         }
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+        GL11.glPopMatrix();
 
-        GL11.glScissor(0, this.height - 100, this.width, this.height);
-        GL11.glColor3f(255,255,255);
+        drawRect(0, (int)(this.height * 0.66) - 18, this.width, (int)(this.height * 0.66),
+                Color.BLACK.getRGB());
+
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
