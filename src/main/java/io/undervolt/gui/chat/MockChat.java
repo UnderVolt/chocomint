@@ -95,12 +95,13 @@ public class MockChat extends GuiScreen {
 
 
         if(selectedTab != null) {
-            AtomicInteger i = new AtomicInteger(this.height - 21);
-            selectedTab.getMessages().forEach(message -> {
+            int i = this.height - 21;
+            for (int id = selectedTab.getMessages().size(); id-- > 0; ) {
+                Message message = selectedTab.getMessages().get(id);
                 this.fontRendererObj.drawString("\247e" + message.getUser().getUsername() +
-                        "\247f: " + message.getMessage(), 5, i.get(), Color.WHITE.getRGB());
-                i.set(i.get() - 12);
-            });
+                        "\247f: " + message.getMessage(), 5, i, Color.WHITE.getRGB());
+                i = i - 12;
+            }
         }
 
         GL11.glScissor(0, this.height - 100, this.width, this.height);
@@ -120,8 +121,10 @@ public class MockChat extends GuiScreen {
             if(keyCode == 1) this.mc.displayGuiScreen(this.prev);
             this.textField.textboxKeyTyped(typedChar, keyCode);
         } else {
-            this.selectedTab.addMessage(this.chocomint.getUser(), this.textField.getText().trim());
-            this.textField.setText("");
+            if(!this.textField.getText().equals("")) {
+                this.selectedTab.addMessage(this.chocomint.getUser(), this.textField.getText().trim());
+                this.textField.setText("");
+            }
         }
     }
 }
