@@ -5,6 +5,7 @@ import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.RenderUtils;
 import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.gui.user.User;
+import io.undervolt.utils.RestUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
 
@@ -14,12 +15,14 @@ public class Chocomint {
     private final User user;
     private GameBridge gameBridge;
     private final RenderUtils renderUtils;
+    private final RestUtils restUtils;
     private EventManager eventManager;
 
     /** Initialize constructor */
     public Chocomint(final Minecraft mc) {
         this.user = new User(mc.getSession().getUsername(), User.Status.ONLINE);
         this.renderUtils = new RenderUtils(mc);
+        this.restUtils = new RestUtils();
     }
 
     public void init(LaunchType type){
@@ -56,8 +59,11 @@ public class Chocomint {
         return renderUtils;
     }
 
+    public RestUtils getRestUtils() {
+        return restUtils;
+    }
+  
     public EventManager getEventManager() {
         return eventManager;
     }
-
 }
