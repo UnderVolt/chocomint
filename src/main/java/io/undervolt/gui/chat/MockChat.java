@@ -5,6 +5,7 @@ import io.undervolt.gui.user.User;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -27,7 +28,15 @@ public class MockChat extends GuiScreen {
     private final User mockUser1;
     private final User mockUser2 = new User("Usuario2", User.Status.ONLINE);
 
-    public MockChat(final Chocomint chocomint) {
+    /** TextField */
+    private GuiTextField textField;
+
+    /** Previous GuiScreen */
+    private final GuiScreen prev;
+
+    public MockChat(final GuiScreen prev, final Chocomint chocomint) {
+        this.prev = prev;
+
         this.chocomint = chocomint;
         this.chatManager = this.chocomint.getChatManager();
         this.mockUser1 = chocomint.getUser();
@@ -43,6 +52,18 @@ public class MockChat extends GuiScreen {
 
     @Override
     public void initGui() {
+
+        if(this.chatManager.getOpenTabs().get(0) != null)
+            this.selectedTab = this.chatManager.getOpenTabs().get(0);
+
+        this.textField = new GuiTextField(0, this.fontRendererObj, 10,
+                this.height - 10, this.width, this.height);
+
+        this.textField.setEnableBackgroundDrawing(false);
+        this.textField.setFocused(true);
+        this.textField.setMaxStringLength(255);
+        this.textField.setCanLoseFocus(false);
+
 
         AtomicInteger i = new AtomicInteger(0);
         AtomicInteger x = new AtomicInteger(0);
@@ -69,9 +90,12 @@ public class MockChat extends GuiScreen {
         drawRect(0, this.width - 100, this.width, this.height - 82,
                 new Color(36, 36, 36, 100).getRGB());
 
+        this.textField.drawTextBox();
+        drawString(this.fontRendererObj, ">", 3, this.height - 10, Color.CYAN.getRGB());
+
 
         if(selectedTab != null) {
-            AtomicInteger i = new AtomicInteger(this.height - 12);
+            AtomicInteger i = new AtomicInteger(this.height - 21);
             selectedTab.getMessages().forEach(message -> {
                 this.fontRendererObj.drawString("\247e" + message.getUser().getUsername() +
                         "\247f: " + message.getMessage(), 5, i.get(), Color.WHITE.getRGB());
@@ -88,5 +112,16 @@ public class MockChat extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         this.selectedTab = this.chatManager.getOpenTabs().get(button.id);
+    }
+
+    @Override
+    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        if(keyCode != 28 && keyCode != 156) {
+            if(keyCode == 1) this.mc.displayGuiScreen(this.prev);
+            this.textField.textboxKeyTyped(typedChar, keyCode);
+        } else {
+            this.selectedTab.addMessage(this.chocomint.getUser(), this.textField.getText().trim());
+            this.textField.setText("");
+        }
     }
 }
