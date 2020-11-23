@@ -22,28 +22,31 @@ import java.util.stream.StreamSupport;
 
 public class ContributorsManager {
 
-    private final static LinkedHashMap<String, DynamicTexture> contributors = new LinkedHashMap<>();
-    private final static HashMap<String, Integer> commits = new HashMap<>();
-    private static String err = "";
+    private final Minecraft mc;
 
-    public static LinkedHashMap<String, DynamicTexture> getContributors() {
+    private final LinkedHashMap<String, DynamicTexture> contributors = new LinkedHashMap<>();
+    private final HashMap<String, Integer> commits = new HashMap<>();
+    private String err = "";
+
+    public final LinkedHashMap<String, DynamicTexture> getContributors() {
         return contributors;
     }
 
-    public static HashMap<String, Integer> getCommits() {
+    public final HashMap<String, Integer> getCommits() {
         return commits;
     }
 
-    public static String getErr() {
+    public final String getErr() {
         return err;
     }
 
-    public ContributorsManager() {
+    public ContributorsManager(final Minecraft mc) {
+        this.mc = mc;
         System.setProperty("http.agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
         fetch(1);
     }
 
-    private static void fetch(int tries) {
+    private void fetch(int tries) {
         try {
             String content = IOUtils.toString(URI.create("https://api.github.com/repos/undervolt/chocomint/stats/contributors"), StandardCharsets.UTF_8);
             JsonParser parser = new JsonParser();
@@ -54,11 +57,11 @@ public class ContributorsManager {
 
                 try {
                     BufferedImage bi = ImageIO.read(new URL(con.get("avatar_url").getAsString() + "&size=64"));
-                    Minecraft.getMinecraft().addScheduledTask(() -> {
+                    this.mc.addScheduledTask(() -> {
                         DynamicTexture tx = new DynamicTexture(bi);
 
                         try {
-                            tx.loadTexture(Minecraft.getMinecraft().getResourceManager());
+                            tx.loadTexture(this.mc.getResourceManager());
                             contributors.put(con.get("login").getAsString(), tx);
                             commits.put(con.get("login").getAsString(), o.get("total").getAsInt());
                         } catch (IOException e) {
