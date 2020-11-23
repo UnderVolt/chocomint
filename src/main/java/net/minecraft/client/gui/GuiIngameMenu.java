@@ -14,6 +14,7 @@ public class GuiIngameMenu extends GameBar
 {
     private int field_146445_a;
     private int field_146444_f;
+    private final Chocomint chocomint;
 
     /**
      * Constructor
@@ -22,6 +23,7 @@ public class GuiIngameMenu extends GameBar
      */
     public GuiIngameMenu(final Chocomint chocomint) {
         super(null, chocomint);
+        this.chocomint = chocomint;
     }
 
     /**
@@ -71,16 +73,16 @@ public class GuiIngameMenu extends GameBar
 
                 if (flag)
                 {
-                    this.mc.displayGuiScreen(new GuiMainMenu());
+                    this.mc.displayGuiScreen(new GuiMainMenu(this.chocomint));
                 }
                 else if (flag1)
                 {
                     RealmsBridge realmsbridge = new RealmsBridge();
-                    realmsbridge.switchToRealms(new GuiMainMenu());
+                    realmsbridge.switchToRealms(new GuiMainMenu(this.chocomint));
                 }
                 else
                 {
-                    this.mc.displayGuiScreen(new GuiMultiplayer(new GuiMainMenu()));
+                    this.mc.displayGuiScreen(new GuiMultiplayer(new GuiMainMenu(this.chocomint)));
                 }
 
             case 2:
@@ -120,6 +122,7 @@ public class GuiIngameMenu extends GameBar
      * Draws the screen and all the components in it. Args : mouseX, mouseY, renderPartialTicks
      */
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        this.drawDefaultBackground();
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
