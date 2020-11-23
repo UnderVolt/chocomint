@@ -1503,7 +1503,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
     {
         if (this.currentScreen == null)
         {
-            this.displayGuiScreen(new GuiIngameMenu());
+            this.displayGuiScreen(new GuiIngameMenu(this.getChocomint()));
 
             if (this.isSingleplayer() && !this.theIntegratedServer.getPublic())
             {
