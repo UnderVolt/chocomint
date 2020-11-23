@@ -38,6 +38,9 @@ public class GameBar extends GuiScreen {
     /** Declare requirement for previous screen, to prevent accumulation of cached Guis */
     private final GuiScreen previousScreen;
 
+    /** Enable background drawing */
+    private boolean backgroundDrawing;
+
     /** Constructor */
     public GameBar(final GuiScreen previousScreen, final Chocomint chocomint) {
         this.previousScreen = previousScreen;
@@ -84,7 +87,7 @@ public class GameBar extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 
         // Draw default background
-        this.drawDefaultBackground();
+        if(this.backgroundDrawing) this.drawDefaultBackground();
 
         // Draw main rectangle (width x 20 res, #222)
         drawRect(0, 0, this.width, 20, new Color(22, 22, 22).getRGB());
@@ -138,5 +141,9 @@ public class GameBar extends GuiScreen {
         this.notificationManager.updateNotifications(
                 this.notificationManager.clearNotifications()
         );
+    }
+
+    public void setBackgroundDrawing(boolean backgroundDrawing) {
+        this.backgroundDrawing = backgroundDrawing;
     }
 }
