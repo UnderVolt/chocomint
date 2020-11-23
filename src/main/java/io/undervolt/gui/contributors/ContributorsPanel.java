@@ -27,7 +27,7 @@ public class ContributorsPanel extends Gui {
                             ? "Cargando..." : "Contribuciones", 25,
                     29, Color.WHITE.getRGB());
             int x = 5;
-            AtomicInteger y = new AtomicInteger(40);
+            AtomicInteger y = new AtomicInteger(50);
             this.getContributorsManager().getContributors().forEach((contributorStatistic, textureId) -> {
                 GlStateManager.color(1f, 1f, 1f);
                 GlStateManager.bindTexture(textureId.getGlTextureId());
