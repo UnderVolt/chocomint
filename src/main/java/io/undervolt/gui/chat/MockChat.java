@@ -8,6 +8,7 @@ import io.undervolt.instance.Chocomint;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.multiplayer.ServerData;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -32,14 +33,22 @@ public class MockChat extends GameBar {
 
     /** TextField */
     private GuiTextField textField;
+    private String initialText;
 
     /** Previous GuiScreen */
     private final GuiScreen prev;
 
-    public MockChat(final GuiScreen prev, final Chocomint chocomint) {
+    /** Server chat */
+    private ServerData serverData;
+    private GameBarButton serverChatButton;
+
+    public MockChat(final String initialText, final GuiScreen prev, final Chocomint chocomint, final ServerData serverData) {
         super(prev, chocomint);
 
+        this.serverData = serverData;
+
         this.prev = prev;
+        this.initialText = initialText;
 
         this.chocomint = chocomint;
         this.chatManager = this.chocomint.getChatManager();
@@ -67,10 +76,17 @@ public class MockChat extends GameBar {
         this.textField.setFocused(true);
         this.textField.setMaxStringLength(255);
         this.textField.setCanLoseFocus(false);
+        this.textField.setText(this.initialText);
 
+        String serverString = this.serverData == null ? "Servidor" : this.serverData.serverIP;
 
         AtomicInteger i = new AtomicInteger(0);
-        AtomicInteger x = new AtomicInteger(0);
+        AtomicInteger x = new AtomicInteger(10 + this.fontRendererObj.getStringWidth(serverString));
+        this.buttonList.add(serverChatButton = new GameBarButton(1337099,
+                0, (int)(this.height * 0.66) - 18,
+                10 + this.fontRendererObj.getStringWidth(serverString),
+                18, serverString));
+        serverChatButton.enabled = this.serverData != null;
         this.chatManager.getOpenTabs().forEach(tab -> {
             this.buttonList.add(new GameBarButton(i.get(), x.get(), (int)(this.height * 0.66) - 18,
                     10 + this.fontRendererObj.getStringWidth(tab.getName()),
@@ -85,8 +101,7 @@ public class MockChat extends GameBar {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 
-        this.drawDefaultBackground();
-        drawRect(0, 0, this.width, this.height, new Color(138, 102, 102).getRGB());
+        drawRect(0, 0, this.width, this.height, new Color(0, 0, 0, 128).getRGB());
 
         drawRect(0, (int)(this.height * 0.66), this.width, this.height, new Color(36, 36, 36, 100).getRGB());
 
@@ -119,8 +134,10 @@ public class MockChat extends GameBar {
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
-        if(button.id < 1337100)
+        if(button.id < 1337098)
             this.selectedTab = this.chatManager.getOpenTabs().get(button.id);
+        else if (button.id == 1337099)
+            this.selectedTab = null;
         else super.actionPerformed(button);
     }
 

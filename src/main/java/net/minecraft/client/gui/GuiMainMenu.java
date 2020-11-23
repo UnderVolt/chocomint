@@ -366,7 +366,7 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
                 this.mc.displayGuiScreen(guiyesno);
             }
         }
-        if(button.id == 103) this.mc.displayGuiScreen(new MockChat(this, this.mc.getChocomint()));
+        if(button.id == 103) this.mc.displayGuiScreen(new MockChat("", this, this.mc.getChocomint(), null));
 
         super.actionPerformed(button);
     }
