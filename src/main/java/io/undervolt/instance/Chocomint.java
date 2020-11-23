@@ -4,6 +4,7 @@ import io.undervolt.api.event.EventManager;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.RenderUtils;
 import io.undervolt.gui.chat.ChatManager;
+import io.undervolt.gui.contributors.ContributorsManager;
 import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.gui.user.User;
 import io.undervolt.utils.RestUtils;
@@ -19,12 +20,15 @@ public class Chocomint {
     private final RenderUtils renderUtils;
     private final RestUtils restUtils;
     private EventManager eventManager;
+    private ContributorsManager contributorsManager;
+    private final Minecraft mc;
 
     /** Initialize constructor */
     public Chocomint(final Minecraft mc) {
         this.user = new User(mc.getSession().getUsername(), User.Status.ONLINE);
         this.renderUtils = new RenderUtils(mc);
         this.restUtils = new RestUtils();
+        this.mc = mc;
     }
 
     public void init(LaunchType type){
@@ -33,6 +37,7 @@ public class Chocomint {
                 this.gameBridge = new GameBridge();
                 this.notificationManager = new NotificationManager();
                 this.eventManager = new EventManager();
+                this.contributorsManager = new ContributorsManager(this.mc);
                 //TODO: Load heavy stuff
                 //TODO: Load external mods
                 break;
@@ -74,4 +79,7 @@ public class Chocomint {
         return chatManager;
     }
 
+    public ContributorsManager getContributorsManager() {
+        return contributorsManager;
+    }
 }
