@@ -32,7 +32,7 @@ public class GameBar extends GuiScreen {
     public ContributorsPanel contributorsPanel;
 
     /** Declare screen resolution */
-    private ScaledResolution sr;
+    private final ScaledResolution sr;
 
     /** Declare buttons */
     private TextureGameBarButton notificationsButton;
