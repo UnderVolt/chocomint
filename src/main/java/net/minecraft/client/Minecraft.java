@@ -36,6 +36,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import javax.imageio.ImageIO;
 
+import io.undervolt.gui.chat.MockChat;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.audio.MusicTicker;
@@ -2106,12 +2107,12 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
 
             while (this.gameSettings.keyBindPlayerList.isPressed() && flag)
             {
-                this.displayGuiScreen(new GuiChat());
+                this.displayGuiScreen(new MockChat("", null, this.getChocomint(), this.currentServerData));
             }
 
             if (this.currentScreen == null && this.gameSettings.keyBindScreenshot.isPressed() && flag)
             {
-                this.displayGuiScreen(new GuiChat("/"));
+                this.displayGuiScreen(new MockChat("/", null, this.getChocomint(), this.currentServerData));
             }
 
             if (this.thePlayer.isUsingItem())
