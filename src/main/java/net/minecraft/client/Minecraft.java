@@ -585,11 +585,11 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
 
         if (this.serverName != null)
         {
-            this.displayGuiScreen(new GuiConnecting(new GuiMainMenu(), this, this.serverName, this.serverPort));
+            this.displayGuiScreen(new GuiConnecting(new GuiMainMenu(this.getChocomint()), this, this.serverName, this.serverPort));
         }
         else
         {
-            this.displayGuiScreen(new GuiMainMenu());
+            this.displayGuiScreen(new GuiMainMenu(this.getChocomint()));
         }
 
         this.renderEngine.deleteTexture(this.mojangLogo);
@@ -1007,7 +1007,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
 
         if (guiScreenIn == null && this.theWorld == null)
         {
-            guiScreenIn = new GuiMainMenu();
+            guiScreenIn = new GuiMainMenu(this.getChocomint());
         }
         else if (guiScreenIn == null && this.thePlayer.getHealth() <= 0.0F)
         {
@@ -1503,7 +1503,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
     {
         if (this.currentScreen == null)
         {
-            this.displayGuiScreen(new GuiIngameMenu());
+            this.displayGuiScreen(new GuiIngameMenu(this.getChocomint()));
 
             if (this.isSingleplayer() && !this.theIntegratedServer.getPublic())
             {
