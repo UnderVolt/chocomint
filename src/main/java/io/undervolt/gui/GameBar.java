@@ -38,6 +38,9 @@ public class GameBar extends GuiScreen {
     /** Declare requirement for previous screen, to prevent accumulation of cached Guis */
     private final GuiScreen previousScreen;
 
+    /** Enable background drawing */
+    private boolean backgroundDrawing;
+
     /** Constructor */
     public GameBar(final GuiScreen previousScreen, final Chocomint chocomint) {
         this.previousScreen = previousScreen;
@@ -61,19 +64,19 @@ public class GameBar extends GuiScreen {
 
         // Add buttons to the buttonList variable
         this.buttonList.add(this.notificationsButton = new TextureGameBarButton(
-                101,
+                1337101,
                 this.width - 20, 0, 20, 20, "notifications"
         ));
         this.buttonList.add(this.userButton = new GameBarButton(
-                102,
+                1337102,
                 this.width - 84, 0, 62, 20, "[ ] Usuario"
         ));
         this.buttonList.add(this.musicButton = new TextureGameBarButton(
-                103,
+                1337103,
                 this.width - 108, 0, 20, 20, "music"
         ));
         this.buttonList.add(this.friendsButton = new TextureGameBarButton(
-                104,
+                1337104,
                 this.width - 130, 0, 20, 20, "friends"
         ));
 
@@ -84,8 +87,7 @@ public class GameBar extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 
         // Draw default background
-        this.drawDefaultBackground();
-        drawRect(0, 0, this.width, this.height, new Color(138, 102, 102).getRGB());
+        if(this.backgroundDrawing) this.drawDefaultBackground();
 
         // Draw main rectangle (width x 20 res, #222)
         drawRect(0, 0, this.width, 20, new Color(22, 22, 22).getRGB());
@@ -123,11 +125,11 @@ public class GameBar extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         switch (button.id) {
-            case 101:
+            case 1337101:
                 this.notificationPanel.toggleActive();
                 this.userCard.setActive(false);
                 break;
-            case 102:
+            case 1337102:
                 this.userCard.toggleActive();
                 this.notificationPanel.setActive(false);
                 break;
@@ -139,5 +141,9 @@ public class GameBar extends GuiScreen {
         this.notificationManager.updateNotifications(
                 this.notificationManager.clearNotifications()
         );
+    }
+
+    public void setBackgroundDrawing(boolean backgroundDrawing) {
+        this.backgroundDrawing = backgroundDrawing;
     }
 }

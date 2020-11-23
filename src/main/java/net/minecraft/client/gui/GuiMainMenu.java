@@ -13,7 +13,7 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import io.undervolt.gui.GameBar;
-import io.undervolt.gui.chat.MockChat;
+import io.undervolt.instance.Chocomint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -40,7 +40,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.Project;
 
-public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
+public class GuiMainMenu extends GameBar implements GuiYesNoCallback
 {
     private static final AtomicInteger field_175373_f = new AtomicInteger(0);
     private static final Logger logger = LogManager.getLogger();
@@ -96,8 +96,9 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
     private GuiButton modButton;
     private GuiScreen modUpdateNotification;
 
-    public GuiMainMenu()
+    public GuiMainMenu(final Chocomint chocomint)
     {
+        super(null, chocomint);
         this.openGLWarning2 = field_96138_a;
         this.L = false;
         this.splashText = "missingno";
@@ -202,6 +203,7 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
      */
     public void initGui()
     {
+        this.setBackgroundDrawing(false);
         this.viewportTexture = new DynamicTexture(256, 256);
         this.backgroundTexture = this.mc.getTextureManager().getDynamicTextureLocation("background", this.viewportTexture);
         Calendar calendar = Calendar.getInstance();
@@ -261,6 +263,8 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
             this.M.a(this.width, this.height);
             this.M.initGui();
         }
+        super.initGui();
+
     }
 
     /**
@@ -315,7 +319,7 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
 
         if (button.id == 1)
         {
-            this.mc.displayGuiScreen(new MockChat(this, this.mc.getChocomint()));
+            this.mc.displayGuiScreen(new GuiSelectWorld(this));
         }
 
         if (button.id == 2)
@@ -354,6 +358,8 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
                 this.mc.displayGuiScreen(guiyesno);
             }
         }
+
+        super.actionPerformed(button);
     }
 
     private void f()

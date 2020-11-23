@@ -1,16 +1,30 @@
 package net.minecraft.client.gui;
 
 import java.io.IOException;
+
+import io.undervolt.gui.GameBar;
+import io.undervolt.instance.Chocomint;
 import net.minecraft.client.gui.achievement.GuiAchievements;
 import net.minecraft.client.gui.achievement.GuiStats;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.realms.RealmsBridge;
 
-public class GuiIngameMenu extends GuiScreen
+public class GuiIngameMenu extends GameBar
 {
     private int field_146445_a;
     private int field_146444_f;
+    private final Chocomint chocomint;
+
+    /**
+     * Constructor
+     *
+     * @param chocomint
+     */
+    public GuiIngameMenu(final Chocomint chocomint) {
+        super(null, chocomint);
+        this.chocomint = chocomint;
+    }
 
     /**
      * Adds the buttons (and other controls) to the screen in question. Called when the GUI is displayed and when the
@@ -36,6 +50,7 @@ public class GuiIngameMenu extends GuiScreen
         this.buttonList.add(new GuiButton(5, this.width / 2 - 100, this.height / 4 + 48 + i, 98, 20, I18n.format("gui.achievements", new Object[0])));
         this.buttonList.add(new GuiButton(6, this.width / 2 + 2, this.height / 4 + 48 + i, 98, 20, I18n.format("gui.stats", new Object[0])));
         guibutton.enabled = this.mc.isSingleplayer() && !this.mc.getIntegratedServer().getPublic();
+        super.initGui();
     }
 
     /**
@@ -58,16 +73,16 @@ public class GuiIngameMenu extends GuiScreen
 
                 if (flag)
                 {
-                    this.mc.displayGuiScreen(new GuiMainMenu());
+                    this.mc.displayGuiScreen(new GuiMainMenu(this.chocomint));
                 }
                 else if (flag1)
                 {
                     RealmsBridge realmsbridge = new RealmsBridge();
-                    realmsbridge.switchToRealms(new GuiMainMenu());
+                    realmsbridge.switchToRealms(new GuiMainMenu(this.chocomint));
                 }
                 else
                 {
-                    this.mc.displayGuiScreen(new GuiMultiplayer(new GuiMainMenu()));
+                    this.mc.displayGuiScreen(new GuiMultiplayer(new GuiMainMenu(this.chocomint)));
                 }
 
             case 2:
@@ -91,6 +106,7 @@ public class GuiIngameMenu extends GuiScreen
             case 7:
                 this.mc.displayGuiScreen(new GuiShareToLan(this));
         }
+        super.actionPerformed(button);
     }
 
     /**
@@ -105,10 +121,10 @@ public class GuiIngameMenu extends GuiScreen
     /**
      * Draws the screen and all the components in it. Args : mouseX, mouseY, renderPartialTicks
      */
-    public void drawScreen(int mouseX, int mouseY, float partialTicks)
-    {
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
-        this.drawCenteredString(this.fontRendererObj, I18n.format("menu.game", new Object[0]), this.width / 2, 40, 16777215);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
+
+
 }
