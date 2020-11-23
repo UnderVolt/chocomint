@@ -13,6 +13,8 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import io.undervolt.gui.GameBar;
+import io.undervolt.gui.GameBarButton;
+import io.undervolt.gui.chat.MockChat;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -88,6 +90,9 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
     private int field_92020_v;
     private int field_92019_w;
     private ResourceLocation backgroundTexture;
+
+    /** Chat button */
+    private GameBarButton chatButton;
 
     /** Minecraft Realms button. */
     private GuiButton realmsButton;
@@ -249,6 +254,9 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
             this.field_92019_w = this.field_92021_u + 24;
         }
 
+        this.buttonList.add(chatButton = new GameBarButton(103,
+                this.width - 52, this.height - 15, 50, 15, "Chat"));
+
         this.mc.setConnectedToRealms(false);
 
         if (Minecraft.getMinecraft().gameSettings.getOptionOrdinalValue(GameSettings.Options.enumFloat) && !this.L)
@@ -358,6 +366,7 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
                 this.mc.displayGuiScreen(guiyesno);
             }
         }
+        if(button.id == 103) this.mc.displayGuiScreen(new MockChat(this, this.mc.getChocomint()));
 
         super.actionPerformed(button);
     }
