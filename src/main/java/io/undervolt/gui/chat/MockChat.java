@@ -1,6 +1,7 @@
 package io.undervolt.gui.chat;
 
 import com.google.common.collect.Lists;
+import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
 import io.undervolt.gui.user.User;
 import io.undervolt.instance.Chocomint;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MockChat extends GuiScreen {
+public class MockChat extends GameBar {
 
     /** Declare Chocomint */
     private final Chocomint chocomint;
@@ -36,6 +37,8 @@ public class MockChat extends GuiScreen {
     private final GuiScreen prev;
 
     public MockChat(final GuiScreen prev, final Chocomint chocomint) {
+        super(prev, chocomint);
+
         this.prev = prev;
 
         this.chocomint = chocomint;
@@ -116,7 +119,9 @@ public class MockChat extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
-        this.selectedTab = this.chatManager.getOpenTabs().get(button.id);
+        if(button.id < 1337100)
+            this.selectedTab = this.chatManager.getOpenTabs().get(button.id);
+        else super.actionPerformed(button);
     }
 
     @Override
