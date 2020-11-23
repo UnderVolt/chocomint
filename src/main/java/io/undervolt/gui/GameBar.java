@@ -1,5 +1,7 @@
 package io.undervolt.gui;
 
+import io.undervolt.gui.contributors.ContributorsManager;
+import io.undervolt.gui.contributors.ContributorsPanel;
 import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.gui.notifications.NotificationPanel;
 import io.undervolt.gui.user.User;
@@ -8,7 +10,6 @@ import io.undervolt.instance.Chocomint;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
 import java.io.IOException;
@@ -26,6 +27,10 @@ public class GameBar extends GuiScreen {
     public UserCard userCard;
     private final User user;
 
+    /** Declare contributors panel */
+    private final ContributorsManager contributorsManager;
+    public ContributorsPanel contributorsPanel;
+
     /** Declare screen resolution */
     private ScaledResolution sr;
 
@@ -34,6 +39,7 @@ public class GameBar extends GuiScreen {
     private GameBarButton userButton;
     private TextureGameBarButton musicButton;
     private TextureGameBarButton friendsButton;
+    private GameBarButton contributorsButton;
 
     /** Declare requirement for previous screen, to prevent accumulation of cached Guis */
     private final GuiScreen previousScreen;
@@ -50,6 +56,7 @@ public class GameBar extends GuiScreen {
         // This is only a mock user under Minecraft's credentials.
         // Will make use of the UnderVolt API in the future.
         this.user = chocomint.getUser();
+        this.contributorsManager = chocomint.getContributorsManager();
     }
 
     @Override
@@ -61,6 +68,9 @@ public class GameBar extends GuiScreen {
 
         // Initialize User Card
         this.userCard = new UserCard(this.chocomint, this.mc, this.user, false);
+
+        // Initialize Contributors Panel
+        this.contributorsPanel = new ContributorsPanel(this.mc, this.contributorsManager, false);
 
         // Add buttons to the buttonList variable
         this.buttonList.add(this.notificationsButton = new TextureGameBarButton(
@@ -78,6 +88,10 @@ public class GameBar extends GuiScreen {
         this.buttonList.add(this.friendsButton = new TextureGameBarButton(
                 1337104,
                 this.width - 130, 0, 20, 20, "friends"
+        ));
+        this.buttonList.add(this.contributorsButton = new GameBarButton(
+                1337105,
+                this.width - 154, 0, 20, 20, "C"
         ));
 
         super.initGui();
@@ -99,6 +113,7 @@ public class GameBar extends GuiScreen {
 
         this.userCard.drawCard(this.width, this.height);
         this.notificationPanel.drawPanel(this.width, this.height);
+        this.contributorsPanel.drawPanel(this.width, this.height);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
@@ -127,11 +142,18 @@ public class GameBar extends GuiScreen {
         switch (button.id) {
             case 1337101:
                 this.notificationPanel.toggleActive();
+                this.contributorsPanel.setActive(false);
                 this.userCard.setActive(false);
                 break;
             case 1337102:
                 this.userCard.toggleActive();
                 this.notificationPanel.setActive(false);
+                this.contributorsPanel.setActive(false);
+                break;
+            case 1337105:
+                this.notificationPanel.setActive(false);
+                this.userCard.setActive(false);
+                this.contributorsPanel.toggleActive();
                 break;
         }
     }
