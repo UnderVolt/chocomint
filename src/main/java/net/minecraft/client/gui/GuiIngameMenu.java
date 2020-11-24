@@ -3,6 +3,8 @@ package net.minecraft.client.gui;
 import java.io.IOException;
 
 import io.undervolt.gui.GameBar;
+import io.undervolt.gui.GameBarButton;
+import io.undervolt.gui.chat.Chat;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.gui.achievement.GuiAchievements;
 import net.minecraft.client.gui.achievement.GuiStats;
@@ -15,6 +17,9 @@ public class GuiIngameMenu extends GameBar
     private int field_146445_a;
     private int field_146444_f;
     private final Chocomint chocomint;
+
+    /** Chat button */
+    private GameBarButton chatButton;
 
     /**
      * Constructor
@@ -48,6 +53,8 @@ public class GuiIngameMenu extends GameBar
         GuiButton guibutton;
         this.buttonList.add(guibutton = new GuiButton(7, this.width / 2 + 2, this.height / 4 + 96 + i, 98, 20, I18n.format("menu.shareToLan", new Object[0])));
         this.buttonList.add(new GuiButton(5, this.width / 2 - 100, this.height / 4 + 48 + i, 98, 20, I18n.format("gui.achievements", new Object[0])));
+        this.buttonList.add(chatButton = new GameBarButton(103,
+                this.width - 52, this.height - 15, 50, 15, "Chat"));
         this.buttonList.add(new GuiButton(6, this.width / 2 + 2, this.height / 4 + 48 + i, 98, 20, I18n.format("gui.stats", new Object[0])));
         guibutton.enabled = this.mc.isSingleplayer() && !this.mc.getIntegratedServer().getPublic();
         super.initGui();
@@ -105,6 +112,9 @@ public class GuiIngameMenu extends GameBar
 
             case 7:
                 this.mc.displayGuiScreen(new GuiShareToLan(this));
+
+            case 103:
+                this.mc.displayGuiScreen(new Chat("", this, this.chocomint, this.mc.getCurrentServerData()));
         }
         super.actionPerformed(button);
     }
