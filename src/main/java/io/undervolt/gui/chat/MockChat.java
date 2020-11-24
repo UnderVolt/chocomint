@@ -38,36 +38,31 @@ public class MockChat extends GameBar {
     /** Previous GuiScreen */
     private final GuiScreen prev;
 
-    /** Server chat */
+    /** Server */
     private ServerData serverData;
-    private GameBarButton serverChatButton;
+    private GameBarButton serverReservedButton;
 
     public MockChat(final String initialText, final GuiScreen prev, final Chocomint chocomint, final ServerData serverData) {
         super(prev, chocomint);
-
-        this.serverData = serverData;
 
         this.prev = prev;
         this.initialText = initialText;
 
         this.chocomint = chocomint;
         this.chatManager = this.chocomint.getChatManager();
+
+        this.serverData = serverData;
+
         this.mockUser1 = chocomint.getUser();
-
-        this.chatManager.getOpenTabs().get(0).addMessage(mockUser1, "Mensaje 1");
-        this.chatManager.getOpenTabs().get(0).addMessage(mockUser2, "Mensaje 2");
-        this.chatManager.getOpenTabs().get(0).addMessage(mockUser1, "Mensaje 3");
-
-        this.chatManager.getOpenTabs().get(1).addMessage(mockUser2, "Mensaje 4");
-        this.chatManager.getOpenTabs().get(1).addMessage(mockUser1, "Mensaje 5");
-        this.chatManager.getOpenTabs().get(1).addMessage(mockUser2, "Mensaje 6");
     }
 
     @Override
     public void initGui() {
 
-        if(this.chatManager.getOpenTabs().get(0) != null)
-            this.selectedTab = this.chatManager.getOpenTabs().get(0);
+        if(this.serverData == null) {
+            if (this.chatManager.getOpenTabs().get(1) != null)
+                this.selectedTab = this.chatManager.getOpenTabs().get(1);
+        } else this.selectedTab = this.chatManager.getReservedServerTab();
 
         this.textField = new GuiTextField(0, this.fontRendererObj, 10,
                 this.height - 10, this.width, this.height);
@@ -78,15 +73,8 @@ public class MockChat extends GameBar {
         this.textField.setCanLoseFocus(false);
         this.textField.setText(this.initialText);
 
-        String serverString = this.serverData == null ? "Servidor" : this.serverData.serverIP;
-
         AtomicInteger i = new AtomicInteger(0);
-        AtomicInteger x = new AtomicInteger(10 + this.fontRendererObj.getStringWidth(serverString));
-        this.buttonList.add(serverChatButton = new GameBarButton(1337099,
-                0, (int)(this.height * 0.66) - 18,
-                10 + this.fontRendererObj.getStringWidth(serverString),
-                18, serverString));
-        serverChatButton.enabled = this.serverData != null;
+        AtomicInteger x = new AtomicInteger(0);
         this.chatManager.getOpenTabs().forEach(tab -> {
             this.buttonList.add(new GameBarButton(i.get(), x.get(), (int)(this.height * 0.66) - 18,
                     10 + this.fontRendererObj.getStringWidth(tab.getName()),
@@ -94,6 +82,16 @@ public class MockChat extends GameBar {
             x.set(x.get() + 10 + this.fontRendererObj.getStringWidth(tab.getName()));
             i.set(i.get() + 1);
         });
+
+        this.serverReservedButton = (GameBarButton) this.buttonList.get(this.chatManager.getOpenTabs().indexOf(this.chatManager.getReservedServerTab()));
+
+        if(this.serverData == null) {
+            this.serverReservedButton.enabled = false;
+            this.serverReservedButton.buttonText = "No conectado";
+        } else {
+            this.serverReservedButton.enabled = true;
+            this.serverReservedButton.buttonText = this.serverData.serverIP;
+        }
 
         super.initGui();
     }
@@ -117,8 +115,9 @@ public class MockChat extends GameBar {
             int i = this.height - 21;
             for (int id = selectedTab.getMessages().size(); id-- > 0; ) {
                 Message message = selectedTab.getMessages().get(id);
-                this.fontRendererObj.drawString("\247e" + message.getUser().getUsername() +
-                        "\247f: " + message.getMessage(), 5, i, Color.WHITE.getRGB());
+                this.fontRendererObj.drawString("\247e" +
+                        (message.getUser() != null ? message.getUser().getUsername() + "\247f: " : "")
+                        + message.getMessage(), 5, i, Color.WHITE.getRGB());
                 i = i - 12;
             }
         }
@@ -136,8 +135,6 @@ public class MockChat extends GameBar {
     protected void actionPerformed(GuiButton button) throws IOException {
         if(button.id < 1337098)
             this.selectedTab = this.chatManager.getOpenTabs().get(button.id);
-        else if (button.id == 1337099)
-            this.selectedTab = null;
         else super.actionPerformed(button);
     }
 
@@ -148,7 +145,10 @@ public class MockChat extends GameBar {
             this.textField.textboxKeyTyped(typedChar, keyCode);
         } else {
             if(!this.textField.getText().equals("")) {
-                this.selectedTab.addMessage(this.chocomint.getUser(), this.textField.getText().trim());
+                if(this.selectedTab == this.chatManager.getReservedServerTab())
+                    this.mc.thePlayer.sendChatMessage(this.textField.getText().trim());
+                else
+                    this.selectedTab.addMessage(this.chocomint.getUser(), this.textField.getText().trim());
                 this.textField.setText("");
             }
         }
