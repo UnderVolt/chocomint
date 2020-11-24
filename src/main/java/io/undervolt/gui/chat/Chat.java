@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MockChat extends GameBar {
+public class Chat extends GameBar {
 
     /** Declare Chocomint */
     private final Chocomint chocomint;
@@ -42,7 +42,7 @@ public class MockChat extends GameBar {
     private ServerData serverData;
     private GameBarButton serverReservedButton;
 
-    public MockChat(final String initialText, final GuiScreen prev, final Chocomint chocomint, final ServerData serverData) {
+    public Chat(final String initialText, final GuiScreen prev, final Chocomint chocomint, final ServerData serverData) {
         super(prev, chocomint);
 
         this.prev = prev;
