@@ -3,6 +3,8 @@ package net.minecraft.client.gui;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
+
+import io.undervolt.gui.chat.MockChat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,6 +20,11 @@ public class GuiNewChat extends Gui
     private final Minecraft mc;
     private final List<String> sentMessages = Lists.<String>newArrayList();
     private final List<ChatLine> chatLines = Lists.<ChatLine>newArrayList();
+
+    public List<ChatLine> getDrawnChatLines() {
+        return drawnChatLines;
+    }
+
     private final List<ChatLine> drawnChatLines = Lists.<ChatLine>newArrayList();
     private int scrollPos;
     private boolean isScrolled;
@@ -29,6 +36,7 @@ public class GuiNewChat extends Gui
 
     public void drawChat(int updateCounter)
     {
+        if(this.mc.currentScreen instanceof MockChat) return;
         if (this.mc.gameSettings.chatVisibility != EntityPlayer.EnumChatVisibility.HIDDEN)
         {
             int i = this.getLineCount();
@@ -125,6 +133,7 @@ public class GuiNewChat extends Gui
 
     public void printChatMessage(IChatComponent chatComponent)
     {
+        this.mc.getChocomint().getChatManager().getReservedServerTab().addMessage(null, chatComponent.getFormattedText());
         this.printChatMessageWithOptionalDeletion(chatComponent, 0);
     }
 
@@ -201,6 +210,7 @@ public class GuiNewChat extends Gui
     {
         if (this.sentMessages.isEmpty() || !((String)this.sentMessages.get(this.sentMessages.size() - 1)).equals(message))
         {
+            this.mc.getChocomint().getChatManager().getReservedServerTab().addMessage(null, message);
             this.sentMessages.add(message);
         }
     }
