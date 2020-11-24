@@ -1,6 +1,5 @@
 package io.undervolt.gui.chat;
 
-import com.google.common.collect.Lists;
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
 import io.undervolt.gui.user.User;
@@ -13,9 +12,6 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Chat extends GameBar {
@@ -99,8 +95,7 @@ public class Chat extends GameBar {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 
-        drawRect(0, 0, this.width, this.height, new Color(0, 0, 0, 128).getRGB());
-
+        this.drawDefaultBackground();
         drawRect(0, (int)(this.height * 0.66), this.width, this.height, new Color(36, 36, 36, 100).getRGB());
 
         this.textField.drawTextBox();
