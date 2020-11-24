@@ -1,12 +1,14 @@
 package io.undervolt.gui.chat;
 
 import com.google.common.collect.Lists;
+import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
 import io.undervolt.gui.user.User;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.multiplayer.ServerData;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -16,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MockChat extends GuiScreen {
+public class Chat extends GameBar {
 
     /** Declare Chocomint */
     private final Chocomint chocomint;
@@ -31,31 +33,36 @@ public class MockChat extends GuiScreen {
 
     /** TextField */
     private GuiTextField textField;
+    private String initialText;
 
     /** Previous GuiScreen */
     private final GuiScreen prev;
 
-    public MockChat(final GuiScreen prev, final Chocomint chocomint) {
+    /** Server */
+    private ServerData serverData;
+    private GameBarButton serverReservedButton;
+
+    public Chat(final String initialText, final GuiScreen prev, final Chocomint chocomint, final ServerData serverData) {
+        super(prev, chocomint);
+
         this.prev = prev;
+        this.initialText = initialText;
 
         this.chocomint = chocomint;
         this.chatManager = this.chocomint.getChatManager();
+
+        this.serverData = serverData;
+
         this.mockUser1 = chocomint.getUser();
-
-        this.chatManager.getOpenTabs().get(0).addMessage(mockUser1, "Mensaje 1");
-        this.chatManager.getOpenTabs().get(0).addMessage(mockUser2, "Mensaje 2");
-        this.chatManager.getOpenTabs().get(0).addMessage(mockUser1, "Mensaje 3");
-
-        this.chatManager.getOpenTabs().get(1).addMessage(mockUser2, "Mensaje 4");
-        this.chatManager.getOpenTabs().get(1).addMessage(mockUser1, "Mensaje 5");
-        this.chatManager.getOpenTabs().get(1).addMessage(mockUser2, "Mensaje 6");
     }
 
     @Override
     public void initGui() {
 
-        if(this.chatManager.getOpenTabs().get(0) != null)
-            this.selectedTab = this.chatManager.getOpenTabs().get(0);
+        if(this.serverData == null) {
+            if (this.chatManager.getOpenTabs().get(1) != null)
+                this.selectedTab = this.chatManager.getOpenTabs().get(1);
+        } else this.selectedTab = this.chatManager.getReservedServerTab();
 
         this.textField = new GuiTextField(0, this.fontRendererObj, 10,
                 this.height - 10, this.width, this.height);
@@ -64,7 +71,7 @@ public class MockChat extends GuiScreen {
         this.textField.setFocused(true);
         this.textField.setMaxStringLength(255);
         this.textField.setCanLoseFocus(false);
-
+        this.textField.setText(this.initialText);
 
         AtomicInteger i = new AtomicInteger(0);
         AtomicInteger x = new AtomicInteger(0);
@@ -76,14 +83,23 @@ public class MockChat extends GuiScreen {
             i.set(i.get() + 1);
         });
 
+        this.serverReservedButton = (GameBarButton) this.buttonList.get(this.chatManager.getOpenTabs().indexOf(this.chatManager.getReservedServerTab()));
+
+        if(this.serverData == null) {
+            this.serverReservedButton.enabled = false;
+            this.serverReservedButton.buttonText = "No conectado";
+        } else {
+            this.serverReservedButton.enabled = true;
+            this.serverReservedButton.buttonText = this.serverData.serverIP;
+        }
+
         super.initGui();
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 
-        this.drawDefaultBackground();
-        drawRect(0, 0, this.width, this.height, new Color(138, 102, 102).getRGB());
+        drawRect(0, 0, this.width, this.height, new Color(0, 0, 0, 128).getRGB());
 
         drawRect(0, (int)(this.height * 0.66), this.width, this.height, new Color(36, 36, 36, 100).getRGB());
 
@@ -99,8 +115,9 @@ public class MockChat extends GuiScreen {
             int i = this.height - 21;
             for (int id = selectedTab.getMessages().size(); id-- > 0; ) {
                 Message message = selectedTab.getMessages().get(id);
-                this.fontRendererObj.drawString("\247e" + message.getUser().getUsername() +
-                        "\247f: " + message.getMessage(), 5, i, Color.WHITE.getRGB());
+                this.fontRendererObj.drawString("\247e" +
+                        (message.getUser() != null ? message.getUser().getUsername() + "\247f: " : "")
+                        + message.getMessage(), 5, i, Color.WHITE.getRGB());
                 i = i - 12;
             }
         }
@@ -116,7 +133,9 @@ public class MockChat extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
-        this.selectedTab = this.chatManager.getOpenTabs().get(button.id);
+        if(button.id < 1337098)
+            this.selectedTab = this.chatManager.getOpenTabs().get(button.id);
+        else super.actionPerformed(button);
     }
 
     @Override
@@ -126,7 +145,10 @@ public class MockChat extends GuiScreen {
             this.textField.textboxKeyTyped(typedChar, keyCode);
         } else {
             if(!this.textField.getText().equals("")) {
-                this.selectedTab.addMessage(this.chocomint.getUser(), this.textField.getText().trim());
+                if(this.selectedTab == this.chatManager.getReservedServerTab())
+                    this.mc.thePlayer.sendChatMessage(this.textField.getText().trim());
+                else
+                    this.selectedTab.addMessage(this.chocomint.getUser(), this.textField.getText().trim());
                 this.textField.setText("");
             }
         }

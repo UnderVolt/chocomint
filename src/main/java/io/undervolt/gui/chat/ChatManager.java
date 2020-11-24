@@ -6,9 +6,16 @@ import java.util.List;
 
 public class ChatManager {
 
+    private final Tab reservedServerTab = new Tab(true, "server_reserved", -1);
+    private final Tab reservedLogTab = new Tab(false, "#debug-log", -1);
+
+    public Tab getReservedServerTab() {
+        return reservedServerTab;
+    }
+
     private List<Tab> openTabs = Lists.newArrayList(
-            new Tab("#general", 2),
-            new Tab("#general-2", 1)
+            reservedServerTab, reservedLogTab,
+            new Tab(true, "#general", 2)
     );
 
     public List<Tab> getOpenTabs() {
