@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
 
-import io.undervolt.gui.chat.MockChat;
+import io.undervolt.gui.chat.Chat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,7 +36,7 @@ public class GuiNewChat extends Gui
 
     public void drawChat(int updateCounter)
     {
-        if(this.mc.currentScreen instanceof MockChat) return;
+        if(this.mc.currentScreen instanceof Chat) return;
         if (this.mc.gameSettings.chatVisibility != EntityPlayer.EnumChatVisibility.HIDDEN)
         {
             int i = this.getLineCount();

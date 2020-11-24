@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
-import io.undervolt.gui.chat.MockChat;
+import io.undervolt.gui.chat.Chat;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -366,7 +366,7 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
                 this.mc.displayGuiScreen(guiyesno);
             }
         }
-        if(button.id == 103) this.mc.displayGuiScreen(new MockChat("", this, this.mc.getChocomint(), null));
+        if(button.id == 103) this.mc.displayGuiScreen(new Chat("", this, this.mc.getChocomint(), null));
 
         super.actionPerformed(button);
     }
