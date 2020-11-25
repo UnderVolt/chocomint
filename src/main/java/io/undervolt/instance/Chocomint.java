@@ -3,6 +3,7 @@ package io.undervolt.instance;
 import io.undervolt.api.event.EventManager;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.console.Console;
+import io.undervolt.console.commands.VersionCommand;
 import io.undervolt.gui.RenderUtils;
 import io.undervolt.gui.chat.ChatManager;
 import io.undervolt.gui.contributors.ContributorsManager;
@@ -47,6 +48,8 @@ public class Chocomint {
             case INIT:
                 this.chatManager = new ChatManager();
                 this.console = new Console(this);
+                // Register Commands
+                this.console.registerCommand(new VersionCommand(this));
                 //TODO: Register events & hooks
                 break;
             case POSTINIT:
