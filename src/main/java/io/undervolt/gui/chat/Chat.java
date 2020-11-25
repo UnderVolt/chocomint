@@ -1,5 +1,7 @@
 package io.undervolt.gui.chat;
 
+import com.google.common.collect.Lists;
+import io.undervolt.console.Console;
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
 import io.undervolt.gui.user.User;
@@ -24,12 +26,13 @@ public class Chat extends GameBar {
 
     /** Declaring everything related to tabs */
     private Tab selectedTab;
-    private final User mockUser1;
-    private final User mockUser2 = new User("Usuario2", User.Status.ONLINE);
 
     /** TextField */
     private GuiTextField textField;
     private String initialText;
+
+    /** Console */
+    private final Console console;
 
     /** Previous GuiScreen */
     private final GuiScreen prev;
@@ -49,7 +52,7 @@ public class Chat extends GameBar {
 
         this.serverData = serverData;
 
-        this.mockUser1 = chocomint.getUser();
+        this.console = this.chocomint.getConsole();
     }
 
     @Override
@@ -142,10 +145,18 @@ public class Chat extends GameBar {
             if(!this.textField.getText().equals("")) {
                 if(this.selectedTab == this.chatManager.getReservedServerTab())
                     this.mc.thePlayer.sendChatMessage(this.textField.getText().trim());
+                else if(this.selectedTab == this.chatManager.getReservedLogTab()) {
+                    this.selectedTab.addMessage(this.chocomint.getUser(), this.textField.getText());
+                    this.console.processCommand(this.chatManager.getReservedLogTab(), this.textField.getText());
+                }
                 else
                     this.selectedTab.addMessage(this.chocomint.getUser(), this.textField.getText().trim());
                 this.textField.setText("");
             }
         }
+    }
+
+    public Console getConsole() {
+        return console;
     }
 }
