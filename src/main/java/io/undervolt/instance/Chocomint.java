@@ -1,6 +1,7 @@
 package io.undervolt.instance;
 
 import io.undervolt.api.event.EventManager;
+import io.undervolt.api.event.events.InitEvent;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.console.Console;
 import io.undervolt.console.commands.HelpCommand;
@@ -43,15 +44,20 @@ public class Chocomint {
                 this.notificationManager = new NotificationManager();
                 this.eventManager = new EventManager();
                 this.contributorsManager = new ContributorsManager(this.mc);
+
                 //TODO: Load heavy stuff
                 //TODO: Load external mods
                 break;
             case INIT:
                 this.chatManager = new ChatManager();
                 this.console = new Console(this);
+
                 // Register Commands
                 this.console.registerCommand(new VersionCommand(this));
                 this.console.registerCommand(new HelpCommand(this));
+
+                this.eventManager.callEvent(new InitEvent());
+
                 //TODO: Register events & hooks
                 break;
             case POSTINIT:
