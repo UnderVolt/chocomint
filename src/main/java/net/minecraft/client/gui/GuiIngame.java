@@ -6,6 +6,8 @@ import com.google.common.collect.Lists;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+
+import io.undervolt.api.event.events.RenderGameOverlayEvent;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -338,6 +340,8 @@ public class GuiIngame extends Gui
         {
             this.renderScoreboard(scoreobjective1, scaledresolution);
         }
+
+        this.mc.getChocomint().getEventManager().callEvent(new RenderGameOverlayEvent());
 
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
