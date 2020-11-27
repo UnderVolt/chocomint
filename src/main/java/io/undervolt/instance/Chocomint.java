@@ -45,6 +45,8 @@ public class Chocomint {
                 this.eventManager = new EventManager();
                 this.contributorsManager = new ContributorsManager(this.mc);
 
+                this.eventManager.callEvent(new InitEvent.PreInitEvent());
+
                 //TODO: Load heavy stuff
                 //TODO: Load external mods
                 break;
@@ -56,11 +58,14 @@ public class Chocomint {
                 this.console.registerCommand(new VersionCommand(this));
                 this.console.registerCommand(new HelpCommand(this));
 
-                this.eventManager.callEvent(new InitEvent());
+                this.eventManager.callEvent(new InitEvent.ClientInitEvent());
 
                 //TODO: Register events & hooks
                 break;
             case POSTINIT:
+
+                this.eventManager.callEvent(new InitEvent.PostInitEvent());
+
                 //TODO: Throw post setup
                 break;            
         }
