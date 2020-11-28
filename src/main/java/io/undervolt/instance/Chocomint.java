@@ -2,6 +2,7 @@ package io.undervolt.instance;
 
 import io.undervolt.api.event.EventManager;
 import io.undervolt.api.event.events.InitEvent;
+import io.undervolt.api.screenshot.ScreenshotUploader;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.console.Console;
 import io.undervolt.console.commands.HelpCommand;
@@ -27,6 +28,7 @@ public class Chocomint {
     private ContributorsManager contributorsManager;
     private final Minecraft mc;
     private Console console;
+    private ScreenshotUploader screenshotUploader;
 
     /** Initialize constructor */
     public Chocomint(final Minecraft mc) {
@@ -53,6 +55,7 @@ public class Chocomint {
             case INIT:
                 this.chatManager = new ChatManager();
                 this.console = new Console(this);
+                this.screenshotUploader = new ScreenshotUploader(this);
 
                 // Register Commands
                 this.console.registerCommand(new VersionCommand(this));
@@ -109,5 +112,9 @@ public class Chocomint {
 
     public Console getConsole() {
         return console;
+    }
+
+    public ScreenshotUploader getScreenshotUploader() {
+        return screenshotUploader;
     }
 }
