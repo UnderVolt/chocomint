@@ -146,7 +146,7 @@ public class ScreenShotHelper
             ichatcomponent.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, file2.getAbsolutePath()));
             ichatcomponent.getChatStyle().setUnderlined(true);
             System.out.println("Attemping to upload screenshot...");
-            minecraft.getChocomint().getScreenshotUploader().uploadScreenshot(bufferedimage);
+            minecraft.getChocomint().getScreenshotUploader().uploadScreenshot(new File(file1, "asubir.png"));
             System.out.println("Screenshot upload ended.");
             return new ChatComponentTranslation("screenshot.success", ichatcomponent);
         }
