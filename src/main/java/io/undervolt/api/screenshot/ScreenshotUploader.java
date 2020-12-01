@@ -6,6 +6,14 @@ import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.MultipartUtility;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -70,15 +78,39 @@ public class ScreenshotUploader {
         }
     }
 
-    public void uploadScreenshot(final BufferedImage screenshot) throws IOException {
+    public void up(BufferedImage bufferedImage) throws IOException {
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(bufferedImage, "png", baos);
+        baos.flush();
+        byte[] imageInByte = baos.toByteArray();
+
+        String encoded = Base64.encodeBase64String(imageInByte);
+        String boundary = "===" + System.currentTimeMillis() + "===";
+        String contentType = "multipart/form-data; boundary=" + boundary;
+        String data = "screenshot = " + encoded;
+
+        HttpClient httpclient = HttpClients.createDefault();
+        StringEntity requestEntity = new StringEntity(data, ContentType.create("multipart/form-data"));
+
+        HttpPost postMethod = new HttpPost("http://f.mscpn.com/upload");
+        postMethod.setEntity(requestEntity);
+
+        HttpResponse response = httpclient.execute(postMethod);
+        HttpEntity entity = response.getEntity();
+
+        if (entity != null) {
+            String responseString = EntityUtils.toString(entity);
+            System.out.println(responseString);
+        }
+    }
+
+    public void uploadScreenshot(final File screenshot) throws IOException {
         MultipartUtility multipart = new MultipartUtility("http://f.mscpn.com/upload", "UTF-8");
-        multipart.addFilePart("screenshot", "screenshot.png", screenshot);
+        multipart.addFilePart("screenshot", screenshot);
 
         List<String> response = multipart.finish();
-        System.out.println("Respuesta:");
-        for (String line : response) {
-            System.out.println("Upload Files Response:::" + line);
-        }
+        response.forEach(line -> this.chocomint.getChatManager().getReservedLogTab().addMessage(this.chocomint.getUser(), line));
     }
 
 }
