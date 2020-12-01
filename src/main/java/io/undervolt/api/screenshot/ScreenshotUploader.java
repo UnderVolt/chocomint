@@ -3,6 +3,7 @@ package io.undervolt.api.screenshot;
 import com.google.gson.JsonObject;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.instance.Chocomint;
+import io.undervolt.utils.MultipartUtility;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 
@@ -11,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 /** WON'T WORK */
 //TODO: Fix
@@ -65,6 +67,17 @@ public class ScreenshotUploader {
             IOUtils.closeQuietly(wr);
             IOUtils.closeQuietly(in);
             IOUtils.closeQuietly(baos);
+        }
+    }
+
+    public void uploadScreenshot(final BufferedImage screenshot) throws IOException {
+        MultipartUtility multipart = new MultipartUtility("http://f.mscpn.com/upload", "UTF-8");
+        multipart.addFilePart("screenshot", "screenshot.png", screenshot);
+
+        List<String> response = multipart.finish();
+        System.out.println("Respuesta:");
+        for (String line : response) {
+            System.out.println("Upload Files Response:::" + line);
         }
     }
 

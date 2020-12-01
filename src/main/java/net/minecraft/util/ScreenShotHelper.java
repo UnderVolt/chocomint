@@ -142,10 +142,12 @@ public class ScreenShotHelper
 
             file2 = file2.getCanonicalFile();
             ImageIO.write(bufferedimage, "png", (File)file2);
-            minecraft.getChocomint().getScreenshotUploader().upload(bufferedimage);
             IChatComponent ichatcomponent = new ChatComponentText(file2.getName());
             ichatcomponent.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, file2.getAbsolutePath()));
             ichatcomponent.getChatStyle().setUnderlined(true);
+            System.out.println("Attemping to upload screenshot...");
+            minecraft.getChocomint().getScreenshotUploader().uploadScreenshot(bufferedimage);
+            System.out.println("Screenshot upload ended.");
             return new ChatComponentTranslation("screenshot.success", ichatcomponent);
         }
         catch (Exception exception)
