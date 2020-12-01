@@ -2,6 +2,7 @@ package io.undervolt.instance;
 
 import io.undervolt.api.event.EventManager;
 import io.undervolt.api.event.events.InitEvent;
+import io.undervolt.api.sambayon.Sambayon;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.console.Console;
 import io.undervolt.console.commands.HelpCommand;
@@ -27,6 +28,7 @@ public class Chocomint {
     private ContributorsManager contributorsManager;
     private final Minecraft mc;
     private Console console;
+    private final Sambayon sambayon;
 
     /** Initialize constructor */
     public Chocomint(final Minecraft mc) {
@@ -35,6 +37,7 @@ public class Chocomint {
         this.restUtils = new RestUtils();
         this.mc = mc;
         this.chocomintUser = new User("\247bchocomint", User.Status.OFFLINE);
+        this.sambayon = new Sambayon(this);
     }
 
     public void init(LaunchType type){
@@ -109,5 +112,9 @@ public class Chocomint {
 
     public Console getConsole() {
         return console;
+    }
+
+    public Sambayon getSambayon() {
+        return sambayon;
     }
 }
