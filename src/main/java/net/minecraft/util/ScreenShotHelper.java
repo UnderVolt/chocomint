@@ -144,13 +144,16 @@ public class ScreenShotHelper
             ImageIO.write(bufferedimage, "png", (File)file2);
             IChatComponent ichatcomponent = new ChatComponentText(file2.getName());
             ichatcomponent.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, file2.getAbsolutePath()));
-            ichatcomponent.getChatStyle().setUnderlined(Boolean.valueOf(true));
-            return new ChatComponentTranslation("screenshot.success", new Object[] {ichatcomponent});
+            ichatcomponent.getChatStyle().setUnderlined(true);
+            System.out.println("Attemping to upload screenshot...");
+            minecraft.getChocomint().getScreenshotUploader().uploadScreenshot(new File(file1, "asubir.png"));
+            System.out.println("Screenshot upload ended.");
+            return new ChatComponentTranslation("screenshot.success", ichatcomponent);
         }
         catch (Exception exception)
         {
-            logger.warn((String)"Couldn\'t save screenshot", (Throwable)exception);
-            return new ChatComponentTranslation("screenshot.failure", new Object[] {exception.getMessage()});
+            logger.warn("Couldn\'t save screenshot", exception);
+            return new ChatComponentTranslation("screenshot.failure", exception.getMessage());
         }
     }
 
