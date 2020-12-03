@@ -36,6 +36,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import javax.imageio.ImageIO;
 
+import io.undervolt.api.event.events.TickEvent;
 import io.undervolt.gui.chat.Chat;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -1759,6 +1760,8 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
      */
     public void runTick() throws IOException
     {
+        this.getChocomint().getEventManager().callEvent(new TickEvent.ClientTickEvent());
+
         if (this.rightClickDelayTimer > 0)
         {
             --this.rightClickDelayTimer;
@@ -2161,6 +2164,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
             }
 
             this.mcProfiler.endStartSection("gameRenderer");
+            this.getChocomint().getEventManager().callEvent(new TickEvent.RenderTickEvent());
 
             if (!this.isGamePaused)
             {
