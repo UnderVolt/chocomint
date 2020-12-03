@@ -7,7 +7,7 @@ import java.util.List;
 public class ChatManager {
 
     private final Tab reservedServerTab = new Tab(true, "server_reserved", -1);
-    private final Tab reservedLogTab = new Tab(false, "#debug-log", -1);
+    private final Tab reservedLogTab = new Tab(true, "#debug-log", -1);
 
     public Tab getReservedServerTab() {
         return reservedServerTab;
@@ -24,5 +24,9 @@ public class ChatManager {
 
     public void addTab(final Tab tab) {
         this.getOpenTabs().add(tab);
+    }
+
+    public Tab getReservedLogTab() {
+        return reservedLogTab;
     }
 }

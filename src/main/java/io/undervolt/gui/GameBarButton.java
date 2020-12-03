@@ -21,6 +21,7 @@ public class GameBarButton extends GuiButton {
         this.widthIn = widthIn;
         this.heightIn = heightIn;
         this.buttonText = buttonText;
+        this.enabled = true;
     }
 
 
@@ -29,19 +30,25 @@ public class GameBarButton extends GuiButton {
         ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
         boolean isOverButton = (mouseX >= this.x) && (mouseX <= this.x + this.widthIn) && (mouseY >= this.y) && (
                 mouseY <= this.y + this.heightIn);
+        if(enabled) {
+            if (isOverButton)
+            {
+                drawRect(this.x, this.y, this.x + this.widthIn,
+                        this.y + this.heightIn, new Color(56, 56, 56).getRGB());
+            }
+            else
+            {
+                drawRect(this.x, this.y, this.x + this.widthIn,
+                        this.y + this.heightIn, new Color(22, 22, 22).getRGB());
+            }
+            drawCenteredString(mc.fontRendererObj, this.buttonText, this.x + (this.widthIn / 2), this.y + (this.heightIn / 3), Color.WHITE.getRGB());
+        } else {
+            drawRect(this.x, this.y, this.x + this.widthIn,
+                    this.y + this.heightIn, new Color(102, 102, 102).getRGB());
+            GL11.glColor3f(255, 255, 255);
+            drawCenteredString(mc.fontRendererObj, this.buttonText, this.x + (this.widthIn / 2), this.y + (this.heightIn / 3), Color.LIGHT_GRAY.getRGB());
+        }
 
-        if (isOverButton)
-        {
-            drawRect(this.x, this.y, this.x + this.widthIn,
-                    this.y + this.heightIn, new Color(56, 56, 56).getRGB());
-        }
-        else
-        {
-            drawRect(this.x, this.y, this.x + this.widthIn,
-                    this.y + this.heightIn, new Color(22, 22, 22).getRGB());
-        }
-        GL11.glColor3f(255,255,255);
-        drawCenteredString(mc.fontRendererObj, this.buttonText, this.x + (this.widthIn / 2), this.y + (this.heightIn / 3), Color.WHITE.getRGB());
     }
 }
 
