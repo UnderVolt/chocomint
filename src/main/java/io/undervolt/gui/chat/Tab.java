@@ -8,16 +8,22 @@ import java.util.List;
 public class Tab {
     private final String name;
     private final int connected;
+    private final boolean isClientReserved;
     private List<Message> messages = Lists.newArrayList();
     private final boolean canSendMessages;
 
-    public Tab(final boolean canSendMessages, final String name, final int connected) {
+    public Tab(final boolean canSendMessages, final String name, final int connected, final boolean isClientReserved) {
         this.connected = connected;
         this.name = name;
         this.canSendMessages = canSendMessages;
+        this.isClientReserved = isClientReserved;
     }
 
-    public void addMessage(final User user, final String message) {
+    public void addMessage(final Message message) {
+        this.messages.add(message);
+    }
+
+    public void addMessage(final String user, final String message) {
         if(this.canSendMessages) this.messages.add(new Message(user, message));
     }
 
