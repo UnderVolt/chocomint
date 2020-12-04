@@ -1,6 +1,7 @@
 package io.undervolt.gui.chat;
 
 import com.google.common.collect.Lists;
+import io.undervolt.api.almendra.Almendra;
 import io.undervolt.console.Console;
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
@@ -25,7 +26,6 @@ public class Chat extends GameBar {
     private final ChatManager chatManager;
 
     /** Declaring everything related to tabs */
-    private Tab selectedTab;
     private GameBarButton addTabButton;
 
     /** TextField */
@@ -42,6 +42,9 @@ public class Chat extends GameBar {
     private ServerData serverData;
     private GameBarButton serverReservedButton;
 
+    /** Almendra */
+    private final Almendra almendra;
+
     public Chat(final String initialText, final GuiScreen prev, final Chocomint chocomint, final ServerData serverData) {
         super(prev, chocomint);
 
@@ -50,6 +53,7 @@ public class Chat extends GameBar {
 
         this.chocomint = chocomint;
         this.chatManager = this.chocomint.getChatManager();
+        this.almendra = this.chocomint.getAlmendra();
 
         this.serverData = serverData;
 
@@ -59,10 +63,12 @@ public class Chat extends GameBar {
     @Override
     public void initGui() {
 
-        if(this.serverData == null) {
-            if (this.chatManager.getOpenTabs().size() > 1)
-                this.selectedTab = this.chatManager.getOpenTabs().get(1);
-        } else this.selectedTab = this.chatManager.getReservedServerTab();
+        if(this.chatManager.getSelectedTab() == null) {
+            if (this.serverData == null) {
+                if (this.chatManager.getOpenTabs().size() > 1)
+                    this.chatManager.setSelectedTab(this.chatManager.getOpenTabs().get(1));
+            } else this.chatManager.setSelectedTab(this.chatManager.getReservedServerTab());
+        }
 
         this.textField = new GuiTextField(0, this.fontRendererObj, 10,
                 this.height - 10, this.width, this.height);
@@ -113,10 +119,10 @@ public class Chat extends GameBar {
         GL11.glScissor(0, 0, this.width * 2, (int) (this.height * 0.66));
         GL11.glColor3f(255,255,255);
 
-        if(selectedTab != null) {
+        if(this.chatManager.getSelectedTab() != null) {
             int i = this.height - 21;
-            for (int id = selectedTab.getMessages().size(); id-- > 0; ) {
-                Message message = selectedTab.getMessages().get(id);
+            for (int id = this.chatManager.getSelectedTab().getMessages().size(); id-- > 0; ) {
+                Message message = this.chatManager.getSelectedTab().getMessages().get(id);
                 this.fontRendererObj.drawString("\247e" +
                         (message.getUser() != null ? message.getUser() + "\247f: " : "")
                         + message.getMessage(), 5, i, Color.WHITE.getRGB());
@@ -136,7 +142,7 @@ public class Chat extends GameBar {
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         if(button.id < 1337097)
-            this.selectedTab = this.chatManager.getOpenTabs().get(button.id);
+            this.chatManager.setSelectedTab(this.chatManager.getOpenTabs().get(button.id));
         else if(button.id == 1337097)
             this.mc.displayGuiScreen(new AvailableRoomsGUI(this, this.chocomint, this.chatManager));
         else
@@ -150,14 +156,14 @@ public class Chat extends GameBar {
             this.textField.textboxKeyTyped(typedChar, keyCode);
         } else {
             if(!this.textField.getText().equals("")) {
-                if(this.selectedTab == this.chatManager.getReservedServerTab())
+                if(this.chatManager.getSelectedTab() == this.chatManager.getReservedServerTab())
                     this.mc.thePlayer.sendChatMessage(this.textField.getText().trim());
-                else if(this.selectedTab == this.chatManager.getReservedLogTab()) {
-                    this.selectedTab.addMessage(this.chocomint.getUser(), this.textField.getText());
+                else if(this.chatManager.getSelectedTab() == this.chatManager.getReservedLogTab()) {
+                    this.chatManager.getSelectedTab().addMessage(this.chocomint.getUser(), this.textField.getText());
                     this.console.processCommand(this.chatManager.getReservedLogTab(), this.textField.getText());
                 }
                 else
-                    this.selectedTab.addMessage(this.chocomint.getUser(), this.textField.getText().trim());
+                    this.almendra.sendMessage(this.chatManager.getSelectedTab(), this.textField.getText().trim(), this.chocomint.getUser());
                 this.textField.setText("");
             }
         }

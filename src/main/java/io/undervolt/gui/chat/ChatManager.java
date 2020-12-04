@@ -12,6 +12,7 @@ public class ChatManager {
     private final Tab reservedServerTab = new Tab(true, "server_reserved", -1, true);
     private final Tab reservedLogTab = new Tab(true, "#debug-log", -1, true);
     private final List<Tab> openTabs = Lists.newArrayList(reservedServerTab);
+    private Tab selectedTab;
 
     public ChatManager(final Chocomint chocomint) {
         this.chocomint = chocomint;
@@ -27,13 +28,23 @@ public class ChatManager {
     }
 
     public Tab getOrCreateTabByName(final String tabName) {
-        final Tab tab;
+        Tab tab;
         final List<Tab> filteredTabs = this.openTabs.stream().filter(t -> t.getName().equals(tabName)).collect(Collectors.toList());
-        if(filteredTabs.get(0) != null) tab = filteredTabs.get(0);
-        else {
-            tab = new Tab(true, tabName, 0, false);
+        if(filteredTabs.size() >= 1) {
+            tab = filteredTabs.get(0);
+        } else {
+            if(this.chocomint.getAlmendra().getAvailableRooms().containsKey(tabName)) {
+                tab = this.chocomint.getAlmendra().getAvailableRooms().get(tabName);
+            } else {
+                tab = new Tab(true, tabName, 0, false);
+            }
             this.openTabs.add(tab);
         }
+
+        if(this.chocomint.getMc().currentScreen != null && this.chocomint.getMc().currentScreen instanceof Chat) {
+            this.chocomint.getMc().currentScreen.updateScreen();
+        }
+
         return tab;
     }
 
@@ -43,5 +54,15 @@ public class ChatManager {
 
     public Tab getReservedLogTab() {
         return reservedLogTab;
+    }
+
+    public void setSelectedTab(Tab selectedTab) {
+        this.selectedTab = selectedTab;
+    }
+
+    public Tab getSelectedTab() {
+
+
+        return selectedTab;
     }
 }
