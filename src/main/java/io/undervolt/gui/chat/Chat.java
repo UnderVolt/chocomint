@@ -26,6 +26,7 @@ public class Chat extends GameBar {
 
     /** Declaring everything related to tabs */
     private Tab selectedTab;
+    private GameBarButton addTabButton;
 
     /** TextField */
     private GuiTextField textField;
@@ -59,7 +60,7 @@ public class Chat extends GameBar {
     public void initGui() {
 
         if(this.serverData == null) {
-            if (this.chatManager.getOpenTabs().get(1) != null)
+            if (this.chatManager.getOpenTabs().size() > 1)
                 this.selectedTab = this.chatManager.getOpenTabs().get(1);
         } else this.selectedTab = this.chatManager.getReservedServerTab();
 
@@ -83,6 +84,9 @@ public class Chat extends GameBar {
         });
 
         this.serverReservedButton = (GameBarButton) this.buttonList.get(this.chatManager.getOpenTabs().indexOf(this.chatManager.getReservedServerTab()));
+
+        this.buttonList.add(this.addTabButton = new GameBarButton(1337097, this.width - 20,
+                (int)(this.height * 0.66) - 18, 18, 18, "+"));
 
         if(this.serverData == null) {
             this.serverReservedButton.enabled = false;
@@ -114,7 +118,7 @@ public class Chat extends GameBar {
             for (int id = selectedTab.getMessages().size(); id-- > 0; ) {
                 Message message = selectedTab.getMessages().get(id);
                 this.fontRendererObj.drawString("\247e" +
-                        (message.getUser() != null ? message.getUser().getUsername() + "\247f: " : "")
+                        (message.getUser() != null ? message.getUser() + "\247f: " : "")
                         + message.getMessage(), 5, i, Color.WHITE.getRGB());
                 i = i - 12;
             }
@@ -131,9 +135,12 @@ public class Chat extends GameBar {
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
-        if(button.id < 1337098)
+        if(button.id < 1337097)
             this.selectedTab = this.chatManager.getOpenTabs().get(button.id);
-        else super.actionPerformed(button);
+        else if(button.id == 1337097)
+            this.mc.displayGuiScreen(new AvailableRoomsGUI(this, this.chocomint, this.chatManager));
+        else
+            super.actionPerformed(button);
     }
 
     @Override
