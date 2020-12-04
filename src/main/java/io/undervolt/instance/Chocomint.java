@@ -128,6 +128,10 @@ public class Chocomint {
         return almendra;
     }
 
+    public Minecraft getMc() {
+        return mc;
+    }
+
     public Console getConsole() {
         return console;
     }
