@@ -3,6 +3,7 @@ package io.undervolt.api.almendra;
 import com.google.common.collect.Maps;
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import io.undervolt.api.sambayon.Sambayon;
 import io.undervolt.gui.chat.ChatManager;
 import io.undervolt.gui.chat.Message;
 import io.undervolt.gui.chat.Tab;
@@ -18,15 +19,24 @@ import java.util.Map;
 public class Almendra {
     private final Chocomint chocomint;
     private final ChatManager chatManager;
-    private final Socket socket;
+    private Socket socket;
+    private final Sambayon sambayon;
+    private final String ALMENDRA_ENDPOINT;
     private final Map<String, Tab> availableRooms = Maps.newHashMap();
 
     public Almendra(final Chocomint chocomint) throws URISyntaxException {
         this.chocomint = chocomint;
         this.chatManager = chocomint.getChatManager();
+        this.sambayon = chocomint.getSambayon();
+        this.ALMENDRA_ENDPOINT = this.sambayon.getServer("chat");
 
         System.out.println("Loaded Almendra");
-        socket = IO.socket("http://localhost:1356").connect();
+        this.connectToSocket(this.ALMENDRA_ENDPOINT);
+
+    }
+
+    public void connectToSocket(final String endpoint) throws URISyntaxException {
+        this.socket = IO.socket(endpoint).connect();
 
         socket.on(Socket.EVENT_CONNECT, args -> {
             System.out.println("Conectado a Almendra con éxito.");
