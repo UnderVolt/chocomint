@@ -85,6 +85,7 @@ public class Chat extends GameBar {
             this.buttonList.add(new GameBarButton(i.get(), x.get(), (int)(this.height * 0.66) - 18,
                     10 + this.fontRendererObj.getStringWidth(tab.getName()),
                     18, tab.getName()));
+            this.buttonList.get(i.get()).enabled = tab != this.chatManager.getSelectedTab();
             x.set(x.get() + 10 + this.fontRendererObj.getStringWidth(tab.getName()));
             i.set(i.get() + 1);
         });
@@ -141,9 +142,20 @@ public class Chat extends GameBar {
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
-        if(button.id < 1337097)
+        if(button.id < 1337097) {
             this.chatManager.setSelectedTab(this.chatManager.getOpenTabs().get(button.id));
-        else if(button.id == 1337097)
+            this.buttonList.forEach(guiButton -> {
+                if(guiButton == serverReservedButton) {
+                    if(this.serverData == null) {
+                        this.serverReservedButton.enabled = false;
+                        this.serverReservedButton.buttonText = "No conectado";
+                    } else {
+                        this.serverReservedButton.enabled = true;
+                        this.serverReservedButton.buttonText = this.serverData.serverIP;
+                    }
+                } else guiButton.enabled = guiButton.id != button.id;
+            });
+        } else if(button.id == 1337097)
             this.mc.displayGuiScreen(new AvailableRoomsGUI(this, this.chocomint, this.chatManager));
         else
             super.actionPerformed(button);
@@ -171,5 +183,9 @@ public class Chat extends GameBar {
 
     public Console getConsole() {
         return console;
+    }
+
+    public void update() {
+        this.mc.displayGuiScreen(this);
     }
 }

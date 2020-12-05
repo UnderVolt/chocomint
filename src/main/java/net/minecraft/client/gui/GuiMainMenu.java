@@ -38,6 +38,7 @@ import net.optifine.reflect.Reflector;
 import org.apache.commons.io.Charsets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.Project;
@@ -200,6 +201,9 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
      */
     protected void keyTyped(char typedChar, int keyCode) throws IOException
     {
+        if(keyCode == Keyboard.KEY_F8) {
+            this.mc.displayGuiScreen(new Chat("", this, this.mc.getChocomint(), null));
+        }
     }
 
     /**
