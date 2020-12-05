@@ -54,14 +54,14 @@ public class Chocomint {
                 this.eventManager = new EventManager();
                 this.contributorsManager = new ContributorsManager(this.mc);
 
+                this.chatManager = new ChatManager(this);
+                this.console = new Console(this);
+
                 try {
                     this.almendra = new Almendra(this);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-                this.chatManager = new ChatManager(this);
-                this.console = new Console(this);
 
                 this.eventManager.callEvent(new InitEvent.PreInitEvent());
 

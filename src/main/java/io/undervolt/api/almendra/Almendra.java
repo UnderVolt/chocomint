@@ -79,21 +79,22 @@ public class Almendra {
 
     public void receiveMessage(final JSONObject message) throws JSONException {
         System.out.println(message.getString("from") + " (" + message.getString("to") + "): " + message.getString("message"));
+        if(message.getString("from").equals(this.chocomint.getUser())) return;
         if(message.getString("to").startsWith("#")) {
             this.getAvailableRooms().get(message.getString("to"))
                     .addMessage(message.getString("from"), message.getString("message"));
         } else {
-            this.chatManager.getOrCreateTabByName(message.getString("from"));
-            this.chatManager.getOrCreateTabByName(message.getString("from"))
-                    .addMessage(message.getString("from"), message.getString("message"));
+            Tab tab = this.chatManager.getOrCreateTabByName(message.getString("from"));
+            this.chatManager.addTab(tab);
+            tab.addMessage(message.getString("from"), message.getString("message"));
         }
-        //this.chatManager.getOrCreateTabByName("#español").addMessage(new Message(message.getString("from"), message.getString("message")));
 
     }
 
     public void sendMessage(final Tab tab, final String message, final String user) {
         try {
             this.socket.emit("sendMessage", new JSONObject(new AlmendraMessage(user, tab.getName(), message).toString()));
+            this.chatManager.getSelectedTab().addMessage(user, message);
         } catch (JSONException e) {
             e.printStackTrace();
         }

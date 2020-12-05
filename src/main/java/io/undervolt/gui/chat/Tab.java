@@ -24,7 +24,7 @@ public class Tab {
     }
 
     public void addMessage(final String user, final String message) {
-        if(this.canSendMessages) this.messages.add(new Message(user, message));
+        this.messages.add(new Message(user, message));
     }
 
     public List<Message> getMessages() {
