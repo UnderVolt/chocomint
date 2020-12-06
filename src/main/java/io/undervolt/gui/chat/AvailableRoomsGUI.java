@@ -72,6 +72,11 @@ public class AvailableRoomsGUI extends GameBar {
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if(keyCode == Keyboard.KEY_F9) this.mc.displayGuiScreen(new SendPMGui(this, this.chocomint));
+        if(keyCode == Keyboard.KEY_F10) {
+            this.chatManager.addTab(this.chatManager.getReservedLogTab());
+            this.chatManager.setSelectedTab(this.chatManager.getReservedLogTab());
+            this.mc.displayGuiScreen(previous);
+        }
         super.keyTyped(typedChar, keyCode);
     }
 }
