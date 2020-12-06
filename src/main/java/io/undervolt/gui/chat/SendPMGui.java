@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class SendPMGui extends GameBar {
-    private final AvailableRoomsGUI previous;
+    private final GuiScreen previous;
     private final Chocomint chocomint;
     private final ChatManager chatManager;
     private final Almendra almendra;
@@ -23,7 +23,7 @@ public class SendPMGui extends GameBar {
 
     private GuiTextField textField;
 
-    public SendPMGui(final AvailableRoomsGUI previous, final Chocomint chocomint) {
+    public SendPMGui(final GuiScreen previous, final Chocomint chocomint) {
         super(previous, chocomint);
         this.chocomint = chocomint;
         this.previous = previous;
@@ -64,7 +64,14 @@ public class SendPMGui extends GameBar {
     protected void actionPerformed(GuiButton button) throws IOException {
         if(button.id == 1337097) {
             this.chatManager.setSelectedTab(this.chatManager.getOrCreateTabByName(this.textField.getText().trim()));
-            this.mc.displayGuiScreen(previous.previous);
+            if(this.previous instanceof Chat) {
+                this.mc.displayGuiScreen(previous);
+            } else if(this.previous instanceof AvailableRoomsGUI) {
+                this.mc.displayGuiScreen(((AvailableRoomsGUI) this.previous).previous);
+            } else {
+                this.mc.displayGuiScreen(new Chat("", null, this.chocomint, this.mc.getCurrentServerData()));
+            }
+            this.mc.displayGuiScreen(previous);
         } else {
             super.actionPerformed(button);
         }
@@ -77,14 +84,21 @@ public class SendPMGui extends GameBar {
             this.textField.textboxKeyTyped(typedChar, keyCode);
 
             if(this.textField.getText().length() >= 3) {
-                this.filteredUserList = this.almendra.getConnectedUsers().stream().filter(user -> user.startsWith(this.textField.getText())).collect(Collectors.toList());
+                this.filteredUserList = this.almendra.getConnectedUsers().stream().filter(user -> user.toLowerCase()
+                        .startsWith(this.textField.getText().toLowerCase())).collect(Collectors.toList());
             }
 
         } else {
             if(!this.textField.getText().isEmpty()) {
                 if(this.almendra.getConnectedUsers().contains(this.textField.getText().trim()) && !this.textField.getText().trim().equalsIgnoreCase(this.chocomint.getUser())) {
                     this.chatManager.setSelectedTab(this.chatManager.getOrCreateTabByName(this.textField.getText().trim()));
-                    this.mc.displayGuiScreen(previous.previous);
+                    if(this.previous instanceof Chat) {
+                        this.mc.displayGuiScreen(previous);
+                    } else if(this.previous instanceof AvailableRoomsGUI) {
+                        this.mc.displayGuiScreen(((AvailableRoomsGUI) this.previous).previous);
+                    } else {
+                        this.mc.displayGuiScreen(new Chat("", null, this.chocomint, this.mc.getCurrentServerData()));
+                    }
                 }
             }
         }

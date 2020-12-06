@@ -14,7 +14,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
+import io.undervolt.gui.chat.AvailableRoomsGUI;
 import io.undervolt.gui.chat.Chat;
+import io.undervolt.gui.chat.SendPMGui;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -201,8 +203,16 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
      */
     protected void keyTyped(char typedChar, int keyCode) throws IOException
     {
-        if(keyCode == Keyboard.KEY_F8) {
-            this.mc.displayGuiScreen(new Chat("", this, this.mc.getChocomint(), null));
+        switch(keyCode) {
+            case Keyboard.KEY_F8:
+                this.mc.displayGuiScreen(new Chat("", this, this.mc.getChocomint(), null));
+                break;
+            case Keyboard.KEY_F9:
+                this.mc.displayGuiScreen(new AvailableRoomsGUI(this, this.mc.getChocomint(), this.mc.getChocomint().getChatManager()));
+                break;
+            case Keyboard.KEY_F10:
+                this.mc.displayGuiScreen(new SendPMGui(this, this.mc.getChocomint()));
+                break;
         }
     }
 

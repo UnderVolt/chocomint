@@ -5,6 +5,7 @@ import io.undervolt.api.almendra.Almendra;
 import io.undervolt.gui.GameBar;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
@@ -17,11 +18,11 @@ public class AvailableRoomsGUI extends GameBar {
     private final Almendra almendra;
     private final ChatManager chatManager;
     private List<Tab> availableRooms = Lists.newArrayList();
-    public final Chat previous;
+    public final GuiScreen previous;
     private final Chocomint chocomint;
     private GuiButton pmButton;
 
-    public AvailableRoomsGUI(final Chat previous, final Chocomint chocomint, final ChatManager chatManager) {
+    public AvailableRoomsGUI(final GuiScreen previous, final Chocomint chocomint, final ChatManager chatManager) {
         super(previous, chocomint);
         this.chocomint = chocomint;
         this.almendra = chocomint.getAlmendra();
@@ -71,11 +72,21 @@ public class AvailableRoomsGUI extends GameBar {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if(keyCode == Keyboard.KEY_F9) this.mc.displayGuiScreen(new SendPMGui(this, this.chocomint));
-        if(keyCode == Keyboard.KEY_F10) {
-            this.chatManager.addTab(this.chatManager.getReservedLogTab());
-            this.chatManager.setSelectedTab(this.chatManager.getReservedLogTab());
-            this.mc.displayGuiScreen(previous);
+        switch(keyCode) {
+            case Keyboard.KEY_F9:
+                this.mc.displayGuiScreen(new SendPMGui(this, this.chocomint));
+                break;
+            case Keyboard.KEY_F10:
+                this.chatManager.addTab(this.chatManager.getReservedLogTab());
+                this.chatManager.setSelectedTab(this.chatManager.getReservedLogTab());
+                if(previous instanceof Chat)
+                    this.mc.displayGuiScreen(previous);
+                else
+                    this.mc.displayGuiScreen(new Chat("", this.previous, this.chocomint, this.mc.getCurrentServerData()));
+                this.mc.displayGuiScreen(previous);
+                break;
+            case 1:
+                this.mc.displayGuiScreen(previous);
         }
         super.keyTyped(typedChar, keyCode);
     }
