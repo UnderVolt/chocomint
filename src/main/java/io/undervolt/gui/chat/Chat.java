@@ -186,6 +186,6 @@ public class Chat extends GameBar {
     }
 
     public void update() {
-        this.mc.displayGuiScreen(this);
+        this.mc.displayGuiScreen(new Chat(this.textField.getText().trim(), this.prev, this.chocomint, this.serverData));
     }
 }
