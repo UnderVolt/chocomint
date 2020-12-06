@@ -10,7 +10,7 @@ public class ChatManager {
 
     private final Chocomint chocomint;
     private final Tab reservedServerTab = new Tab(true, "server_reserved", -1, true);
-    private final Tab reservedLogTab = new Tab(true, "#debug-log", -1, true);
+    private final Tab reservedLogTab = new Tab(true, "#chocomint", -1, true);
     private final List<Tab> openTabs = Lists.newArrayList(reservedServerTab, reservedLogTab);
     private Tab selectedTab;
 
