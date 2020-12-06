@@ -46,7 +46,7 @@ public class Almendra implements Listener {
         this.socket = IO.socket(endpoint).connect();
 
         socket.on(Socket.EVENT_CONNECT, args -> {
-            System.out.println("Establecida conexión con los servidores de Slmendra");
+            System.out.println("Establecida conexión con los servidores de Almendra");
             socket.emit("join", this.chocomint.getUser());
 
             socket.on("welcome", response -> {
