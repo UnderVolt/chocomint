@@ -113,7 +113,7 @@ public class Chat extends GameBar {
         drawRect(0, (int)(this.height * 0.66), this.width, this.height, new Color(36, 36, 36, 100).getRGB());
 
         this.textField.drawTextBox();
-        drawString(this.fontRendererObj, ">", 3, this.height - 10, Color.CYAN.getRGB());
+        drawString(this.fontRendererObj, ">", 5, this.height - 10, Color.CYAN.getRGB());
 
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
