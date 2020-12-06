@@ -1,11 +1,9 @@
 package io.undervolt.gui.chat;
 
-import com.google.common.collect.Lists;
 import io.undervolt.api.almendra.Almendra;
 import io.undervolt.console.Console;
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
-import io.undervolt.gui.user.User;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
