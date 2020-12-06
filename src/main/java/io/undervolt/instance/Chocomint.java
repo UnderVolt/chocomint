@@ -59,6 +59,7 @@ public class Chocomint {
 
                 try {
                     this.almendra = new Almendra(this);
+                    this.getEventManager().registerEvents(this.almendra);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
