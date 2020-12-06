@@ -11,7 +11,7 @@ public class ChatManager {
     private final Chocomint chocomint;
     private final Tab reservedServerTab = new Tab(true, "server_reserved", -1, true);
     private final Tab reservedLogTab = new Tab(true, "#chocomint", -1, true);
-    private final List<Tab> openTabs = Lists.newArrayList(reservedServerTab, reservedLogTab);
+    private final List<Tab> openTabs = Lists.newArrayList(reservedServerTab);
     private Tab selectedTab;
 
     public ChatManager(final Chocomint chocomint) {
@@ -44,9 +44,9 @@ public class ChatManager {
             this.addTab(tab);
         }
 
-        if(this.chocomint.getMc().currentScreen != null && this.chocomint.getMc().currentScreen instanceof Chat) {
+        if(this.chocomint.getMinecraft().currentScreen != null && this.chocomint.getMinecraft().currentScreen instanceof Chat) {
             System.out.println("Updated chat screen");
-            ((Chat) this.chocomint.getMc().currentScreen).update();
+            ((Chat) this.chocomint.getMinecraft().currentScreen).update();
         }
 
         return tab;
