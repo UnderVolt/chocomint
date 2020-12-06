@@ -16,7 +16,6 @@ public class ChatManager {
 
     public ChatManager(final Chocomint chocomint) {
         this.chocomint = chocomint;
-        this.reservedLogTab.addMessage(null, "Bienvenido a chocomint!");
     }
 
 
