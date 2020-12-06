@@ -129,7 +129,7 @@ public class Chocomint {
         return almendra;
     }
 
-    public Minecraft getMc() {
+    public Minecraft getMinecraft() {
         return mc;
     }
 
