@@ -183,4 +183,8 @@ public class Almendra implements Listener {
     public void setMOTD(String MOTD) {
         this.MOTD = MOTD;
     }
+
+    public List<String> getConnectedUsers() {
+        return connectedUsers;
+    }
 }
