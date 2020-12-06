@@ -35,9 +35,7 @@ public class Almendra implements Listener {
         this.chocomint = chocomint;
         this.chatManager = chocomint.getChatManager();
         this.sambayon = chocomint.getSambayon();
-        this.ALMENDRA_ENDPOINT = "http://localhost:1356";
-
-        //this.ALMENDRA_ENDPOINT = this.sambayon.getServer("chat");
+        this.ALMENDRA_ENDPOINT = this.sambayon.getServer("chat");
 
         System.out.println("Loaded Almendra");
         this.connectToSocket(this.ALMENDRA_ENDPOINT);
