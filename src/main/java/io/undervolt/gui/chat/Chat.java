@@ -11,6 +11,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.multiplayer.ServerData;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -165,6 +166,7 @@ public class Chat extends GameBar {
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if(keyCode != 28 && keyCode != 156) {
             if(keyCode == 1) this.mc.displayGuiScreen(this.prev);
+            if(keyCode == Keyboard.KEY_F9) this.mc.displayGuiScreen(new AvailableRoomsGUI(this, this.chocomint, this.chatManager));
             this.textField.textboxKeyTyped(typedChar, keyCode);
         } else {
             if(!this.textField.getText().equals("")) {
