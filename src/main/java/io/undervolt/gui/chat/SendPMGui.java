@@ -1,5 +1,6 @@
 package io.undervolt.gui.chat;
 
+import io.undervolt.api.almendra.Almendra;
 import io.undervolt.gui.GameBar;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.gui.GuiButton;
@@ -9,11 +10,16 @@ import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class SendPMGui extends GameBar {
     private final AvailableRoomsGUI previous;
     private final Chocomint chocomint;
     private final ChatManager chatManager;
+    private final Almendra almendra;
+    private List<String> filteredUserList;
 
     private GuiTextField textField;
 
@@ -22,6 +28,7 @@ public class SendPMGui extends GameBar {
         this.chocomint = chocomint;
         this.previous = previous;
         this.chatManager = chocomint.getChatManager();
+        this.almendra = chocomint.getAlmendra();
     }
 
     @Override
@@ -41,6 +48,15 @@ public class SendPMGui extends GameBar {
         this.drawDefaultBackground();
         drawRect(0,0,this.width,this.height, new Color(0,0,0,100).getRGB());
         this.textField.drawTextBox();
+
+        if(this.filteredUserList != null) {
+            AtomicInteger y = new AtomicInteger(5);
+            this.filteredUserList.forEach(user -> {
+                drawCenteredString(this.fontRendererObj, user, this.width / 2, y.get(), Color.WHITE.getRGB());
+                y.set(y.get() + 12);
+            });
+        }
+
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -59,10 +75,17 @@ public class SendPMGui extends GameBar {
         if(keyCode != 28 && keyCode != 156) {
             if(keyCode == 1) this.mc.displayGuiScreen(this.previous);
             this.textField.textboxKeyTyped(typedChar, keyCode);
+
+            if(this.textField.getText().length() >= 3) {
+                this.filteredUserList = this.almendra.getConnectedUsers().stream().filter(user -> user.startsWith(this.textField.getText())).collect(Collectors.toList());
+            }
+
         } else {
             if(!this.textField.getText().isEmpty()) {
-                this.chatManager.setSelectedTab(this.chatManager.getOrCreateTabByName(this.textField.getText().trim()));
-                this.mc.displayGuiScreen(previous.previous);
+                if(this.almendra.getConnectedUsers().contains(this.textField.getText().trim()) && !this.textField.getText().trim().equalsIgnoreCase(this.chocomint.getUser())) {
+                    this.chatManager.setSelectedTab(this.chatManager.getOrCreateTabByName(this.textField.getText().trim()));
+                    this.mc.displayGuiScreen(previous.previous);
+                }
             }
         }
         super.keyTyped(typedChar, keyCode);
