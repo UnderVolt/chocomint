@@ -5,6 +5,7 @@ import io.undervolt.api.almendra.Almendra;
 import io.undervolt.gui.GameBar;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.gui.GuiButton;
+import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.io.IOException;
@@ -66,5 +67,11 @@ public class AvailableRoomsGUI extends GameBar {
                 super.actionPerformed(button);
             }
         }
+    }
+
+    @Override
+    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        if(keyCode == Keyboard.KEY_F9) this.mc.displayGuiScreen(new SendPMGui(this, this.chocomint));
+        super.keyTyped(typedChar, keyCode);
     }
 }
