@@ -12,6 +12,7 @@ import io.undervolt.console.commands.VersionCommand;
 import io.undervolt.gui.RenderUtils;
 import io.undervolt.gui.chat.ChatManager;
 import io.undervolt.gui.contributors.ContributorsManager;
+import io.undervolt.gui.modifiers.UnreadMessageIndicator;
 import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.gui.user.User;
 import io.undervolt.utils.RestUtils;
@@ -75,6 +76,8 @@ public class Chocomint {
                 // Register Commands
                 this.console.registerCommand(new VersionCommand(this));
                 this.console.registerCommand(new HelpCommand(this));
+
+                this.getEventManager().registerEvents(new UnreadMessageIndicator(this.getChatManager(), this.getMinecraft(), "friends"));
 
                 this.eventManager.callEvent(new InitEvent.ClientInitEvent());
 
