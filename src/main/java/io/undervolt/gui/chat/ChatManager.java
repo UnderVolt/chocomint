@@ -16,6 +16,12 @@ public class ChatManager {
 
     public ChatManager(final Chocomint chocomint) {
         this.chocomint = chocomint;
+        this.reservedLogTab.setRead();
+        this.reservedServerTab.setRead();
+    }
+
+    public boolean hasUnreadMessages() {
+        return this.getOpenTabs().stream().anyMatch(tab -> !tab.isRead());
     }
 
 
