@@ -11,6 +11,7 @@ public class Tab {
     private final boolean isClientReserved;
     private List<Message> messages = Lists.newArrayList();
     private final boolean canSendMessages;
+    private boolean read;
 
     public Tab(final boolean canSendMessages, final String name, final int connected, final boolean isClientReserved) {
         this.connected = connected;
@@ -19,12 +20,26 @@ public class Tab {
         this.isClientReserved = isClientReserved;
     }
 
-    public void addMessage(final Message message) {
+    public Tab addMessage(final Message message) {
         this.messages.add(message);
+        return this;
     }
 
-    public void addMessage(final String user, final String message) {
+    public Tab addMessage(final String user, final String message) {
         this.messages.add(new Message(user, message));
+        return this;
+    }
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead() {
+        this.read = true;
+    }
+
+    public void setUnread() {
+        this.read = false;
     }
 
     public List<Message> getMessages() {
