@@ -46,7 +46,7 @@ public class ChatManager {
 
         if(this.chocomint.getMinecraft().currentScreen != null && this.chocomint.getMinecraft().currentScreen instanceof Chat) {
             System.out.println("Updated chat screen");
-            ((Chat) this.chocomint.getMinecraft().currentScreen).update();
+            ((Chat) this.chocomint.getMinecraft().currentScreen).update(true);
         }
 
         return tab;
@@ -63,6 +63,7 @@ public class ChatManager {
     }
 
     public void setSelectedTab(Tab selectedTab) {
+        selectedTab.setRead();
         this.selectedTab = selectedTab;
     }
 

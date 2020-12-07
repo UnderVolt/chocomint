@@ -8,6 +8,7 @@ import io.undervolt.api.event.events.GameShutdownEvent;
 import io.undervolt.api.event.handler.EventHandler;
 import io.undervolt.api.event.handler.Listener;
 import io.undervolt.api.sambayon.Sambayon;
+import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.chat.ChatManager;
 import io.undervolt.gui.chat.Message;
 import io.undervolt.gui.chat.Tab;
@@ -133,6 +134,13 @@ public class Almendra implements Listener {
             Tab tab = this.chatManager.getOrCreateTabByName(message.getString("from"));
             this.chatManager.addTab(tab);
             tab.addMessage(message.getString("from"), message.getString("message"));
+            if(this.chatManager.getSelectedTab() != tab) {
+                tab.setUnread();
+                if(this.chocomint.getMinecraft().currentScreen != null && this.chocomint.getMinecraft().currentScreen instanceof Chat) {
+                    System.out.println("Updated chat screen");
+                    ((Chat) this.chocomint.getMinecraft().currentScreen).update(false);
+                }
+            }
         }
 
     }
