@@ -82,10 +82,10 @@ public class Chat extends GameBar {
         AtomicInteger x = new AtomicInteger(0);
         this.chatManager.getOpenTabs().forEach(tab -> {
             this.buttonList.add(new GameBarButton(i.get(), x.get(), (int)(this.height * 0.66) - 18,
-                    10 + this.fontRendererObj.getStringWidth(tab.getName()),
-                    18, (tab.isRead() ? "" : "• ") + tab.getName()));
+                    18 + this.fontRendererObj.getStringWidth(tab.getName()),
+                    18, (tab.isRead() ? "" : "\247e• \247f") + tab.getName()));
             this.buttonList.get(i.get()).enabled = tab != this.chatManager.getSelectedTab();
-            x.set(x.get() + 10 + this.fontRendererObj.getStringWidth(tab.getName()));
+            x.set(x.get() + 18 + this.fontRendererObj.getStringWidth(tab.getName()));
             i.set(i.get() + 1);
         });
 
