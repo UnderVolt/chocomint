@@ -10,7 +10,6 @@ import io.undervolt.api.event.handler.Listener;
 import io.undervolt.api.sambayon.Sambayon;
 import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.chat.ChatManager;
-import io.undervolt.gui.chat.Message;
 import io.undervolt.gui.chat.Tab;
 import io.undervolt.instance.Chocomint;
 import org.json.JSONArray;

@@ -1,7 +1,6 @@
 package io.undervolt.gui.chat;
 
 import com.google.common.collect.Lists;
-import io.undervolt.gui.user.User;
 
 import java.util.List;
 
