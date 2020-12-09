@@ -109,8 +109,8 @@ public class GameBar extends GuiScreen {
         // Draw default background
         if(this.backgroundDrawing) this.drawDefaultBackground();
 
-        // Draw main rectangle (width x 20 res, #222)
-        drawRect(0, 0, this.width, 20, new Color(22, 22, 22).getRGB());
+        // Draw main rectangle (width x g20 res, #222)
+        drawRect(0, 0, this.width, 20, new Color(32,34,37).getRGB());
 
         // Draw logo placeholder until resources are loaded
         drawRect(4, 4, 10, 16, new Color(65, 44, 25).getRGB());
