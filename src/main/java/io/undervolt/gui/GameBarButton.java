@@ -34,17 +34,17 @@ public class GameBarButton extends GuiButton {
             if (isOverButton)
             {
                 drawRect(this.x, this.y, this.x + this.widthIn,
-                        this.y + this.heightIn, new Color(56, 56, 56).getRGB());
+                        this.y + this.heightIn, new Color(54,57,63).getRGB());
             }
             else
             {
                 drawRect(this.x, this.y, this.x + this.widthIn,
-                        this.y + this.heightIn, new Color(22, 22, 22).getRGB());
+                        this.y + this.heightIn, new Color(32,34,37).getRGB());
             }
             drawCenteredString(mc.fontRendererObj, this.buttonText, this.x + (this.widthIn / 2), this.y + (this.heightIn / 3), Color.WHITE.getRGB());
         } else {
             drawRect(this.x, this.y, this.x + this.widthIn,
-                    this.y + this.heightIn, new Color(102, 102, 102).getRGB());
+                    this.y + this.heightIn, new Color(41,43,47).getRGB());
             GL11.glColor3f(255, 255, 255);
             drawCenteredString(mc.fontRendererObj, this.buttonText, this.x + (this.widthIn / 2), this.y + (this.heightIn / 3), Color.LIGHT_GRAY.getRGB());
         }
