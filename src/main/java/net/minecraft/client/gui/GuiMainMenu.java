@@ -13,6 +13,10 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import io.undervolt.gui.GameBar;
+import io.undervolt.gui.GameBarButton;
+import io.undervolt.gui.chat.AvailableRoomsGUI;
+import io.undervolt.gui.chat.Chat;
+import io.undervolt.gui.chat.SendPMGui;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -36,6 +40,7 @@ import net.optifine.reflect.Reflector;
 import org.apache.commons.io.Charsets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.Project;
@@ -88,6 +93,9 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
     private int field_92020_v;
     private int field_92019_w;
     private ResourceLocation backgroundTexture;
+
+    /** Chat button */
+    private GameBarButton chatButton;
 
     /** Minecraft Realms button. */
     private GuiButton realmsButton;
@@ -195,6 +203,17 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
      */
     protected void keyTyped(char typedChar, int keyCode) throws IOException
     {
+        switch(keyCode) {
+            case Keyboard.KEY_F8:
+                this.mc.displayGuiScreen(new Chat("", this, this.mc.getChocomint(), null));
+                break;
+            case Keyboard.KEY_F9:
+                this.mc.displayGuiScreen(new AvailableRoomsGUI(this, this.mc.getChocomint(), this.mc.getChocomint().getChatManager()));
+                break;
+            case Keyboard.KEY_F10:
+                this.mc.displayGuiScreen(new SendPMGui(this, this.mc.getChocomint()));
+                break;
+        }
     }
 
     /**
@@ -248,6 +267,9 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
             this.field_92020_v = this.field_92022_t + k;
             this.field_92019_w = this.field_92021_u + 24;
         }
+
+        this.buttonList.add(chatButton = new GameBarButton(103,
+                this.width - 52, this.height - 15, 50, 15, "Chat"));
 
         this.mc.setConnectedToRealms(false);
 
@@ -358,6 +380,7 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
                 this.mc.displayGuiScreen(guiyesno);
             }
         }
+        if(button.id == 103) this.mc.displayGuiScreen(new Chat("", this, this.mc.getChocomint(), null));
 
         super.actionPerformed(button);
     }
