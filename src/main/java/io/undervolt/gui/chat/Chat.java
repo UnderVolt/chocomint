@@ -9,7 +9,9 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -43,6 +45,9 @@ public class Chat extends GameBar {
 
     /** Almendra */
     private final Almendra almendra;
+
+    /** Scroll implementation */
+    private float scroll = 0;
 
     public Chat(final String initialText, final GuiScreen prev, final Chocomint chocomint, final ServerData serverData) {
         super(prev, chocomint);
@@ -115,6 +120,8 @@ public class Chat extends GameBar {
         drawString(this.fontRendererObj, ">", 5, this.height - 10, Color.CYAN.getRGB());
 
         GL11.glPushMatrix();
+        GlStateManager.translate(0, scroll, 0);
+        GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         GL11.glScissor(0, 0, this.width * 2, (int) (this.height * 0.66));
         GL11.glColor3f(255,255,255);
@@ -130,6 +137,7 @@ public class Chat extends GameBar {
             }
         }
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
+        GL11.glPopMatrix();
         GL11.glPopMatrix();
 
         drawRect(0, (int)(this.height * 0.66) - 18, this.width, (int)(this.height * 0.66),
@@ -182,6 +190,16 @@ public class Chat extends GameBar {
                 this.textField.setText("");
             }
         }
+    }
+
+    @Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+
+        int i = Mouse.getEventDWheel();
+
+        if (i < 0) this.scroll += 2.3;
+        else if (i > 0) this.scroll -=2.3;
     }
 
     public Console getConsole() {
