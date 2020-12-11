@@ -16,7 +16,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-public class Menu extends GameBar {
+public class Menu extends AnimationUI {
 
     private final Chocomint chocomint;
     private final GuiScreen previous;
@@ -30,7 +30,7 @@ public class Menu extends GameBar {
     private int position = 0;
 
     public Menu(final GuiScreen prev, final Chocomint chocomint, final String menuName, final int pageSize) {
-        super(prev, chocomint);
+        //super(prev, chocomint);
         this.menuName = menuName;
         this.chocomint = chocomint;
         this.pageSize = pageSize;
@@ -44,6 +44,7 @@ public class Menu extends GameBar {
     @Override
     public void initGui() {
         this.ftime = Minecraft.getSystemTime();
+        this.buttonList.add(new TexturedMenuInterfaceButton(100, 0, 0, 20, 20, "back"));
         super.initGui();
     }
 
@@ -62,17 +63,25 @@ public class Menu extends GameBar {
 
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
+
         GlStateManager.translate(0, tw,0);
-        GlStateManager.translate(0, scroll, 0);
+
         GL11.glColor3f(255, 255, 255);
+
         this.mc.getTextureManager().bindTexture(this.bracketRes);
+
         drawModalRectWithCustomSizedTexture(-5, position - 50, 0, 0, this.width + 10, 50, this.width + 10,50);
-        drawRect(0, position, this.width, pageSize, new Color(54,57,63).getRGB());
+        drawRect(0, position, this.width, pageSize, new Color(39, 39, 45).getRGB());
+        drawRect(0, position, this.width, 20, new Color(54,57,63).getRGB());
+
+        this.fontRendererObj.drawString(this.menuName, 24, position + 7, Color.white.getRGB());
+        super.drawScreen(mouseX, mouseY, partialTicks);
+
+        GlStateManager.translate(0, scroll, 0);
         drawMenuItems(mouseX, mouseY, partialTicks);
+
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glPopMatrix();
-
-        super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     @Override
@@ -86,13 +95,12 @@ public class Menu extends GameBar {
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
+        if(button.id == 100) this.mc.displayGuiScreen(previous);
         super.actionPerformed(button);
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if(keyCode == 1) {
-            this.tw = Integer.MAX_VALUE;
-        }
+        if(keyCode == 1) this.mc.displayGuiScreen(previous);
     }
 }
