@@ -1,13 +1,13 @@
 package io.undervolt.gui;
 
 import io.undervolt.instance.Chocomint;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 
 import java.awt.*;
 
 public class ExtendMenuExample extends Menu {
-    public ExtendMenuExample(Chocomint chocomint) {
-        super(chocomint);
+    public ExtendMenuExample(GuiScreen prev, Chocomint chocomint) {
+        super(prev, chocomint, 900);
     }
 
     @Override
