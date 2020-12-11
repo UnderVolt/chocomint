@@ -2,6 +2,7 @@ package io.undervolt.gui;
 
 import io.undervolt.gui.contributors.ContributorsManager;
 import io.undervolt.gui.contributors.ContributorsPanel;
+import io.undervolt.gui.menu.ExtendMenuExample;
 import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.gui.notifications.NotificationPanel;
 import io.undervolt.gui.user.User;
@@ -12,12 +13,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameBar extends AnimationUI {
 

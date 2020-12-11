@@ -1,5 +1,6 @@
-package io.undervolt.gui;
+package io.undervolt.gui.menu;
 
+import io.undervolt.gui.GameBar;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.AnimationUI;
 import io.undervolt.utils.Multithreading;
