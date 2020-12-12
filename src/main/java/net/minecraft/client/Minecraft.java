@@ -36,6 +36,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import javax.imageio.ImageIO;
 
+import io.undervolt.api.event.events.GameShutdownEvent;
 import io.undervolt.api.event.events.TickEvent;
 import io.undervolt.gui.chat.Chat;
 import net.minecraft.block.Block;
@@ -1463,6 +1464,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
      */
     public void shutdown()
     {
+        this.getChocomint().getEventManager().callEvent(new GameShutdownEvent());
         this.running = false;
     }
 

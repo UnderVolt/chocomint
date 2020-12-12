@@ -48,6 +48,8 @@ public class Sambayon {
                         throw new SambayonException(json.getString("response"));
                     }
                 }
+
+
             } catch (Exception e) {
                 this.chocomint.getChatManager().getReservedLogTab().addMessage(this.chocomint.getChocomintUser(), "Failed to get server: " + e.getMessage());
                 e.printStackTrace();
