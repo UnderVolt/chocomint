@@ -8,11 +8,13 @@
 
 In-development Minecraft ModLoader, Client and Optimizer.
 
- ## Status
-This client is under heavy development, and might break eventually. We do **not** recommend using it as your daily driver.
+## Status
+This client is under heavy development, and might break eventually. We do **not** recommend using development/nightly builds as your daily driver.
 
-We're accepting bug reports, feature requests and code inspections.
-In those, try to include every possible detail, since it will improve productivity for the next release.
+## Do you have an idea, or something doesn't work?
+We're accepting bug reports and feature requests.
+To make one, head over to the Issues tab. In there, try to include every possible detail, and send it.
+We'll review it, and eventually, if it gets accepted, will be shipped within the next release!
 
 ## Running chocomint
 Until releases start flowing, you can run chocomint if you have Gradle knowledge.
