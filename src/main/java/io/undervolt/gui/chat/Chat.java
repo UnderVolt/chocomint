@@ -123,7 +123,7 @@ public class Chat extends GameBar {
         GlStateManager.translate(0, scroll, 0);
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor(0, 0, this.width * 2, (int) (this.height * 0.66));
+        GL11.glScissor(0, 0, this.width * 2, (int) (this.height * 0.66) + 10);
         GL11.glColor3f(255,255,255);
 
         if(this.chatManager.getSelectedTab() != null) {
