@@ -96,7 +96,7 @@ public class Chat extends GameBar {
 
         this.serverReservedButton = (GameBarButton) this.buttonList.get(this.chatManager.getOpenTabs().indexOf(this.chatManager.getReservedServerTab()));
 
-        this.buttonList.add(this.addTabButton = new GameBarButton(1337097, this.width - 20,
+        this.buttonList.add(this.addTabButton = new GameBarButton(1337097, this.width - 18,
                 (int)(this.height * 0.66) - 18, 18, 18, "+"));
 
         if(this.serverData == null) {
