@@ -1,10 +1,13 @@
 package net.minecraft.client.gui;
 
+import io.undervolt.gui.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+
+import java.awt.*;
 
 public class GuiButton extends Gui
 {
@@ -75,33 +78,35 @@ public class GuiButton extends Gui
     /**
      * Draws this button to the screen.
      */
-    public void drawButton(Minecraft mc, int mouseX, int mouseY)
-    {
-        if (this.visible)
-        {
-            FontRenderer fontrenderer = mc.fontRendererObj;
-            mc.getTextureManager().bindTexture(buttonTextures);
+    public void drawButton(Minecraft mc, int mouseX, int mouseY) {
+        if (this.visible) {
+
+            final RenderUtils renderUtils = mc.getChocomint().getRenderUtils();
+            final FontRenderer fontRenderer = mc.fontRendererObj;
+
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
             int i = this.getHoverState(this.hovered);
             GlStateManager.enableBlend();
             GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
             GlStateManager.blendFunc(770, 771);
-            this.drawTexturedModalRect(this.xPosition, this.yPosition, 0, 46 + i * 20, this.width / 2, this.height);
-            this.drawTexturedModalRect(this.xPosition + this.width / 2, this.yPosition, 200 - this.width / 2, 46 + i * 20, this.width / 2, this.height);
-            this.mouseDragged(mc, mouseX, mouseY);
-            int j = 14737632;
+
+            Color color = new Color(32,34,37);
 
             if (!this.enabled)
             {
-                j = 10526880;
+                color = new Color(41,43,47);
             }
             else if (this.hovered)
             {
-                j = 16777120;
+                color = new Color(79, 82, 92);
             }
 
-            this.drawCenteredString(fontrenderer, this.displayString, this.xPosition + this.width / 2, this.yPosition + (this.height - 8) / 2, j);
+            renderUtils.drawRoundedRect(this.xPosition, this.yPosition, this.width, this.height, 4, color.getRGB());
+
+            this.mouseDragged(mc, mouseX, mouseY);
+
+            this.drawCenteredString(fontRenderer, this.displayString, this.xPosition + this.width / 2, this.yPosition + (this.height - 8) / 2, Color.white.getRGB());
         }
     }
 
