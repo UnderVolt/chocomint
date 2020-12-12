@@ -9,7 +9,7 @@
 In-development Minecraft ModLoader, Client and Optimizer.
 
 ## Status
-This client is under heavy development, and might break eventually. We do **not** recommend using development/nightly builds as your daily driver.
+This client is under heavy development, and might break eventually. We do **not** recommend using development/nightly builds as your daily driver, unless you want to submit bugs/glitch reports.
 
 ## Do you have an idea, or something doesn't work?
 We're accepting bug reports and feature requests.
