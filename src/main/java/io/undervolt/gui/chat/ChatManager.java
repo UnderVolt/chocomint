@@ -12,6 +12,7 @@ public class ChatManager {
     private final Tab reservedServerTab = new Tab(true, "server_reserved", -1, true);
     private final Tab reservedLogTab = new Tab(true, "#chocomint", -1, true);
     private final List<Tab> openTabs = Lists.newArrayList(reservedServerTab);
+    private final List<Message> sentMessages = Lists.newArrayList();
     private Tab selectedTab;
 
     public ChatManager(final Chocomint chocomint) {
@@ -71,6 +72,10 @@ public class ChatManager {
     public void setSelectedTab(Tab selectedTab) {
         selectedTab.setRead();
         this.selectedTab = selectedTab;
+    }
+
+    public List<Message> getSentMessages() {
+        return sentMessages;
     }
 
     public Tab getSelectedTab() {
