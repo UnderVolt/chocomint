@@ -10,6 +10,7 @@ import io.undervolt.api.event.handler.Listener;
 import io.undervolt.api.sambayon.Sambayon;
 import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.chat.ChatManager;
+import io.undervolt.gui.chat.Message;
 import io.undervolt.gui.chat.Tab;
 import io.undervolt.instance.Chocomint;
 import org.json.JSONArray;
@@ -152,6 +153,7 @@ public class Almendra implements Listener {
         try {
             this.socket.emit("sendMessage", new JSONObject(new AlmendraMessage(user, tab.getName(), message).toString()));
             this.chatManager.getSelectedTab().addMessage(user, message);
+            this.chatManager.getSentMessages().add(new Message(user, message));
         } catch (JSONException e) {
             e.printStackTrace();
         }
