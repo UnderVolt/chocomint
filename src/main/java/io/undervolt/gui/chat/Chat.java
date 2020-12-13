@@ -47,6 +47,9 @@ public class Chat extends GameBar {
     /** Almendra */
     private final Almendra almendra;
 
+    /** Chat height */
+    private int chatHeight;
+
     /** Scroll implementation */
     private float scroll = 0;
 
@@ -68,6 +71,8 @@ public class Chat extends GameBar {
     @Override
     public void initGui() {
 
+        this.chatHeight = (int) (this.mc.theWorld == null ? this.height * .33 : this.height * .66);
+
         if(this.chatManager.getSelectedTab() == null) {
             if (this.serverData == null) {
                 if (this.chatManager.getOpenTabs().size() > 1)
@@ -87,7 +92,7 @@ public class Chat extends GameBar {
         AtomicInteger i = new AtomicInteger(0);
         AtomicInteger x = new AtomicInteger(0);
         this.chatManager.getOpenTabs().forEach(tab -> {
-            this.buttonList.add(new GameBarButton(i.get(), x.get(), (int)(this.height * 0.66) - 18,
+            this.buttonList.add(new GameBarButton(i.get(), x.get(), this.chatHeight - 18,
                     18 + this.fontRendererObj.getStringWidth(tab.getName()),
                     18, (tab.isRead() ? "" : "\247e• \247f") + tab.getName()));
             this.buttonList.get(i.get()).enabled = tab != this.chatManager.getSelectedTab();
@@ -98,7 +103,7 @@ public class Chat extends GameBar {
         this.serverReservedButton = (GameBarButton) this.buttonList.get(this.chatManager.getOpenTabs().indexOf(this.chatManager.getReservedServerTab()));
 
         this.buttonList.add(this.addTabButton = new GameBarButton(1337097, this.width - 18,
-                (int)(this.height * 0.66) - 18, 18, 18, "+"));
+                this.chatHeight - 18, 18, 18, "+"));
 
         if(this.serverData == null) {
             this.serverReservedButton.enabled = false;
@@ -115,7 +120,7 @@ public class Chat extends GameBar {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 
         this.drawDefaultBackground();
-        drawRect(0, (int)(this.height * 0.66), this.width, this.height, new Color(36, 36, 36, 100).getRGB());
+        drawRect(0, this.chatHeight, this.width, this.height, new Color(36, 36, 36, 100).getRGB());
 
         this.textField.drawTextBox();
         drawString(this.fontRendererObj, ">", 5, this.height - 10, Color.CYAN.getRGB());
@@ -124,7 +129,7 @@ public class Chat extends GameBar {
         GlStateManager.translate(0, scroll, 0);
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor(0, 0, this.width * 2, (int) (this.height * 0.66) + 10);
+        GL11.glScissor(0, 0, this.width * 2, (int)(this.mc.theWorld == null ? this.height * 2 - this.height * .66 : this.height * .66 + 10));
         GL11.glColor3f(255,255,255);
 
         if(this.chatManager.getSelectedTab() != null) {
@@ -141,7 +146,7 @@ public class Chat extends GameBar {
         GL11.glPopMatrix();
         GL11.glPopMatrix();
 
-        drawRect(0, (int)(this.height * 0.66) - 18, this.width, (int)(this.height * 0.66),
+        drawRect(0, this.chatHeight - 18, this.width, this.chatHeight,
                 Color.BLACK.getRGB());
 
 
@@ -225,7 +230,8 @@ public class Chat extends GameBar {
         int i = Mouse.getEventDWheel();
 
         if (i > 0 && !(this.scroll <= 0)) this.scroll -=2.3;
-        else if (i < 0  && (this.scroll <= (this.chatManager.getSelectedTab().getMessages().size() * 12) - (int)(this.height * 0.33) + 12)) this.scroll += 2.3;
+        else if (i < 0  && (this.scroll <= (this.chatManager.getSelectedTab().getMessages().size() * 12) -
+                (this.mc.theWorld != null ? this.height * .33 : this.height * .66) + 12)) this.scroll += 2.3;
     }
 
     public Console getConsole() {
