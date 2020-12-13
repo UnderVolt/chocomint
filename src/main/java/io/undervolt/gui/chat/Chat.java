@@ -32,6 +32,7 @@ public class Chat extends GameBar {
     /** TextField */
     private GuiTextField textField;
     private String initialText;
+    private int upKeyCounter = 0;
 
     /** Console */
     private final Console console;
@@ -174,8 +175,33 @@ public class Chat extends GameBar {
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if(keyCode != 28 && keyCode != 156) {
-            if(keyCode == 1) this.mc.displayGuiScreen(this.prev);
-            if(keyCode == Keyboard.KEY_F9) this.mc.displayGuiScreen(new AvailableRoomsGUI(this, this.chocomint, this.chatManager));
+            switch(keyCode) {
+                case 1:
+                    this.mc.displayGuiScreen(this.prev);
+                    break;
+                case Keyboard.KEY_F9:
+                    this.mc.displayGuiScreen(new AvailableRoomsGUI(this, this.chocomint, this.chatManager));
+                    break;
+                case Keyboard.KEY_UP:
+                    if(upKeyCounter - 1 >= this.chatManager.getSentMessages().size()) return;
+                    upKeyCounter = upKeyCounter + 1;
+                    if(this.chatManager.getSentMessages().size() - upKeyCounter < 0
+                        || this.chatManager.getSentMessages().get(this.chatManager.getSentMessages().size() - upKeyCounter) == null) return;
+                    this.textField.setText(this.chatManager.getSentMessages().get(this.chatManager.getSentMessages().size() - upKeyCounter).getMessage());
+                    break;
+                case Keyboard.KEY_DOWN:
+                    if(upKeyCounter <= 1) {
+                        this.textField.setText("");
+                        upKeyCounter = upKeyCounter - 1;
+                    } else {
+                        upKeyCounter = upKeyCounter - 1;
+                        if (this.chatManager.getSentMessages().size() - upKeyCounter < 0
+                                || this.chatManager.getSentMessages().get(this.chatManager.getSentMessages().size() - upKeyCounter) == null)
+                            return;
+                        this.textField.setText(this.chatManager.getSentMessages().get(this.chatManager.getSentMessages().size() - upKeyCounter).getMessage());
+                    }
+                    break;
+            }
             this.textField.textboxKeyTyped(typedChar, keyCode);
         } else {
             if(!this.textField.getText().equals("")) {
