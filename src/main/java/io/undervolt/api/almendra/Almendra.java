@@ -13,10 +13,13 @@ import io.undervolt.gui.chat.ChatManager;
 import io.undervolt.gui.chat.Message;
 import io.undervolt.gui.chat.Tab;
 import io.undervolt.instance.Chocomint;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.awt.*;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +30,8 @@ public class Almendra implements Listener {
     private final ChatManager chatManager;
     private Socket socket;
     private final Sambayon sambayon;
+    private final Minecraft mc;
+    private final FontRenderer fontRenderer;
     private final String ALMENDRA_ENDPOINT;
     private final Map<String, Tab> availableRooms = Maps.newHashMap();
     private List<String> connectedUsers = Lists.newArrayList();
@@ -37,6 +42,8 @@ public class Almendra implements Listener {
         this.chatManager = chocomint.getChatManager();
         this.sambayon = chocomint.getSambayon();
         this.ALMENDRA_ENDPOINT = this.sambayon.getServer("chat");
+        this.mc = chocomint.getMinecraft();
+        this.fontRenderer = this.mc.fontRendererObj;
 
         System.out.println("Loaded Almendra");
         this.connectToSocket(this.ALMENDRA_ENDPOINT);
@@ -152,7 +159,25 @@ public class Almendra implements Listener {
     public void sendMessage(final Tab tab, final String message, final String user) {
         try {
             this.socket.emit("sendMessage", new JSONObject(new AlmendraMessage(user, tab.getName(), message).toString()));
-            this.chatManager.getSelectedTab().addMessage(user, message);
+            int width = this.chocomint.getGameBridge().getScaledResolution().getScaledWidth() - 5 - fontRenderer.getStringWidth(user + ": ");
+            if(this.fontRenderer.getStringWidth(user + ": " + message) > width) {
+                String splitSeq = message.contains(" ") ? " " : "(?!^)";
+                String firstLine = "";
+                String secondLine = "\247f";
+
+                for (String msgSplit : message.split(splitSeq)){
+                    if(this.fontRenderer.getStringWidth(firstLine + msgSplit) < width) {
+                        firstLine = firstLine + msgSplit + splitSeq.replace("(?!^)", "");
+                    } else {
+                        secondLine = secondLine + msgSplit + splitSeq.replace("(?!^)", "");
+                    }
+                }
+
+                this.chatManager.getSelectedTab().addMessage(user, firstLine);
+                this.chatManager.getSelectedTab().addMessage(null, secondLine);
+            } else {
+                this.chatManager.getSelectedTab().addMessage(user, message);
+            }
             this.chatManager.getSentMessages().add(new Message(user, message));
         } catch (JSONException e) {
             e.printStackTrace();

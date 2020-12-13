@@ -80,7 +80,7 @@ public class Chat extends GameBar {
 
         this.textField.setEnableBackgroundDrawing(false);
         this.textField.setFocused(true);
-        this.textField.setMaxStringLength(255);
+        this.textField.setMaxStringLength(100);
         this.textField.setCanLoseFocus(false);
         this.textField.setText(this.initialText);
 
