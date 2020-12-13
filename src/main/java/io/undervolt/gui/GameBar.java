@@ -2,6 +2,7 @@ package io.undervolt.gui;
 
 import io.undervolt.gui.contributors.ContributorsManager;
 import io.undervolt.gui.contributors.ContributorsPanel;
+import io.undervolt.gui.login.LoginGUI;
 import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.gui.notifications.NotificationPanel;
 import io.undervolt.gui.user.User;
@@ -155,6 +156,7 @@ public class GameBar extends GuiScreen {
                 this.userCard.toggleActive();
                 this.notificationPanel.setActive(false);
                 this.contributorsPanel.setActive(false);
+                this.mc.displayGuiScreen(new LoginGUI(this, this.chocomint));
                 break;
             case 1337105:
                 this.notificationPanel.setActive(false);
