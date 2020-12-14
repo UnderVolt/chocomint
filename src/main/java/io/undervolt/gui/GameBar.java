@@ -62,8 +62,6 @@ public class GameBar extends AnimationUI {
         this.chocomint = chocomint;
         this.notificationManager = chocomint.getNotificationManager();
         this.sr = chocomint.getGameBridge().getScaledResolution();
-        // This is only a mock user under Minecraft's credentials.
-        // Will make use of the UnderVolt API in the future.
         this.user = this.chocomint.getUser();
         this.contributorsManager = chocomint.getContributorsManager();
     }
