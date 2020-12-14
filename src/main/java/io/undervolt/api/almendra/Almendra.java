@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.undervolt.api.event.events.GameShutdownEvent;
+import io.undervolt.api.event.events.UserLoginEvent;
 import io.undervolt.api.event.handler.EventHandler;
 import io.undervolt.api.event.handler.Listener;
 import io.undervolt.api.sambayon.Sambayon;
@@ -46,8 +47,19 @@ public class Almendra implements Listener {
         this.fontRenderer = this.mc.fontRendererObj;
 
         System.out.println("Loaded Almendra");
-        this.connectToSocket(this.ALMENDRA_ENDPOINT);
+        if(!this.chocomint.getUser().getUsername().equals("Guest"))
+            this.connectToSocket(this.ALMENDRA_ENDPOINT);
 
+    }
+
+    @EventHandler public void handleUserLogin(UserLoginEvent event) {
+        if(!event.getUser().getUsername().equals("Guest")) {
+            try {
+                this.connectToSocket(this.ALMENDRA_ENDPOINT);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void connectToSocket(final String endpoint) throws URISyntaxException {
@@ -55,7 +67,7 @@ public class Almendra implements Listener {
 
         socket.on(Socket.EVENT_CONNECT, args -> {
             System.out.println("Establecida conexión con los servidores de Almendra");
-            socket.emit("join", this.chocomint.getUser());
+            socket.emit("join", this.chocomint.getUser().getUsername());
 
             socket.on("welcome", response -> {
 
@@ -133,7 +145,7 @@ public class Almendra implements Listener {
 
     public void receiveMessage(final JSONObject message) throws JSONException {
         System.out.println(message.getString("from") + " (" + message.getString("to") + "): " + message.getString("message"));
-        if(message.getString("from").equals(this.chocomint.getUser())) return;
+        if(message.getString("from").equals(this.chocomint.getUser().getUsername())) return;
         if(message.getString("to").startsWith("#")) {
             this.getAvailableRooms().get(message.getString("to"))
                     .addMessage(message.getString("from"), message.getString("message"));

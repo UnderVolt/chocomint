@@ -3,6 +3,8 @@ package io.undervolt.instance;
 import io.undervolt.api.almendra.Almendra;
 import io.undervolt.api.event.EventManager;
 import io.undervolt.api.event.events.InitEvent;
+import io.undervolt.api.event.events.UserLoginEvent;
+import io.undervolt.api.event.handler.Listener;
 import io.undervolt.api.sambayon.Sambayon;
 import io.undervolt.api.screenshot.ScreenshotUploader;
 import io.undervolt.bridge.GameBridge;
@@ -14,15 +16,17 @@ import io.undervolt.gui.chat.ChatManager;
 import io.undervolt.gui.contributors.ContributorsManager;
 import io.undervolt.gui.modifiers.UnreadMessageIndicator;
 import io.undervolt.gui.notifications.NotificationManager;
+import io.undervolt.gui.user.User;
+import io.undervolt.gui.user.UserManager;
 import io.undervolt.utils.RestUtils;
 import io.undervolt.utils.config.Config;
 import net.minecraft.client.Minecraft;
 
-public class Chocomint {
+public class Chocomint implements Listener {
 
     private NotificationManager notificationManager;
     private ChatManager chatManager;
-    private final String user;
+    private User user;
     private final String chocomintUser;
     private GameBridge gameBridge;
     private final RenderUtils renderUtils;
@@ -35,16 +39,18 @@ public class Chocomint {
     private ScreenshotUploader screenshotUploader;
     private Almendra almendra;
     private final Config config;
+    private final UserManager userManager;
 
     /** Initialize constructor */
     public Chocomint(final Minecraft mc) {
-        this.user = mc.getSession().getUsername();
         this.sambayon = new Sambayon(this);
         this.renderUtils = new RenderUtils(mc);
         this.restUtils = new RestUtils(this);
         this.mc = mc;
         this.chocomintUser = "\247bchocomint";
+        this.userManager = new UserManager(this);
         this.config = new Config(this);
+        this.user = this.userManager.setUser(this.config.getToken());
     }
 
     public void init(LaunchType type){
@@ -65,6 +71,7 @@ public class Chocomint {
                     e.printStackTrace();
                 }
 
+                this.eventManager.registerEvents(this);
                 this.eventManager.callEvent(new InitEvent.PreInitEvent());
 
                 //TODO: Load heavy stuff
@@ -100,7 +107,7 @@ public class Chocomint {
         return notificationManager;
     }
 
-    public String getUser() {
+    public User getUser() {
         return user;
     }
 
@@ -146,6 +153,15 @@ public class Chocomint {
 
     public Config getConfig() {
         return config;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+        this.eventManager.callEvent(new UserLoginEvent(user));
+    }
+
+    public UserManager getUserManager() {
+        return userManager;
     }
 
     public ScreenshotUploader getScreenshotUploader() {

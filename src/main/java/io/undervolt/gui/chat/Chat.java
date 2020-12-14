@@ -213,11 +213,11 @@ public class Chat extends GameBar {
                 if(this.chatManager.getSelectedTab() == this.chatManager.getReservedServerTab())
                     this.mc.thePlayer.sendChatMessage(this.textField.getText().trim());
                 else if(this.chatManager.getSelectedTab() == this.chatManager.getReservedLogTab()) {
-                    this.chatManager.getSelectedTab().addMessage(this.chocomint.getUser(), this.textField.getText());
+                    this.chatManager.getSelectedTab().addMessage(this.chocomint.getUser().getUsername(), this.textField.getText());
                     this.console.processCommand(this.chatManager.getReservedLogTab(), this.textField.getText());
                 }
                 else
-                    this.almendra.sendMessage(this.chatManager.getSelectedTab(), this.textField.getText().trim(), this.chocomint.getUser());
+                    this.almendra.sendMessage(this.chatManager.getSelectedTab(), this.textField.getText().trim(), this.chocomint.getUser().getUsername());
                 this.textField.setText("");
             }
         }
