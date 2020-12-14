@@ -9,7 +9,9 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -30,6 +32,7 @@ public class Chat extends GameBar {
     /** TextField */
     private GuiTextField textField;
     private String initialText;
+    private int upKeyCounter = 0;
 
     /** Console */
     private final Console console;
@@ -43,6 +46,12 @@ public class Chat extends GameBar {
 
     /** Almendra */
     private final Almendra almendra;
+
+    /** Chat height */
+    private int chatHeight;
+
+    /** Scroll implementation */
+    private float scroll = 0;
 
     public Chat(final String initialText, final GuiScreen prev, final Chocomint chocomint, final ServerData serverData) {
         super(prev, chocomint);
@@ -62,6 +71,8 @@ public class Chat extends GameBar {
     @Override
     public void initGui() {
 
+        this.chatHeight = (int) (this.mc.theWorld == null ? this.height * .33 : this.height * .66);
+
         if(this.chatManager.getSelectedTab() == null) {
             if (this.serverData == null) {
                 if (this.chatManager.getOpenTabs().size() > 1)
@@ -74,14 +85,14 @@ public class Chat extends GameBar {
 
         this.textField.setEnableBackgroundDrawing(false);
         this.textField.setFocused(true);
-        this.textField.setMaxStringLength(255);
+        this.textField.setMaxStringLength(100);
         this.textField.setCanLoseFocus(false);
         this.textField.setText(this.initialText);
 
         AtomicInteger i = new AtomicInteger(0);
         AtomicInteger x = new AtomicInteger(0);
         this.chatManager.getOpenTabs().forEach(tab -> {
-            this.buttonList.add(new GameBarButton(i.get(), x.get(), (int)(this.height * 0.66) - 18,
+            this.buttonList.add(new GameBarButton(i.get(), x.get(), this.chatHeight - 18,
                     18 + this.fontRendererObj.getStringWidth(tab.getName()),
                     18, (tab.isRead() ? "" : "\247e• \247f") + tab.getName()));
             this.buttonList.get(i.get()).enabled = tab != this.chatManager.getSelectedTab();
@@ -91,8 +102,8 @@ public class Chat extends GameBar {
 
         this.serverReservedButton = (GameBarButton) this.buttonList.get(this.chatManager.getOpenTabs().indexOf(this.chatManager.getReservedServerTab()));
 
-        this.buttonList.add(this.addTabButton = new GameBarButton(1337097, this.width - 20,
-                (int)(this.height * 0.66) - 18, 18, 18, "+"));
+        this.buttonList.add(this.addTabButton = new GameBarButton(1337097, this.width - 18,
+                this.chatHeight - 18, 18, 18, "+"));
 
         if(this.serverData == null) {
             this.serverReservedButton.enabled = false;
@@ -109,14 +120,16 @@ public class Chat extends GameBar {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 
         this.drawDefaultBackground();
-        drawRect(0, (int)(this.height * 0.66), this.width, this.height, new Color(36, 36, 36, 100).getRGB());
+        drawRect(0, this.chatHeight, this.width, this.height, new Color(36, 36, 36, 100).getRGB());
 
         this.textField.drawTextBox();
         drawString(this.fontRendererObj, ">", 5, this.height - 10, Color.CYAN.getRGB());
 
         GL11.glPushMatrix();
+        GlStateManager.translate(0, scroll, 0);
+        GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor(0, 0, this.width * 2, (int) (this.height * 0.66));
+        GL11.glScissor(0, 0, this.width * 2, (int)(this.mc.theWorld == null ? this.height * 2 - this.height * .66 : this.height * .66 + 10));
         GL11.glColor3f(255,255,255);
 
         if(this.chatManager.getSelectedTab() != null) {
@@ -131,8 +144,9 @@ public class Chat extends GameBar {
         }
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
         GL11.glPopMatrix();
+        GL11.glPopMatrix();
 
-        drawRect(0, (int)(this.height * 0.66) - 18, this.width, (int)(this.height * 0.66),
+        drawRect(0, this.chatHeight - 18, this.width, this.chatHeight,
                 Color.BLACK.getRGB());
 
 
@@ -166,22 +180,58 @@ public class Chat extends GameBar {
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if(keyCode != 28 && keyCode != 156) {
-            if(keyCode == 1) this.mc.displayGuiScreen(this.prev);
-            if(keyCode == Keyboard.KEY_F9) this.mc.displayGuiScreen(new AvailableRoomsGUI(this, this.chocomint, this.chatManager));
+            switch(keyCode) {
+                case 1:
+                    this.mc.displayGuiScreen(this.prev);
+                    break;
+                case Keyboard.KEY_F9:
+                    this.mc.displayGuiScreen(new AvailableRoomsGUI(this, this.chocomint, this.chatManager));
+                    break;
+                case Keyboard.KEY_UP:
+                    if(upKeyCounter - 1 >= this.chatManager.getSentMessages().size()) return;
+                    upKeyCounter = upKeyCounter + 1;
+                    if(this.chatManager.getSentMessages().size() - upKeyCounter < 0
+                        || this.chatManager.getSentMessages().get(this.chatManager.getSentMessages().size() - upKeyCounter) == null) return;
+                    this.textField.setText(this.chatManager.getSentMessages().get(this.chatManager.getSentMessages().size() - upKeyCounter).getMessage());
+                    break;
+                case Keyboard.KEY_DOWN:
+                    if(upKeyCounter <= 1) {
+                        this.textField.setText("");
+                        upKeyCounter = upKeyCounter - 1;
+                    } else {
+                        upKeyCounter = upKeyCounter - 1;
+                        if (this.chatManager.getSentMessages().size() - upKeyCounter < 0
+                                || this.chatManager.getSentMessages().get(this.chatManager.getSentMessages().size() - upKeyCounter) == null)
+                            return;
+                        this.textField.setText(this.chatManager.getSentMessages().get(this.chatManager.getSentMessages().size() - upKeyCounter).getMessage());
+                    }
+                    break;
+            }
             this.textField.textboxKeyTyped(typedChar, keyCode);
         } else {
             if(!this.textField.getText().equals("")) {
                 if(this.chatManager.getSelectedTab() == this.chatManager.getReservedServerTab())
                     this.mc.thePlayer.sendChatMessage(this.textField.getText().trim());
                 else if(this.chatManager.getSelectedTab() == this.chatManager.getReservedLogTab()) {
-                    this.chatManager.getSelectedTab().addMessage(this.chocomint.getUser(), this.textField.getText());
+                    this.chatManager.getSelectedTab().addMessage(this.chocomint.getUser().getUsername(), this.textField.getText());
                     this.console.processCommand(this.chatManager.getReservedLogTab(), this.textField.getText());
                 }
                 else
-                    this.almendra.sendMessage(this.chatManager.getSelectedTab(), this.textField.getText().trim(), this.chocomint.getUser());
+                    this.almendra.sendMessage(this.chatManager.getSelectedTab(), this.textField.getText().trim(), this.chocomint.getUser().getUsername());
                 this.textField.setText("");
             }
         }
+    }
+
+    @Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+
+        int i = Mouse.getEventDWheel();
+
+        if (i > 0 && !(this.scroll <= 0)) this.scroll -=2.3;
+        else if (i < 0  && (this.scroll <= (this.chatManager.getSelectedTab().getMessages().size() * 12) -
+                (this.mc.theWorld != null ? this.height * .33 : this.height * .66) + 12)) this.scroll += 2.3;
     }
 
     public Console getConsole() {

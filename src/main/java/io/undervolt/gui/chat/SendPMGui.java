@@ -90,7 +90,7 @@ public class SendPMGui extends GameBar {
 
         } else {
             if(!this.textField.getText().isEmpty()) {
-                if(this.almendra.getConnectedUsers().contains(this.textField.getText().trim()) && !this.textField.getText().trim().equalsIgnoreCase(this.chocomint.getUser())) {
+                if(this.almendra.getConnectedUsers().contains(this.textField.getText().trim()) && !this.textField.getText().trim().equalsIgnoreCase(this.chocomint.getUser().getUsername())) {
                     this.chatManager.setSelectedTab(this.chatManager.getOrCreateTabByName(this.textField.getText().trim()));
                     if(this.previous instanceof Chat) {
                         this.mc.displayGuiScreen(previous);
