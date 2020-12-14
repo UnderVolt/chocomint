@@ -198,7 +198,6 @@ public class GameBar extends AnimationUI {
                 this.notificationPanel.setActive(false);
                 this.userCard.setActive(false);
                 this.contributorsPanel.toggleActive();
-                this.mc.displayGuiScreen(new ExtendMenuExample(this, this.chocomint));
                 break;
         }
     }
