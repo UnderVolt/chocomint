@@ -10,10 +10,16 @@ public class User {
 
     private final String username;
     private final Status status;
+    private final String countryCode;
+    private final boolean developer;
+    private final String image;
 
-    public User(final String username, final Status status) {
+    public User(final String username, final Status status, String countryCode, boolean developer, String image) {
         this.status = status;
         this.username = username;
+        this.countryCode = countryCode;
+        this.developer = developer;
+        this.image = image;
     }
 
     public final String getUsername() {
@@ -22,6 +28,18 @@ public class User {
 
     public final Status getStatus() {
         return this.status;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public boolean isDeveloper() {
+        return developer;
+    }
+
+    public String getImage() {
+        return image;
     }
 
     public String getStatusString() {

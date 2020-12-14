@@ -110,7 +110,7 @@ public class ScreenshotUploader {
         multipart.addFilePart("screenshot", screenshot);
 
         List<String> response = multipart.finish();
-        response.forEach(line -> this.chocomint.getChatManager().getReservedLogTab().addMessage(this.chocomint.getUser(), line));
+        response.forEach(line -> this.chocomint.getChatManager().getReservedLogTab().addMessage(this.chocomint.getChocomintUser(), line));
     }
 
 }
