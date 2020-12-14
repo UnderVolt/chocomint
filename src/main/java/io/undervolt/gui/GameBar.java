@@ -84,17 +84,19 @@ public class GameBar extends AnimationUI {
         BufferedImage image = null;
         byte[] imageByte;
         DynamicTexture dynamicTexture = null;
-        String imageString = this.user.getImage().split(",")[1];
+        if(this.user.getImage() != null) {
+            String imageString = this.user.getImage().split(",")[1];
 
-        try {
-            BASE64Decoder decoder = new BASE64Decoder();
-            imageByte = decoder.decodeBuffer(imageString);
-            ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
-            image = ImageIO.read(bis);
-            bis.close();
-            dynamicTexture = new DynamicTexture(image);
-        } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                BASE64Decoder decoder = new BASE64Decoder();
+                imageByte = decoder.decodeBuffer(imageString);
+                ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+                image = ImageIO.read(bis);
+                bis.close();
+                dynamicTexture = new DynamicTexture(image);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         try {

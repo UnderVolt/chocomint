@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import io.undervolt.gui.GuiPasswordField;
 import io.undervolt.gui.TextureGameBarButton;
+import io.undervolt.gui.menu.Menu;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.RestUtils;
 import io.undervolt.utils.config.Config;
@@ -21,7 +22,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-public class LoginGUI extends GuiScreen {
+public class LoginGUI extends Menu {
 
     private final RestUtils restUtils;
     private final Config config;
@@ -32,6 +33,7 @@ public class LoginGUI extends GuiScreen {
     private GuiTextField pass;
 
     public LoginGUI(final GuiScreen parent, final Chocomint chocomint) {
+        super(parent, chocomint, "Iniciar sesión", parent.height);
         this.parent = parent;
         this.restUtils = chocomint.getRestUtils();
         this.config = chocomint.getConfig();
@@ -44,48 +46,37 @@ public class LoginGUI extends GuiScreen {
         this.pass = new GuiPasswordField(99, this.width / 2 - 75, this.height / 3 + 23, 150, 18);
 
         this.buttonList.add(new GuiButton(1, this.width / 2 - 50, this.height / 3 + 70, 100, 20, "Link Account"));
-        this.buttonList.add(new TextureGameBarButton(45, 5, 5, 20, 20, "back"));
-        Keyboard.enableRepeatEvents(true);
-    }
-
-    @Override
-    public void onGuiClosed() {
-        Keyboard.enableRepeatEvents(false);
+        super.initGui();
     }
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
-        switch (button.id) {
-            case 1: {
-                try {
-                    JSONObject obj = new JSONObject();
-                    obj.put("user", this.user.getText());
-                    obj.put("pass", this.pass.getText());
-                    restUtils.sendJSONRequest("api/login", obj, (js) -> {
-                        if (js.get("code").getAsInt() == 200) {
-                            JsonObject cfg = new JsonObject();
-                            cfg.addProperty("token", js.get("accessToken").getAsString());
-                            try (Writer writer = new FileWriter(new File(this.mc.mcDataDir, "uvpt.json"))) {
-                                Gson gson = new GsonBuilder().create();
-                                gson.toJson(cfg, writer);
-                                writer.flush();
-                                System.out.println("Created token file");
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            this.config.setToken(js.get("accessToken").getAsString());
-                            this.chocomint.setUser(this.chocomint.getUserManager().setUser(js.get("accessToken").getAsString()));
-                            this.mc.displayGuiScreen(this.parent);
+        if (button.id == 1) {
+            try {
+                JSONObject obj = new JSONObject();
+                obj.put("user", this.user.getText());
+                obj.put("pass", this.pass.getText());
+                restUtils.sendJSONRequest("api/login", obj, (js) -> {
+                    if (js.get("code").getAsInt() == 200) {
+                        JsonObject cfg = new JsonObject();
+                        cfg.addProperty("token", js.get("accessToken").getAsString());
+                        try (Writer writer = new FileWriter(new File(this.mc.mcDataDir, "uvpt.json"))) {
+                            Gson gson = new GsonBuilder().create();
+                            gson.toJson(cfg, writer);
+                            writer.flush();
+                            System.out.println("Created token file");
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
+                        this.config.setToken(js.get("accessToken").getAsString());
+                        this.chocomint.setUser(this.chocomint.getUserManager().setUser(js.get("accessToken").getAsString()));
+                        this.mc.displayGuiScreen(this.parent);
+                    }
 
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            case 45:
-                this.mc.displayGuiScreen(parent);
         }
         super.actionPerformed(button);
     }
@@ -117,21 +108,7 @@ public class LoginGUI extends GuiScreen {
     }
 
     @Override
-    public void updateScreen() {
-        this.user.updateCursorCounter();
-        this.pass.updateCursorCounter();
-    }
-
-    @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        GL11.glColor3f(1, 1, 1);
-
-        this.drawDefaultBackground();
-
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.depthMask(true);
-        GlStateManager.enableDepth();
-        GlStateManager.enableAlpha();
+    public void drawMenuItems(int mouseX, int mouseY, float partialTicks) {
 
         GL11.glPushMatrix();
 
@@ -141,15 +118,7 @@ public class LoginGUI extends GuiScreen {
         this.drawString(mc.fontRendererObj, this.user.isFocused() || this.user.getText().length() > 0 ? "" : "Username", this.width / 2 - 70, this.height / 3 + 5, -1);
         this.drawString(mc.fontRendererObj, this.pass.isFocused() || this.pass.getText().length() > 0 ? "" : "Password", this.width / 2 - 70, this.height / 3 + 28, -1);
 
-        super.drawScreen(mouseX, mouseY, partialTicks);
         GL11.glPopMatrix();
 
-    }
-
-    public void drawRect(int x, int y, int width, int height, Color c) {
-        GL11.glPushMatrix();
-        GL11.glTranslatef(x, y, 0);
-        Gui.drawRect(0, 0, width, height, c.getRGB());
-        GL11.glPopMatrix();
     }
 }
