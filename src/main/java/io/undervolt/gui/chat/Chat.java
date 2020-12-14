@@ -104,6 +104,7 @@ public class Chat extends GameBar {
 
         this.buttonList.add(this.addTabButton = new GameBarButton(1337097, this.width - 18,
                 this.chatHeight - 18, 18, 18, "+"));
+        if(this.chocomint.getUser().getUsername().equals("Guest")) this.addTabButton.enabled = false;
 
         if(this.serverData == null) {
             this.serverReservedButton.enabled = false;
@@ -122,7 +123,10 @@ public class Chat extends GameBar {
         this.drawDefaultBackground();
         drawRect(0, this.chatHeight, this.width, this.height, new Color(36, 36, 36, 100).getRGB());
 
-        this.textField.drawTextBox();
+        if(this.chocomint.getUser().getUsername().equals("Guest") && this.chatManager.getSelectedTab() != this.chatManager.getReservedServerTab())
+            this.fontRendererObj.drawString("Inicia sesión para poder hablar",10, this.height - 10, Color.GRAY.getRGB());
+        else
+            this.textField.drawTextBox();
         drawString(this.fontRendererObj, ">", 5, this.height - 10, Color.CYAN.getRGB());
 
         GL11.glPushMatrix();
@@ -207,17 +211,19 @@ public class Chat extends GameBar {
                     }
                     break;
             }
-            this.textField.textboxKeyTyped(typedChar, keyCode);
+            if(this.chocomint.getUser().getUsername().equals("Guest") && this.chatManager.getSelectedTab() != this.chatManager.getReservedServerTab()) return;
+            else this.textField.textboxKeyTyped(typedChar, keyCode);
         } else {
+            if(this.chatManager.getSelectedTab() == this.chatManager.getReservedServerTab() && this.serverData == null) return;
             if(!this.textField.getText().equals("")) {
                 if(this.chatManager.getSelectedTab() == this.chatManager.getReservedServerTab())
                     this.mc.thePlayer.sendChatMessage(this.textField.getText().trim());
                 else if(this.chatManager.getSelectedTab() == this.chatManager.getReservedLogTab()) {
-                    this.chatManager.getSelectedTab().addMessage(this.chocomint.getUser(), this.textField.getText());
+                    this.chatManager.getSelectedTab().addMessage(this.chocomint.getUser().getUsername(), this.textField.getText());
                     this.console.processCommand(this.chatManager.getReservedLogTab(), this.textField.getText());
                 }
                 else
-                    this.almendra.sendMessage(this.chatManager.getSelectedTab(), this.textField.getText().trim(), this.chocomint.getUser());
+                    this.almendra.sendMessage(this.chatManager.getSelectedTab(), this.textField.getText().trim(), this.chocomint.getUser().getUsername());
                 this.textField.setText("");
             }
         }
