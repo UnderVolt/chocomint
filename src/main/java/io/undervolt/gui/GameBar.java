@@ -8,6 +8,8 @@ import io.undervolt.gui.notifications.NotificationPanel;
 import io.undervolt.gui.user.User;
 import io.undervolt.gui.user.UserCard;
 import io.undervolt.instance.Chocomint;
+import io.undervolt.utils.AnimationUI;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -20,7 +22,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-public class GameBar extends GuiScreen {
+public class GameBar extends AnimationUI {
 
     /** Declare Chocomint */
     private final Chocomint chocomint;
@@ -37,8 +39,9 @@ public class GameBar extends GuiScreen {
     private final ContributorsManager contributorsManager;
     public ContributorsPanel contributorsPanel;
 
-    /** Declare screen resolution */
+    /** UI elements */
     private final ScaledResolution sr;
+    private long ftime;
 
     /** Declare buttons */
     private TextureGameBarButton notificationsButton;
@@ -127,8 +130,12 @@ public class GameBar extends GuiScreen {
                 this.width - 154, 0, 20, 20, "C"
         ));
 
+        this.ftime = Minecraft.getSystemTime();
+
         super.initGui();
     }
+
+    private double dw;
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
@@ -191,6 +198,7 @@ public class GameBar extends GuiScreen {
                 this.notificationPanel.setActive(false);
                 this.userCard.setActive(false);
                 this.contributorsPanel.toggleActive();
+                this.mc.displayGuiScreen(new ExtendMenuExample(this, this.chocomint));
                 break;
         }
     }
