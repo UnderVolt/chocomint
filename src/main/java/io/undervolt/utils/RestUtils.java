@@ -2,6 +2,9 @@ package io.undervolt.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import io.undervolt.api.almendra.Almendra;
+import io.undervolt.api.sambayon.Sambayon;
+import io.undervolt.instance.Chocomint;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -16,14 +19,19 @@ import java.util.function.Consumer;
 
 public class RestUtils {
 
-    private static RestUtils instance;
+    private final String REST_ENDPOINT;
+    private final Sambayon sambayon;
+    public RestUtils(final Chocomint chocomint) {
+        this.sambayon = chocomint.getSambayon();
+        this.REST_ENDPOINT = sambayon.getServer("backend") + "/";
+    }
 
     public void sendJsonRequest(String endpoint, JSONObject obj, Consumer<String> callback) {
         try {
             HttpClient httpclient = HttpClients.createDefault();
             StringEntity requestEntity = new StringEntity(obj.toString(), ContentType.APPLICATION_JSON);
 
-            HttpPost postMethod = new HttpPost(endpoint);
+            HttpPost postMethod = new HttpPost(this.REST_ENDPOINT + endpoint);
             postMethod.setEntity(requestEntity);
 
             HttpResponse response = httpclient.execute(postMethod);
@@ -43,7 +51,7 @@ public class RestUtils {
             HttpClient httpclient = HttpClients.createDefault();
             StringEntity requestEntity = new StringEntity(obj.toString(), ContentType.APPLICATION_JSON);
 
-            HttpPost postMethod = new HttpPost(endpoint);
+            HttpPost postMethod = new HttpPost(this.REST_ENDPOINT + endpoint);
             postMethod.setEntity(requestEntity);
 
             HttpResponse response = httpclient.execute(postMethod);
@@ -64,7 +72,7 @@ public class RestUtils {
             HttpClient httpclient = HttpClients.createDefault();
             StringEntity requestEntity = new StringEntity(obj, ContentType.APPLICATION_JSON);
 
-            HttpPost postMethod = new HttpPost(endpoint);
+            HttpPost postMethod = new HttpPost(this.REST_ENDPOINT + endpoint);
             postMethod.setEntity(requestEntity);
 
             HttpResponse response = httpclient.execute(postMethod);
@@ -77,9 +85,5 @@ public class RestUtils {
         }catch (Exception e){
             e.printStackTrace();
         }
-    }
-
-    public static RestUtils getInstance(){
-        return instance == null ? instance = new RestUtils() : instance;
     }
 }

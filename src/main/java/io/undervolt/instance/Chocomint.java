@@ -15,6 +15,7 @@ import io.undervolt.gui.contributors.ContributorsManager;
 import io.undervolt.gui.modifiers.UnreadMessageIndicator;
 import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.utils.RestUtils;
+import io.undervolt.utils.config.Config;
 import net.minecraft.client.Minecraft;
 
 public class Chocomint {
@@ -33,15 +34,17 @@ public class Chocomint {
     private final Sambayon sambayon;
     private ScreenshotUploader screenshotUploader;
     private Almendra almendra;
+    private final Config config;
 
     /** Initialize constructor */
     public Chocomint(final Minecraft mc) {
         this.user = mc.getSession().getUsername();
+        this.sambayon = new Sambayon(this);
         this.renderUtils = new RenderUtils(mc);
-        this.restUtils = new RestUtils();
+        this.restUtils = new RestUtils(this);
         this.mc = mc;
         this.chocomintUser = "\247bchocomint";
-        this.sambayon = new Sambayon(this);
+        this.config = new Config(this);
     }
 
     public void init(LaunchType type){
@@ -139,6 +142,10 @@ public class Chocomint {
 
     public Sambayon getSambayon() {
         return sambayon;
+    }
+
+    public Config getConfig() {
+        return config;
     }
 
     public ScreenshotUploader getScreenshotUploader() {
