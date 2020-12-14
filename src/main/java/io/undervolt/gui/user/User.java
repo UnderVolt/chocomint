@@ -30,6 +30,18 @@ public class User {
         return this.status;
     }
 
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public boolean isDeveloper() {
+        return developer;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
     public String getStatusString() {
         switch(this.status) {
             case OFFLINE:
