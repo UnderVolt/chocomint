@@ -56,7 +56,7 @@ public class GameBar extends GuiScreen {
         this.sr = chocomint.getGameBridge().getScaledResolution();
         // This is only a mock user under Minecraft's credentials.
         // Will make use of the UnderVolt API in the future.
-        this.user = new User(chocomint.getUser(), User.Status.ONLINE);
+        this.user = this.chocomint.getUser();
         this.contributorsManager = chocomint.getContributorsManager();
     }
 
@@ -64,7 +64,7 @@ public class GameBar extends GuiScreen {
     public void initGui() {
 
         // Set username trim
-        String username = this.chocomint.getUser();
+        String username = this.chocomint.getUser().getUsername();
         if(this.fontRendererObj.getStringWidth("[ ] " + username) > 62) {
             username = username.substring(0, Math.min(username.length(), 6)) + "...";
         }

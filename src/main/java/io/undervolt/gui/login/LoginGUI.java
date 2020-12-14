@@ -25,6 +25,7 @@ public class LoginGUI extends GuiScreen {
 
     private final RestUtils restUtils;
     private final Config config;
+    private final Chocomint chocomint;
 
     private final GuiScreen parent;
     private GuiTextField user;
@@ -34,6 +35,7 @@ public class LoginGUI extends GuiScreen {
         this.parent = parent;
         this.restUtils = chocomint.getRestUtils();
         this.config = chocomint.getConfig();
+        this.chocomint = chocomint;
     }
 
     @Override
@@ -60,35 +62,22 @@ public class LoginGUI extends GuiScreen {
                     obj.put("user", this.user.getText());
                     obj.put("pass", this.pass.getText());
                     restUtils.sendJSONRequest("api/login", obj, (js) -> {
-
-                        JSONObject obj2 = new JSONObject();
-                        try {
-                            if (js.get("code").getAsInt() == 200) {
-                                obj2.put("accessToken", js.get("accessToken").getAsString());
-                                obj2.put("beta", true);
-                                restUtils.sendJSONRequest("noid/login", obj2, (json) -> {
-                                    try {
-                                        if (json.get("code").getAsInt() == 200) {
-                                            JsonObject cfg = new JsonObject();
-                                            String token = json.get("user").getAsJsonObject().get("mcToken").getAsString();
-                                            cfg.addProperty("token", token);
-                                            try (Writer writer = new FileWriter(new File(this.mc.mcDataDir, "uvpt.json"))) {
-                                                Gson gson = new GsonBuilder().create();
-                                                gson.toJson(cfg, writer);
-                                                writer.flush();
-                                            }
-                                            this.config.setToken(token);
-                                            this.mc.displayGuiScreen(this.parent);
-                                        }
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                });
+                        if (js.get("code").getAsInt() == 200) {
+                            JsonObject cfg = new JsonObject();
+                            cfg.addProperty("token", js.get("accessToken").getAsString());
+                            try (Writer writer = new FileWriter(new File(this.mc.mcDataDir, "uvpt.json"))) {
+                                Gson gson = new GsonBuilder().create();
+                                gson.toJson(cfg, writer);
+                                writer.flush();
+                                System.out.println("Created token file");
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            this.config.setToken(js.get("accessToken").getAsString());
+                            this.chocomint.setUser(this.chocomint.getUserManager().setUser(js.get("accessToken").getAsString()));
+                            this.mc.displayGuiScreen(this.parent);
                         }
+
                     });
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -7,6 +7,8 @@ import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.RestUtils;
 import net.minecraft.client.Minecraft;
 import org.apache.commons.io.IOUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -35,11 +37,17 @@ public class Config {
             if(tkC.exists()){
                 try {
                     String js = IOUtils.toString(new FileInputStream(tkC), StandardCharsets.UTF_8);
-                    JsonObject json = this.gson.fromJson(js, JsonObject.class);
+                    JSONObject json = new JSONObject(js);
 
-                    this.restUtils.sendJsonRequest("noid/validateToken", js, (obj)->{
-                        JsonObject res = this.gson.fromJson(obj, JsonObject.class);
-                        if(res.get("code").getAsInt() == 200) this.mcToken = json.get("token").getAsString();
+                    this.restUtils.sendJsonRequest("api/user", json, (obj)->{
+                        try {
+                            System.out.println(json.getString("token"));
+                            System.out.println(obj);
+                            JsonObject res = this.gson.fromJson(obj, JsonObject.class);
+                            if(res.get("code").getAsInt() == 200) this.mcToken = json.getString("token");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     });
                 }catch (Exception e){
                     System.out.println(e.getMessage());
