@@ -25,7 +25,7 @@ public class Menu extends AnimationUI {
 
     private double tw = Integer.MAX_VALUE;
     private double scroll = 0;
-    private final int pageSize;
+    private int pageSize;
 
     private int position = 0;
 
@@ -102,5 +102,9 @@ public class Menu extends AnimationUI {
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if(keyCode == 1) this.mc.displayGuiScreen(previous);
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 }
