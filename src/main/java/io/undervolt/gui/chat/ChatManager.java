@@ -19,6 +19,12 @@ public class ChatManager {
         this.chocomint = chocomint;
         this.reservedLogTab.setRead();
         this.reservedServerTab.setRead();
+        this.reservedLogTab.addMessage(this.chocomint.getChocomintUser(), "Esta es la pestaña de #chocomint.");
+        this.reservedLogTab.addMessage(this.chocomint.getChocomintUser(), "Acá vas a poder realizar comandos del cliente.");
+        this.reservedLogTab.addMessage(this.chocomint.getChocomintUser(), "Para acceder a los chats globales, iniciá sesión con tu cuenta de UnderVolt.");
+        this.reservedLogTab.addMessage(this.chocomint.getChocomintUser(), "Para ver los comandos disponibles, hacé /help.");
+        this.reservedLogTab.addMessage(this.chocomint.getChocomintUser(), "Si encontraste algún bug, entrá a https://github.com/UnderVolt/chocomint/. Abajo hay una guia sobre como reportarlos.");
+        this.reservedLogTab.addMessage(this.chocomint.getChocomintUser(), "\247cDisfrutá!");
     }
 
     public boolean hasUnreadMessages() {
