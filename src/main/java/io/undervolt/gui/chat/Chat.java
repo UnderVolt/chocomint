@@ -31,7 +31,7 @@ public class Chat extends GameBar {
 
     /** TextField */
     private GuiTextField textField;
-    private String initialText;
+    private final String initialText;
     private int upKeyCounter = 0;
 
     /** Console */
@@ -41,7 +41,7 @@ public class Chat extends GameBar {
     private final GuiScreen prev;
 
     /** Server */
-    private ServerData serverData;
+    private final ServerData serverData;
     private GameBarButton serverReservedButton;
 
     /** Almendra */
@@ -74,9 +74,13 @@ public class Chat extends GameBar {
         this.chatHeight = (int) (this.mc.theWorld == null ? this.height * .33 : this.height * .66);
 
         if(this.chatManager.getSelectedTab() == null) {
-            if (this.serverData == null) {
+            if (this.mc.theWorld == null || this.mc.thePlayer == null) {
                 if (this.chatManager.getOpenTabs().size() > 1)
                     this.chatManager.setSelectedTab(this.chatManager.getOpenTabs().get(1));
+                else {
+                    this.chatManager.addTab(this.chatManager.getReservedLogTab());
+                    this.chatManager.setSelectedTab(this.chatManager.getReservedLogTab());
+                }
             } else this.chatManager.setSelectedTab(this.chatManager.getReservedServerTab());
         }
 
@@ -106,12 +110,18 @@ public class Chat extends GameBar {
                 this.chatHeight - 18, 18, 18, "+"));
         if(this.chocomint.getUser().getUsername().equals("Guest")) this.addTabButton.enabled = false;
 
-        if(this.serverData == null) {
-            this.serverReservedButton.enabled = false;
-            this.serverReservedButton.buttonText = "No conectado";
+
+        if(this.mc.theWorld != null && this.mc.thePlayer != null) {
+            if(this.serverData != null) {
+                this.serverReservedButton.enabled = true;
+                this.serverReservedButton.buttonText = this.serverData.serverIP;
+            } else {
+                this.serverReservedButton.enabled = true;
+                this.serverReservedButton.buttonText = "Un jugador";
+            }
         } else {
-            this.serverReservedButton.enabled = true;
-            this.serverReservedButton.buttonText = this.serverData.serverIP;
+            this.serverReservedButton.enabled = false;
+            this.serverReservedButton.buttonText = "No está jugando";
         }
 
         super.initGui();
@@ -123,7 +133,8 @@ public class Chat extends GameBar {
         this.drawDefaultBackground();
         drawRect(0, this.chatHeight, this.width, this.height, new Color(36, 36, 36, 100).getRGB());
 
-        if(this.chocomint.getUser().getUsername().equals("Guest") && this.chatManager.getSelectedTab() != this.chatManager.getReservedServerTab())
+        if(this.chocomint.getUser().getUsername().equals("Guest") && this.chatManager.getSelectedTab() != this.chatManager.getReservedServerTab()
+                && this.chatManager.getSelectedTab() != this.chatManager.getReservedLogTab())
             this.fontRendererObj.drawString("Inicia sesión para poder hablar",10, this.height - 10, Color.GRAY.getRGB());
         else
             this.textField.drawTextBox();
@@ -165,12 +176,17 @@ public class Chat extends GameBar {
             button.displayString = this.chatManager.getOpenTabs().get(button.id).getName();
             this.buttonList.forEach(guiButton -> {
                 if(guiButton == serverReservedButton) {
-                    if(this.serverData == null) {
-                        this.serverReservedButton.enabled = false;
-                        this.serverReservedButton.buttonText = "No conectado";
+                    if(this.mc.theWorld != null && this.mc.thePlayer != null) {
+                        if(this.serverData != null) {
+                            this.serverReservedButton.enabled = true;
+                            this.serverReservedButton.buttonText = this.serverData.serverIP;
+                        } else {
+                            this.serverReservedButton.enabled = true;
+                            this.serverReservedButton.buttonText = "Un jugador";
+                        }
                     } else {
-                        this.serverReservedButton.enabled = true;
-                        this.serverReservedButton.buttonText = this.serverData.serverIP;
+                        this.serverReservedButton.enabled = false;
+                        this.serverReservedButton.buttonText = "No está jugando";
                     }
                 } else guiButton.enabled = guiButton.id != button.id;
             });
@@ -211,10 +227,11 @@ public class Chat extends GameBar {
                     }
                     break;
             }
-            if(this.chocomint.getUser().getUsername().equals("Guest") && this.chatManager.getSelectedTab() != this.chatManager.getReservedServerTab()) return;
+            if(this.chocomint.getUser().getUsername().equals("Guest") && this.chatManager.getSelectedTab() != this.chatManager.getReservedServerTab()
+                && this.chatManager.getSelectedTab() != this.chatManager.getReservedLogTab()) return;
             else this.textField.textboxKeyTyped(typedChar, keyCode);
         } else {
-            if(this.chatManager.getSelectedTab() == this.chatManager.getReservedServerTab() && this.serverData == null) return;
+            if(this.chatManager.getSelectedTab() == this.chatManager.getReservedServerTab() && (this.mc.thePlayer == null || this.mc.theWorld == null)) return;
             if(!this.textField.getText().equals("")) {
                 if(this.chatManager.getSelectedTab() == this.chatManager.getReservedServerTab())
                     this.mc.thePlayer.sendChatMessage(this.textField.getText().trim());
