@@ -54,8 +54,8 @@ public class MessageOptions extends GameBar {
                 this.chatManager.setSelectedTab(this.chatManager.getOrCreateTabByName(this.message.getUser()));
                 if(this.previous instanceof Chat) {
                     this.mc.displayGuiScreen(previous);
-                } else if(this.previous instanceof AvailableRoomsGUI) {
-                    this.mc.displayGuiScreen(((AvailableRoomsGUI) this.previous).previous);
+                } else if(this.previous instanceof AvailableRooms) {
+                    this.mc.displayGuiScreen(((AvailableRooms) this.previous).previous);
                 } else {
                     this.mc.displayGuiScreen(new Chat("", null, this.chocomint, this.mc.getCurrentServerData()));
                 }
