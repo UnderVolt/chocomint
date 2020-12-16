@@ -112,14 +112,16 @@ public class LoginGUI extends Menu {
     public void drawMenuItems(int mouseX, int mouseY, float partialTicks) {
 
         GL11.glPushMatrix();
+
+        GL11.glColor3f(255, 255, 255);
         this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/ui/undervolt.png"));
         drawModalRectWithCustomSizedTexture(this.width / 2 - 25, this.height / 3 - 38, 0, 0, 50, 57, 50, 57);
 
         this.user.drawTextBox();
         this.pass.drawTextBox();
 
-        this.drawString(mc.fontRendererObj, this.user.isFocused() || this.user.getText().length() > 0 ? "" : "Usuario", this.width / 2 - 70, this.height / 3 + 41, -1);
-        this.drawString(mc.fontRendererObj, this.pass.isFocused() || this.pass.getText().length() > 0 ? "" : "Contraseña", this.width / 2 - 70, this.height / 3 + 64, -1);
+        this.drawString(mc.fontRendererObj, this.user.isFocused() || this.user.getText().length() > 0 ? "" : "Usuario", this.width / 2 - 70, this.height / 3 + 42, -1);
+        this.drawString(mc.fontRendererObj, this.pass.isFocused() || this.pass.getText().length() > 0 ? "" : "Contraseña", this.width / 2 - 70, this.height / 3 + 65, -1);
 
         GL11.glPopMatrix();
 
