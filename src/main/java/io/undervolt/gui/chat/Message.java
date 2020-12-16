@@ -1,7 +1,5 @@
 package io.undervolt.gui.chat;
 
-import io.undervolt.gui.user.User;
-
 public class Message {
     private final long timeMillis;
     private final String user;
@@ -23,5 +21,17 @@ public class Message {
 
     public String getMessage() {
         return message;
+    }
+
+    public ContentType getMessageType() {
+        if(this.getMessage().toLowerCase().contains("http://") || this.getMessage().toLowerCase().contains("https://")) {
+            return ContentType.LINK;
+        }else {
+            return ContentType.PLAINTEXT;
+        }
+    }
+
+    public enum ContentType {
+        PLAINTEXT, LINK, COMMAND
     }
 }
