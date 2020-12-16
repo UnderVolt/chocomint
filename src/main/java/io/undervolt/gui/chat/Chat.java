@@ -192,7 +192,7 @@ public class Chat extends GameBar {
             });
             this.update(false);
         } else if(button.id == 1337097)
-            this.mc.displayGuiScreen(new AvailableRoomsGUI(this, this.chocomint, this.chatManager));
+            this.mc.displayGuiScreen(new AvailableRooms(this, this.chocomint, this.chatManager));
         else
             super.actionPerformed(button);
     }
@@ -205,7 +205,7 @@ public class Chat extends GameBar {
                     this.mc.displayGuiScreen(this.prev);
                     break;
                 case Keyboard.KEY_F9:
-                    this.mc.displayGuiScreen(new AvailableRoomsGUI(this, this.chocomint, this.chatManager));
+                    this.mc.displayGuiScreen(new AvailableRooms(this, this.chocomint, this.chatManager));
                     break;
                 case Keyboard.KEY_UP:
                     if(upKeyCounter - 1 >= this.chatManager.getSentMessages().size()) return;
