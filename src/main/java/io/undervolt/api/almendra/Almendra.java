@@ -20,7 +20,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.awt.*;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
