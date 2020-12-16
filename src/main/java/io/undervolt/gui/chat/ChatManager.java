@@ -53,6 +53,7 @@ public class ChatManager {
             } else {
                 System.out.println(tabName + " didn't exist in open tabs or available rooms. Creating tab and selecting it.");
                 tab = new Tab(true, tabName, 0, false);
+                tab.setUnread();
             }
             this.addTab(tab);
         }
