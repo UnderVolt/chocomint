@@ -165,7 +165,7 @@ public class Almendra implements Listener {
     }
 
     @EventHandler public void gameShutdownEvent(GameShutdownEvent event) {
-        this.socket.emit("userDisconnect", this.chocomint.getUser());
+        this.socket.emit("userDisconnect", this.chocomint.getUser().getUsername());
     }
 
     public void sendMessage(final Tab tab, final String message, final String user) {
