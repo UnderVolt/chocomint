@@ -145,7 +145,7 @@ public class Almendra implements Listener {
 
     public void receiveMessage(final JSONObject message) throws JSONException {
         System.out.println(message.getString("from") + " (" + message.getString("to") + "): " + message.getString("message"));
-        if(message.getString("from").equals(this.chocomint.getUser().getUsername())) return;
+        if(message.getString("from").equals(this.chocomint.getUser().getFormattedUsername())) return;
         if(message.getString("to").startsWith("#")) {
             this.getAvailableRooms().get(message.getString("to"))
                     .addMessage(message.getString("from"), message.getString("message"));
