@@ -227,9 +227,9 @@ public class Chat extends GameBar {
                     }
                     break;
             }
-            if(this.chocomint.getUser().getUsername().equals("Guest") && this.chatManager.getSelectedTab() != this.chatManager.getReservedServerTab()
-                && this.chatManager.getSelectedTab() != this.chatManager.getReservedLogTab()) return;
-            else this.textField.textboxKeyTyped(typedChar, keyCode);
+            if(!(this.chocomint.getUser().getUsername().equals("Guest") && this.chatManager.getSelectedTab() != this.chatManager.getReservedServerTab()
+                && this.chatManager.getSelectedTab() != this.chatManager.getReservedLogTab()))
+                this.textField.textboxKeyTyped(typedChar, keyCode);
         } else {
             if(this.chatManager.getSelectedTab() == this.chatManager.getReservedServerTab() && (this.mc.thePlayer == null || this.mc.theWorld == null)) return;
             if(!this.textField.getText().equals("")) {
