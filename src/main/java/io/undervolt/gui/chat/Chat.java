@@ -26,9 +26,6 @@ public class Chat extends GameBar {
     /** Declare ChatManager */
     private final ChatManager chatManager;
 
-    /** Declaring everything related to tabs */
-    private GameBarButton addTabButton;
-
     /** TextField */
     private GuiTextField textField;
     private final String initialText;
@@ -106,9 +103,11 @@ public class Chat extends GameBar {
 
         this.serverReservedButton = (GameBarButton) this.buttonList.get(this.chatManager.getOpenTabs().indexOf(this.chatManager.getReservedServerTab()));
 
-        this.buttonList.add(this.addTabButton = new GameBarButton(1337097, this.width - 18,
+        /* Declaring everything related to tabs */
+        GameBarButton addTabButton;
+        this.buttonList.add(addTabButton = new GameBarButton(1337097, this.width - 18,
                 this.chatHeight - 18, 18, 18, "+"));
-        if(this.chocomint.getUser().getUsername().equals("Guest")) this.addTabButton.enabled = false;
+        if(this.chocomint.getUser().getUsername().equals("Guest")) addTabButton.enabled = false;
 
 
         if(this.mc.theWorld != null && this.mc.thePlayer != null) {
@@ -157,6 +156,7 @@ public class Chat extends GameBar {
                 i = i - 12;
             }
         }
+
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
         GL11.glPopMatrix();
         GL11.glPopMatrix();
@@ -192,7 +192,7 @@ public class Chat extends GameBar {
             });
             this.update(false);
         } else if(button.id == 1337097)
-            this.mc.displayGuiScreen(new AvailableRoomsGUI(this, this.chocomint, this.chatManager));
+            this.mc.displayGuiScreen(new AvailableRooms(this, this.chocomint, this.chatManager));
         else
             super.actionPerformed(button);
     }
@@ -205,7 +205,7 @@ public class Chat extends GameBar {
                     this.mc.displayGuiScreen(this.prev);
                     break;
                 case Keyboard.KEY_F9:
-                    this.mc.displayGuiScreen(new AvailableRoomsGUI(this, this.chocomint, this.chatManager));
+                    this.mc.displayGuiScreen(new AvailableRooms(this, this.chocomint, this.chatManager));
                     break;
                 case Keyboard.KEY_UP:
                     if(upKeyCounter - 1 >= this.chatManager.getSentMessages().size()) return;
@@ -227,9 +227,9 @@ public class Chat extends GameBar {
                     }
                     break;
             }
-            if(this.chocomint.getUser().getUsername().equals("Guest") && this.chatManager.getSelectedTab() != this.chatManager.getReservedServerTab()
-                && this.chatManager.getSelectedTab() != this.chatManager.getReservedLogTab()) return;
-            else this.textField.textboxKeyTyped(typedChar, keyCode);
+            if(!(this.chocomint.getUser().getUsername().equals("Guest") && this.chatManager.getSelectedTab() != this.chatManager.getReservedServerTab()
+                && this.chatManager.getSelectedTab() != this.chatManager.getReservedLogTab()))
+                this.textField.textboxKeyTyped(typedChar, keyCode);
         } else {
             if(this.chatManager.getSelectedTab() == this.chatManager.getReservedServerTab() && (this.mc.thePlayer == null || this.mc.theWorld == null)) return;
             if(!this.textField.getText().equals("")) {
@@ -240,10 +240,16 @@ public class Chat extends GameBar {
                     this.console.processCommand(this.chatManager.getReservedLogTab(), this.textField.getText());
                 }
                 else
-                    this.almendra.sendMessage(this.chatManager.getSelectedTab(), this.textField.getText().trim(), this.chocomint.getUser().getUsername());
+                    this.almendra.sendMessage(this.chatManager.getSelectedTab(), this.textField.getText().trim(), this.chocomint.getUser().getFormattedUsername());
                 this.textField.setText("");
             }
         }
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        this.textField.mouseClicked(mouseX, mouseY, mouseButton);
+        super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
