@@ -202,13 +202,6 @@ public class GameBar extends AnimationUI {
         }
     }
 
-    @Override
-    public void onGuiClosed() {
-        this.notificationManager.updateNotifications(
-                this.notificationManager.clearNotifications()
-        );
-    }
-
     public void setBackgroundDrawing(boolean backgroundDrawing) {
         this.backgroundDrawing = backgroundDrawing;
     }
