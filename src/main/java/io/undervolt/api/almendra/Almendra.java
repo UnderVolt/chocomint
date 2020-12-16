@@ -13,6 +13,7 @@ import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.chat.ChatManager;
 import io.undervolt.gui.chat.Message;
 import io.undervolt.gui.chat.Tab;
+import io.undervolt.gui.notifications.Notification;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -20,7 +21,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.awt.*;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
@@ -158,6 +158,10 @@ public class Almendra implements Listener {
                 if(this.chocomint.getMinecraft().currentScreen != null && this.chocomint.getMinecraft().currentScreen instanceof Chat) {
                     System.out.println("Updated chat screen");
                     ((Chat) this.chocomint.getMinecraft().currentScreen).update(false);
+                } else {
+                    this.chocomint.getNotificationManager().addNotification(
+                            new Notification(Notification.Priority.SOCIAL, message.getString("from"), message.getString("message"))
+                    );
                 }
             }
         }
