@@ -29,7 +29,7 @@ public class NotificationPanel extends Gui {
             AtomicInteger x = new AtomicInteger();
             this.notificationManager.getNotifications().forEach(notification -> {
                 notification.draw(this.mc, screenWidth - 115, 45 + x.get());
-                x.set(x.get() + 35);
+                x.set(x.get() + 45);
             });
         } else {
             if(!this.read || this.notificationManager.getNotifications().size() > 0) {
