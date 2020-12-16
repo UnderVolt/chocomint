@@ -26,6 +26,10 @@ public class User {
         return this.username;
     }
 
+    public final String getFormattedUsername() {
+        return (this.developer ? "§9" : "") + this.username;
+    }
+
     public final Status getStatus() {
         return this.status;
     }
