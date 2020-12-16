@@ -6,7 +6,6 @@ import io.undervolt.instance.Chocomint;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.io.IOException;
@@ -14,7 +13,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class SendPMGui extends GameBar {
+public class SendPM extends GameBar {
     private final GuiScreen previous;
     private final Chocomint chocomint;
     private final ChatManager chatManager;
@@ -23,7 +22,7 @@ public class SendPMGui extends GameBar {
 
     private GuiTextField textField;
 
-    public SendPMGui(final GuiScreen previous, final Chocomint chocomint) {
+    public SendPM(final GuiScreen previous, final Chocomint chocomint) {
         super(previous, chocomint);
         this.chocomint = chocomint;
         this.previous = previous;
@@ -66,8 +65,8 @@ public class SendPMGui extends GameBar {
             this.chatManager.setSelectedTab(this.chatManager.getOrCreateTabByName(this.textField.getText().trim()));
             if(this.previous instanceof Chat) {
                 this.mc.displayGuiScreen(previous);
-            } else if(this.previous instanceof AvailableRoomsGUI) {
-                this.mc.displayGuiScreen(((AvailableRoomsGUI) this.previous).previous);
+            } else if(this.previous instanceof AvailableRooms) {
+                this.mc.displayGuiScreen(((AvailableRooms) this.previous).previous);
             } else {
                 this.mc.displayGuiScreen(new Chat("", null, this.chocomint, this.mc.getCurrentServerData()));
             }
@@ -94,8 +93,8 @@ public class SendPMGui extends GameBar {
                     this.chatManager.setSelectedTab(this.chatManager.getOrCreateTabByName(this.textField.getText().trim()));
                     if(this.previous instanceof Chat) {
                         this.mc.displayGuiScreen(previous);
-                    } else if(this.previous instanceof AvailableRoomsGUI) {
-                        this.mc.displayGuiScreen(((AvailableRoomsGUI) this.previous).previous);
+                    } else if(this.previous instanceof AvailableRooms) {
+                        this.mc.displayGuiScreen(((AvailableRooms) this.previous).previous);
                     } else {
                         this.mc.displayGuiScreen(new Chat("", null, this.chocomint, this.mc.getCurrentServerData()));
                     }

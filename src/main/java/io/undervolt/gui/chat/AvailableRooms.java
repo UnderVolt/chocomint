@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class AvailableRoomsGUI extends GameBar {
+public class AvailableRooms extends GameBar {
 
     private final Almendra almendra;
     private final ChatManager chatManager;
@@ -22,7 +22,7 @@ public class AvailableRoomsGUI extends GameBar {
     private final Chocomint chocomint;
     private GuiButton pmButton;
 
-    public AvailableRoomsGUI(final GuiScreen previous, final Chocomint chocomint, final ChatManager chatManager) {
+    public AvailableRooms(final GuiScreen previous, final Chocomint chocomint, final ChatManager chatManager) {
         super(previous, chocomint);
         this.chocomint = chocomint;
         this.almendra = chocomint.getAlmendra();
@@ -63,7 +63,7 @@ public class AvailableRoomsGUI extends GameBar {
             this.mc.displayGuiScreen(previous);
         } else {
             if(button.id == 1337) {
-                this.mc.displayGuiScreen(new SendPMGui(this, this.chocomint));
+                this.mc.displayGuiScreen(new SendPM(this, this.chocomint));
             } else {
                 super.actionPerformed(button);
             }
@@ -74,7 +74,7 @@ public class AvailableRoomsGUI extends GameBar {
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         switch(keyCode) {
             case Keyboard.KEY_F9:
-                this.mc.displayGuiScreen(new SendPMGui(this, this.chocomint));
+                this.mc.displayGuiScreen(new SendPM(this, this.chocomint));
                 break;
             case Keyboard.KEY_F10:
                 this.chatManager.addTab(this.chatManager.getReservedLogTab());
