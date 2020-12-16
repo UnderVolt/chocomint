@@ -11,6 +11,7 @@ import io.undervolt.utils.RestUtils;
 import io.undervolt.utils.config.Config;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.ResourceLocation;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.lwjgl.input.Keyboard;
@@ -42,10 +43,10 @@ public class LoginGUI extends Menu {
 
     @Override
     public void initGui() {
-        this.user = new GuiTextField(99, mc.fontRendererObj, this.width / 2 - 75, this.height / 3, 150, 18);
-        this.pass = new GuiPasswordField(99, this.width / 2 - 75, this.height / 3 + 23, 150, 18);
+        this.user = new GuiTextField(99, mc.fontRendererObj, this.width / 2 - 75, this.height / 3 + 37, 150, 18);
+        this.pass = new GuiPasswordField(99, this.width / 2 - 75, this.height / 3 + 60, 150, 18);
 
-        this.buttonList.add(new GuiButton(1, this.width / 2 - 50, this.height / 3 + 70, 100, 20, "Link Account"));
+        this.buttonList.add(new GuiButton(1, this.width / 2 - 50, this.height / 3 + 90, 100, 20, "Vincular cuenta"));
         super.initGui();
     }
 
@@ -112,11 +113,15 @@ public class LoginGUI extends Menu {
 
         GL11.glPushMatrix();
 
+        GL11.glColor3f(255, 255, 255);
+        this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/ui/undervolt.png"));
+        drawModalRectWithCustomSizedTexture(this.width / 2 - 25, this.height / 3 - 38, 0, 0, 50, 57, 50, 57);
+
         this.user.drawTextBox();
         this.pass.drawTextBox();
 
-        this.drawString(mc.fontRendererObj, this.user.isFocused() || this.user.getText().length() > 0 ? "" : "Username", this.width / 2 - 70, this.height / 3 + 5, -1);
-        this.drawString(mc.fontRendererObj, this.pass.isFocused() || this.pass.getText().length() > 0 ? "" : "Password", this.width / 2 - 70, this.height / 3 + 28, -1);
+        this.drawString(mc.fontRendererObj, this.user.isFocused() || this.user.getText().length() > 0 ? "" : "Usuario", this.width / 2 - 70, this.height / 3 + 42, -1);
+        this.drawString(mc.fontRendererObj, this.pass.isFocused() || this.pass.getText().length() > 0 ? "" : "Contraseña", this.width / 2 - 70, this.height / 3 + 65, -1);
 
         GL11.glPopMatrix();
 
