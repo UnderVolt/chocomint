@@ -14,8 +14,8 @@ import io.undervolt.console.commands.VersionCommand;
 import io.undervolt.gui.RenderUtils;
 import io.undervolt.gui.chat.ChatManager;
 import io.undervolt.gui.contributors.ContributorsManager;
-import io.undervolt.gui.modifiers.UnreadMessageIndicator;
 import io.undervolt.gui.notifications.NotificationManager;
+import io.undervolt.gui.notifications.NotificationOverlay;
 import io.undervolt.gui.user.User;
 import io.undervolt.gui.user.UserManager;
 import io.undervolt.utils.RestUtils;
@@ -31,7 +31,7 @@ public class Chocomint implements Listener {
     private GameBridge gameBridge;
     private final RenderUtils renderUtils;
     private final RestUtils restUtils;
-    private EventManager eventManager;
+    private final EventManager eventManager;
     private ContributorsManager contributorsManager;
     private final Minecraft mc;
     private Console console;
@@ -43,6 +43,7 @@ public class Chocomint implements Listener {
 
     /** Initialize constructor */
     public Chocomint(final Minecraft mc) {
+        this.eventManager = new EventManager();
         this.sambayon = new Sambayon(this);
         this.renderUtils = new RenderUtils(mc);
         this.restUtils = new RestUtils(this);
@@ -57,8 +58,7 @@ public class Chocomint implements Listener {
         switch(type){
             case PREINIT:
                 this.gameBridge = new GameBridge();
-                this.notificationManager = new NotificationManager();
-                this.eventManager = new EventManager();
+                this.notificationManager = new NotificationManager(this);
                 this.contributorsManager = new ContributorsManager(this.mc);
 
                 this.chatManager = new ChatManager(this);
@@ -84,7 +84,7 @@ public class Chocomint implements Listener {
                 this.console.registerCommand(new VersionCommand(this));
                 this.console.registerCommand(new HelpCommand(this));
 
-                this.getEventManager().registerEvents(new UnreadMessageIndicator(this.getChatManager(), this.getMinecraft(), "friends"));
+                this.getEventManager().registerEvents(new NotificationOverlay(this));
 
                 this.eventManager.callEvent(new InitEvent.ClientInitEvent());
 
