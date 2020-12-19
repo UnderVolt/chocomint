@@ -33,7 +33,6 @@ public class GameBar extends AnimationUI {
 
     /** Declare User card */
     public UserCard userCard;
-    private final User user;
 
     /** Declare contributors panel */
     private final ContributorsManager contributorsManager;
@@ -62,7 +61,6 @@ public class GameBar extends AnimationUI {
         this.chocomint = chocomint;
         this.notificationManager = chocomint.getNotificationManager();
         this.sr = chocomint.getGameBridge().getScaledResolution();
-        this.user = this.chocomint.getUser();
         this.contributorsManager = chocomint.getContributorsManager();
     }
 
@@ -84,8 +82,8 @@ public class GameBar extends AnimationUI {
         BufferedImage image = null;
         byte[] imageByte;
         DynamicTexture dynamicTexture = null;
-        if(this.user.getImage() != null) {
-            String imageString = this.user.getImage().split(",")[1];
+        if(this.chocomint.getUser().getImage() != null) {
+            String imageString = this.chocomint.getUser().getImage().split(",")[1];
 
             try {
                 Base64.Decoder decoder = Base64.getDecoder();
@@ -100,7 +98,7 @@ public class GameBar extends AnimationUI {
         }
 
         try {
-            this.userCard = new UserCard(this.chocomint, this.mc, this.user, false, dynamicTexture);
+            this.userCard = new UserCard(this.chocomint, this.mc, this.chocomint.getUser(), false, dynamicTexture);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -186,13 +184,10 @@ public class GameBar extends AnimationUI {
                 this.userCard.setActive(false);
                 break;
             case 1337102:
-                if(this.user.getUsername().equals("Guest"))
-                    this.mc.displayGuiScreen(new LoginGUI(this, this.chocomint));
-                else {
-                    this.userCard.toggleActive();
-                    this.notificationPanel.setActive(false);
-                    this.contributorsPanel.setActive(false);
-                }
+                this.userCard.toggleActive();
+                this.notificationPanel.setActive(false);
+                this.contributorsPanel.setActive(false);
+                if(this.chocomint.getUser().getUsername().equals("Guest")) this.mc.displayGuiScreen(new LoginGUI(this, this.chocomint));
                 break;
             case 1337105:
                 this.notificationPanel.setActive(false);
