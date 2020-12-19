@@ -82,7 +82,7 @@ public class GameBar extends AnimationUI {
         BufferedImage image = null;
         byte[] imageByte;
         DynamicTexture dynamicTexture = null;
-        if(this.chocomint.getUser().getImage() != null) {
+        if(this.chocomint.getUser().getImage() != null && !this.chocomint.getUser().getImage().equals("")) {
             String imageString = this.chocomint.getUser().getImage().split(",")[1];
 
             try {
