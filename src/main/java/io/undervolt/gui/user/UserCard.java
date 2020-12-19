@@ -17,7 +17,7 @@ public class UserCard extends Gui {
     private boolean isActive;
     private final DynamicTexture pfp;
 
-    public UserCard(final Chocomint chocomint, final Minecraft mc, final User user, boolean isActive, final DynamicTexture pfp) throws IOException {
+    public UserCard(final Chocomint chocomint, final Minecraft mc, final User user, boolean isActive, final DynamicTexture pfp) {
         this.chocomint = chocomint;
         this.isActive = isActive;
         this.mc = mc;
