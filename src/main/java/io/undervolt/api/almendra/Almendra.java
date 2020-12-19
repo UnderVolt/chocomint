@@ -145,15 +145,15 @@ public class Almendra implements Listener {
     }
 
     public void receiveMessage(final JSONObject message) throws JSONException {
-        System.out.println(message.getBoolean("developer") ? "§9" : "" +  message.getString("from") + " (" + message.getString("to") + "): " + message.getString("message"));
+        System.out.println((message.getBoolean("developer") ? "§9" : "") +  message.getString("from") + " (" + message.getString("to") + "): " + message.getString("message"));
         if(message.getString("from").equals(this.chocomint.getUser().getUsername())) return;
         if(message.getString("to").startsWith("#")) {
             this.getAvailableRooms().get(message.getString("to"))
-                    .addMessage(message.getBoolean("developer") ? "§9" : "" +  message.getString("from"), message.getString("message"));
+                    .addMessage((message.getBoolean("developer") ? "§9" : "") +  message.getString("from"), message.getString("message"));
         } else {
             Tab tab = this.chatManager.getOrCreateTabByName(message.getString("from"));
             this.chatManager.addTab(tab);
-            tab.addMessage(message.getBoolean("developer") ? "§9" : "" +  message.getString("from"), message.getString("message"));
+            tab.addMessage((message.getBoolean("developer") ? "§9" : "") + message.getString("from"), message.getString("message"));
             if(this.chatManager.getSelectedTab() != tab) {
                 tab.setUnread();
                 if(this.chocomint.getMinecraft().currentScreen != null && this.chocomint.getMinecraft().currentScreen instanceof Chat) {
@@ -161,7 +161,7 @@ public class Almendra implements Listener {
                     ((Chat) this.chocomint.getMinecraft().currentScreen).update(false);
                 } else {
                     this.chocomint.getNotificationManager().addNotification(
-                            new Notification(Notification.Priority.SOCIAL, message.getBoolean("developer") ? "§9" : "" +  message.getString("from"), message.getString("message"))
+                            new Notification(Notification.Priority.SOCIAL, (message.getBoolean("developer") ? "§9" : "") +  message.getString("from"), message.getString("message"))
                     );
                 }
             }
