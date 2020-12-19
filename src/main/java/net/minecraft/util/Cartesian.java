@@ -57,7 +57,7 @@ public class Cartesian
         }
     }
 
-    static class Product<T> implements Iterable<T[]>
+    static class Product<T> implements Iterable<Object[]>
     {
         private final Class<T> clazz;
         private final Iterable <? extends T > [] iterables;
@@ -68,9 +68,9 @@ public class Cartesian
             this.iterables = iterables;
         }
 
-        public Iterator<T[]> iterator()
+        public Iterator<Object[]> iterator()
         {
-            return (Iterator<T[]>)(this.iterables.length <= 0 ? Collections.singletonList((Object[])Cartesian.createArray(this.clazz, 0)).iterator() : new Cartesian.Product.ProductIterator(this.clazz, this.iterables));
+            return (Iterator<Object[]>)(this.iterables.length <= 0 ? Collections.singletonList((Object[])Cartesian.createArray(this.clazz, 0)).iterator() : new ProductIterator(this.clazz, this.iterables));
         }
 
         static class ProductIterator<T> extends UnmodifiableIterator<T[]>
@@ -84,7 +84,7 @@ public class Cartesian
             {
                 this.index = -2;
                 this.iterables = iterables;
-                this.iterators = (Iterator[])Cartesian.createArray(Iterator.class, this.iterables.length);
+                this.iterators = Cartesian.createArray(Iterator.class, this.iterables.length);
 
                 for (int i = 0; i < this.iterables.length; ++i)
                 {

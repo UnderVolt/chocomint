@@ -13,7 +13,7 @@ applicationDefaultJvmArgs = ["-Djava.library.path=natives"]
 
 mainClassName = 'Start'
 
-group 'dev.galaxyproject'
+group 'io.undervolt.chocomint'
 version '1.1-SNAPSHOT'
 
 sourceCompatibility = 1.8
