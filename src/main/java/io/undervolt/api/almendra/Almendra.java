@@ -177,7 +177,7 @@ public class Almendra implements Listener {
     public void sendMessage(final Tab tab, final String message, final User user) {
         try {
             this.socket.emit("sendMessage", new JSONObject(new AlmendraMessage(user, tab.getName(), message).toString()));
-            this.chatManager.getSelectedTab().addMessage(user.getUsername(), message);
+            this.chatManager.getSelectedTab().addMessage((user.isDeveloper() ? "§9" : "") + user.getUsername(), message);
             this.chatManager.getSentMessages().add(new Message(user.getUsername(), message));
         } catch (JSONException e) {
             e.printStackTrace();
