@@ -194,6 +194,7 @@ public class Almendra implements Listener {
 
         public AlmendraMessage(User user, String to, String message) {
             this.from = user.getUsername();
+            this.developer = user.isDeveloper();
             this.to = to;
             this.message = message;
         }
