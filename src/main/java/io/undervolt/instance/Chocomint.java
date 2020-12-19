@@ -1,7 +1,6 @@
 package io.undervolt.instance;
 
 import io.undervolt.api.almendra.Almendra;
-import io.undervolt.api.discord.PresenceHandler;
 import io.undervolt.api.event.EventManager;
 import io.undervolt.api.event.events.InitEvent;
 import io.undervolt.api.event.events.UserLoginEvent;
@@ -43,7 +42,6 @@ public class Chocomint implements Listener {
     private final UserManager userManager;
     private final String clientName;
     private final String commitName;
-    private PresenceHandler presenceHandler;
 
     /** Initialize constructor */
     public Chocomint(final Minecraft mc) {
@@ -85,7 +83,6 @@ public class Chocomint implements Listener {
                 break;
             case INIT:
                 this.screenshotUploader = new ScreenshotUploader(this);
-                this.presenceHandler = new PresenceHandler(this);
 
                 // Register Commands
                 this.console.registerCommand(new VersionCommand(this));
