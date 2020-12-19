@@ -14,13 +14,13 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.texture.DynamicTexture;
-import sun.misc.BASE64Decoder;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Base64;
 
 public class GameBar extends AnimationUI {
 
@@ -88,8 +88,8 @@ public class GameBar extends AnimationUI {
             String imageString = this.user.getImage().split(",")[1];
 
             try {
-                BASE64Decoder decoder = new BASE64Decoder();
-                imageByte = decoder.decodeBuffer(imageString);
+                Base64.Decoder decoder = Base64.getDecoder();
+                imageByte = decoder.decode(imageString);
                 ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
                 image = ImageIO.read(bis);
                 bis.close();
