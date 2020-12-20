@@ -151,7 +151,7 @@ public class GameBar extends AnimationUI {
                 this.notificationPanel.setActive(false);
 
             for (Notification notification : this.notificationManager.getNotifications()) {
-                if (mouseX >= notification.getX() && mouseY >= notification.getY() && mouseX <= notification.getX() + 110 && mouseY <= notification.getY() + 35) {
+                if (mouseX >= notification.getX() + notificationScroll && mouseY >= notification.getY() +notificationScroll && mouseX <= notification.getX() + notificationScroll + 110 && mouseY <= notification.getY() + notificationScroll + 35) {
                     notification.getConsumer().accept((this.mc.currentScreen instanceof Chat ? this.previousScreen : this));
                 }
             }
