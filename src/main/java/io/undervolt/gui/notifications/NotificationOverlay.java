@@ -28,6 +28,14 @@ public class NotificationOverlay extends Gui implements Listener {
         this.scaledResolution = this.chocomint.getGameBridge().getScaledResolution();
     }
 
+    public void drawOverlay(int x, int y) {
+        AtomicInteger yy = new AtomicInteger(y);
+        this.notificationsToDraw.forEach(notification -> {
+            notification.draw(mc, x, yy.get());
+            yy.set(yy.get() + 43);
+        });
+    }
+
     @EventHandler public void add(NotificationEvent.Add e) {
         System.out.println(e.notification.title);
         this.notificationsToDraw.add(e.notification);
@@ -43,10 +51,6 @@ public class NotificationOverlay extends Gui implements Listener {
     }
 
     @EventHandler public void draw(RenderGameOverlayEvent event) {
-        AtomicInteger y = new AtomicInteger(5);
-        this.notificationsToDraw.forEach(notification -> {
-            notification.draw(mc, 5, y.get());
-            y.set(y.get() + 43);
-        });
+        if(this.mc.currentScreen == null) this.drawOverlay(5, 5);
     }
 }

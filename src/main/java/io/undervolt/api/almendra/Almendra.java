@@ -14,6 +14,7 @@ import io.undervolt.gui.chat.ChatManager;
 import io.undervolt.gui.chat.Message;
 import io.undervolt.gui.chat.Tab;
 import io.undervolt.gui.notifications.Notification;
+import io.undervolt.gui.user.User;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -144,15 +145,15 @@ public class Almendra implements Listener {
     }
 
     public void receiveMessage(final JSONObject message) throws JSONException {
-        System.out.println(message.getString("from") + " (" + message.getString("to") + "): " + message.getString("message"));
-        if(message.getString("from").equals(this.chocomint.getUser().getFormattedUsername())) return;
+        System.out.println((message.getBoolean("developer") ? "§9" : "") +  message.getString("from") + " (" + message.getString("to") + "): " + message.getString("message"));
+        if(message.getString("from").equals(this.chocomint.getUser().getUsername())) return;
         if(message.getString("to").startsWith("#")) {
             this.getAvailableRooms().get(message.getString("to"))
-                    .addMessage(message.getString("from"), message.getString("message"));
+                    .addMessage((message.getBoolean("developer") ? "§9" : "") +  message.getString("from"), message.getString("message"));
         } else {
             Tab tab = this.chatManager.getOrCreateTabByName(message.getString("from"));
             this.chatManager.addTab(tab);
-            tab.addMessage(message.getString("from"), message.getString("message"));
+            tab.addMessage((message.getBoolean("developer") ? "§9" : "") + message.getString("from"), message.getString("message"));
             if(this.chatManager.getSelectedTab() != tab) {
                 tab.setUnread();
                 if(this.chocomint.getMinecraft().currentScreen != null && this.chocomint.getMinecraft().currentScreen instanceof Chat) {
@@ -160,7 +161,7 @@ public class Almendra implements Listener {
                     ((Chat) this.chocomint.getMinecraft().currentScreen).update(false);
                 } else {
                     this.chocomint.getNotificationManager().addNotification(
-                            new Notification(Notification.Priority.SOCIAL, message.getString("from"), message.getString("message"))
+                            new Notification(Notification.Priority.SOCIAL, (message.getBoolean("developer") ? "§9" : "") +  message.getString("from"), message.getString("message"))
                     );
                 }
             }
@@ -173,29 +174,11 @@ public class Almendra implements Listener {
             this.socket.emit("userDisconnect", this.chocomint.getUser().getUsername());
     }
 
-    public void sendMessage(final Tab tab, final String message, final String user) {
+    public void sendMessage(final Tab tab, final String message, final User user) {
         try {
             this.socket.emit("sendMessage", new JSONObject(new AlmendraMessage(user, tab.getName(), message).toString()));
-            int width = this.chocomint.getGameBridge().getScaledResolution().getScaledWidth() - 5 - fontRenderer.getStringWidth(user + ": ");
-            if(this.fontRenderer.getStringWidth(user + ": " + message) > width) {
-                String splitSeq = message.contains(" ") ? " " : "(?!^)";
-                String firstLine = "";
-                String secondLine = "\247f";
-
-                for (String msgSplit : message.split(splitSeq)){
-                    if(this.fontRenderer.getStringWidth(firstLine + msgSplit) < width) {
-                        firstLine = firstLine + msgSplit + splitSeq.replace("(?!^)", "");
-                    } else {
-                        secondLine = secondLine + msgSplit + splitSeq.replace("(?!^)", "");
-                    }
-                }
-
-                this.chatManager.getSelectedTab().addMessage(user, firstLine);
-                this.chatManager.getSelectedTab().addMessage(null, secondLine);
-            } else {
-                this.chatManager.getSelectedTab().addMessage(user, message);
-            }
-            this.chatManager.getSentMessages().add(new Message(user, message));
+            this.chatManager.getSelectedTab().addMessage((user.isDeveloper() ? "§9" : "") + user.getUsername(), message);
+            this.chatManager.getSentMessages().add(new Message(user.getUsername(), message));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -207,15 +190,17 @@ public class Almendra implements Listener {
 
     static class AlmendraMessage {
         public final String from, to, message;
+        public boolean developer;
 
-        public AlmendraMessage(String from, String to, String message) {
-            this.from = from;
+        public AlmendraMessage(User user, String to, String message) {
+            this.from = user.getUsername();
+            this.developer = user.isDeveloper();
             this.to = to;
             this.message = message;
         }
 
         public String toString() {
-            return "{\"from\":\"" + from + "\", \"to\":\"" + to + "\", \"message\":\"" + message + "\"}";
+            return "{\"from\":\"" + from + "\", \"to\":\"" + to + "\", \"message\":\"" + message + "\", \"developer\":" + developer + "}";
         }
     }
 
