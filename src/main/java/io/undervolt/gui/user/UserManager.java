@@ -6,9 +6,15 @@ import com.google.gson.JsonObject;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.RestUtils;
 import io.undervolt.utils.config.Config;
+import net.minecraft.client.renderer.texture.DynamicTexture;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class UserManager {
@@ -17,6 +23,7 @@ public class UserManager {
     private final Gson gson;
     private final Config config;
     private User user;
+    private DynamicTexture dynamicTexture;
 
     public UserManager(Chocomint chocomint) {
         this.chocomint = chocomint;
@@ -51,5 +58,26 @@ public class UserManager {
             }
         });
         return user.get();
+    }
+
+    public DynamicTexture getImageAsDynamicTexture() {
+        if(dynamicTexture == null) {
+            BufferedImage image;
+            byte[] imageByte;
+            Base64.Decoder decoder = Base64.getDecoder();
+            if (this.chocomint.getUser().getImage() != null) {
+                String imageString = this.chocomint.getUser().getImage().split(",")[1];
+                try {
+                    imageByte = decoder.decode(imageString);
+                    ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+                    image = ImageIO.read(bis);
+                    bis.close();
+                    dynamicTexture = new DynamicTexture(image);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return dynamicTexture;
     }
 }
