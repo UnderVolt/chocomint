@@ -42,6 +42,7 @@ public class Chocomint implements Listener {
     private final UserManager userManager;
     private final String clientName;
     private final String commitName;
+    private NotificationOverlay notificationOverlay;
 
     /** Initialize constructor */
     public Chocomint(final Minecraft mc) {
@@ -83,12 +84,13 @@ public class Chocomint implements Listener {
                 break;
             case INIT:
                 this.screenshotUploader = new ScreenshotUploader(this);
+                this.notificationOverlay = new NotificationOverlay(this);
 
                 // Register Commands
                 this.console.registerCommand(new VersionCommand(this));
                 this.console.registerCommand(new HelpCommand(this));
 
-                this.getEventManager().registerEvents(new NotificationOverlay(this));
+                this.getEventManager().registerEvents(this.notificationOverlay);
 
                 this.eventManager.callEvent(new InitEvent.ClientInitEvent());
 
@@ -170,6 +172,10 @@ public class Chocomint implements Listener {
 
     public String getCommitName() {
         return commitName;
+    }
+
+    public NotificationOverlay getNotificationOverlay() {
+        return notificationOverlay;
     }
 
     public UserManager getUserManager() {

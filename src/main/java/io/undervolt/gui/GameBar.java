@@ -5,6 +5,7 @@ import io.undervolt.gui.contributors.ContributorsPanel;
 import io.undervolt.gui.login.LoginGUI;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.gui.notifications.NotificationManager;
+import io.undervolt.gui.notifications.NotificationOverlay;
 import io.undervolt.gui.notifications.NotificationPanel;
 import io.undervolt.gui.user.User;
 import io.undervolt.gui.user.UserCard;
@@ -31,6 +32,7 @@ public class GameBar extends AnimationUI {
     /** Declare panel status */
     private final NotificationManager notificationManager;
     public NotificationPanel notificationPanel;
+    private final NotificationOverlay notificationOverlay;
 
     /** Declare User card */
     public UserCard userCard;
@@ -63,6 +65,7 @@ public class GameBar extends AnimationUI {
         this.notificationManager = chocomint.getNotificationManager();
         this.sr = chocomint.getGameBridge().getScaledResolution();
         this.contributorsManager = chocomint.getContributorsManager();
+        this.notificationOverlay = chocomint.getNotificationOverlay();
     }
 
     @Override
@@ -130,6 +133,7 @@ public class GameBar extends AnimationUI {
         this.userCard.drawCard(this.width, this.height);
         this.notificationPanel.drawPanel(this.width, this.height);
         this.contributorsPanel.drawPanel(this.width, this.height);
+        this.notificationOverlay.drawOverlay(5, 25);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
