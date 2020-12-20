@@ -6,9 +6,7 @@ import io.undervolt.gui.contributors.ContributorsPanel;
 import io.undervolt.gui.login.LoginGUI;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.gui.notifications.NotificationManager;
-import io.undervolt.gui.notifications.NotificationOverlay;
 import io.undervolt.gui.notifications.NotificationPanel;
-import io.undervolt.gui.user.User;
 import io.undervolt.gui.user.UserCard;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.AnimationUI;
@@ -16,14 +14,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.texture.DynamicTexture;
+import org.lwjgl.input.Mouse;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Base64;
 
 public class GameBar extends AnimationUI {
 
@@ -33,7 +27,8 @@ public class GameBar extends AnimationUI {
     /** Declare panel status */
     private final NotificationManager notificationManager;
     public NotificationPanel notificationPanel;
-    private final NotificationOverlay notificationOverlay;
+    private int notificationScroll = 0;
+
 
     /** Declare User card */
     public UserCard userCard;
@@ -66,7 +61,6 @@ public class GameBar extends AnimationUI {
         this.notificationManager = chocomint.getNotificationManager();
         this.sr = chocomint.getGameBridge().getScaledResolution();
         this.contributorsManager = chocomint.getContributorsManager();
-        this.notificationOverlay = chocomint.getNotificationOverlay();
     }
 
     @Override
@@ -134,8 +128,11 @@ public class GameBar extends AnimationUI {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         this.userCard.drawCard(this.width, this.height);
-        this.notificationPanel.drawPanel(this.width, this.height);
+        this.notificationPanel.drawPanel(this.width, this.height, this.notificationScroll);
         this.contributorsPanel.drawPanel(this.width, this.height);
+
+        drawString(mc.fontRendererObj, (this.notificationManager.getNotifications().size() * 45) + "", 0, 0, Color.WHITE.getRGB());
+        drawString(mc.fontRendererObj, ((this.height - 45) - this.notificationScroll) + "", 0, 15, Color.WHITE.getRGB());
     }
 
     @Override
@@ -162,6 +159,21 @@ public class GameBar extends AnimationUI {
 
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
+
+    @Override
+    public void handleMouseInput() throws IOException {
+
+        int i = Mouse.getEventDWheel();
+
+        if(notificationPanel.isActive()) {
+            if (i > 0 && (this.notificationScroll <= 0)) this.notificationScroll += 4.5;
+            else if (i < 0 && !((this.notificationManager.getNotifications().size() * 45) <= (this.height - 45) - this.notificationScroll))
+                this.notificationScroll -= 4.5;
+        }
+
+        super.handleMouseInput();
+    }
+
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
