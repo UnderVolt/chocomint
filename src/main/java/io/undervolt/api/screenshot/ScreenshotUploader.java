@@ -63,11 +63,11 @@ public class ScreenshotUploader {
             wr.flush();
             in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
-            this.chocomint.getNotificationManager().addNotification((new Notification(Notification.Priority.NOTICE, "Uploaded screenshot", "asd")));
+            //this.chocomint.getNotificationManager().addNotification((new Notification(Notification.Priority.NOTICE, "Uploaded screenshot", "asd", action)));
 
             return true;
         } catch (Exception e) {
-            this.chocomint.getNotificationManager().addNotification(new Notification(Notification.Priority.CRITICAL, "Failed to upload screenshot", e.getMessage()));
+            //this.chocomint.getNotificationManager().addNotification(new Notification(Notification.Priority.CRITICAL, "Failed to upload screenshot", e.getMessage(), action));
             e.printStackTrace();
             return false;
         } finally {

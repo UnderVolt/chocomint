@@ -1,5 +1,6 @@
 package io.undervolt.gui;
 
+import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.contributors.ContributorsManager;
 import io.undervolt.gui.contributors.ContributorsPanel;
 import io.undervolt.gui.login.LoginGUI;
@@ -130,12 +131,11 @@ public class GameBar extends AnimationUI {
         drawRect(10, 4, 16, 16, new Color(63, 222, 160).getRGB());
         drawString(this.fontRendererObj, "chocomint", 20, 6, Color.WHITE.getRGB());
 
+        super.drawScreen(mouseX, mouseY, partialTicks);
+
         this.userCard.drawCard(this.width, this.height);
         this.notificationPanel.drawPanel(this.width, this.height);
         this.contributorsPanel.drawPanel(this.width, this.height);
-        this.notificationOverlay.drawOverlay(5, 25);
-
-        super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     @Override
@@ -152,6 +152,12 @@ public class GameBar extends AnimationUI {
         if(this.notificationPanel.isActive()) {
             if (mouseX < this.width - 120)
                 this.notificationPanel.setActive(false);
+
+            for (Notification notification : this.notificationManager.getNotifications()) {
+                if (mouseX >= notification.getX() && mouseY >= notification.getY() && mouseX <= notification.getX() + 110 && mouseY <= notification.getY() + 35) {
+                    notification.getConsumer().accept((this.mc.currentScreen instanceof Chat ? this.previousScreen : this));
+                }
+            }
         }
 
         super.mouseClicked(mouseX, mouseY, mouseButton);

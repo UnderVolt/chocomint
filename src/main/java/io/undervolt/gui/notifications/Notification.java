@@ -1,10 +1,11 @@
 package io.undervolt.gui.notifications;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiScreen;
 
 import java.awt.*;
+import java.util.function.Consumer;
 
 public class Notification extends Gui {
 
@@ -14,11 +15,15 @@ public class Notification extends Gui {
 
     public final Priority priority;
     public final String title, description;
+    private final Consumer<GuiScreen> consumer;
 
-    public Notification(final Priority priority, final String title, final String description) {
+    private int x, y;
+
+    public Notification(final Priority priority, final String title, final String description, Consumer<GuiScreen> consumer) {
         this.title = title;
         this.description = description;
         this.priority = priority;
+        this.consumer = consumer;
     }
 
     public int getPriorityColor() {
@@ -39,6 +44,10 @@ public class Notification extends Gui {
     }
 
     public void draw(final Minecraft mc, int x, int y) {
+
+        this.x = x;
+        this.y = y;
+
         mc.getChocomint().getRenderUtils().drawRoundedRect(x, y, 110, 35, 3, Color.WHITE.getRGB());
         mc.getChocomint().getRenderUtils().drawFilledCircle(x + 12, y + 15, 8, this.getPriorityColor());
 
@@ -73,4 +82,15 @@ public class Notification extends Gui {
         }
     }
 
+    public Consumer<GuiScreen> getConsumer() {
+        return consumer;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }
