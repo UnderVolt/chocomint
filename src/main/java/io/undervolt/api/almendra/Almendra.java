@@ -18,6 +18,7 @@ import io.undervolt.gui.user.User;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiScreen;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -161,7 +162,15 @@ public class Almendra implements Listener {
                     ((Chat) this.chocomint.getMinecraft().currentScreen).update(false);
                 } else {
                     this.chocomint.getNotificationManager().addNotification(
-                            new Notification(Notification.Priority.SOCIAL, (message.getBoolean("developer") ? "§9" : "") +  message.getString("from"), message.getString("message"))
+                            new Notification(Notification.Priority.SOCIAL, (message.getBoolean("developer") ? "§9" : "") +  message.getString("from"), message.getString("message"),
+                                    (previous) -> {
+                                        try {
+                                            this.chatManager.setSelectedTab(this.chatManager.getOrCreateTabByName(message.getString("from")));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        this.mc.displayGuiScreen(new Chat("", previous, this.chocomint, this.chocomint.getMinecraft().getCurrentServerData()));
+                                    })
                     );
                 }
             }
