@@ -51,6 +51,6 @@ public class NotificationOverlay extends Gui implements Listener {
     }
 
     @EventHandler public void draw(RenderGameOverlayEvent event) {
-        this.drawOverlay(5, 5);
+        if(this.mc.currentScreen == null) this.drawOverlay(5, 5);
     }
 }
