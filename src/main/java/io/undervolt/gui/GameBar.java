@@ -3,7 +3,9 @@ package io.undervolt.gui;
 import io.undervolt.gui.contributors.ContributorsManager;
 import io.undervolt.gui.contributors.ContributorsPanel;
 import io.undervolt.gui.login.LoginGUI;
+import io.undervolt.gui.notifications.Notification;
 import io.undervolt.gui.notifications.NotificationManager;
+import io.undervolt.gui.notifications.NotificationOverlay;
 import io.undervolt.gui.notifications.NotificationPanel;
 import io.undervolt.gui.user.User;
 import io.undervolt.gui.user.UserCard;
@@ -30,6 +32,7 @@ public class GameBar extends AnimationUI {
     /** Declare panel status */
     private final NotificationManager notificationManager;
     public NotificationPanel notificationPanel;
+    private final NotificationOverlay notificationOverlay;
 
     /** Declare User card */
     public UserCard userCard;
@@ -62,6 +65,7 @@ public class GameBar extends AnimationUI {
         this.notificationManager = chocomint.getNotificationManager();
         this.sr = chocomint.getGameBridge().getScaledResolution();
         this.contributorsManager = chocomint.getContributorsManager();
+        this.notificationOverlay = chocomint.getNotificationOverlay();
     }
 
     @Override
@@ -78,30 +82,7 @@ public class GameBar extends AnimationUI {
                 this.chocomint.getNotificationManager());
 
         // Initialize User Card
-
-        BufferedImage image = null;
-        byte[] imageByte;
-        DynamicTexture dynamicTexture = null;
-        if(this.chocomint.getUser().getImage() != null && !this.chocomint.getUser().getImage().equals("default")) {
-            String imageString = this.chocomint.getUser().getImage().split(",")[1];
-
-            try {
-                Base64.Decoder decoder = Base64.getDecoder();
-                imageByte = decoder.decode(imageString);
-                ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
-                image = ImageIO.read(bis);
-                bis.close();
-                dynamicTexture = new DynamicTexture(image);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        try {
-            this.userCard = new UserCard(this.chocomint, this.mc, this.chocomint.getUser(), false, dynamicTexture);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.userCard = new UserCard(this.chocomint, this.mc, this.chocomint.getUser(), false, this.chocomint.getUser().getImage());
 
         // Initialize Contributors Panel
         this.contributorsPanel = new ContributorsPanel(this.mc, this.contributorsManager, false);
@@ -152,6 +133,7 @@ public class GameBar extends AnimationUI {
         this.userCard.drawCard(this.width, this.height);
         this.notificationPanel.drawPanel(this.width, this.height);
         this.contributorsPanel.drawPanel(this.width, this.height);
+        this.notificationOverlay.drawOverlay(5, 25);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

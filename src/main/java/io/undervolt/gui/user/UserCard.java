@@ -6,8 +6,12 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import org.lwjgl.opengl.GL11;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Base64;
 
 public class UserCard extends Gui {
 
@@ -15,14 +19,16 @@ public class UserCard extends Gui {
     private final Chocomint chocomint;
     private final Minecraft mc;
     private boolean isActive;
-    private final DynamicTexture pfp;
+    private final String pfp;
+    private final DynamicTexture dynamicTexture;
 
-    public UserCard(final Chocomint chocomint, final Minecraft mc, final User user, boolean isActive, final DynamicTexture pfp) throws IOException {
+    public UserCard(final Chocomint chocomint, final Minecraft mc, final User user, boolean isActive, final String pfp) {
         this.chocomint = chocomint;
         this.isActive = isActive;
         this.mc = mc;
         this.user = user;
         this.pfp = pfp;
+        this.dynamicTexture = this.chocomint.getUserManager().getImageAsDynamicTexture();
     }
 
     public void drawCard(int screenWidth, int screenHeight) {
@@ -35,7 +41,7 @@ public class UserCard extends Gui {
             GL11.glColor3f(255, 255, 255);
 
             if(this.pfp != null) {
-                this.mc.getTextureManager().bindTexture(this.mc.getTextureManager().getDynamicTextureLocation("Profile", this.pfp));
+                this.mc.getTextureManager().bindTexture(this.mc.getTextureManager().getDynamicTextureLocation("Profile", this.dynamicTexture));
                 Gui.drawModalRectWithCustomSizedTexture(screenWidth - 128, 26, 0, 0, 30, 30, 30, 30);
             } else {
                 this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 128, 26, 30, 30, 3, Color.RED.getRGB());
