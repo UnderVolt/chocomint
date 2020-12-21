@@ -3,6 +3,7 @@ package io.undervolt.gui.chat;
 import com.google.common.collect.Lists;
 import io.undervolt.instance.Chocomint;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +39,10 @@ public class ChatManager {
 
     public List<Tab> getOpenTabs() {
         return openTabs;
+    }
+
+    public void removeTabs() {
+        this.openTabs.removeIf(tab -> !tab.equals(this.reservedServerTab) || !tab.equals(this.reservedLogTab));
     }
 
     public Tab getOrCreateTabByName(final String tabName) {
