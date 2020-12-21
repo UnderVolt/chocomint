@@ -109,6 +109,13 @@ public class Chat extends GameBar {
                 this.chatHeight - 18, 18, 18, "+"));
         if(this.chocomint.getUser().getUsername().equals("Guest")) addTabButton.enabled = false;
 
+        GameBarButton closeTabButton;
+        this.buttonList.add(closeTabButton = new GameBarButton(1400000, this.width - 18,
+                this.chatHeight, 18, 18, "✕"));
+        if(this.chatManager.getSelectedTab().equals(this.chatManager.getReservedServerTab()) ||
+                (this.chocomint.getUser().getUsername().equals("Guest") && this.chatManager.getSelectedTab().equals(this.chatManager.getReservedLogTab())))
+            closeTabButton.enabled = false;
+
 
         if(this.mc.theWorld != null && this.mc.thePlayer != null) {
             if(this.serverData != null) {
@@ -193,7 +200,10 @@ public class Chat extends GameBar {
             this.update(false);
         } else if(button.id == 1337097)
             this.mc.displayGuiScreen(new AvailableRooms(this, this.chocomint, this.chatManager));
-        else
+        else if(button.id == 1400000) {
+            this.chatManager.removeCurrentTab();
+            this.update(false);
+        } else
             super.actionPerformed(button);
     }
 

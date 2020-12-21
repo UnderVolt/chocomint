@@ -86,6 +86,16 @@ public class ChatManager {
         this.selectedTab = selectedTab;
     }
 
+    public void removeTab(final Tab tab) {
+        this.setSelectedTab(this.openTabs.get(this.openTabs.indexOf(tab) - 1));
+        this.openTabs.remove(tab);
+    }
+
+    public void removeCurrentTab() {
+        this.removeTab(this.selectedTab);
+
+    }
+
     public List<Message> getSentMessages() {
         return sentMessages;
     }
