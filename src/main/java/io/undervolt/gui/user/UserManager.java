@@ -23,7 +23,6 @@ public class UserManager {
     private final Gson gson;
     private final Config config;
     private User user;
-    private DynamicTexture dynamicTexture;
 
     public UserManager(Chocomint chocomint) {
         this.chocomint = chocomint;
@@ -61,23 +60,21 @@ public class UserManager {
     }
 
     public DynamicTexture getImageAsDynamicTexture(String imgStr) {
-        if(dynamicTexture == null) {
-            BufferedImage image;
-            byte[] imageByte;
-            Base64.Decoder decoder = Base64.getDecoder();
-            if (imgStr != null) {
-                String imageString = imgStr.split(",")[1];
-                try {
-                    imageByte = decoder.decode(imageString);
-                    ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
-                    image = ImageIO.read(bis);
-                    bis.close();
-                    dynamicTexture = new DynamicTexture(image);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        BufferedImage image;
+        byte[] imageByte;
+        Base64.Decoder decoder = Base64.getDecoder();
+        if (imgStr != null) {
+            String imageString = imgStr.split(",")[1];
+            try {
+                imageByte = decoder.decode(imageString);
+                ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+                image = ImageIO.read(bis);
+                bis.close();
+                return new DynamicTexture(image);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
-        return dynamicTexture;
+        return null;
     }
 }
