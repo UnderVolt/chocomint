@@ -1,7 +1,10 @@
-package io.undervolt.gui.chat;
+package io.undervolt.gui.user;
 
 import com.google.common.collect.Lists;
 import io.undervolt.api.almendra.Almendra;
+import io.undervolt.gui.chat.AvailableRooms;
+import io.undervolt.gui.chat.Chat;
+import io.undervolt.gui.chat.ChatManager;
 import io.undervolt.gui.menu.Menu;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.gui.user.User;
@@ -16,7 +19,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class SendPM extends Menu {
+public class UserSearch extends Menu {
     private final GuiScreen previous;
     private final Chocomint chocomint;
     private final ChatManager chatManager;
@@ -25,7 +28,7 @@ public class SendPM extends Menu {
 
     private GuiTextField textField;
 
-    public SendPM(final GuiScreen previous, final Chocomint chocomint) {
+    public UserSearch(final GuiScreen previous, final Chocomint chocomint) {
         super(previous, chocomint, "Enviar un mensaje privado", 0);
         this.chocomint = chocomint;
         this.previous = previous;
