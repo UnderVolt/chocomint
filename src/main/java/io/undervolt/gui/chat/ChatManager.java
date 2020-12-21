@@ -11,7 +11,7 @@ public class ChatManager {
 
     private final Chocomint chocomint;
     private final Tab reservedServerTab = new Tab(true, "server_reserved", -1, true);
-    private final Tab reservedLogTab = new Tab(true, "#chocomint", -1, true);
+    private final Tab reservedLogTab = new Tab(true, "#comandos", -1, true);
     private final List<Tab> openTabs = Lists.newArrayList(reservedServerTab);
     private final List<Message> sentMessages = Lists.newArrayList();
     private Tab selectedTab;
@@ -20,7 +20,7 @@ public class ChatManager {
         this.chocomint = chocomint;
         this.reservedLogTab.setRead();
         this.reservedServerTab.setRead();
-        this.reservedLogTab.addMessage(this.chocomint.getChocomintUser(), "Esta es la pestaña de #chocomint.");
+        this.reservedLogTab.addMessage(this.chocomint.getChocomintUser(), "Esta es la pestaña de #comandos.");
         this.reservedLogTab.addMessage(this.chocomint.getChocomintUser(), "Acá vas a poder realizar comandos del cliente.");
         this.reservedLogTab.addMessage(this.chocomint.getChocomintUser(), "Para acceder a los chats globales, iniciá sesión con tu cuenta de UnderVolt.");
         this.reservedLogTab.addMessage(this.chocomint.getChocomintUser(), "Para ver los comandos disponibles, hacé /help.");
