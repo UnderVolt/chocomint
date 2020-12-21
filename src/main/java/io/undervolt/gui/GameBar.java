@@ -77,7 +77,9 @@ public class GameBar extends AnimationUI {
                 this.chocomint.getNotificationManager());
 
         // Initialize User Card
-        this.userCard = new UserCard(this.chocomint, this.mc, this.chocomint.getUser(), false, this.chocomint.getUser().getImage());
+        this.userCard = new UserCard(this.chocomint, this.mc, this.chocomint.getUser(), false, true, (user) -> {
+            //TODO: User settings page
+        });
 
         // Initialize Contributors Panel
         this.contributorsPanel = new ContributorsPanel(this.mc, this.contributorsManager, false);
@@ -127,7 +129,7 @@ public class GameBar extends AnimationUI {
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        this.userCard.drawCard(this.width, this.height);
+        this.userCard.drawCard(this.width - 132, 22);
         this.notificationPanel.drawPanel(this.width, this.height, this.notificationScroll);
         this.contributorsPanel.drawPanel(this.width, this.height);
     }
