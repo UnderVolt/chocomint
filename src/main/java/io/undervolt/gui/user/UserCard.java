@@ -3,15 +3,12 @@ package io.undervolt.gui.user;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import org.lwjgl.opengl.GL11;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.Base64;
+import java.util.function.Consumer;
 
 public class UserCard extends Gui {
 
@@ -19,43 +16,62 @@ public class UserCard extends Gui {
     private final Chocomint chocomint;
     private final Minecraft mc;
     private boolean isActive;
-    private final String pfp;
     private final DynamicTexture dynamicTexture;
+    private final boolean isSelf;
+    private final Consumer<User> consumer;
+    public int x, y;
 
-    public UserCard(final Chocomint chocomint, final Minecraft mc, final User user, boolean isActive, final String pfp) {
+    public UserCard(final Chocomint chocomint, final Minecraft mc, final User user, boolean isActive, boolean isSelf, Consumer<User> consumer) {
         this.chocomint = chocomint;
         this.isActive = isActive;
         this.mc = mc;
         this.user = user;
-        this.pfp = pfp;
-        this.dynamicTexture = this.chocomint.getUserManager().getImageAsDynamicTexture();
+        this.isSelf = isSelf;
+        this.consumer = consumer;
+        this.dynamicTexture = this.chocomint.getUserManager().getImageAsDynamicTexture(this.chocomint.getUser().getImage());
     }
 
-    public void drawCard(int screenWidth, int screenHeight) {
+    public void drawCard(int x, int y) {
         if(this.isActive()) {
+
+            this.x = x;
+            this.y = y;
+
             this.chocomint.getRenderUtils().
-                    drawRoundedRect(screenWidth - 132, 22, 130,
-                    38, 4, new Color(22, 22, 22).getRGB());
+                    drawRoundedRect(x, y, 130,
+                    isSelf ? 52 : 38, 4, new Color(22, 22, 22).getRGB());
 
             GL11.glPushMatrix();
             GL11.glColor3f(255, 255, 255);
 
-            if(this.pfp != null) {
+            if(this.user.getImage() != null) {
                 this.mc.getTextureManager().bindTexture(this.mc.getTextureManager().getDynamicTextureLocation("Profile", this.dynamicTexture));
-                Gui.drawModalRectWithCustomSizedTexture(screenWidth - 128, 26, 0, 0, 30, 30, 30, 30);
+                Gui.drawModalRectWithCustomSizedTexture(x + 4, y + 4, 0, 0, 30, 30, 30, 30);
             } else {
-                this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 128, 26, 30, 30, 3, Color.RED.getRGB());
+                this.chocomint.getRenderUtils().drawRoundedRect(x + 4, y + 4, 30, 30, 3, Color.RED.getRGB());
             }
 
             GL11.glPopMatrix();
 
-            drawString(mc.fontRendererObj, this.user.getUsername(), screenWidth - 94,
-                    30, Color.WHITE.getRGB());
+            drawString(mc.fontRendererObj, this.user.getUsername(), x + 38,
+                    y + 8, Color.WHITE.getRGB());
             drawString(mc.fontRendererObj, this.user.getStatusString().toUpperCase(),
-                    screenWidth - 94, 42, Color.WHITE.getRGB());
+                    x + 38, y + 20, Color.WHITE.getRGB());
             this.chocomint.getRenderUtils().
-                drawFilledCircle(screenWidth - 98, 55, 3, this.user.getStatusColor());
+                    drawFilledCircle(x + 34, y + 33, 3, this.user.getStatusColor());
+
+            if(this.isSelf)
+                drawString(this.mc.fontRendererObj, "Opciones de perfil",
+                    x + 65 - (this.mc.fontRendererObj.getStringWidth("Opciones de perfil") / 2), y + 38, Color.GRAY.getRGB());
         }
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Consumer<User> getConsumer() {
+        return consumer;
     }
 
     public boolean isActive() {

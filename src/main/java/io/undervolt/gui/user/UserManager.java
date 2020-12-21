@@ -60,13 +60,13 @@ public class UserManager {
         return user.get();
     }
 
-    public DynamicTexture getImageAsDynamicTexture() {
+    public DynamicTexture getImageAsDynamicTexture(String imgStr) {
         if(dynamicTexture == null) {
             BufferedImage image;
             byte[] imageByte;
             Base64.Decoder decoder = Base64.getDecoder();
-            if (this.chocomint.getUser().getImage() != null) {
-                String imageString = this.chocomint.getUser().getImage().split(",")[1];
+            if (imgStr != null) {
+                String imageString = imgStr.split(",")[1];
                 try {
                     imageByte = decoder.decode(imageString);
                     ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
