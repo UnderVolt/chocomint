@@ -8,6 +8,7 @@ import io.undervolt.gui.notifications.Notification;
 import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.gui.notifications.NotificationPanel;
 import io.undervolt.gui.user.UserCard;
+import io.undervolt.gui.user.UserScreen;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.AnimationUI;
 import net.minecraft.client.Minecraft;
@@ -78,7 +79,7 @@ public class GameBar extends AnimationUI {
 
         // Initialize User Card
         this.userCard = new UserCard(this.chocomint, this.mc, this.chocomint.getUser(), false, true, (user) -> {
-            //TODO: User settings page
+            this.mc.displayGuiScreen(new UserScreen(this, this.chocomint, this.chocomint.getUser()));
         });
 
         // Initialize Contributors Panel
@@ -139,9 +140,11 @@ public class GameBar extends AnimationUI {
 
         // Toggle off userCard's visibility if clicked outside of rendered area
         if(this.userCard.isActive()) {
-            if (mouseX < this.width - 132 || mouseX > this.width - 2
-                    || mouseY > 60)
-                this.userCard.setActive(false);
+            if (mouseX >= userCard.x && mouseY >= userCard.y && mouseX <= userCard.x + 130 && mouseY <= userCard.y + 52) {
+                userCard.getConsumer().accept(userCard.getUser());
+            } else {
+                this.userCard.toggleActive();
+            }
         }
 
         // Same as above, but with Notifications
