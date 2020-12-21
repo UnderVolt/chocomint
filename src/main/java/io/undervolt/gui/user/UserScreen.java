@@ -81,7 +81,8 @@ public class UserScreen extends Menu {
         }
 
         drawRect(0, 120, this.width, this.height, new Color(54,57,63).getRGB());
-        drawCenteredString(this.fontRendererObj, "Has estado jugando por " + this.chocomint.getParsedOpenTime(), this.width / 2, 195, Color.WHITE.getRGB());
+        if(this.user.equals(this.chocomint.getUser()))
+            drawCenteredString(this.fontRendererObj, "Has estado jugando por " + this.chocomint.getParsedOpenTime(), this.width / 2, 195, Color.WHITE.getRGB());
     }
 
     @Override
