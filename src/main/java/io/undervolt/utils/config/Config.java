@@ -3,6 +3,7 @@ package io.undervolt.utils.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import io.undervolt.gui.notifications.Notification;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.RestUtils;
 import net.minecraft.client.Minecraft;
@@ -18,6 +19,7 @@ public class Config {
     private final Minecraft mc;
     private final Gson gson;
     private final RestUtils restUtils;
+    private final File tkC;
 
     private String mcToken;
 
@@ -26,12 +28,12 @@ public class Config {
         this.gson = new GsonBuilder().create();
         this.restUtils = chocomint.getRestUtils();
 
+        this.tkC = new File(this.mc.mcDataDir, "uvpt.json");
         this.loadToken();
     }
 
     private void loadToken(){
         System.out.println("Cargando token");
-        final File tkC = new File(this.mc.mcDataDir, "uvpt.json");
 
         try {
             if(tkC.exists()){
@@ -68,5 +70,14 @@ public class Config {
 
     public void setToken(String token) {
         this.mcToken = token;
+        if(token == null) {
+            if(tkC.delete()) {
+                System.out.println("Cerrada la sesión, eliminado archivo");
+            } else {
+                this.mc.getChocomint().getNotificationManager().addNotification(
+                        new Notification(Notification.Priority.WARNING, "No se pudo cerrar sesión", "Fue imposible eliminar los datos del usuario.", obj->{})
+                );
+            }
+        }
     }
 }
