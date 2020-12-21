@@ -16,7 +16,7 @@ import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
 import io.undervolt.gui.chat.AvailableRooms;
 import io.undervolt.gui.chat.Chat;
-import io.undervolt.gui.chat.SendPM;
+import io.undervolt.gui.user.UserSearch;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -211,7 +211,7 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
                 this.mc.displayGuiScreen(new AvailableRooms(this, this.mc.getChocomint(), this.mc.getChocomint().getChatManager()));
                 break;
             case Keyboard.KEY_F10:
-                this.mc.displayGuiScreen(new SendPM(this, this.mc.getChocomint()));
+                this.mc.displayGuiScreen(new UserSearch(this, this.mc.getChocomint()));
                 break;
         }
     }

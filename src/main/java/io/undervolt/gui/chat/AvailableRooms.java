@@ -3,6 +3,7 @@ package io.undervolt.gui.chat;
 import com.google.common.collect.Lists;
 import io.undervolt.api.almendra.Almendra;
 import io.undervolt.gui.GameBar;
+import io.undervolt.gui.user.UserSearch;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -63,7 +64,7 @@ public class AvailableRooms extends GameBar {
             this.mc.displayGuiScreen(previous);
         } else {
             if(button.id == 1337) {
-                this.mc.displayGuiScreen(new SendPM(this, this.chocomint));
+                this.mc.displayGuiScreen(new UserSearch(this, this.chocomint));
             } else {
                 super.actionPerformed(button);
             }
@@ -74,7 +75,7 @@ public class AvailableRooms extends GameBar {
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         switch(keyCode) {
             case Keyboard.KEY_F9:
-                this.mc.displayGuiScreen(new SendPM(this, this.chocomint));
+                this.mc.displayGuiScreen(new UserSearch(this, this.chocomint));
                 break;
             case Keyboard.KEY_F10:
                 this.chatManager.addTab(this.chatManager.getReservedLogTab());
