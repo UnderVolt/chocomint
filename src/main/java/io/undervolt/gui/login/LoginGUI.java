@@ -53,31 +53,7 @@ public class LoginGUI extends Menu {
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         if (button.id == 1) {
-            try {
-                JSONObject obj = new JSONObject();
-                obj.put("user", this.user.getText());
-                obj.put("pass", this.pass.getText());
-                restUtils.sendJSONRequest("api/login", obj, (js) -> {
-                    if (js.get("code").getAsInt() == 200) {
-                        JsonObject cfg = new JsonObject();
-                        cfg.addProperty("token", js.get("accessToken").getAsString());
-                        try (Writer writer = new FileWriter(new File(this.mc.mcDataDir, "uvpt.json"))) {
-                            Gson gson = new GsonBuilder().create();
-                            gson.toJson(cfg, writer);
-                            writer.flush();
-                            System.out.println("Created token file");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        this.config.setToken(js.get("accessToken").getAsString());
-                        this.chocomint.setUser(this.chocomint.getUserManager().setUser(js.get("accessToken").getAsString()));
-                        this.mc.displayGuiScreen(this.parent);
-                    }
-
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            this.login();
         }
         super.actionPerformed(button);
     }
@@ -88,6 +64,34 @@ public class LoginGUI extends Menu {
         this.pass.mouseClicked(mouseX, mouseY, mouseButton);
 
         super.mouseClicked(mouseX, mouseY, mouseButton);
+    }
+
+    public void login() {
+        try {
+            JSONObject obj = new JSONObject();
+            obj.put("user", this.user.getText());
+            obj.put("pass", this.pass.getText());
+            restUtils.sendJSONRequest("api/login", obj, (js) -> {
+                if (js.get("code").getAsInt() == 200) {
+                    JsonObject cfg = new JsonObject();
+                    cfg.addProperty("token", js.get("accessToken").getAsString());
+                    try (Writer writer = new FileWriter(new File(this.mc.mcDataDir, "uvpt.json"))) {
+                        Gson gson = new GsonBuilder().create();
+                        gson.toJson(cfg, writer);
+                        writer.flush();
+                        System.out.println("Created token file");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    this.config.setToken(js.get("accessToken").getAsString());
+                    this.chocomint.setUser(this.chocomint.getUserManager().setUser(js.get("accessToken").getAsString()));
+                    this.mc.displayGuiScreen(this.parent);
+                }
+
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -102,6 +106,12 @@ public class LoginGUI extends Menu {
             } else {
                 this.user.setFocused(true);
                 this.pass.setFocused(false);
+            }
+        }
+
+        if(keyCode == Keyboard.KEY_RETURN) {
+            if(!user.getText().isEmpty() && !this.pass.getText().isEmpty()) {
+                this.login();
             }
         }
 
