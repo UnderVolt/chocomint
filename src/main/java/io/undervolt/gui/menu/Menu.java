@@ -75,10 +75,13 @@ public class Menu extends AnimationUI {
         drawRect(0, position, this.width, 20, new Color(54,57,63).getRGB());
 
         this.fontRendererObj.drawString(this.menuName, 24, position + 7, Color.white.getRGB());
-        super.drawScreen(mouseX, mouseY, partialTicks);
 
+        GL11.glPushMatrix();
         GlStateManager.translate(0, scroll, 0);
         drawMenuItems(mouseX, mouseY, partialTicks);
+        GL11.glPopMatrix();
+
+        super.drawScreen(mouseX, mouseY, partialTicks);
 
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glPopMatrix();
