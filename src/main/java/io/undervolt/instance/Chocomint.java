@@ -43,9 +43,11 @@ public class Chocomint implements Listener {
     private final String clientName;
     private final String commitName;
     private NotificationOverlay notificationOverlay;
+    private final long millisAtStart;
 
     /** Initialize constructor */
     public Chocomint(final Minecraft mc) {
+        this.millisAtStart = System.currentTimeMillis();
         this.eventManager = new EventManager();
         this.sambayon = new Sambayon(this);
         this.renderUtils = new RenderUtils(mc);
@@ -184,5 +186,15 @@ public class Chocomint implements Listener {
 
     public ScreenshotUploader getScreenshotUploader() {
         return screenshotUploader;
+    }
+
+    public String getParsedOpenTime() {
+
+        long milliseconds = System.currentTimeMillis() - this.millisAtStart;
+
+        long minutes = (milliseconds / 1000) / 60;
+        long seconds = (milliseconds / 1000) % 60;
+
+        return minutes + " minutos y " + seconds + " segundos";
     }
 }
