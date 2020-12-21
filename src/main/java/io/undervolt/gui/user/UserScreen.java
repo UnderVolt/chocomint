@@ -36,7 +36,7 @@ public class UserScreen extends Menu {
         this.prev = prev;
         this.user = user;
         this.userManager = chocomint.getUserManager();
-        this.image = this.userManager.getImageAsDynamicTexture(this.user.getImage());
+        this.image = this.userManager.getUserProfilePictureManager().getImageAsDynamicTexture(this.user.getImage());
     }
 
     @Override

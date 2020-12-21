@@ -28,7 +28,7 @@ public class UserCard extends Gui {
         this.user = user;
         this.isSelf = isSelf;
         this.consumer = consumer;
-        this.dynamicTexture = this.chocomint.getUserManager().getImageAsDynamicTexture(this.user.getImage());
+        this.dynamicTexture = this.chocomint.getUserManager().getUserProfilePictureManager().getImageAsDynamicTexture(this.user.getImage());
     }
 
     public void drawCard(int x, int y) {

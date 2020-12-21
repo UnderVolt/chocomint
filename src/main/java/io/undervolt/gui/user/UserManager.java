@@ -22,13 +22,15 @@ public class UserManager {
     private final RestUtils restUtils;
     private final Gson gson;
     private final Config config;
-    private User user;
+
+    private final UserProfilePictureManager userProfilePictureManager;
 
     public UserManager(Chocomint chocomint) {
         this.chocomint = chocomint;
         this.restUtils = chocomint.getRestUtils();
         this.config = chocomint.getConfig();
         this.gson = new GsonBuilder().create();
+        this.userProfilePictureManager = new UserProfilePictureManager();
     }
 
     public User setUser(final JsonObject tokenObj) {
@@ -59,22 +61,7 @@ public class UserManager {
         return user.get();
     }
 
-    public DynamicTexture getImageAsDynamicTexture(String imgStr) {
-        BufferedImage image;
-        byte[] imageByte;
-        Base64.Decoder decoder = Base64.getDecoder();
-        if (imgStr != null) {
-            String imageString = imgStr.split(",")[1];
-            try {
-                imageByte = decoder.decode(imageString);
-                ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
-                image = ImageIO.read(bis);
-                bis.close();
-                return new DynamicTexture(image);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
+    public UserProfilePictureManager getUserProfilePictureManager() {
+        return userProfilePictureManager;
     }
 }
