@@ -130,9 +130,6 @@ public class GameBar extends AnimationUI {
         this.userCard.drawCard(this.width, this.height);
         this.notificationPanel.drawPanel(this.width, this.height, this.notificationScroll);
         this.contributorsPanel.drawPanel(this.width, this.height);
-
-        drawString(mc.fontRendererObj, (this.notificationManager.getNotifications().size() * 45) + "", 0, 0, Color.WHITE.getRGB());
-        drawString(mc.fontRendererObj, ((this.height - 45) - this.notificationScroll) + "", 0, 15, Color.WHITE.getRGB());
     }
 
     @Override
