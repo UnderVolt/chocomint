@@ -1,6 +1,7 @@
 package io.undervolt.gui;
 
 import io.undervolt.gui.chat.Chat;
+import io.undervolt.gui.config.ProfileManager;
 import io.undervolt.gui.contributors.ContributorsManager;
 import io.undervolt.gui.contributors.ContributorsPanel;
 import io.undervolt.gui.login.LoginGUI;
@@ -48,6 +49,7 @@ public class GameBar extends AnimationUI {
     private TextureGameBarButton musicButton;
     private TextureGameBarButton friendsButton;
     private GameBarButton contributorsButton;
+    private GameBarButton configButton;
 
     /** Declare requirement for previous screen, to prevent accumulation of cached Guis */
     private final GuiScreen previousScreen;
@@ -105,6 +107,10 @@ public class GameBar extends AnimationUI {
         this.buttonList.add(this.contributorsButton = new GameBarButton(
                 1337105,
                 this.width - 154, 0, 20, 20, "C"
+        ));
+        this.buttonList.add(this.configButton = new GameBarButton(
+                1337106,
+                this.width - 178, 0, 20, 20, "C"
         ));
 
         this.ftime = Minecraft.getSystemTime();
@@ -195,6 +201,9 @@ public class GameBar extends AnimationUI {
                 this.notificationPanel.setActive(false);
                 this.userCard.setActive(false);
                 this.contributorsPanel.toggleActive();
+                break;
+            case 1337106:
+                this.mc.displayGuiScreen(new ProfileManager(this, this.chocomint));
                 break;
         }
     }
