@@ -5,6 +5,7 @@ import io.undervolt.api.event.handler.EventHandler;
 import io.undervolt.api.event.handler.Listener;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.config.Configurable;
+import io.undervolt.utils.config.Loader;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -61,6 +62,12 @@ public class Background extends Configurable implements Listener {
 
     public enum DrawType {
         STRETCH, ORIGINAL_SIZE
+    }
+
+    @Override
+    public void saveConfig(Loader.Profile profile) {
+        this.setBackground(new File(this.backgroundPath));
+        super.saveConfig(profile);
     }
 
     public int getImageWidth() {
