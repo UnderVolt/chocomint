@@ -21,7 +21,7 @@ public class Configurable extends Gui implements Listener {
         return name;
     }
 
-    public void saveConfig(Loader.Profile profile) {
+    public void saveConfig(ProfileLoader.Profile profile) {
         File b = new File(profile.getFile() + File.separator + this.getName() + ".json");
         try (Writer writer = new FileWriter(b)) {
             gson.toJson(this, writer);

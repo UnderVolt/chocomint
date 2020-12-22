@@ -5,12 +5,10 @@ import io.undervolt.api.event.events.RenderGameOverlayEvent;
 import io.undervolt.api.event.handler.EventHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import io.undervolt.api.event.EventManager;
 import io.undervolt.api.event.handler.Listener;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.mod.Mod;
 import io.undervolt.mod.RenderMod;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
@@ -30,14 +28,14 @@ public class ConfigurableManager extends Gui implements Listener {
     public final transient List<Mod> modList = Lists.newArrayList();
     private final transient Gson gson = new GsonBuilder().setPrettyPrinting().disableInnerClassSerialization().create();
     private final transient Chocomint chocomint;
-    private final transient Loader.Profile currentProfile;
+    private final transient ProfileLoader.Profile currentProfile;
 
     public ConfigurableManager(final Chocomint chocomint) {
         this.chocomint = chocomint;
         this.currentProfile = chocomint.getLoader().selectedProfile;
     }
 
-    public void saveConfig(Loader.Profile profile) {
+    public void saveConfig(ProfileLoader.Profile profile) {
         this.configurableList.forEach(configurable -> {
             File b = new File(profile.getFile() + File.separator + configurable.getName() + ".json");
             try (Writer writer = new FileWriter(b)) {
@@ -76,7 +74,7 @@ public class ConfigurableManager extends Gui implements Listener {
         this.chocomint.getEventManager().registerEvents(c);
     }
 
-    public void reloadConfig(Loader.Profile profile) {
+    public void reloadConfig(ProfileLoader.Profile profile) {
         this.configurableList.forEach(configurable -> {
             File b = new File(profile.getFile() + File.separator + configurable.getName() + ".json");
             this.loadConfig(b, configurable);
