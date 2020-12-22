@@ -20,7 +20,11 @@ import io.undervolt.gui.user.User;
 import io.undervolt.gui.user.UserManager;
 import io.undervolt.utils.RestUtils;
 import io.undervolt.utils.config.Config;
+import io.undervolt.utils.config.ConfigurableManager;
+import io.undervolt.utils.config.Loader;
 import net.minecraft.client.Minecraft;
+
+import java.io.File;
 
 public class Chocomint implements Listener {
 
@@ -44,10 +48,21 @@ public class Chocomint implements Listener {
     private final String commitName;
     private NotificationOverlay notificationOverlay;
     private final long millisAtStart;
+    private final Loader loader;
+    private final ConfigurableManager configurableManager;
 
     /** Initialize constructor */
     public Chocomint(final Minecraft mc) {
         this.millisAtStart = System.currentTimeMillis();
+        this.commitName = "testCommit";
+        this.clientName = "chocomint";
+
+        File rootPath = new File(Minecraft.getMinecraft().mcDataDir + File.separator + getClientName());
+        rootPath.mkdir();
+
+        this.loader = new Loader(rootPath);
+        this.configurableManager = new ConfigurableManager(this);
+
         this.eventManager = new EventManager();
         this.sambayon = new Sambayon(this);
         this.renderUtils = new RenderUtils(mc);
@@ -57,8 +72,6 @@ public class Chocomint implements Listener {
         this.userManager = new UserManager(this);
         this.config = new Config(this);
         this.user = this.userManager.setUser(this.config.getToken());
-        this.commitName = "testCommit";
-        this.clientName = "chocomint";
     }
 
     public void init(LaunchType type){
@@ -186,6 +199,10 @@ public class Chocomint implements Listener {
 
     public ScreenshotUploader getScreenshotUploader() {
         return screenshotUploader;
+    }
+
+    public Loader getLoader() {
+        return loader;
     }
 
     public String getParsedOpenTime() {
