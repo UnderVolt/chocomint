@@ -36,8 +36,6 @@ public class Loader {
         this.selectedProfile = availableProfiles.get(0);
     }
 
-
-
     public void newProfile(String name) {
         final File file = new File(rootPath + File.separator + name);
         file.mkdirs();
@@ -67,5 +65,9 @@ public class Loader {
             this.file = file;
             this.name = name;
         }
+    }
+
+    public void setSelectedProfile(Profile selectedProfile) {
+        this.selectedProfile = selectedProfile;
     }
 }
