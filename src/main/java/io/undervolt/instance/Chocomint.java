@@ -19,6 +19,7 @@ import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.gui.notifications.NotificationOverlay;
 import io.undervolt.gui.user.User;
 import io.undervolt.gui.user.UserManager;
+import io.undervolt.mod.ModLoader;
 import io.undervolt.utils.RestUtils;
 import io.undervolt.utils.config.Config;
 import io.undervolt.utils.config.ConfigurableManager;
@@ -57,6 +58,8 @@ public class Chocomint implements Listener {
     private final ProfileLoader loader;
     private final ConfigurableManager configurableManager;
     private final Config config;
+    private ModLoader modLoader;
+    private final File rootPath = new File(Minecraft.getMinecraft().mcDataDir + File.separator + getClientName());
 
     private final RenderUtils renderUtils;
     private final RestUtils restUtils;
@@ -70,7 +73,6 @@ public class Chocomint implements Listener {
         this.commitName = "testCommit";
         this.clientName = "chocomint";
 
-        File rootPath = new File(Minecraft.getMinecraft().mcDataDir + File.separator + getClientName());
         rootPath.mkdir();
 
         this.loader = new ProfileLoader(rootPath);
@@ -104,6 +106,9 @@ public class Chocomint implements Listener {
                     e.printStackTrace();
                 }
 
+                // ModLoader
+                this.modLoader = new ModLoader(this);
+
                 // Profiles
                 this.loader.availableProfiles.forEach(profile -> System.out.println("Registered profile: " + profile.getName()));
                 System.out.println("Current profile: " + this.loader.selectedProfile.getName());
@@ -112,6 +117,7 @@ public class Chocomint implements Listener {
                 this.getEventManager().registerEvents(this.configurableManager);
                 this.background = new Background(this);
                 this.configurableManager.register(this.background);
+                this.modLoader.load(new File(this.rootPath + File.separator + "mods"));
 
                 this.configurableManager.configurableList.forEach(configurable -> System.out.println("Registered configurable: " + configurable.getName()));
 
