@@ -109,10 +109,11 @@ public class GameBar extends AnimationUI {
                 1337105,
                 this.width - 154, 0, 20, 20, "C"
         ));
-        this.buttonList.add(this.configButton = new GameBarButton(
-                1337106,
-                this.width - 178, 0, 20, 20, "C"
-        ));
+        if(this.mc.theWorld != null && this.mc.thePlayer != null)
+            this.buttonList.add(this.configButton = new GameBarButton(
+                    1337106,
+                    this.width - 178, 0, 20, 20, "C"
+            ));
 
         this.ftime = Minecraft.getSystemTime();
 
