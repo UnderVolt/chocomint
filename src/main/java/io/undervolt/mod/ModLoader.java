@@ -47,7 +47,7 @@ public class ModLoader {
 
             System.out.println("Loaded class " + className + " from " + file.getPath());
 
-            if(c.getSuperclass().equals(Mod.class)) {
+            if(c.getSuperclass().equals(Mod.class) || c.getSuperclass().equals(RenderMod.class)) {
                 System.out.println(className + " was assignable from mod");
                 this.configurableManager.register((Configurable) c.newInstance());
             } else {
