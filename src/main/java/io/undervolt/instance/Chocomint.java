@@ -109,6 +109,7 @@ public class Chocomint implements Listener {
                 System.out.println("Current profile: " + this.loader.selectedProfile.getName());
 
                 // Register configurables
+                this.getEventManager().registerEvents(this.configurableManager);
                 this.background = new Background(this);
                 this.configurableManager.register(this.background);
 
