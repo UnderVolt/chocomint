@@ -101,7 +101,15 @@ public class Chat extends GameBar {
             i.set(i.get() + 1);
         });
 
-        this.serverReservedButton = (GameBarButton) this.buttonList.get(this.chatManager.getOpenTabs().indexOf(this.chatManager.getReservedServerTab()));
+        try {
+            this.serverReservedButton = (GameBarButton) this.buttonList.get(this.chatManager.getOpenTabs().indexOf(this.chatManager.getReservedServerTab()));
+        } catch(ArrayIndexOutOfBoundsException e) {
+            if(!this.chatManager.getOpenTabs().contains(this.chatManager.getReservedServerTab())) {
+                this.chatManager.getOpenTabs().set(0, this.chatManager.getReservedServerTab());
+                this.chatManager.setSelectedTab(this.chatManager.getReservedServerTab());
+                this.serverReservedButton = (GameBarButton) this.buttonList.get(this.chatManager.getOpenTabs().indexOf(this.chatManager.getReservedServerTab()));
+            }
+        }
 
         /* Declaring everything related to tabs */
         GameBarButton addTabButton;
