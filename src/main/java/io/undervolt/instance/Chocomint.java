@@ -11,6 +11,7 @@ import io.undervolt.bridge.GameBridge;
 import io.undervolt.console.Console;
 import io.undervolt.console.commands.HelpCommand;
 import io.undervolt.console.commands.VersionCommand;
+import io.undervolt.gui.Background;
 import io.undervolt.gui.RenderUtils;
 import io.undervolt.gui.chat.ChatManager;
 import io.undervolt.gui.contributors.ContributorsManager;
@@ -28,28 +29,40 @@ import java.io.File;
 
 public class Chocomint implements Listener {
 
-    private NotificationManager notificationManager;
-    private ChatManager chatManager;
-    private User user;
-    private final String chocomintUser;
-    private GameBridge gameBridge;
-    private final RenderUtils renderUtils;
-    private final RestUtils restUtils;
-    private final EventManager eventManager;
-    private ContributorsManager contributorsManager;
     private final Minecraft mc;
-    private Console console;
-    private final Sambayon sambayon;
-    private ScreenshotUploader screenshotUploader;
-    private Almendra almendra;
-    private final Config config;
-    private final UserManager userManager;
+    private final long millisAtStart;
+    private GameBridge gameBridge;
     private final String clientName;
     private final String commitName;
+
+    private User user;
+    private final String chocomintUser;
+    private final UserManager userManager;
+
+    private final Sambayon sambayon;
+
+    private ChatManager chatManager;
+    private Almendra almendra;
+    private Console console;
+
+    private ContributorsManager contributorsManager;
+
+    private final EventManager eventManager;
+
+    private ScreenshotUploader screenshotUploader;
+
     private NotificationOverlay notificationOverlay;
-    private final long millisAtStart;
+    private NotificationManager notificationManager;
+
     private final Loader loader;
     private final ConfigurableManager configurableManager;
+    private final Config config;
+
+    private final RenderUtils renderUtils;
+    private final RestUtils restUtils;
+
+    // Configurables
+    private Background background;
 
     /** Initialize constructor */
     public Chocomint(final Minecraft mc) {
@@ -91,6 +104,16 @@ public class Chocomint implements Listener {
                     e.printStackTrace();
                 }
 
+                // Profiles
+                this.loader.availableProfiles.forEach(profile -> System.out.println("Registered profile: " + profile.getName()));
+                System.out.println("Current profile: " + this.loader.selectedProfile.getName());
+
+                // Register configurables
+                this.background = new Background(this);
+                this.configurableManager.register(this.background);
+
+                this.configurableManager.configurableList.forEach(configurable -> System.out.println("Registered configurable: " + configurable.getName()));
+
                 this.eventManager.registerEvents(this);
                 this.eventManager.callEvent(new InitEvent.PreInitEvent());
 
@@ -101,11 +124,11 @@ public class Chocomint implements Listener {
                 this.screenshotUploader = new ScreenshotUploader(this);
                 this.notificationOverlay = new NotificationOverlay(this);
 
+                this.getEventManager().registerEvents(this.notificationOverlay);
+
                 // Register Commands
                 this.console.registerCommand(new VersionCommand(this));
                 this.console.registerCommand(new HelpCommand(this));
-
-                this.getEventManager().registerEvents(this.notificationOverlay);
 
                 this.eventManager.callEvent(new InitEvent.ClientInitEvent());
 
@@ -203,6 +226,14 @@ public class Chocomint implements Listener {
 
     public Loader getLoader() {
         return loader;
+    }
+
+    public ConfigurableManager getConfigurableManager() {
+        return configurableManager;
+    }
+
+    public Background getBackground() {
+        return background;
     }
 
     public String getParsedOpenTime() {
