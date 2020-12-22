@@ -22,12 +22,11 @@ import java.util.List;
 
 public class ConfigurableManager extends Gui implements Listener {
     public final transient List<Configurable> configurableList = Lists.newArrayList();
-    private final transient Gson gson;
+    private final transient Gson gson = new GsonBuilder().setPrettyPrinting().disableInnerClassSerialization().create();
     private final transient Chocomint chocomint;
     private final transient Loader.Profile currentProfile;
 
     public ConfigurableManager(final Chocomint chocomint) {
-        this.gson = new GsonBuilder().setPrettyPrinting().disableInnerClassSerialization().create();
         this.chocomint = chocomint;
         this.currentProfile = chocomint.getLoader().selectedProfile;
     }
@@ -49,9 +48,11 @@ public class ConfigurableManager extends Gui implements Listener {
         File b = new File(currentProfile.getFile() + File.separator + c.getName() + ".json");
 
         if (b.exists()) {
+            System.out.println("Loaded config for " + c.getName());
             this.loadConfig(b, c);
         } else {
-            this.saveConfig(currentProfile);
+            System.out.println("Config for " + c.getName() + " didn't exist. Creating file...");
+            c.saveConfig(currentProfile);
         }
 
         if (!configurableList.contains(c))
