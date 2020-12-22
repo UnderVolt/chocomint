@@ -612,7 +612,7 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
         GlStateManager.disableAlpha();
-        this.renderSkybox(mouseX, mouseY, partialTicks);
+        this.drawDefaultBackground();
         GlStateManager.enableAlpha();
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
