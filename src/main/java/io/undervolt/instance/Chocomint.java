@@ -22,7 +22,7 @@ import io.undervolt.gui.user.UserManager;
 import io.undervolt.utils.RestUtils;
 import io.undervolt.utils.config.Config;
 import io.undervolt.utils.config.ConfigurableManager;
-import io.undervolt.utils.config.Loader;
+import io.undervolt.utils.config.ProfileLoader;
 import net.minecraft.client.Minecraft;
 
 import java.io.File;
@@ -54,7 +54,7 @@ public class Chocomint implements Listener {
     private NotificationOverlay notificationOverlay;
     private NotificationManager notificationManager;
 
-    private final Loader loader;
+    private final ProfileLoader loader;
     private final ConfigurableManager configurableManager;
     private final Config config;
 
@@ -73,7 +73,7 @@ public class Chocomint implements Listener {
         File rootPath = new File(Minecraft.getMinecraft().mcDataDir + File.separator + getClientName());
         rootPath.mkdir();
 
-        this.loader = new Loader(rootPath);
+        this.loader = new ProfileLoader(rootPath);
         this.configurableManager = new ConfigurableManager(this);
 
         this.eventManager = new EventManager();
@@ -225,7 +225,7 @@ public class Chocomint implements Listener {
         return screenshotUploader;
     }
 
-    public Loader getLoader() {
+    public ProfileLoader getLoader() {
         return loader;
     }
 

@@ -5,7 +5,7 @@ import io.undervolt.api.event.handler.EventHandler;
 import io.undervolt.api.event.handler.Listener;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.config.Configurable;
-import io.undervolt.utils.config.Loader;
+import io.undervolt.utils.config.ProfileLoader;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -65,7 +65,7 @@ public class Background extends Configurable implements Listener {
     }
 
     @Override
-    public void saveConfig(Loader.Profile profile) {
+    public void saveConfig(ProfileLoader.Profile profile) {
         this.setBackground(new File(this.backgroundPath));
         super.saveConfig(profile);
     }
