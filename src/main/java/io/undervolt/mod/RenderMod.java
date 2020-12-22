@@ -1,24 +1,22 @@
 package io.undervolt.mod;
 
-import io.undervolt.api.event.events.RenderGameOverlayEvent;
-import io.undervolt.api.event.handler.EventHandler;
 import io.undervolt.api.event.handler.Listener;
-import io.undervolt.utils.config.Configurable;
-import net.minecraft.client.renderer.GlStateManager;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
 public class RenderMod extends Mod implements Listener {
 
     public final transient String name;
+    public transient int width, height;
     public int x = 0, y = 0;
     public float scale = 1.0F;
     public int color1 = Color.WHITE.getRGB(), color2 = Integer.MIN_VALUE;
 
-    public RenderMod(String name) {
+    public RenderMod(String name, int width, int height) {
         super(name);
         this.name = name;
+        this.width = width;
+        this.height = height;
     }
 
     public void render() {}
