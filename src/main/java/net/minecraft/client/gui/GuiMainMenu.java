@@ -6,10 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import io.undervolt.gui.GameBar;
@@ -97,6 +94,9 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
     /** Chat button */
     private GameBarButton chatButton;
 
+    /** Chocomint */
+    private final Chocomint chocomint;
+
     /** Minecraft Realms button. */
     private GuiButton realmsButton;
     private boolean L;
@@ -107,6 +107,7 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
     public GuiMainMenu(final Chocomint chocomint)
     {
         super(null, chocomint);
+        this.chocomint = chocomint;
         this.openGLWarning2 = field_96138_a;
         this.L = false;
         this.splashText = "missingno";
@@ -668,17 +669,12 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
         GlStateManager.scale(f, f, f);
         this.drawCenteredString(this.fontRendererObj, this.splashText, 0, -8, -256);
         GlStateManager.popMatrix();
-        String s = "Minecraft 1.8.9";
-
-        if (this.mc.isDemo())
-        {
-            s = s + " Demo";
-        }
+        String s = this.chocomint.getCommitName();
 
         if (Reflector.FMLCommonHandler_getBrandings.exists())
         {
-            Object object = Reflector.call(Reflector.FMLCommonHandler_instance, new Object[0]);
-            List<String> list = Lists.<String>reverse((List)Reflector.call(object, Reflector.FMLCommonHandler_getBrandings, new Object[] {Boolean.valueOf(true)}));
+            Object object = Reflector.call(Reflector.FMLCommonHandler_instance);
+            List list = Lists.<String>reverse((List) Objects.requireNonNull(Reflector.call(object, Reflector.FMLCommonHandler_getBrandings, true)));
 
             for (int l1 = 0; l1 < list.size(); ++l1)
             {
@@ -692,7 +688,7 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
 
             if (Reflector.ForgeHooksClient_renderMainMenu.exists())
             {
-                Reflector.call(Reflector.ForgeHooksClient_renderMainMenu, new Object[] {this, this.fontRendererObj, Integer.valueOf(this.width), Integer.valueOf(this.height)});
+                Reflector.call(Reflector.ForgeHooksClient_renderMainMenu, this, this.fontRendererObj, this.width, this.height);
             }
         }
         else
