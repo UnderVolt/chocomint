@@ -59,7 +59,7 @@ public class Chocomint implements Listener {
     private final ConfigurableManager configurableManager;
     private final Config config;
     private ModLoader modLoader;
-    private final File rootPath = new File(Minecraft.getMinecraft().mcDataDir + File.separator + getClientName());
+    private File rootPath;
 
     private final RenderUtils renderUtils;
     private final RestUtils restUtils;
@@ -73,6 +73,7 @@ public class Chocomint implements Listener {
         this.commitName = "testCommit";
         this.clientName = "chocomint";
 
+        this.rootPath = new File(Minecraft.getMinecraft().mcDataDir + File.separator + getClientName());
         rootPath.mkdir();
 
         this.loader = new ProfileLoader(rootPath);
