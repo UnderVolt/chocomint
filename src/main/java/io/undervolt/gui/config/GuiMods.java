@@ -34,7 +34,7 @@ public class GuiMods extends EditGUI {
 
     @Override
     public void initGui() {
-        this.buttonList.add(new TextureGameBarButton(650847, this.width / 2 + 28,this.height / 2 + 40, 20, 20, "settings"));
+        this.buttonList.add(new TextureGameBarButton(650847, this.width / 2 + 2,this.height / 2 + 40, 20, 20, "settings"));
         this.buttonList.add(new TextureGameBarButton(650849, this.width / 2 - 22,this.height / 2 + 40, 20, 20, "list"));
         AtomicInteger i = new AtomicInteger();
         AtomicInteger id = new AtomicInteger(1);
