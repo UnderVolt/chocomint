@@ -2,6 +2,7 @@ package io.undervolt.mod;
 
 import com.google.common.collect.Lists;
 import io.undervolt.instance.Chocomint;
+import io.undervolt.utils.config.Configurable;
 import io.undervolt.utils.config.ConfigurableManager;
 
 import java.io.File;
@@ -21,11 +22,12 @@ public class ModLoader {
     }
 
     public File[] availableMods(final File modPath) {
-        return modPath.listFiles((dir, filename) -> filename.endsWith(".jar"));
+        return modPath.listFiles((dir, filename) -> filename.endsWith(".choc"));
     }
 
     public void loadModFromJar(final File file) throws ClassNotFoundException, IOException, IllegalAccessException, InstantiationException {
 
+        System.out.println(file.getPath() + " is being checked if it's a mod.");
         final JarFile jarFile = new JarFile(file);
 
         Enumeration<JarEntry> e = jarFile.entries();
@@ -43,8 +45,13 @@ public class ModLoader {
             className = className.replace('/', '.');
             Class c = cl.loadClass(className);
 
-            if(c.isAssignableFrom(Mod.class)) {
-                this.configurableManager.register((Mod) c.newInstance());
+            System.out.println("Loaded class " + className + " from " + file.getPath());
+
+            if(c.getSuperclass().equals(Mod.class)) {
+                System.out.println(className + " was assignable from mod");
+                this.configurableManager.register((Configurable) c.newInstance());
+            } else {
+                System.out.println(className + " wasn't assignable from mod");
             }
         }
     }
