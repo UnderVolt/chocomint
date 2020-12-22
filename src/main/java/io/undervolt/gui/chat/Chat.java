@@ -147,13 +147,6 @@ public class Chat extends GameBar {
         this.drawDefaultBackground();
         drawRect(0, this.chatHeight, this.width, this.height, new Color(36, 36, 36, 100).getRGB());
 
-        if(this.chocomint.getUser().getUsername().equals("Guest") && this.chatManager.getSelectedTab() != this.chatManager.getReservedServerTab()
-                && this.chatManager.getSelectedTab() != this.chatManager.getReservedLogTab())
-            this.fontRendererObj.drawString("Inicia sesión para poder hablar",10, this.height - 10, Color.GRAY.getRGB());
-        else
-            this.textField.drawTextBox();
-        drawString(this.fontRendererObj, ">", 5, this.height - 10, Color.CYAN.getRGB());
-
         GL11.glPushMatrix();
         GlStateManager.translate(0, scroll, 0);
         GL11.glPushMatrix();
@@ -162,7 +155,7 @@ public class Chat extends GameBar {
         GL11.glColor3f(255,255,255);
 
         if(this.chatManager.getSelectedTab() != null) {
-            int i = this.height - 21;
+            int i = this.height - 23;
             for (int id = this.chatManager.getSelectedTab().getMessages().size(); id-- > 0; ) {
                 Message message = this.chatManager.getSelectedTab().getMessages().get(id);
                 this.fontRendererObj.drawString("\247e" +
@@ -175,6 +168,14 @@ public class Chat extends GameBar {
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
         GL11.glPopMatrix();
         GL11.glPopMatrix();
+
+        drawRect(0, this.height - 12, this.width, this.height, new Color(0,0,0,130).getRGB());
+        if(this.chocomint.getUser().getUsername().equals("Guest") && this.chatManager.getSelectedTab() != this.chatManager.getReservedServerTab()
+                && this.chatManager.getSelectedTab() != this.chatManager.getReservedLogTab())
+            this.fontRendererObj.drawString("Inicia sesión para poder hablar",10, this.height - 10, Color.GRAY.getRGB());
+        else
+            this.textField.drawTextBox();
+        drawString(this.fontRendererObj, ">", 5, this.height - 10, Color.CYAN.getRGB());
 
         drawRect(0, this.chatHeight - 18, this.width, this.chatHeight,
                 Color.BLACK.getRGB());
