@@ -634,16 +634,6 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
             k1 = custompanoramaproperties.getOverlay2Bottom();
         }
 
-        if (l != 0 || i1 != 0)
-        {
-            this.drawGradientRect(0, 0, this.width, this.height, l, i1);
-        }
-
-        if (j1 != 0 || k1 != 0)
-        {
-            this.drawGradientRect(0, 0, this.width, this.height, j1, k1);
-        }
-
         this.mc.getTextureManager().bindTexture(minecraftTitleTextures);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
