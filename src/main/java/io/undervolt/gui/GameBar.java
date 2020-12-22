@@ -1,6 +1,7 @@
 package io.undervolt.gui;
 
 import io.undervolt.gui.chat.Chat;
+import io.undervolt.gui.config.GuiMods;
 import io.undervolt.gui.config.ProfileManager;
 import io.undervolt.gui.contributors.ContributorsManager;
 import io.undervolt.gui.contributors.ContributorsPanel;
@@ -203,7 +204,7 @@ public class GameBar extends AnimationUI {
                 this.contributorsPanel.toggleActive();
                 break;
             case 1337106:
-                this.mc.displayGuiScreen(new ProfileManager(this, this.chocomint));
+                this.mc.displayGuiScreen(new GuiMods(this, this.chocomint));
                 break;
         }
     }
