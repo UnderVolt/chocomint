@@ -6,16 +6,17 @@ import java.io.File;
 import java.util.List;
 import java.util.Objects;
 
-public class Loader {
+public class ProfileLoader {
 
     public transient List<Profile> availableProfiles;
     private final File rootPath;
     public Profile selectedProfile;
 
-    public Loader(File rootPath) {
-        this.rootPath = rootPath;
+    public ProfileLoader(File path) {
+        this.rootPath = new File(path + File.separator + "config");
+        this.rootPath.mkdirs();
         this.availableProfiles = Lists.newArrayList();
-        if(rootPath != null && rootPath.exists() && rootPath.length() > 0)
+        if(path != null && rootPath.exists() && rootPath.length() > 0)
             this.getAvailableProfiles(rootPath);
         else {
             try {
@@ -49,7 +50,7 @@ public class Loader {
         this.selectedProfile = profile;
     }
 
-    public final class Profile {
+    public static final class Profile {
         private final String name;
         private final File file;
 
