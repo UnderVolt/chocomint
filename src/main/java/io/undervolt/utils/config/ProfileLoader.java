@@ -37,13 +37,14 @@ public class ProfileLoader {
         this.selectedProfile = availableProfiles.get(0);
     }
 
-    public void newProfile(String name) {
+    public Profile newProfile(String name) {
         final File file = new File(rootPath + File.separator + name);
         file.mkdirs();
 
         Profile newProf = new Profile(name, file);
         this.setNewProfile(newProf);
         this.availableProfiles.add(newProf);
+        return newProf;
     }
 
     public void setNewProfile(Profile profile) {
