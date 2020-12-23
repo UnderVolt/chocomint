@@ -85,7 +85,7 @@ public class Chat extends AnimationUI {
             } else this.chatManager.setSelectedTab(this.chatManager.getReservedServerTab());
         }
 
-        this.textField = new GuiTextField(0, this.fontRendererObj, 10,
+        this.textField = new GuiTextField(0, this.fontRendererObj, 13,
                 this.height - 10, this.width, this.height);
 
         this.textField.setEnableBackgroundDrawing(false);
