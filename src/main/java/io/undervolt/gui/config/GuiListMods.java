@@ -29,7 +29,7 @@ public class GuiListMods extends Menu {
                 y.set(y.get() + 22);
             });
         } else {
-            drawCenteredString(this.fontRendererObj, "No tenés ningún mod instalado!", this.width / 2, 40, Color.WHITE.getRGB());
+            drawCenteredString(this.fontRendererObj, "¡No tenés ningún mod instalado!", this.width / 2, this.height / 2 - 4, Color.WHITE.getRGB());
         }
     }
 
