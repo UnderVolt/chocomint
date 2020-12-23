@@ -1,5 +1,6 @@
 package io.undervolt.gui;
 
+import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.config.GuiMods;
 import io.undervolt.gui.config.ProfileManager;
@@ -63,7 +64,7 @@ public class GameBar extends AnimationUI {
         this.previousScreen = previousScreen;
         this.chocomint = chocomint;
         this.notificationManager = chocomint.getNotificationManager();
-        this.sr = chocomint.getGameBridge().getScaledResolution();
+        this.sr = GameBridge.getScaledResolution();
         this.contributorsManager = chocomint.getContributorsManager();
     }
 
