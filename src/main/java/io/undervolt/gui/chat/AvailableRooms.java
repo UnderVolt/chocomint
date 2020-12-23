@@ -44,7 +44,7 @@ public class AvailableRooms extends GameBar {
             y.set(y.get() + 22);
         });
 
-        this.buttonList.add(this.pmButton = new GuiButton(1337, this.width / 2 - 100, y.get(), "Enviar un mensaje privado"));
+        this.buttonList.add(this.pmButton = new GuiButton(1337, this.width / 2 - 100, y.get(), "#comandos"));
 
         super.initGui();
 
@@ -64,7 +64,9 @@ public class AvailableRooms extends GameBar {
             this.mc.displayGuiScreen(previous);
         } else {
             if(button.id == 1337) {
-                this.mc.displayGuiScreen(new UserSearch(this, this.chocomint));
+                this.chatManager.setSelectedTab(this.chatManager.getReservedLogTab());
+                this.chatManager.getOpenTabs().add(this.chatManager.getReservedLogTab());
+                this.mc.displayGuiScreen(previous);
             } else {
                 super.actionPerformed(button);
             }
