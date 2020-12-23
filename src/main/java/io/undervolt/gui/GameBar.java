@@ -3,7 +3,6 @@ package io.undervolt.gui;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.config.GuiMods;
-import io.undervolt.gui.config.ProfileManager;
 import io.undervolt.gui.contributors.ContributorsManager;
 import io.undervolt.gui.contributors.ContributorsPanel;
 import io.undervolt.gui.login.LoginGUI;
