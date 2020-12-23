@@ -9,12 +9,14 @@ import java.net.URI;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
 import io.undervolt.gui.chat.AvailableRooms;
 import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.user.UserSearch;
 import io.undervolt.instance.Chocomint;
+import io.undervolt.utils.AnimationUI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -42,7 +44,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.Project;
 
-public class GuiMainMenu extends GameBar implements GuiYesNoCallback
+public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
 {
     private static final AtomicInteger field_175373_f = new AtomicInteger(0);
     private static final Logger logger = LogManager.getLogger();
@@ -97,6 +99,9 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
     /** Chocomint */
     private final Chocomint chocomint;
 
+    /** GameBar */
+    private final GameBar gameBar;
+
     /** Minecraft Realms button. */
     private GuiButton realmsButton;
     private boolean L;
@@ -104,10 +109,9 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
     private GuiButton modButton;
     private GuiScreen modUpdateNotification;
 
-    public GuiMainMenu(final Chocomint chocomint)
-    {
-        super(null, chocomint);
-        this.chocomint = chocomint;
+    public GuiMainMenu() {
+        this.chocomint = GameBridge.getChocomint();
+        this.gameBar = new GameBar(this, this.chocomint, this.buttonList);
         this.openGLWarning2 = field_96138_a;
         this.L = false;
         this.splashText = "missingno";
@@ -221,9 +225,7 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
      * Adds the buttons (and other controls) to the screen in question. Called when the GUI is displayed and when the
      * window resizes, the buttonList is cleared beforehand.
      */
-    public void initGui()
-    {
-        this.setBackgroundDrawing(false);
+    public void initGui() {
         this.viewportTexture = new DynamicTexture(256, 256);
         this.backgroundTexture = this.mc.getTextureManager().getDynamicTextureLocation("background", this.viewportTexture);
         Calendar calendar = Calendar.getInstance();
@@ -288,6 +290,7 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
         }
         super.initGui();
 
+        this.gameBar.init(width, height);
     }
 
     /**
@@ -384,6 +387,8 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
         if(button.id == 103) this.mc.displayGuiScreen(new Chat("", this, this.mc.getChocomint(), null));
 
         super.actionPerformed(button);
+
+        this.gameBar.actionPerformed(button);
     }
 
     private void f()
@@ -693,6 +698,8 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
             this.drawString(this.fontRendererObj, this.openGLWarning2, (this.width - this.field_92024_r) / 2, ((GuiButton)this.buttonList.get(0)).yPosition - 12, -1);
         }
 
+        this.gameBar.draw(mouseX, mouseY, partialTicks, width, height);
+
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         if (this.a())
@@ -704,6 +711,12 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
         {
             this.modUpdateNotification.drawScreen(mouseX, mouseY, partialTicks);
         }
+    }
+
+    @Override
+    public void handleMouseInput() throws IOException {
+        this.gameBar.handleMouseInput(width, height);
+        super.handleMouseInput();
     }
 
     /**
@@ -727,6 +740,8 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
         {
             this.M.mouseClicked(mouseX, mouseY, mouseButton);
         }
+
+        this.gameBar.mouseClicked(mouseX, mouseY, mouseButton, width, height);
     }
 
     /**
