@@ -3,12 +3,12 @@
 </p>
 
 # chocomint
+[![Dev chat](https://discordapp.com/api/guilds/646132850302779405/widget.png?style=shield)](https://discord.gg/PYdEpXp)
 [![CodeFactor](https://www.codefactor.io/repository/github/undervolt/chocomint/badge)](https://www.codefactor.io/repository/github/undervolt/chocomint)
 [![UnderVolt Website Badge](https://img.shields.io/badge/visit%20our-website-red.svg)](https://undervolt.io)
 [![GitHub Forks](https://img.shields.io/github/forks/UnderVolt/Chocomint.svg?style=social&label=Fork&maxAge=2592000)](https://github.com/UnderVolt/Chocomint/network)
 [![GitHub Stars](https://img.shields.io/github/stars/UnderVolt/Chocomint.svg?style=social&label=Star&maxAge=2592000)](https://github.com/UnderVolt/Chocomint/stargazers)
 [![GitHub Watches](https://img.shields.io/github/watchers/UnderVolt/Chocomint.svg?style=social&label=Watch&maxAge=2592000)](https://github.com/UnderVolt/Chocomint/watchers)  
-[![Dev chat](https://discordapp.com/api/guilds/646132850302779405/widget.png?style=shield)](https://discord.gg/PYdEpXp)
 
 In-development Minecraft ModLoader, Client and Optimizer.
 
