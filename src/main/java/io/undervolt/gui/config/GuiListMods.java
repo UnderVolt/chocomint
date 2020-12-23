@@ -7,7 +7,6 @@ import net.minecraft.client.gui.GuiScreen;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GuiListMods extends Menu {
