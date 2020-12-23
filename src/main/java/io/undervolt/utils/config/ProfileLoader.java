@@ -16,7 +16,7 @@ public class ProfileLoader {
         this.rootPath = new File(path + File.separator + "config");
         this.rootPath.mkdirs();
         this.availableProfiles = Lists.newArrayList();
-        if(path != null && rootPath.exists() && rootPath.length() > 0)
+        if(path != null && rootPath.exists() && Objects.requireNonNull(rootPath.listFiles()).length > 0)
             this.getAvailableProfiles(rootPath);
         else {
             try {
