@@ -5,6 +5,7 @@ import io.undervolt.api.almendra.Almendra;
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.user.UserSearch;
 import io.undervolt.instance.Chocomint;
+import io.undervolt.utils.AnimationUI;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
@@ -14,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class AvailableRooms extends GameBar {
+public class AvailableRooms extends AnimationUI {
 
     private final Almendra almendra;
     private final ChatManager chatManager;
@@ -23,12 +24,14 @@ public class AvailableRooms extends GameBar {
     private final Chocomint chocomint;
     private GuiButton pmButton;
 
+    private final GameBar gameBar;
+
     public AvailableRooms(final GuiScreen previous, final Chocomint chocomint, final ChatManager chatManager) {
-        super(previous, chocomint);
         this.chocomint = chocomint;
         this.almendra = chocomint.getAlmendra();
         this.chatManager = chatManager;
         this.previous = previous;
+        this.gameBar = new GameBar(this, chocomint, this.buttonList);
     }
 
     @Override
@@ -47,6 +50,7 @@ public class AvailableRooms extends GameBar {
         this.buttonList.add(this.pmButton = new GuiButton(1337, this.width / 2 - 100, y.get(), "#comandos"));
 
         super.initGui();
+        this.gameBar.init(width, height);
 
     }
 
@@ -54,6 +58,7 @@ public class AvailableRooms extends GameBar {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         drawRect(0,0,this.width,this.height, new Color(0,0,0,100).getRGB());
+        this.gameBar.draw(mouseX, mouseY, partialTicks, width, height);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -63,6 +68,7 @@ public class AvailableRooms extends GameBar {
             this.chatManager.setSelectedTab(this.chatManager.getOrCreateTabByName(availableRooms.get(button.id).getName()));
             this.mc.displayGuiScreen(previous);
         } else {
+            this.gameBar.actionPerformed(button);
             if(button.id == 1337) {
                 this.chatManager.setSelectedTab(this.chatManager.getReservedLogTab());
                 this.chatManager.getOpenTabs().add(this.chatManager.getReservedLogTab());
@@ -71,6 +77,18 @@ public class AvailableRooms extends GameBar {
                 super.actionPerformed(button);
             }
         }
+    }
+
+    @Override
+    public void handleMouseInput() throws IOException {
+        this.gameBar.handleMouseInput(width, height);
+        super.handleMouseInput();
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        this.gameBar.mouseClicked(mouseX, mouseY, mouseButton, width, height);
+        super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override

@@ -5,6 +5,7 @@ import io.undervolt.console.Console;
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
 import io.undervolt.instance.Chocomint;
+import io.undervolt.utils.AnimationUI;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -18,10 +19,13 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Chat extends GameBar {
+public class Chat extends AnimationUI {
 
     /** Declare Chocomint */
     private final Chocomint chocomint;
+
+    /** GameBar */
+    private final GameBar gameBar;
 
     /** Declare ChatManager */
     private final ChatManager chatManager;
@@ -51,7 +55,6 @@ public class Chat extends GameBar {
     private float scroll = 0;
 
     public Chat(final String initialText, final GuiScreen prev, final Chocomint chocomint, final ServerData serverData) {
-        super(prev, chocomint);
 
         this.prev = prev;
         this.initialText = initialText;
@@ -63,6 +66,7 @@ public class Chat extends GameBar {
         this.serverData = serverData;
 
         this.console = this.chocomint.getConsole();
+        this.gameBar = new GameBar(this, this.chocomint, this.buttonList);
     }
 
     @Override
@@ -138,7 +142,9 @@ public class Chat extends GameBar {
             this.serverReservedButton.buttonText = "No está jugando";
         }
 
+        this.gameBar.init(width, height);
         super.initGui();
+
     }
 
     @Override
@@ -180,7 +186,7 @@ public class Chat extends GameBar {
         drawRect(0, this.chatHeight - 18, this.width, this.chatHeight,
                 Color.BLACK.getRGB());
 
-
+        this.gameBar.draw(mouseX, mouseY, partialTicks, width, height);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -212,8 +218,10 @@ public class Chat extends GameBar {
         else if(button.id == 1400000) {
             this.chatManager.removeCurrentTab();
             this.update(false);
-        } else
+        } else {
+            this.gameBar.actionPerformed(button);
             super.actionPerformed(button);
+        }
     }
 
     @Override
@@ -268,12 +276,14 @@ public class Chat extends GameBar {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         this.textField.mouseClicked(mouseX, mouseY, mouseButton);
+        this.gameBar.mouseClicked(mouseX, mouseY, mouseButton, width, height);
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
+        this.gameBar.handleMouseInput(width, height);
 
         int i = Mouse.getEventDWheel();
 
