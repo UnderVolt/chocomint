@@ -66,6 +66,8 @@ public class GuiMods extends EditGUI {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else if(button.id == 650849) {
+            this.mc.displayGuiScreen(new GuiListMods(this, this.chocomint));
         } else {
             this.chocomint.getLoader().setSelectedProfile(this.chocomint.getLoader().availableProfiles.get(button.id - 1));
             this.chocomint.getConfigurableManager().reloadConfig(this.chocomint.getLoader().availableProfiles.get(button.id - 1));
