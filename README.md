@@ -8,7 +8,8 @@
 [![UnderVolt Website Badge](https://img.shields.io/badge/visit%20our-website-red.svg)](https://undervolt.io)
 [![GitHub Forks](https://img.shields.io/github/forks/UnderVolt/Chocomint.svg?style=social&label=Fork&maxAge=2592000)](https://github.com/UnderVolt/Chocomint/network)
 [![GitHub Stars](https://img.shields.io/github/stars/UnderVolt/Chocomint.svg?style=social&label=Star&maxAge=2592000)](https://github.com/UnderVolt/Chocomint/stargazers)
-[![GitHub Watches](https://img.shields.io/github/watchers/UnderVolt/Chocomint.svg?style=social&label=Watch&maxAge=2592000)](https://github.com/UnderVolt/Chocomint/watchers)  
+[![GitHub Watches](https://img.shields.io/github/watchers/UnderVolt/Chocomint.svg?style=social&label=Watch&maxAge=2592000)](https://github.com/UnderVolt/Chocomint/watchers)
+[![HitCount](http://hits.dwyl.com/UnderVolt/chocomint.svg)](http://hits.dwyl.com/UnderVolt/chocomint)
 
 In-development Minecraft ModLoader, Client and Optimizer.
 
