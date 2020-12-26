@@ -1,6 +1,9 @@
 # LazyGit
 /lazygit.exe
 
+# run
+/run
+
 # Gradle
 # ------
 .gradle

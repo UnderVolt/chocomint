@@ -3,6 +3,7 @@ package io.undervolt.utils.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.RestUtils;
@@ -74,7 +75,7 @@ public class Config {
             if(tkC.delete()) {
                 System.out.println("Cerrada la sesión, eliminado archivo");
             } else {
-                this.mc.getChocomint().getNotificationManager().addNotification(
+                GameBridge.getChocomint().getNotificationManager().addNotification(
                         new Notification(Notification.Priority.WARNING, "No se pudo cerrar sesión", "Fue imposible eliminar los datos del usuario.", obj->{})
                 );
             }

@@ -1,9 +1,9 @@
 package io.undervolt.gui.chat;
 
 import com.google.common.collect.Lists;
+import io.undervolt.bridge.GameBridge;
 import io.undervolt.instance.Chocomint;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,16 +16,23 @@ public class ChatManager {
     private final List<Message> sentMessages = Lists.newArrayList();
     private Tab selectedTab;
 
-    public ChatManager(final Chocomint chocomint) {
-        this.chocomint = chocomint;
+    public ChatManager() {
+        this.chocomint = GameBridge.getChocomint();
+        String user = this.chocomint.getChocomintUser();
         this.reservedLogTab.setRead();
         this.reservedServerTab.setRead();
-        this.reservedLogTab.addMessage(this.chocomint.getChocomintUser(), "Esta es la pestaña de #comandos.");
-        this.reservedLogTab.addMessage(this.chocomint.getChocomintUser(), "Acá vas a poder realizar comandos del cliente.");
-        this.reservedLogTab.addMessage(this.chocomint.getChocomintUser(), "Para acceder a los chats globales, iniciá sesión con tu cuenta de UnderVolt.");
-        this.reservedLogTab.addMessage(this.chocomint.getChocomintUser(), "Para ver los comandos disponibles, hacé /help.");
-        this.reservedLogTab.addMessage(this.chocomint.getChocomintUser(), "Si encontraste algún bug, entrá a https://github.com/UnderVolt/chocomint/. Abajo hay una guia sobre como reportarlos.");
-        this.reservedLogTab.addMessage(this.chocomint.getChocomintUser(), "\247cDisfrutá!");
+        String[] messages = {
+            "Esta es la pestaña de #comandos.",
+            "Acá vas a poder realizar comandos del cliente.",
+            "Para acceder a los chats globales, iniciá sesión con tu cuenta de UnderVolt.",
+            "Para ver los comandos disponibles, hacé /help.",
+            "Si encontraste algún bug, entrá a https://github.com/UnderVolt/chocomint/. Abajo hay una guia sobre como reportarlos.",
+            "\247cDisfrutá!"
+        };
+
+        for(String msg : messages){
+            this.reservedLogTab.addMessage(user, msg);
+        }
     }
 
     public boolean hasUnreadMessages() {

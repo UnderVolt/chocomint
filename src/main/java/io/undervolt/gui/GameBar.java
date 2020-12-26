@@ -1,7 +1,7 @@
 package io.undervolt.gui;
 
+import com.google.common.collect.Lists;
 import io.undervolt.bridge.GameBridge;
-import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.config.GuiMods;
 import io.undervolt.gui.contributors.ContributorsManager;
 import io.undervolt.gui.contributors.ContributorsPanel;
@@ -12,7 +12,6 @@ import io.undervolt.gui.notifications.NotificationPanel;
 import io.undervolt.gui.user.UserCard;
 import io.undervolt.gui.user.UserScreen;
 import io.undervolt.instance.Chocomint;
-import io.undervolt.utils.AnimationUI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import org.lwjgl.input.Mouse;
@@ -20,6 +19,7 @@ import org.lwjgl.input.Mouse;
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class GameBar extends Gui {
 
@@ -47,7 +47,7 @@ public class GameBar extends Gui {
     private final FontRenderer fontRendererObj;
 
     /** Declare buttons */
-    private final List<GuiButton> buttonList;
+    private List<GuiButton> buttonList;
     private TextureGameBarButton notificationsButton;
     private GameBarButton userButton;
     private TextureGameBarButton musicButton;
@@ -62,10 +62,9 @@ public class GameBar extends Gui {
     private boolean backgroundDrawing;
 
     /** Constructor */
-    public GameBar(final GuiScreen parentScreen, final Chocomint chocomint, final List<GuiButton> buttonList) {
-        this.buttonList = buttonList;
+    public GameBar(final GuiScreen parentScreen) {
         this.parentScreen = parentScreen;
-        this.chocomint = chocomint;
+        this.chocomint = GameBridge.getChocomint();
         this.mc = chocomint.getMinecraft();
         this.notificationManager = chocomint.getNotificationManager();
         this.sr = GameBridge.getScaledResolution();
@@ -74,7 +73,7 @@ public class GameBar extends Gui {
     }
 
     public void init(int width, int height) {
-
+        this.buttonList = Lists.newArrayList();
         // Set username trim
         String username = this.chocomint.getUser().getUsername();
         if(this.fontRendererObj.getStringWidth("[ ] " + username) > 62) {
@@ -87,7 +86,7 @@ public class GameBar extends Gui {
 
         // Initialize User Card
         this.userCard = new UserCard(this.chocomint, this.mc, this.chocomint.getUser(), false, true, (user) -> {
-            this.mc.displayGuiScreen(new UserScreen(this.parentScreen, this.chocomint, this.chocomint.getUser()));
+            this.mc.displayGuiScreen(new UserScreen(this.parentScreen, this.chocomint.getUser()));
         });
 
         // Initialize Contributors Panel
@@ -136,6 +135,8 @@ public class GameBar extends Gui {
         this.userCard.drawCard(width - 132, 22);
         this.notificationPanel.drawPanel(width, height, this.notificationScroll);
         this.contributorsPanel.drawPanel(width, height);
+
+        this.buttonList.forEach(b -> b.drawButton(GameBridge.getMinecraft(), mouseX, mouseY));
     }
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton, int width, int height) {
@@ -161,6 +162,9 @@ public class GameBar extends Gui {
                 }
             }
         }
+
+        Optional<GuiButton> btn = this.buttonList.stream().filter(b -> b.mousePressed(GameBridge.getMinecraft(), mouseX, mouseY)).findFirst();
+        if(btn.isPresent()) this.handleBtn(btn.get());
     }
 
     public void handleMouseInput(int width, int height) throws IOException {
@@ -174,7 +178,7 @@ public class GameBar extends Gui {
         }
     }
 
-    public void actionPerformed(GuiButton button) throws IOException {
+    public void handleBtn(GuiButton button) {
         switch (button.id) {
             case 1337101:
                 this.notificationPanel.toggleActive();
@@ -186,7 +190,7 @@ public class GameBar extends Gui {
                 this.userCard.toggleActive();
                 this.notificationPanel.setActive(false);
                 this.contributorsPanel.setActive(false);
-                if(this.chocomint.getUser().getUsername().equals("Guest")) this.mc.displayGuiScreen(new LoginGUI(this.parentScreen, this.chocomint));
+                if(this.chocomint.getUser().getUsername().equals("Guest")) this.mc.displayGuiScreen(new LoginGUI( this.parentScreen ));
                 break;
             case 1337105:
                 this.notificationPanel.setActive(false);

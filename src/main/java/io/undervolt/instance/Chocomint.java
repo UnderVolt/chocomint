@@ -97,7 +97,7 @@ public class Chocomint implements Listener {
                 this.notificationManager = new NotificationManager(this);
                 this.contributorsManager = new ContributorsManager(this.mc);
 
-                this.chatManager = new ChatManager(this);
+                this.chatManager = new ChatManager();
                 this.console = new Console(this);
 
                 try {

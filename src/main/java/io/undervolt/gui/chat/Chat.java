@@ -1,6 +1,7 @@
 package io.undervolt.gui.chat;
 
 import io.undervolt.api.almendra.Almendra;
+import io.undervolt.bridge.GameBridge;
 import io.undervolt.console.Console;
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
@@ -54,19 +55,19 @@ public class Chat extends AnimationUI {
     /** Scroll implementation */
     private float scroll = 0;
 
-    public Chat(final String initialText, final GuiScreen prev, final Chocomint chocomint, final ServerData serverData) {
+    public Chat(final String initialText, final GuiScreen prev, final ServerData serverData) {
 
         this.prev = prev;
         this.initialText = initialText;
 
-        this.chocomint = chocomint;
+        this.chocomint = GameBridge.getChocomint();
         this.chatManager = this.chocomint.getChatManager();
         this.almendra = this.chocomint.getAlmendra();
 
         this.serverData = serverData;
 
         this.console = this.chocomint.getConsole();
-        this.gameBar = new GameBar(this, this.chocomint, this.buttonList);
+        this.gameBar = new GameBar(this);
     }
 
     @Override
@@ -186,8 +187,8 @@ public class Chat extends AnimationUI {
         drawRect(0, this.chatHeight - 18, this.width, this.chatHeight,
                 Color.BLACK.getRGB());
 
-        this.gameBar.draw(mouseX, mouseY, partialTicks, width, height);
         super.drawScreen(mouseX, mouseY, partialTicks);
+        this.gameBar.draw(mouseX, mouseY, partialTicks, width, height);
     }
 
     @Override
@@ -214,12 +215,11 @@ public class Chat extends AnimationUI {
             });
             this.update(false);
         } else if(button.id == 1337097)
-            this.mc.displayGuiScreen(new AvailableRooms(this, this.chocomint, this.chatManager));
+            this.mc.displayGuiScreen(new AvailableRooms(this ));
         else if(button.id == 1400000) {
             this.chatManager.removeCurrentTab();
             this.update(false);
         } else {
-            this.gameBar.actionPerformed(button);
             super.actionPerformed(button);
         }
     }
@@ -232,13 +232,13 @@ public class Chat extends AnimationUI {
                     this.mc.displayGuiScreen(this.prev);
                     break;
                 case Keyboard.KEY_F9:
-                    this.mc.displayGuiScreen(new AvailableRooms(this, this.chocomint, this.chatManager));
+                    this.mc.displayGuiScreen(new AvailableRooms(this ));
                     break;
                 case Keyboard.KEY_UP:
                     if(upKeyCounter - 1 >= this.chatManager.getSentMessages().size()) return;
                     upKeyCounter = upKeyCounter + 1;
                     if(this.chatManager.getSentMessages().size() - upKeyCounter < 0
-                        || this.chatManager.getSentMessages().get(this.chatManager.getSentMessages().size() - upKeyCounter) == null) return;
+                            || this.chatManager.getSentMessages().get(this.chatManager.getSentMessages().size() - upKeyCounter) == null) return;
                     this.textField.setText(this.chatManager.getSentMessages().get(this.chatManager.getSentMessages().size() - upKeyCounter).getMessage());
                     break;
                 case Keyboard.KEY_DOWN:
@@ -255,7 +255,7 @@ public class Chat extends AnimationUI {
                     break;
             }
             if(!(this.chocomint.getUser().getUsername().equals("Guest") && this.chatManager.getSelectedTab() != this.chatManager.getReservedServerTab()
-                && this.chatManager.getSelectedTab() != this.chatManager.getReservedLogTab()))
+                    && this.chatManager.getSelectedTab() != this.chatManager.getReservedLogTab()))
                 this.textField.textboxKeyTyped(typedChar, keyCode);
         } else {
             if(this.chatManager.getSelectedTab() == this.chatManager.getReservedServerTab() && (this.mc.thePlayer == null || this.mc.theWorld == null)) return;
@@ -297,7 +297,7 @@ public class Chat extends AnimationUI {
     }
 
     public void update(boolean useNew) {
-        if(useNew) this.mc.displayGuiScreen(new Chat(this.textField.getText().trim(), this.prev, this.chocomint, this.serverData));
+        if(useNew) this.mc.displayGuiScreen(new Chat(this.textField.getText().trim(), this.prev, this.serverData));
         else this.mc.displayGuiScreen(this);
     }
 }

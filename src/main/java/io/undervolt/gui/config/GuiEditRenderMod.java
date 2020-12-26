@@ -1,7 +1,6 @@
 package io.undervolt.gui.config;
 
 import io.undervolt.gui.menu.Menu;
-import io.undervolt.instance.Chocomint;
 import io.undervolt.mod.RenderMod;
 import io.undervolt.utils.forge.GuiSlider;
 import net.minecraft.client.gui.GuiButton;
@@ -13,15 +12,13 @@ import java.io.IOException;
 
 public class GuiEditRenderMod extends Menu {
 
-    private final Chocomint chocomint;
     private final RenderMod renderMod;
 
     private GuiButton button1;
     private GuiSlider sliderScale;
 
-    public GuiEditRenderMod(GuiScreen prev, Chocomint chocomint, RenderMod renderMod) {
-        super(prev, chocomint, "Edición de Mod: " + renderMod.getName(), 0);
-        this.chocomint = chocomint;
+    public GuiEditRenderMod(GuiScreen prev, RenderMod renderMod) {
+        super(prev, "Edición de Mod: " + renderMod.getName(), 0);
         this.renderMod = renderMod;
     }
 

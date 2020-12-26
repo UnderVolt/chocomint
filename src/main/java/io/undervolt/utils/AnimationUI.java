@@ -1,11 +1,19 @@
 package io.undervolt.utils;
 
+import io.undervolt.bridge.GameBridge;
+import io.undervolt.instance.Chocomint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 
 public class AnimationUI extends GuiScreen {
+
+    protected final Chocomint chocomint;
+
+    public AnimationUI() {
+        this.chocomint = GameBridge.getChocomint();
+    }
 
     protected double getAnimationTime(long delta, double speed) {
         double sw = (double) (Minecraft.getSystemTime() - delta) / speed;

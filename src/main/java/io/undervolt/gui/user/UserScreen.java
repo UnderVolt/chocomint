@@ -1,10 +1,8 @@
 package io.undervolt.gui.user;
 
-import io.undervolt.gui.GameBarButton;
 import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.menu.Menu;
 import io.undervolt.gui.notifications.Notification;
-import io.undervolt.instance.Chocomint;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -18,21 +16,19 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class UserScreen extends Menu {
-    private final User user;
-    private final Chocomint chocomint;
+
     private final UserManager userManager;
     private final DynamicTexture image;
+    private final User user;
 
-    private GuiScreen prev;
-
-    private GuiButton logOutButton;
     private GuiButton profileSettingsButton;
     private GuiButton friendRequestButton;
+    private GuiButton logOutButton;
     private GuiButton sendDMButton;
+    private GuiScreen prev;
 
-    public UserScreen(GuiScreen prev, Chocomint chocomint, final User user) {
-        super(prev, chocomint, "Perfil", 0);
-        this.chocomint = chocomint;
+    public UserScreen(GuiScreen prev, final User user) {
+        super(prev, "Perfil", 0);
         this.prev = prev;
         this.user = user;
         this.userManager = chocomint.getUserManager();
@@ -41,19 +37,12 @@ public class UserScreen extends Menu {
 
     @Override
     public void initGui() {
-        if(this.user.getUsername().equals(this.chocomint.getUser().getUsername())) {
+        if(this.user.equals(this.chocomint.getUser())) {
             this.buttonList.add(this.logOutButton = new GuiButton(101, 20, 140, this.width - 40, 20, "Cerrar sesión"));
             this.buttonList.add(this.profileSettingsButton = new GuiButton(102, 20, 165, this.width - 40, 20, "Opciones de perfil"));
         } else {
             this.buttonList.add(this.sendDMButton = new GuiButton(103, 20, 140, this.width - 40, 20, "Enviar un mensaje privado"));
             this.buttonList.add(this.friendRequestButton = new GuiButton(104, 20, 165, this.width - 40, 20, "Enviar solicitud de amistad"));
-        }
-
-        if(this.user.getUsername().equals("Guest")) {
-            this.friendRequestButton.enabled = false;
-            this.sendDMButton.enabled = false;
-            this.logOutButton.enabled = false;
-            this.profileSettingsButton.enabled = false;
         }
 
         super.initGui();
@@ -88,7 +77,7 @@ public class UserScreen extends Menu {
         }
 
         drawRect(0, 120, this.width, this.height, new Color(54,57,63).getRGB());
-        if(this.user.getUsername().equals(this.chocomint.getUser().getUsername()))
+        if(this.user.equals(this.chocomint.getUser()))
             drawCenteredString(this.fontRendererObj, "Has estado jugando por " + this.chocomint.getParsedOpenTime(), this.width / 2, 195, Color.WHITE.getRGB());
     }
 
@@ -116,7 +105,7 @@ public class UserScreen extends Menu {
                 break;
             case 103:
                 this.chocomint.getChatManager().setSelectedTab(this.chocomint.getChatManager().getOrCreateTabByName(this.user.getUsername()));
-                this.mc.displayGuiScreen(new Chat("", this, this.chocomint, this.mc.getCurrentServerData()));
+                this.mc.displayGuiScreen(new Chat("", this, this.mc.getCurrentServerData()));
                 break;
             case 104:
                 this.chocomint.getNotificationManager().addNotification(

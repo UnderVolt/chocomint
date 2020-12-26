@@ -1,12 +1,10 @@
 package io.undervolt.gui.config;
 
-import io.undervolt.gui.GameBar;
 import io.undervolt.gui.TextureGameBarButton;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.config.ProfileLoader;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -66,8 +64,6 @@ public class GuiMods extends EditGUI {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if(button.id == 650849) {
-            this.mc.displayGuiScreen(new GuiListMods(this, this.chocomint));
         } else {
             this.chocomint.getLoader().setSelectedProfile(this.chocomint.getLoader().availableProfiles.get(button.id - 1));
             this.chocomint.getConfigurableManager().reloadConfig(this.chocomint.getLoader().availableProfiles.get(button.id - 1));
@@ -83,7 +79,7 @@ public class GuiMods extends EditGUI {
             int buttonYpos = (int) (gui.y + (gui.height + 4) * gui.scale);
 
             if((x >= buttonXpos) && (y >= buttonYpos) && (x <= buttonXpos + fontRendererObj.getStringWidth("[ ]")) && (y <= buttonYpos + fontRendererObj.FONT_HEIGHT)) {
-                this.mc.displayGuiScreen(new GuiEditRenderMod(this, this.chocomint, gui));
+                this.mc.displayGuiScreen(new GuiEditRenderMod(this, gui));
             }
         });
     }

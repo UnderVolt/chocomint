@@ -1,5 +1,6 @@
 package io.undervolt.gui.notifications;
 
+import io.undervolt.bridge.GameBridge;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
@@ -48,8 +49,8 @@ public class Notification extends Gui {
         this.x = x;
         this.y = y;
 
-        mc.getChocomint().getRenderUtils().drawRoundedRect(x, y, 110, 35, 3, Color.WHITE.getRGB());
-        mc.getChocomint().getRenderUtils().drawFilledCircle(x + 12, y + 15, 8, this.getPriorityColor());
+        GameBridge.getChocomint().getRenderUtils().drawRoundedRect(x, y, 110, 35, 3, Color.WHITE.getRGB());
+        GameBridge.getChocomint().getRenderUtils().drawFilledCircle(x + 12, y + 15, 8, this.getPriorityColor());
 
         String title = this.title;
         if(mc.fontRendererObj.getStringWidth(title) > 85) {

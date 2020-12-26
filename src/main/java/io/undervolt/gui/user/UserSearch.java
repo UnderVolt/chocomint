@@ -1,41 +1,30 @@
 package io.undervolt.gui.user;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.undervolt.api.almendra.Almendra;
-import io.undervolt.gui.chat.AvailableRooms;
-import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.chat.ChatManager;
 import io.undervolt.gui.menu.Menu;
-import io.undervolt.gui.notifications.Notification;
-import io.undervolt.gui.user.User;
-import io.undervolt.gui.user.UserCard;
-import io.undervolt.instance.Chocomint;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class UserSearch extends Menu {
     private final GuiScreen previous;
-    private final Chocomint chocomint;
     private final ChatManager chatManager;
     private final Almendra almendra;
     private final Map<String, UserCard> filteredUserMap = Maps.newHashMap();
 
     private GuiTextField textField;
 
-    public UserSearch(final GuiScreen previous, final Chocomint chocomint) {
-        super(previous, chocomint, "Buscar un usuario", 0);
-        this.chocomint = chocomint;
+    public UserSearch(final GuiScreen previous ) {
+        super(previous, "Buscar un usuario", 0);
         this.previous = previous;
-        this.chatManager = chocomint.getChatManager();
-        this.almendra = chocomint.getAlmendra();
+        this.chatManager = this.chocomint.getChatManager();
+        this.almendra = this.chocomint.getAlmendra();
     }
 
     @Override
@@ -89,22 +78,21 @@ public class UserSearch extends Menu {
             this.filteredUserMap.clear();
 
             if(this.textField.getText().length() >= 3) {
-                List<String> filteredUserList = this.almendra.getConnectedUsers().stream().filter(user -> user.toLowerCase()
-                        .startsWith(this.textField.getText().toLowerCase())).collect(Collectors.toList());
-
-                for (String username : filteredUserList) {
-                    User user = this.chocomint.getUserManager().getUser(username);
-                    this.filteredUserMap.put(username,
-                            new UserCard(chocomint, this.mc, user, true, false, (u) ->
-                                    this.mc.displayGuiScreen(new UserScreen(this.previous, this.chocomint, u)))
-                    );
-                }
+                this.almendra.getConnectedUsers().stream().filter(user -> user.toLowerCase()
+                        .startsWith(this.textField.getText().toLowerCase())).collect(Collectors.toList()).forEach(username -> {
+                            User user = new User(username, User.Status.ONLINE, "", false, "default");
+                            this.filteredUserMap.put(username,
+                                new UserCard(chocomint, this.mc, user,true, false, (u) -> this.mc.displayGuiScreen(new UserScreen(this.previous, u)))
+                            );
+                        }
+                );
             }
+
         } else {
             if(!this.textField.getText().isEmpty()) {
                 if(this.almendra.getConnectedUsers().contains(this.textField.getText().trim()) && !this.textField.getText().trim().equalsIgnoreCase(this.chocomint.getUser().getUsername())) {
                     User user = new User(this.textField.getText().trim(), User.Status.ONLINE, "", false, "default");
-                    this.mc.displayGuiScreen(new UserScreen(this.previous, this.chocomint, user));
+                    this.mc.displayGuiScreen(new UserScreen(this.previous, user));
                 }
             }
         }

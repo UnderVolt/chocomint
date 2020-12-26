@@ -1,9 +1,8 @@
 package io.undervolt.gui.menu;
 
-import io.undervolt.gui.GameBar;
+import io.undervolt.bridge.GameBridge;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.AnimationUI;
-import io.undervolt.utils.Multithreading;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -14,11 +13,10 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 public class Menu extends AnimationUI {
 
-    private final Chocomint chocomint;
+    protected final Chocomint chocomint;
     private final GuiScreen previous;
     protected long ftime;
     private final String menuName;
@@ -29,10 +27,9 @@ public class Menu extends AnimationUI {
 
     private int position = 0;
 
-    public Menu(final GuiScreen prev, final Chocomint chocomint, final String menuName, final int pageSize) {
-        //super(prev, chocomint);
+    public Menu(final GuiScreen prev, final String menuName, final int pageSize) {
         this.menuName = menuName;
-        this.chocomint = chocomint;
+        this.chocomint = GameBridge.getChocomint();
         this.pageSize = pageSize;
         this.previous = prev;
     }
@@ -98,7 +95,13 @@ public class Menu extends AnimationUI {
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
-        if(button.id == 100) this.mc.displayGuiScreen(previous);
+        if(button.id == 100) {
+            this.mc.displayGuiScreen(null);
+
+            if (this.mc.currentScreen == null) {
+                this.mc.setIngameFocus();
+            }
+        }
         super.actionPerformed(button);
     }
 

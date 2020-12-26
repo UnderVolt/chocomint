@@ -3,21 +3,19 @@ package io.undervolt.gui.login;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.GuiPasswordField;
-import io.undervolt.gui.TextureGameBarButton;
 import io.undervolt.gui.menu.Menu;
-import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.RestUtils;
 import io.undervolt.utils.config.Config;
-import net.minecraft.client.gui.*;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.ResourceLocation;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -27,18 +25,16 @@ public class LoginGUI extends Menu {
 
     private final RestUtils restUtils;
     private final Config config;
-    private final Chocomint chocomint;
 
     private final GuiScreen parent;
     private GuiTextField user;
     private GuiTextField pass;
 
-    public LoginGUI(final GuiScreen parent, final Chocomint chocomint) {
-        super(parent, chocomint, "Iniciar sesión", parent.height);
+    public LoginGUI(final GuiScreen parent ) {
+        super(parent, "Iniciar sesión", parent == null ? GameBridge.getScaledResolution().getScaledHeight() : parent.height);
+        this.restUtils = this.chocomint.getRestUtils();
+        this.config = this.chocomint.getConfig();
         this.parent = parent;
-        this.restUtils = chocomint.getRestUtils();
-        this.config = chocomint.getConfig();
-        this.chocomint = chocomint;
     }
 
     @Override

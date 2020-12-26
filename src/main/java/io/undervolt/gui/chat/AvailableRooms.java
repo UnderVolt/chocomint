@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import io.undervolt.api.almendra.Almendra;
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.user.UserSearch;
-import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.AnimationUI;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -21,17 +20,15 @@ public class AvailableRooms extends AnimationUI {
     private final ChatManager chatManager;
     private List<Tab> availableRooms = Lists.newArrayList();
     public final GuiScreen previous;
-    private final Chocomint chocomint;
     private GuiButton pmButton;
 
     private final GameBar gameBar;
 
-    public AvailableRooms(final GuiScreen previous, final Chocomint chocomint, final ChatManager chatManager) {
-        this.chocomint = chocomint;
-        this.almendra = chocomint.getAlmendra();
-        this.chatManager = chatManager;
+    public AvailableRooms( final GuiScreen previous ) {
+        this.almendra = this.chocomint.getAlmendra();
+        this.chatManager = this.chocomint.getChatManager();
         this.previous = previous;
-        this.gameBar = new GameBar(this, chocomint, this.buttonList);
+        this.gameBar = new GameBar(this);
     }
 
     @Override
@@ -68,7 +65,6 @@ public class AvailableRooms extends AnimationUI {
             this.chatManager.setSelectedTab(this.chatManager.getOrCreateTabByName(availableRooms.get(button.id).getName()));
             this.mc.displayGuiScreen(previous);
         } else {
-            this.gameBar.actionPerformed(button);
             if(button.id == 1337) {
                 this.chatManager.setSelectedTab(this.chatManager.getReservedLogTab());
                 this.chatManager.getOpenTabs().add(this.chatManager.getReservedLogTab());
@@ -95,15 +91,13 @@ public class AvailableRooms extends AnimationUI {
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         switch(keyCode) {
             case Keyboard.KEY_F9:
-                this.mc.displayGuiScreen(new UserSearch(this, this.chocomint));
+                this.mc.displayGuiScreen(new UserSearch(this ));
                 break;
             case Keyboard.KEY_F10:
                 this.chatManager.addTab(this.chatManager.getReservedLogTab());
                 this.chatManager.setSelectedTab(this.chatManager.getReservedLogTab());
-                if(previous instanceof Chat)
-                    this.mc.displayGuiScreen(previous);
-                else
-                    this.mc.displayGuiScreen(new Chat("", this.previous, this.chocomint, this.mc.getCurrentServerData()));
+                if(previous instanceof Chat) this.mc.displayGuiScreen(previous);
+                else this.mc.displayGuiScreen(new Chat("", this.previous, this.mc.getCurrentServerData()));
                 this.mc.displayGuiScreen(previous);
                 break;
             case 1:

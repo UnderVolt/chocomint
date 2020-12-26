@@ -9,8 +9,10 @@ import net.minecraft.client.renderer.texture.TextureManager;
 
 public class GameBridge {
 
+    public static Chocomint chocomint;
+
     public static Chocomint getChocomint() {
-        return Minecraft.getMinecraft().getChocomint();
+        return chocomint;
     }
     
     public static Minecraft getMinecraft() {

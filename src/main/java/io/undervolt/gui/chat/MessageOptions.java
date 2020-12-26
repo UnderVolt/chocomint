@@ -1,5 +1,6 @@
 package io.undervolt.gui.chat;
 
+import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.GameBar;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.AnimationUI;
@@ -23,15 +24,14 @@ public class MessageOptions extends AnimationUI {
     /**
      * Constructor
      *  @param previousScreen
-     * @param chocomint
      * @param message
      */
-    public MessageOptions(final GuiScreen previousScreen, final Chocomint chocomint, Message message) {
-        this.message = message;
-        this.chatManager = chocomint.getChatManager();
+    public MessageOptions(final GuiScreen previousScreen, Message message) {
+        this.chocomint = GameBridge.getChocomint();
+        this.chatManager = this.chocomint.getChatManager();
         this.previous = previousScreen;
-        this.chocomint = chocomint;
-        this.gameBar = new GameBar(this, chocomint, this.buttonList);
+        this.message = message;
+        this.gameBar = new GameBar(this );
     }
 
     @Override
@@ -61,11 +61,10 @@ public class MessageOptions extends AnimationUI {
                 } else if(this.previous instanceof AvailableRooms) {
                     this.mc.displayGuiScreen(((AvailableRooms) this.previous).previous);
                 } else {
-                    this.mc.displayGuiScreen(new Chat("", null, this.chocomint, this.mc.getCurrentServerData()));
+                    this.mc.displayGuiScreen(new Chat("", null, this.mc.getCurrentServerData()));
                 }
                 break;
         }
-        this.gameBar.actionPerformed(button);
         super.actionPerformed(button);
     }
 
