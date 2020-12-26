@@ -26,7 +26,7 @@ public class UserManager {
     private final Config config;
 
     private final UserProfilePictureManager userProfilePictureManager;
-
+    private final CountryFlagManager countryFlagManager;
     private final Map<String, User> userPool = Maps.newHashMap();
 
     public UserManager(Chocomint chocomint) {
@@ -35,6 +35,7 @@ public class UserManager {
         this.config = chocomint.getConfig();
         this.gson = new GsonBuilder().create();
         this.userProfilePictureManager = new UserProfilePictureManager();
+        this.countryFlagManager = new CountryFlagManager();
     }
 
     public User setUser(final JsonObject tokenObj) {
@@ -96,5 +97,9 @@ public class UserManager {
 
     public UserProfilePictureManager getUserProfilePictureManager() {
         return userProfilePictureManager;
+    }
+
+    public CountryFlagManager getCountryFlagManager() {
+        return countryFlagManager;
     }
 }
