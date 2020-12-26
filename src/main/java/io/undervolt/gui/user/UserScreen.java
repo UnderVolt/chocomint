@@ -22,6 +22,7 @@ public class UserScreen extends Menu {
     private final Chocomint chocomint;
     private final UserManager userManager;
     private final DynamicTexture image;
+    private final DynamicTexture countryFlag;
 
     private GuiScreen prev;
 
@@ -37,6 +38,7 @@ public class UserScreen extends Menu {
         this.user = user;
         this.userManager = chocomint.getUserManager();
         this.image = this.userManager.getUserProfilePictureManager().getImageAsDynamicTexture(this.user.getImage());
+        this.countryFlag = this.userManager.getCountryFlagManager().getCountryFlag(user.getCountryCode());
     }
 
     @Override
@@ -79,6 +81,12 @@ public class UserScreen extends Menu {
 
         this.chocomint.getRenderUtils().drawFilledCircle(89, 64, 4, this.user.getStatusColor());
         this.fontRendererObj.drawString(this.user.getStatusString().toUpperCase(), 97, 60, Color.WHITE.getRGB());
+
+        GL11.glPushMatrix();
+        GlStateManager.translate(85, 69, 0);
+        this.mc.getTextureManager().bindTexture(this.mc.getTextureManager().getDynamicTextureLocation(user.getCountryCode(), this.countryFlag));
+        drawModalRectWithCustomSizedTexture(0, 0, 0, 0, 18, 18, 18, 18);
+        GL11.glPopMatrix();
 
         if(this.user.isDeveloper()) {
             this.chocomint.getRenderUtils().drawRoundedRect(85, 89, 3 + this.fontRendererObj.getStringWidth("DEV"), 11,
