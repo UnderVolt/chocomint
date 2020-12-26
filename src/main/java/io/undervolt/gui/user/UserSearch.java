@@ -89,17 +89,17 @@ public class UserSearch extends Menu {
             this.filteredUserMap.clear();
 
             if(this.textField.getText().length() >= 3) {
-                this.almendra.getConnectedUsers().stream().filter(user -> user.toLowerCase()
-                        .startsWith(this.textField.getText().toLowerCase())).collect(Collectors.toList()).forEach(username -> {
-                            User user = this.chocomint.getUserManager().getUser(username);
-                            this.filteredUserMap.put(username,
-                                    new UserCard(chocomint, this.mc, user,true, false, (u) ->
-                                            this.mc.displayGuiScreen(new UserScreen(this.previous, this.chocomint, u)))
-                            );
-                        }
-                );
-            }
+                List<String> filteredUserList = this.almendra.getConnectedUsers().stream().filter(user -> user.toLowerCase()
+                        .startsWith(this.textField.getText().toLowerCase())).collect(Collectors.toList());
 
+                for (String username : filteredUserList) {
+                    User user = this.chocomint.getUserManager().getUser(username);
+                    this.filteredUserMap.put(username,
+                            new UserCard(chocomint, this.mc, user, true, false, (u) ->
+                                    this.mc.displayGuiScreen(new UserScreen(this.previous, this.chocomint, u)))
+                    );
+                }
+            }
         } else {
             if(!this.textField.getText().isEmpty()) {
                 if(this.almendra.getConnectedUsers().contains(this.textField.getText().trim()) && !this.textField.getText().trim().equalsIgnoreCase(this.chocomint.getUser().getUsername())) {
