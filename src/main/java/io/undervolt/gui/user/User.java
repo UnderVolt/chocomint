@@ -8,18 +8,18 @@ public class User {
         ONLINE, AWAY, BUSY, OFFLINE;
     }
 
-    private final String username;
+    private final String username, image, alias;
     private final Status status;
     private final String countryCode;
     private final boolean developer;
-    private final String image;
 
-    public User(final String username, final Status status, String countryCode, boolean developer, String image) {
+    public User(final String username, final Status status, String countryCode, boolean developer, String image, String alias) {
         this.status = status;
         this.username = username;
         this.countryCode = countryCode;
         this.developer = developer;
         this.image = image;
+        this.alias = alias;
     }
 
     public final String getUsername() {
@@ -36,6 +36,10 @@ public class User {
 
     public boolean isDeveloper() {
         return developer;
+    }
+
+    public String getAlias() {
+        return alias;
     }
 
     public String getImage() {

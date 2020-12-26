@@ -23,6 +23,7 @@ public class UserScreen extends Menu {
     private final UserManager userManager;
     private final DynamicTexture image;
     private final DynamicTexture countryFlag;
+    private boolean drawAlias = true;
 
     private GuiScreen prev;
 
@@ -43,6 +44,11 @@ public class UserScreen extends Menu {
 
     @Override
     public void initGui() {
+
+        if(user.getAlias().toLowerCase().equals(user.getUsername())) {
+            this.drawAlias = false;
+        }
+
         if(this.user.getUsername().equals(this.chocomint.getUser().getUsername())) {
             this.buttonList.add(this.logOutButton = new GuiButton(101, 20, 140, this.width - 40, 20, "Cerrar sesión"));
             this.buttonList.add(this.profileSettingsButton = new GuiButton(102, 20, 165, this.width - 40, 20, "Opciones de perfil"));
@@ -76,16 +82,16 @@ public class UserScreen extends Menu {
         GL11.glPushMatrix();
         GlStateManager.translate(85, 45, 0);
         GlStateManager.scale(1.5, 1.5, 0);
-        this.fontRendererObj.drawString(this.user.getUsername(), 0, 0, Color.white.getRGB());
+        this.fontRendererObj.drawString(this.user.getAlias(), 0, 0, Color.white.getRGB());
         GL11.glPopMatrix();
 
-        this.chocomint.getRenderUtils().drawFilledCircle(89, 64, 4, this.user.getStatusColor());
-        this.fontRendererObj.drawString(this.user.getStatusString().toUpperCase(), 97, 60, Color.WHITE.getRGB());
+        if(drawAlias) this.fontRendererObj.drawString("(" + this.user.getUsername() + ")", 105, 60, Color.LIGHT_GRAY.getRGB());
 
         GL11.glPushMatrix();
-        GlStateManager.translate(85, 69, 0);
+        GL11.glColor3f(255, 255, 255);
+        GlStateManager.translate(85, 57, 0);
         this.mc.getTextureManager().bindTexture(this.mc.getTextureManager().getDynamicTextureLocation(user.getCountryCode(), this.countryFlag));
-        drawModalRectWithCustomSizedTexture(0, 0, 0, 0, 18, 18, 18, 18);
+        drawModalRectWithCustomSizedTexture(0, 0, 0, 0, 15, 15, 15, 15);
         GL11.glPopMatrix();
 
         if(this.user.isDeveloper()) {

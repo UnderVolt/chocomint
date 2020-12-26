@@ -7,15 +7,9 @@ import com.google.gson.JsonObject;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.RestUtils;
 import io.undervolt.utils.config.Config;
-import net.minecraft.client.renderer.texture.DynamicTexture;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.Base64;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -43,7 +37,7 @@ public class UserManager {
     }
 
     public User setUser(final String token) {
-        AtomicReference<User> user = new AtomicReference<>(new User("Guest", User.Status.ONLINE, null, false, null));
+        AtomicReference<User> user = new AtomicReference<>(new User("Guest", User.Status.ONLINE, null, false, null, null));
         if(token == null) return user.get();
         JSONObject json = new JSONObject();
         try {
@@ -60,7 +54,9 @@ public class UserManager {
                         User.Status.ONLINE,
                         userObject.get("country").getAsString(),
                         userObject.get("developer").getAsBoolean(),
-                        userObject.get("image").getAsString()));
+                        userObject.get("image").getAsString(),
+                        userObject.get("alias").getAsString())
+                );
             }
         });
         return user.get();
@@ -71,7 +67,7 @@ public class UserManager {
         else {
             if (this.userPool.containsKey(username)) return userPool.get(username);
             else {
-                AtomicReference<User> user = new AtomicReference<>(new User(username, User.Status.OFFLINE, null, false, "default"));
+                AtomicReference<User> user = new AtomicReference<>(new User(username, User.Status.OFFLINE, null, false, "default", null));
                 JSONObject json = new JSONObject();
                 try {
                     json.put("username", username);
@@ -86,7 +82,9 @@ public class UserManager {
                                 User.Status.ONLINE,
                                 userObject.get("country").getAsString(),
                                 userObject.get("developer").getAsBoolean(),
-                                userObject.get("image").getAsString()));
+                                userObject.get("image").getAsString(),
+                                userObject.get("alias").getAsString()
+                        ));
                         this.userPool.put(username, user.get());
                     }
                 });
