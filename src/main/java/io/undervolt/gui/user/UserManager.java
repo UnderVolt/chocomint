@@ -1,5 +1,6 @@
 package io.undervolt.gui.user;
 
+import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -15,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class UserManager {
@@ -24,6 +26,8 @@ public class UserManager {
     private final Config config;
 
     private final UserProfilePictureManager userProfilePictureManager;
+
+    private final Map<String, User> userPool = Maps.newHashMap();
 
     public UserManager(Chocomint chocomint) {
         this.chocomint = chocomint;
@@ -59,6 +63,35 @@ public class UserManager {
             }
         });
         return user.get();
+    }
+
+    public User getUser(final String username) {
+        if(username == null) return null;
+        else {
+            if (this.userPool.containsKey(username)) return userPool.get(username);
+            else {
+                AtomicReference<User> user = new AtomicReference<>(new User(username, User.Status.OFFLINE, null, false, "default"));
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("username", username);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                this.restUtils.sendJsonRequest("/api/userInfo", json, res -> {
+                    JsonObject jsonObject = this.gson.fromJson(res, JsonObject.class);
+                    if (jsonObject.get("code").getAsInt() == 200) {
+                        JsonObject userObject = jsonObject.getAsJsonObject("user");
+                        user.set(new User(userObject.get("user").getAsString(),
+                                User.Status.ONLINE,
+                                userObject.get("country").getAsString(),
+                                userObject.get("developer").getAsBoolean(),
+                                userObject.get("image").getAsString()));
+                        this.userPool.put(username, user.get());
+                    }
+                });
+                return user.get();
+            }
+        }
     }
 
     public UserProfilePictureManager getUserProfilePictureManager() {
