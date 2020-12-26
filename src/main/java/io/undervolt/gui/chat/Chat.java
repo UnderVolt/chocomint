@@ -164,7 +164,7 @@ public class Chat extends AnimationUI {
             int i = this.height - 23;
             for (int id = this.chatManager.getSelectedTab().getMessages().size(); id-- > 0; ) {
                 Message message = this.chatManager.getSelectedTab().getMessages().get(id);
-                this.fontRendererObj.drawString("\247e" +
+                this.fontRendererObj.drawStringWithShadow("\247e" +
                         (message.getUser() != null ? message.getUser() + "\247f: " : "")
                         + message.getMessage(), 5, i, Color.WHITE.getRGB());
                 i = i - 12;
