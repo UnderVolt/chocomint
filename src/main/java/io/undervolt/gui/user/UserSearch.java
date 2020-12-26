@@ -91,7 +91,7 @@ public class UserSearch extends Menu {
             if(this.textField.getText().length() >= 3) {
                 this.almendra.getConnectedUsers().stream().filter(user -> user.toLowerCase()
                         .startsWith(this.textField.getText().toLowerCase())).collect(Collectors.toList()).forEach(username -> {
-                            User user = new User(username, User.Status.ONLINE, "", false, "default");
+                            User user = this.chocomint.getUserManager().getUser(username);
                             this.filteredUserMap.put(username,
                                     new UserCard(chocomint, this.mc, user,true, false, (u) ->
                                             this.mc.displayGuiScreen(new UserScreen(this.previous, this.chocomint, u)))
