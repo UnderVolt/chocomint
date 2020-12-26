@@ -41,12 +41,19 @@ public class UserScreen extends Menu {
 
     @Override
     public void initGui() {
-        if(this.user.equals(this.chocomint.getUser())) {
+        if(this.user.getUsername().equals(this.chocomint.getUser().getUsername())) {
             this.buttonList.add(this.logOutButton = new GuiButton(101, 20, 140, this.width - 40, 20, "Cerrar sesión"));
             this.buttonList.add(this.profileSettingsButton = new GuiButton(102, 20, 165, this.width - 40, 20, "Opciones de perfil"));
         } else {
             this.buttonList.add(this.sendDMButton = new GuiButton(103, 20, 140, this.width - 40, 20, "Enviar un mensaje privado"));
             this.buttonList.add(this.friendRequestButton = new GuiButton(104, 20, 165, this.width - 40, 20, "Enviar solicitud de amistad"));
+        }
+
+        if(this.user.getUsername().equals("Guest")) {
+            this.friendRequestButton.enabled = false;
+            this.sendDMButton.enabled = false;
+            this.logOutButton.enabled = false;
+            this.profileSettingsButton.enabled = false;
         }
 
         super.initGui();
@@ -81,7 +88,7 @@ public class UserScreen extends Menu {
         }
 
         drawRect(0, 120, this.width, this.height, new Color(54,57,63).getRGB());
-        if(this.user.equals(this.chocomint.getUser()))
+        if(this.user.getUsername().equals(this.chocomint.getUser().getUsername()))
             drawCenteredString(this.fontRendererObj, "Has estado jugando por " + this.chocomint.getParsedOpenTime(), this.width / 2, 195, Color.WHITE.getRGB());
     }
 
