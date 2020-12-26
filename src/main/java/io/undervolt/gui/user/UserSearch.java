@@ -1,17 +1,10 @@
 package io.undervolt.gui.user;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.undervolt.api.almendra.Almendra;
-import io.undervolt.gui.chat.AvailableRooms;
-import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.chat.ChatManager;
 import io.undervolt.gui.menu.Menu;
-import io.undervolt.gui.notifications.Notification;
-import io.undervolt.gui.user.User;
-import io.undervolt.gui.user.UserCard;
 import io.undervolt.instance.Chocomint;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 
@@ -103,7 +96,7 @@ public class UserSearch extends Menu {
         } else {
             if(!this.textField.getText().isEmpty()) {
                 if(this.almendra.getConnectedUsers().contains(this.textField.getText().trim()) && !this.textField.getText().trim().equalsIgnoreCase(this.chocomint.getUser().getUsername())) {
-                    User user = new User(this.textField.getText().trim(), User.Status.ONLINE, "", false, "default");
+                    User user = this.chocomint.getUserManager().getUser(this.textField.getText().trim());
                     this.mc.displayGuiScreen(new UserScreen(this.previous, this.chocomint, user));
                 }
             }
