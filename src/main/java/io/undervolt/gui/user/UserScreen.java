@@ -27,6 +27,9 @@ public class UserScreen extends Menu {
 
     private GuiScreen prev;
 
+    private boolean showDevInfoCard = false;
+    private final String devInfoCardText = "Este usuario es un desarrollador oficial de chocomint";
+
     private GuiButton logOutButton;
     private GuiButton profileSettingsButton;
     private GuiButton friendRequestButton;
@@ -99,6 +102,14 @@ public class UserScreen extends Menu {
             3, new Color(47, 56, 168).getRGB());
             GL11.glColor3f(255, 255, 255);
             this.fontRendererObj.drawString("DEV",87, 91, Color.WHITE.getRGB());
+
+            if(this.showDevInfoCard) {
+                this.chocomint.getRenderUtils().drawRoundedRect(92 + this.fontRendererObj.getStringWidth("DEV"), 86,
+                        12 + this.fontRendererObj.getStringWidth(this.devInfoCardText), 17, 3, new Color(78, 78, 78, 120).getRGB());
+                GL11.glColor3f(255, 255, 255);
+                this.fontRendererObj.drawString(this.devInfoCardText, 98 + this.fontRendererObj.getStringWidth("DEV"), 91, Color.WHITE.getRGB());
+            }
+
         }
 
         drawRect(0, 120, this.width, this.height, new Color(54,57,63).getRGB());
@@ -140,5 +151,17 @@ public class UserScreen extends Menu {
         }
 
         super.actionPerformed(button);
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+
+        if(this.user.isDeveloper() && mouseX >= 85 && mouseY >= 89 && mouseX <= 88 + this.fontRendererObj.getStringWidth("DEV") && mouseY <= 100) {
+            this.showDevInfoCard = true;
+        } else {
+            this.showDevInfoCard = false;
+        }
+
+        super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 }
