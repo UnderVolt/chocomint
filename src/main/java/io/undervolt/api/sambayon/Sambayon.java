@@ -28,7 +28,7 @@ public class Sambayon {
             System.out.println("Got server from server pool");
             return this.serverPool.get(serverName);
         } else {
-            System.out.println("Getting server from Sambayón...");
+            System.out.println("Getting " + serverName + " from Sambayón...");
             try {
                 HttpClient httpclient = HttpClients.createDefault();
                 StringEntity requestEntity = new StringEntity("{\"client_id\": \"chocomint\", \"req\":\"" + serverName + "\"}", ContentType.APPLICATION_JSON);
