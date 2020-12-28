@@ -53,8 +53,10 @@ public class UserScreen extends Menu {
             this.buttonList.add(this.logOutButton = new GuiButton(101, 20, 140, this.width - 40, 20, "Cerrar sesión"));
             this.buttonList.add(this.profileSettingsButton = new GuiButton(102, 20, 165, this.width - 40, 20, "Opciones de perfil"));
         } else {
-            this.buttonList.add(this.sendDMButton = new GuiButton(103, 20, 140, this.width - 40, 20, "Enviar un mensaje privado"));
-            this.buttonList.add(this.friendRequestButton = new GuiButton(104, 20, 165, this.width - 40, 20, "Enviar solicitud de amistad"));
+            if(this.chocomint.getFriendsManager().friendsPool.containsKey(this.user.getUsername()))
+                this.buttonList.add(this.sendDMButton = new GuiButton(103, 20, 140, this.width - 40, 20, "Enviar un mensaje privado"));
+            else
+                this.buttonList.add(this.friendRequestButton = new GuiButton(104, 20, 165, this.width - 40, 20, "Enviar solicitud de amistad"));
         }
 
         if(this.user.getUsername().equals("Guest")) {
