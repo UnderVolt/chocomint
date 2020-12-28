@@ -5,6 +5,8 @@ import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.config.GuiMods;
 import io.undervolt.gui.contributors.ContributorsManager;
 import io.undervolt.gui.contributors.ContributorsPanel;
+import io.undervolt.gui.friends.FriendsManager;
+import io.undervolt.gui.friends.FriendsPanel;
 import io.undervolt.gui.login.LoginGUI;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.gui.notifications.NotificationManager;
@@ -41,6 +43,10 @@ public class GameBar extends Gui {
     private final ContributorsManager contributorsManager;
     public ContributorsPanel contributorsPanel;
 
+    /** Declare friends panel */
+    private final FriendsManager friendsManager;
+    public FriendsPanel friendsPanel;
+
     /** UI elements */
     private final ScaledResolution sr;
     private long ftime;
@@ -70,6 +76,7 @@ public class GameBar extends Gui {
         this.notificationManager = chocomint.getNotificationManager();
         this.sr = GameBridge.getScaledResolution();
         this.contributorsManager = chocomint.getContributorsManager();
+        this.friendsManager = chocomint.getFriendsManager();
         this.fontRendererObj = this.mc.fontRendererObj;
     }
 
@@ -92,6 +99,9 @@ public class GameBar extends Gui {
 
         // Initialize Contributors Panel
         this.contributorsPanel = new ContributorsPanel(this.mc, this.contributorsManager, false);
+
+        // Initialize Friends Panel
+        this.friendsPanel = new FriendsPanel(this.chocomint, this.friendsManager, false);
 
         // Add buttons to the buttonList variable
         this.buttonList.add(this.notificationsButton = new TextureGameBarButton(
@@ -136,6 +146,7 @@ public class GameBar extends Gui {
         this.userCard.drawCard(width - 132, 22);
         this.notificationPanel.drawPanel(width, height, this.notificationScroll);
         this.contributorsPanel.drawPanel(width, height);
+        this.friendsPanel.drawPanel(width, height);
     }
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton, int width, int height) {
@@ -153,6 +164,9 @@ public class GameBar extends Gui {
                 }
             }
         }
+
+        // Friends panel click
+        this.friendsPanel.click(mouseX, mouseY);
     }
 
     public void handleMouseInput(int width, int height) throws IOException {
@@ -172,17 +186,26 @@ public class GameBar extends Gui {
                 this.notificationPanel.toggleActive();
                 this.contributorsPanel.setActive(false);
                 this.userCard.setActive(false);
+                this.friendsPanel.setActive(false);
                 break;
             case 1337102:
                 System.out.println(this.userCard.isActive());
                 this.userCard.toggleActive();
                 this.notificationPanel.setActive(false);
                 this.contributorsPanel.setActive(false);
+                this.friendsPanel.setActive(false);
                 if(this.chocomint.getUser().getUsername().equals("Guest")) this.mc.displayGuiScreen(new LoginGUI(this.parentScreen, this.chocomint));
+                break;
+            case 1337104:
+                this.notificationPanel.setActive(false);
+                this.contributorsPanel.setActive(false);
+                this.userCard.setActive(false);
+                this.friendsPanel.toggleActive();
                 break;
             case 1337105:
                 this.notificationPanel.setActive(false);
                 this.userCard.setActive(false);
+                this.friendsPanel.setActive(false);
                 this.contributorsPanel.toggleActive();
                 break;
             case 1337106:

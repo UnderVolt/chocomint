@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import io.undervolt.gui.notifications.Notification;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.RestUtils;
 import io.undervolt.utils.config.Config;
@@ -57,6 +58,12 @@ public class UserManager {
                         userObject.get("image").getAsString(),
                         userObject.get("alias").getAsString())
                 );
+                try {
+                    this.chocomint.getFriendsManager().loadFriends(userObject.get("friends").getAsJsonObject().get("list").getAsJsonArray());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    this.chocomint.getNotificationManager().addNotification(new Notification(Notification.Priority.CRITICAL, "Error", "Failed to load friends list", (a)->{}));
+                }
             }
         });
         return user.get();
