@@ -140,15 +140,7 @@ public class GameBar extends Gui {
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton, int width, int height) {
         // Toggle off userCard's visibility if clicked outside of rendered area
-        if(this.userCard.isActive()) {
-            if(mouseY > 20) {
-                if (mouseX >= userCard.x && mouseY >= userCard.y && mouseX <= userCard.x + 130 && mouseY <= userCard.y + 52) {
-                    userCard.getConsumer().accept(userCard.getUser());
-                } else {
-                    this.userCard.toggleActive();
-                }
-            }
-        }
+        this.userCard.click(mouseY, mouseX);
 
         // Same as above, but with Notifications
         if(this.notificationPanel.isActive()) {
