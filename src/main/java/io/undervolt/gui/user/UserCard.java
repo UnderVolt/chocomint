@@ -75,10 +75,8 @@ public class UserCard extends Gui {
     public void click(int mouseY, int mouseX) {
         if(this.isActive()) {
             if(mouseY > 20) {
-                if (mouseX >= x && mouseY >= y && mouseX <= x + 130 && mouseY <= y + 52) {
-                    getConsumer().accept(getUser());
-                } else {
-                    this.toggleActive();
+                if (mouseX >= x && mouseY >= y && mouseX <= x + 130 && mouseY <= y + (this.isSelf ? 52 : 38)) {
+                    this.getConsumer().accept(getUser());
                 }
             }
         }
