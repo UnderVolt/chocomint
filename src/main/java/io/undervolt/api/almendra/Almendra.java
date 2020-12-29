@@ -131,6 +131,14 @@ public class Almendra implements Listener {
 
             });
 
+            socket.on("userDisconnected", response -> {
+                String username = Arrays.toString(response);
+                username = username.substring(1, username.length() - 1);
+
+                this.connectedUsers.remove(username);
+                System.out.println("Removido " + username + " a la lista de usuarios conectados.");
+            });
+
             socket.on("receiveMessage", message -> {
 
                 String r = Arrays.toString(message);
