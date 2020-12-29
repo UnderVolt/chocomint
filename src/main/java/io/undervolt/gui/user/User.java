@@ -1,5 +1,11 @@
 package io.undervolt.gui.user;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import io.undervolt.bridge.GameBridge;
+import io.undervolt.gui.notifications.Notification;
+import org.json.JSONObject;
+
 import java.awt.*;
 
 public class User {
@@ -59,6 +65,10 @@ public class User {
         else return image;
     }
 
+    public boolean isOnline() {
+        return this.status != Status.OFFLINE;
+    }
+
     public String getStatusString() {
         switch(this.status) {
             case OFFLINE:
@@ -87,5 +97,80 @@ public class User {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public void removeFriend() {
+        if (!this.getUsername().equals(GameBridge.getChocomint().getUser().getUsername()) && GameBridge.getChocomint().getFriendsManager().friendsPool.containsKey(this.username)) {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("token", GameBridge.getChocomint().getConfig().getToken());
+                jsonObject.put("username", username);
+            } catch (Exception e) {
+                GameBridge.getChocomint().getNotificationManager().addNotification(new Notification(
+                        Notification.Priority.ALERT, "Error", e.getMessage(), a -> {
+                }
+                ));
+            }
+            GameBridge.getChocomint().getRestUtils().sendJsonRequest("/api/deleteFriend", jsonObject, res -> {
+                JsonObject response = new GsonBuilder().create().fromJson(res, JsonObject.class);
+                if (response.get("code").getAsInt() == 200) {
+                    GameBridge.getChocomint().getFriendsManager().friendsPool.remove(this.username);
+                    GameBridge.getChocomint().getNotificationManager().addNotification(new Notification(
+                            Notification.Priority.SOCIAL, "Amigo eliminado", username + " ahora ya no es tu amigo", a -> {
+                    }
+                    ));
+                }
+            });
+        }
+    }
+
+    public void acceptFriendRequest() {
+        if (!this.getUsername().equals(GameBridge.getChocomint().getUser().getUsername()) && GameBridge.getChocomint().getFriendsManager().friendRequestPool.containsKey(this.username)) {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("token", GameBridge.getChocomint().getConfig().getToken());
+                jsonObject.put("username", username);
+            } catch (Exception e) {
+                GameBridge.getChocomint().getNotificationManager().addNotification(new Notification(
+                        Notification.Priority.ALERT, "Error", e.getMessage(), a -> {
+                }
+                ));
+            }
+            GameBridge.getChocomint().getRestUtils().sendJsonRequest("/api/acceptFriendRequest", jsonObject, res -> {
+                JsonObject response = new GsonBuilder().create().fromJson(res, JsonObject.class);
+                if (response.get("code").getAsInt() == 200) {
+                    GameBridge.getChocomint().getFriendsManager().friendRequestPool.remove(this.username);
+                    GameBridge.getChocomint().getFriendsManager().friendsPool.put(this.username, this);
+                    GameBridge.getChocomint().getNotificationManager().addNotification(new Notification(
+                            Notification.Priority.SOCIAL, "Solicitud aceptada", username + " ahora es tu amigo!", a -> {
+                    }
+                    ));
+                }
+            });
+        }
+    }
+
+    public void sendFriendRequest() {
+        if (!this.getUsername().equals(GameBridge.getChocomint().getUser().getUsername()) && !GameBridge.getChocomint().getFriendsManager().friendRequestPool.containsKey(this.username)) {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("token", GameBridge.getChocomint().getConfig().getToken());
+                jsonObject.put("username", username);
+            } catch (Exception e) {
+                GameBridge.getChocomint().getNotificationManager().addNotification(new Notification(
+                        Notification.Priority.ALERT, "Error", e.getMessage(), a -> {
+                }
+                ));
+            }
+            GameBridge.getChocomint().getRestUtils().sendJsonRequest("/api/sendFriendRequest", jsonObject, res -> {
+                JsonObject response = new GsonBuilder().create().fromJson(res, JsonObject.class);
+                if (response.get("code").getAsInt() == 200) {
+                    GameBridge.getChocomint().getNotificationManager().addNotification(new Notification(
+                            Notification.Priority.SOCIAL, "Solicitud enviada", "Se ha enviado la solicitud a " + username, a -> {
+                    }
+                    ));
+                }
+            });
+        }
     }
 }
