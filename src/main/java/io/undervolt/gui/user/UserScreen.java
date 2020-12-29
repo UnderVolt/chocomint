@@ -42,6 +42,7 @@ public class UserScreen extends Menu {
     private GuiButton profileSettingsButton;
     private GuiButton friendRequestButton;
     private GuiButton sendDMButton;
+    private GuiButton deleteFriendButton;
 
     public UserScreen(GuiScreen prev, Chocomint chocomint, final User user) {
         super(prev, chocomint, "Perfil", 0);
@@ -74,10 +75,14 @@ public class UserScreen extends Menu {
             this.buttonList.add(this.logOutButton = new GuiButton(101, 20, 140, this.width - 40, 20, "Cerrar sesión"));
             this.buttonList.add(this.profileSettingsButton = new GuiButton(102, 20, 165, this.width - 40, 20, "Opciones de perfil"));
         } else {
-            if(this.isFriend)
+            if(this.isFriend) {
                 this.buttonList.add(this.sendDMButton = new GuiButton(103, 20, 140, this.width - 40, 20, "Enviar un mensaje privado"));
-            else
-                this.buttonList.add(this.friendRequestButton = new GuiButton(104, 20, 165, this.width - 40, 20, "Enviar solicitud de amistad"));
+                this.buttonList.add(this.deleteFriendButton = new GuiButton(105, 20, 165, this.width - 40, 20, "\247cEliminar amigo"));
+            } else
+                if(this.chocomint.getFriendsManager().friendRequestPool.containsKey(this.user.getUsername()))
+                    this.buttonList.add(this.friendRequestButton = new GuiButton(106, 20, 140, this.width - 40, 20, "Aceptar solicitud de amistad"));
+                else
+                    this.buttonList.add(this.friendRequestButton = new GuiButton(104, 20, 140, this.width - 40, 20, "Enviar solicitud de amistad"));
         }
 
         if(this.user.getUsername().equals("Guest")) {
@@ -176,9 +181,17 @@ public class UserScreen extends Menu {
                 this.mc.displayGuiScreen(new Chat("", this, this.chocomint, this.mc.getCurrentServerData()));
                 break;
             case 104:
-                this.chocomint.getNotificationManager().addNotification(
-                        new Notification(Notification.Priority.ALERT, "Soon", "La función no ha sido implementada.", obj->{})
-                );
+                this.user.sendFriendRequest();
+                this.friendRequestButton.displayString = "Solicitud de amistad enviada";
+                this.friendRequestButton.enabled = false;
+                break;
+            case 105:
+                this.user.removeFriend();
+                this.mc.displayGuiScreen(this);
+                break;
+            case 106:
+                this.user.acceptFriendRequest();
+                this.mc.displayGuiScreen(this);
                 break;
         }
 

@@ -47,7 +47,6 @@ public class UserManager {
             e.printStackTrace();
         }
         this.restUtils.sendJsonRequest("/api/user", json, res -> {
-            System.out.println(res);
             JsonObject jsonObject = this.gson.fromJson(res, JsonObject.class);
             if(jsonObject.get("code").getAsInt() == 200) {
                 JsonObject userObject = jsonObject.getAsJsonObject("user");
@@ -62,6 +61,7 @@ public class UserManager {
                 );
                 try {
                     this.chocomint.getFriendsManager().loadFriends(userObject.get("friends").getAsJsonObject().get("list").getAsJsonArray());
+                    this.chocomint.getFriendsManager().loadFriendRequests(userObject.get("friends").getAsJsonObject().get("requests").getAsJsonArray());
                 } catch (JSONException e) {
                     e.printStackTrace();
                     this.chocomint.getNotificationManager().addNotification(new Notification(Notification.Priority.CRITICAL, "Error", "Failed to load friends list", (a)->{}));

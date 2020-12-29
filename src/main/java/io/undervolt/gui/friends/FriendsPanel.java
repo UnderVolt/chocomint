@@ -17,7 +17,8 @@ public class FriendsPanel extends Gui {
     public boolean isActive;
     private final Chocomint chocomint;
 
-    private final List<UserCard> userCardList = Lists.newArrayList();
+    private final List<UserCard> friendUserCardList = Lists.newArrayList();
+    private final List<UserCard> frUserCardList = Lists.newArrayList();
 
     private int clickCounter = 0;
 
@@ -33,31 +34,59 @@ public class FriendsPanel extends Gui {
 
     public void drawPanel(int screenWidth, int screenHeight) {
         if(this.isActive) {
-            this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 154, 22, 130,
-                            350, 4, new Color(28, 28, 28).getRGB());
+            this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 132, 22, 130,
+                            screenHeight - 24, 4, new Color(28, 28, 28).getRGB());
 
-            drawCenteredString(this.mc.fontRendererObj, "Amigos", screenWidth - 90, 26, Color.WHITE.getRGB());
+            drawCenteredString(this.mc.fontRendererObj, "Amigos", screenWidth - 66, 26, Color.WHITE.getRGB());
+
 
             AtomicInteger y = new AtomicInteger(40);
-            this.userCardList.forEach(userCard -> {
-                userCard.drawCard(screenWidth - 154, y.get());
+            this.friendUserCardList.forEach(userCard -> {
+                userCard.drawCard(screenWidth - 132, y.get());
                 y.set(y.get() + 40);
             });
+
+            if(friendUserCardList.isEmpty()) {
+                this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 132, y.get(), 130, 36, 4, new Color(22, 22, 22).getRGB());
+                drawCenteredString(this.mc.fontRendererObj, "No tenés amigos", screenWidth - 66, y.get() + 13, Color.LIGHT_GRAY.getRGB());
+                y.set(y.get() + 40);
+            }
+
+            drawCenteredString(this.mc.fontRendererObj, "Solicitudes de amistad", screenWidth - 66, y.get(), Color.WHITE.getRGB());
+            y.set(y.get() + 20);
+
+            this.frUserCardList.forEach(userCard -> {
+                userCard.drawCard(screenWidth - 132, y.get());
+                y.set(y.get() + 40);
+            });
+
+            if(frUserCardList.isEmpty()) {
+                this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 132, y.get(), 130, 36, 4, new Color(22, 22, 22).getRGB());
+                drawCenteredString(this.mc.fontRendererObj, "No hay solicitudes", screenWidth - 66, y.get() + 13, Color.LIGHT_GRAY.getRGB());
+                y.set(y.get() + 40);
+            }
+
         }
     }
 
     public void click(int mouseX, int mouseY) {
-        this.userCardList.forEach(userCard -> {
+        this.friendUserCardList.forEach(userCard -> {
+            userCard.click(mouseY, mouseX);
+        });
+
+        this.frUserCardList.forEach(userCard -> {
             userCard.click(mouseY, mouseX);
         });
     }
 
     public void updateUserCardList() {
-        this.userCardList.clear();
-        this.friendsManager.friendsPool.forEach((username, user) -> this.userCardList.add(new UserCard(this.chocomint, this.mc, user, true, false,
-                (u) -> {
-                    this.mc.displayGuiScreen(new UserScreen(null, this.chocomint, u));
-                })));
+        this.friendUserCardList.clear();
+        this.friendsManager.friendsPool.forEach((username, user) -> this.friendUserCardList.add(new UserCard(this.chocomint, this.mc, user, true, false,
+                (u) -> this.mc.displayGuiScreen(new UserScreen(null, this.chocomint, u)))));
+
+        this.frUserCardList.clear();
+        this.friendsManager.friendRequestPool.forEach((username, user) -> this.frUserCardList.add(new UserCard(this.chocomint, this.mc, user, true, false,
+                (u) -> this.mc.displayGuiScreen(new UserScreen(null, this.chocomint, u)))));
     }
 
     public void toggleActive() {
