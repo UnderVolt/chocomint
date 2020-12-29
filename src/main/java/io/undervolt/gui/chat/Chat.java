@@ -105,15 +105,14 @@ public class Chat extends AnimationUI {
             i.set(i.get() + 1);
         });
 
-        try {
-            this.serverReservedButton = (GameBarButton) this.buttonList.get(this.chatManager.getOpenTabs().indexOf(this.chatManager.getReservedServerTab()));
-        } catch(ArrayIndexOutOfBoundsException e) {
-            if(!this.chatManager.getOpenTabs().contains(this.chatManager.getReservedServerTab())) {
+            if(this.chatManager.getOpenTabs().contains(this.chatManager.getReservedServerTab()))
+                this.serverReservedButton = (GameBarButton) this.buttonList.get(this.chatManager.getOpenTabs().indexOf(this.chatManager.getReservedServerTab()));
+            else {
                 this.chatManager.getOpenTabs().set(0, this.chatManager.getReservedServerTab());
                 this.chatManager.setSelectedTab(this.chatManager.getReservedServerTab());
                 this.serverReservedButton = (GameBarButton) this.buttonList.get(this.chatManager.getOpenTabs().indexOf(this.chatManager.getReservedServerTab()));
             }
-        }
+
 
         /* Declaring everything related to tabs */
         GameBarButton addTabButton;
