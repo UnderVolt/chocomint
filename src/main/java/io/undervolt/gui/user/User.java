@@ -9,7 +9,7 @@ public class User {
     }
 
     private final String username, image, alias, banner, createDate;
-    private final Status status;
+    private Status status;
     private final String countryCode;
     private final boolean developer;
 
@@ -83,5 +83,9 @@ public class User {
             default:
                 return new Color(83, 255, 62).getRGB();
         }
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }
