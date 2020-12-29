@@ -38,7 +38,7 @@ public class UserManager {
     }
 
     public User setUser(final String token) {
-        AtomicReference<User> user = new AtomicReference<>(new User("Guest", User.Status.ONLINE, null, false, null, null));
+        AtomicReference<User> user = new AtomicReference<>(new User("Guest", User.Status.ONLINE, null, false, null, null, null, null));
         if(token == null) return user.get();
         JSONObject json = new JSONObject();
         try {
@@ -56,7 +56,9 @@ public class UserManager {
                         userObject.get("country").getAsString(),
                         userObject.get("developer").getAsBoolean(),
                         userObject.get("image").getAsString(),
-                        userObject.get("alias").getAsString())
+                        userObject.get("alias").getAsString(),
+                        userObject.get("banner").getAsString(),
+                        userObject.get("created").getAsString())
                 );
                 try {
                     this.chocomint.getFriendsManager().loadFriends(userObject.get("friends").getAsJsonObject().get("list").getAsJsonArray());
@@ -74,7 +76,7 @@ public class UserManager {
         else {
             if (this.userPool.containsKey(username)) return userPool.get(username);
             else {
-                AtomicReference<User> user = new AtomicReference<>(new User(username, User.Status.OFFLINE, null, false, "default", null));
+                AtomicReference<User> user = new AtomicReference<>(new User(username, User.Status.OFFLINE, null, false, "default", null, "default", null));
                 JSONObject json = new JSONObject();
                 try {
                     json.put("username", username);
@@ -90,8 +92,10 @@ public class UserManager {
                                 userObject.get("country").getAsString(),
                                 userObject.get("developer").getAsBoolean(),
                                 userObject.get("image").getAsString(),
-                                userObject.get("alias").getAsString()
-                        ));
+                                userObject.get("alias").getAsString(),
+                                userObject.get("banner").getAsString(),
+                                userObject.get("created").getAsString())
+                                );
                         this.userPool.put(username, user.get());
                     }
                 });

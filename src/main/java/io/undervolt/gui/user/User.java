@@ -8,18 +8,20 @@ public class User {
         ONLINE, AWAY, BUSY, OFFLINE;
     }
 
-    private final String username, image, alias;
+    private final String username, image, alias, banner, createDate;
     private final Status status;
     private final String countryCode;
     private final boolean developer;
 
-    public User(final String username, final Status status, String countryCode, boolean developer, String image, String alias) {
+    public User(final String username, final Status status, String countryCode, boolean developer, String image, String alias, String banner, String createDate) {
         this.status = status;
         this.username = username;
         this.countryCode = countryCode;
         this.developer = developer;
         this.image = image;
         this.alias = alias;
+        this.banner = banner;
+        this.createDate = createDate;
     }
 
     public final String getUsername() {
@@ -40,6 +42,15 @@ public class User {
 
     public String getAlias() {
         return alias;
+    }
+
+    public String getBanner() {
+        if(image == null || image.equals("default")) return null;
+        else return image;
+    }
+
+    public String getCreateDate() {
+        return createDate;
     }
 
     public String getImage() {
