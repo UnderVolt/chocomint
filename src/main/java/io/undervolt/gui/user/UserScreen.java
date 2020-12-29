@@ -110,8 +110,13 @@ public class UserScreen extends Menu {
         drawModalRectWithCustomSizedTexture(0, 0, 0, 0, 15, 15, 15, 15);
         GL11.glPopMatrix();
 
-        this.fontRendererObj.drawString("Se unió en " + this.createdMonth + " de " + this.createdYear,
-        85, 72, Color.WHITE.getRGB());
+        String dateToDraw;
+        if(this.createdMonth.equals("ene.") && this.createdYear.equals("2020"))
+            dateToDraw = "Desde el principio";
+        else
+            dateToDraw = "Se unió en " + this.createdMonth + " de " + this.createdYear;
+
+        this.fontRendererObj.drawString(dateToDraw, 85, 72, Color.WHITE.getRGB());
 
         if(this.user.isDeveloper()) {
             this.chocomint.getRenderUtils().drawRoundedRect(85, 89, 3 + this.fontRendererObj.getStringWidth("DEV"), 11,
