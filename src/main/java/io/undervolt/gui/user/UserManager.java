@@ -88,7 +88,7 @@ public class UserManager {
                     if (jsonObject.get("code").getAsInt() == 200) {
                         JsonObject userObject = jsonObject.getAsJsonObject("user");
                         user.set(new User(userObject.get("user").getAsString(),
-                                User.Status.ONLINE,
+                                User.Status.OFFLINE,
                                 userObject.get("country").getAsString(),
                                 userObject.get("developer").getAsBoolean(),
                                 userObject.get("image").getAsString(),

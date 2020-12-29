@@ -109,6 +109,8 @@ public class Almendra implements Listener {
 
                     for (int i = 0; i < connectedUsers.length(); i++) {
                         this.connectedUsers.add(connectedUsers.getString(i));
+                        if(this.chocomint.getFriendsManager().friendsPool.get(connectedUsers.getString(i)) != null)
+                            this.chocomint.getFriendsManager().setFriendStatus(connectedUsers.getString(i), User.Status.ONLINE);
                     }
 
 
@@ -127,6 +129,10 @@ public class Almendra implements Listener {
                 username = username.substring(1, username.length() - 1);
 
                 this.connectedUsers.add(username);
+
+                if(this.chocomint.getFriendsManager().friendsPool.get(username) != null)
+                    this.chocomint.getFriendsManager().setFriendStatus(username, User.Status.ONLINE);
+
                 System.out.println("Añadido " + username + " a la lista de usuarios conectados.");
 
             });
@@ -136,6 +142,10 @@ public class Almendra implements Listener {
                 username = username.substring(1, username.length() - 1);
 
                 this.connectedUsers.remove(username);
+
+                if(this.chocomint.getFriendsManager().friendsPool.get(username) != null)
+                    this.chocomint.getFriendsManager().setFriendStatus(username, User.Status.OFFLINE);
+
                 System.out.println("Removido " + username + " a la lista de usuarios conectados.");
             });
 

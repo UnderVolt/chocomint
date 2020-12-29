@@ -37,6 +37,10 @@ public class FriendsManager {
         }
     }
 
+    public void setFriendStatus(String username, User.Status status) {
+        this.friendsPool.get(username).setStatus(status);
+    }
+
     public void removeFriend(String username) {
         this.friendsPool.remove(username);
     }
