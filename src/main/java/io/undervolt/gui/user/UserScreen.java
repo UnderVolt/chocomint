@@ -16,16 +16,24 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class UserScreen extends Menu {
     private final User user;
     private final Chocomint chocomint;
     private final UserManager userManager;
-    private final DynamicTexture image;
-    private final DynamicTexture countryFlag;
+    private final DynamicTexture image, banner, countryFlag;
     private boolean drawAlias = true;
 
+    private final Instant createdAt;
+    private final String createdMonth, createdYear;
+
     private GuiScreen prev;
+
+    private boolean showDevInfoCard = false;
 
     private GuiButton logOutButton;
     private GuiButton profileSettingsButton;
@@ -40,6 +48,14 @@ public class UserScreen extends Menu {
         this.userManager = chocomint.getUserManager();
         this.image = this.userManager.getUserProfilePictureManager().getImageAsDynamicTexture(this.user.getImage());
         this.countryFlag = this.userManager.getCountryFlagManager().getCountryFlag(user.getCountryCode());
+        if(this.user.getBanner() != null)
+            this.banner = this.userManager.getUserProfilePictureManager().getImageAsDynamicTexture(this.user.getBanner());
+        else this.banner = null;
+
+        this.createdAt = Instant.parse(this.user.getCreateDate());
+
+        this.createdMonth = ZonedDateTime.ofInstant(createdAt, ZoneId.of("America/Argentina/Buenos_Aires")).format(DateTimeFormatter.ofPattern("MMM"));
+        this.createdYear = ZonedDateTime.ofInstant(createdAt, ZoneId.of("America/Argentina/Buenos_Aires")).format(DateTimeFormatter.ofPattern("uuuu"));
     }
 
     @Override
@@ -96,11 +112,27 @@ public class UserScreen extends Menu {
         drawModalRectWithCustomSizedTexture(0, 0, 0, 0, 15, 15, 15, 15);
         GL11.glPopMatrix();
 
+        String dateToDraw;
+        if(this.createdMonth.equals("ene.") && this.createdYear.equals("2020"))
+            dateToDraw = "Desde el principio";
+        else
+            dateToDraw = "Se unió en " + this.createdMonth + " de " + this.createdYear;
+
+        this.fontRendererObj.drawString(dateToDraw, 85, 72, Color.WHITE.getRGB());
+
         if(this.user.isDeveloper()) {
             this.chocomint.getRenderUtils().drawRoundedRect(85, 89, 3 + this.fontRendererObj.getStringWidth("DEV"), 11,
             3, new Color(47, 56, 168).getRGB());
             GL11.glColor3f(255, 255, 255);
             this.fontRendererObj.drawString("DEV",87, 91, Color.WHITE.getRGB());
+
+            if(this.showDevInfoCard) {
+                String devInfoCardText = "Este usuario es un desarrollador oficial de chocomint";
+                this.chocomint.getRenderUtils().drawRoundedRect(92 + this.fontRendererObj.getStringWidth("DEV"), 86,
+                        12 + this.fontRendererObj.getStringWidth(devInfoCardText), 17, 3, new Color(78, 78, 78, 120).getRGB());
+                GL11.glColor3f(255, 255, 255);
+                this.fontRendererObj.drawString(devInfoCardText, 98 + this.fontRendererObj.getStringWidth("DEV"), 91, Color.WHITE.getRGB());
+            }
         }
 
         drawRect(0, 120, this.width, this.height, new Color(54,57,63).getRGB());
@@ -142,5 +174,17 @@ public class UserScreen extends Menu {
         }
 
         super.actionPerformed(button);
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+
+        if(this.user.isDeveloper() && mouseX >= 85 && mouseY >= 89 && mouseX <= 88 + this.fontRendererObj.getStringWidth("DEV") && mouseY <= 100) {
+            this.showDevInfoCard = true;
+        } else {
+            this.showDevInfoCard = false;
+        }
+
+        super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 }
