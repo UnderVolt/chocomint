@@ -37,7 +37,7 @@ public class FriendsPanel extends Gui {
             this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 132, 22, 130,
                             screenHeight - 24, 4, new Color(28, 28, 28).getRGB());
 
-            drawCenteredString(this.mc.fontRendererObj, "Amigos", screenWidth - 66, 26, Color.WHITE.getRGB());
+            drawCenteredString(this.mc.fontRendererObj, "Amigos", screenWidth - 66, 28, Color.WHITE.getRGB());
 
 
             AtomicInteger y = new AtomicInteger(40);
