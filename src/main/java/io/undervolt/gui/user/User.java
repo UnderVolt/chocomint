@@ -115,6 +115,7 @@ public class User {
                 JsonObject response = new GsonBuilder().create().fromJson(res, JsonObject.class);
                 if (response.get("code").getAsInt() == 200) {
                     GameBridge.getChocomint().getFriendsManager().friendsPool.remove(this.username);
+                    GameBridge.getChocomint().getAlmendra().deleteFriendPacket(this.username);
                     GameBridge.getChocomint().getNotificationManager().addNotification(new Notification(
                             Notification.Priority.SOCIAL, "Amigo eliminado", username + " ahora ya no es tu amigo", a -> {
                     }
@@ -141,6 +142,7 @@ public class User {
                 if (response.get("code").getAsInt() == 200) {
                     GameBridge.getChocomint().getFriendsManager().friendRequestPool.remove(this.username);
                     GameBridge.getChocomint().getFriendsManager().friendsPool.put(this.username, this);
+                    GameBridge.getChocomint().getAlmendra().acceptFriendRequestPacket(this.username);
                     GameBridge.getChocomint().getNotificationManager().addNotification(new Notification(
                             Notification.Priority.SOCIAL, "Solicitud aceptada", username + " ahora es tu amigo!", a -> {
                     }
@@ -165,6 +167,7 @@ public class User {
             GameBridge.getChocomint().getRestUtils().sendJsonRequest("/api/sendFriendRequest", jsonObject, res -> {
                 JsonObject response = new GsonBuilder().create().fromJson(res, JsonObject.class);
                 if (response.get("code").getAsInt() == 200) {
+                    GameBridge.getChocomint().getAlmendra().sendFriendRequestPacket(this.username);
                     GameBridge.getChocomint().getNotificationManager().addNotification(new Notification(
                             Notification.Priority.SOCIAL, "Solicitud enviada", "Se ha enviado la solicitud a " + username, a -> {
                     }
