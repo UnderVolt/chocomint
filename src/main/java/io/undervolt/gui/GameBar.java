@@ -112,24 +112,20 @@ public class GameBar extends Gui {
         ));
         this.buttonList.add(this.changeMinecraftAccountButton = new TextureGameBarButton(
                 1337107,
-                width - 76, 0, 20, 20, "change"
+                width - 70, 0, 20, 20, "change"
         ));
         this.buttonList.add(this.musicButton = new TextureGameBarButton(
                 1337103,
-                width - 108, 0, 20, 20, "music"
+                width - 92, 0, 20, 20, "music"
         ));
         this.buttonList.add(this.friendsButton = new TextureGameBarButton(
                 1337104,
-                width - 130, 0, 20, 20, "friends"
-        ));
-        this.buttonList.add(this.contributorsButton = new GameBarButton(
-                1337105,
-                width - 154, 0, 20, 20, "C"
+                width - 114, 0, 20, 20, "friends"
         ));
         if(this.mc.theWorld != null && this.mc.thePlayer != null)
             this.buttonList.add(this.configButton = new GameBarButton(
                     1337106,
-                    width - 178, 0, 20, 20, "C"
+                    width - 136, 0, 20, 20, "C"
             ));
     }
 
@@ -165,6 +161,13 @@ public class GameBar extends Gui {
                     notification.getConsumer().accept(this.parentScreen);
                 }
             }
+        }
+
+        if (mouseX >= 4 && mouseY >= 4 && mouseX <= 16 && mouseY <= 16) {
+            this.notificationPanel.setActive(false);
+            this.userCard.setActive(false);
+            this.friendsPanel.setActive(false);
+            this.contributorsPanel.toggleActive();
         }
 
         // Friends panel click
@@ -205,12 +208,6 @@ public class GameBar extends Gui {
                 this.contributorsPanel.setActive(false);
                 this.userCard.setActive(false);
                 this.friendsPanel.toggleActive();
-                break;
-            case 1337105:
-                this.notificationPanel.setActive(false);
-                this.userCard.setActive(false);
-                this.friendsPanel.setActive(false);
-                this.contributorsPanel.toggleActive();
                 break;
             case 1337106:
                 this.mc.displayGuiScreen(new GuiMods(this.parentScreen, this.chocomint));
