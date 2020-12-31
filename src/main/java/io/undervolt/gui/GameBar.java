@@ -166,7 +166,9 @@ public class GameBar extends Gui {
         }
 
         // Friends panel click
-        this.friendsPanel.click(mouseX, mouseY);
+        if(this.friendsPanel.isActive) {
+            this.friendsPanel.click(mouseX, mouseY);
+        }
     }
 
     public void handleMouseInput(int width, int height) throws IOException {
