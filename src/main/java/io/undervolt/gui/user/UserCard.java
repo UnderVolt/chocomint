@@ -45,7 +45,7 @@ public class UserCard extends Gui {
 
             this.chocomint.getRenderUtils().
                     drawRoundedRect(x, y, 130,
-                    isSelf ? 52 : 38, 4, new Color(22, 22, 22).getRGB());
+                    isSelf ? 52 : 38, 2, new Color(22, 22, 22).getRGB());
 
             GL11.glPushMatrix();
             GL11.glColor3f(255, 255, 255);
