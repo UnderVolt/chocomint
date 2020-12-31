@@ -180,7 +180,7 @@ public class Chat extends AnimationUI {
             this.fontRendererObj.drawString("Inicia sesión para poder hablar",10, this.height - 10, Color.GRAY.getRGB());
         else
             this.textField.drawTextBox();
-        drawString(this.fontRendererObj, ">", 5, this.height - 10, Color.CYAN.getRGB());
+        this.fontRendererObj.drawString(">", 5, this.height - 10, Color.CYAN.getRGB());
 
         drawRect(0, this.chatHeight - 18, this.width, this.chatHeight,
                 Color.BLACK.getRGB());
