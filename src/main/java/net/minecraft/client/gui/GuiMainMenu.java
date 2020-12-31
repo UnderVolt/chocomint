@@ -273,6 +273,8 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
 
         this.buttonList.add(chatButton = new GameBarButton(103,
                 this.width - 52, this.height - 15, 50, 15, "Chat"));
+        this.buttonList.add(new GameBarButton(104,
+                this.width - 112, this.height - 15, 55, 15, "Usuarios"));
 
         this.mc.setConnectedToRealms(false);
 
@@ -385,6 +387,7 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
             }
         }
         if(button.id == 103) this.mc.displayGuiScreen(new Chat("", this, this.mc.getChocomint(), null));
+        if(button.id == 104) this.mc.displayGuiScreen(new UserSearch(this, this.chocomint));
 
         super.actionPerformed(button);
 

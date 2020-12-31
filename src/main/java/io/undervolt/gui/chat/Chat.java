@@ -105,15 +105,14 @@ public class Chat extends AnimationUI {
             i.set(i.get() + 1);
         });
 
-        try {
-            this.serverReservedButton = (GameBarButton) this.buttonList.get(this.chatManager.getOpenTabs().indexOf(this.chatManager.getReservedServerTab()));
-        } catch(ArrayIndexOutOfBoundsException e) {
-            if(!this.chatManager.getOpenTabs().contains(this.chatManager.getReservedServerTab())) {
+            if(this.chatManager.getOpenTabs().contains(this.chatManager.getReservedServerTab()))
+                this.serverReservedButton = (GameBarButton) this.buttonList.get(this.chatManager.getOpenTabs().indexOf(this.chatManager.getReservedServerTab()));
+            else {
                 this.chatManager.getOpenTabs().set(0, this.chatManager.getReservedServerTab());
                 this.chatManager.setSelectedTab(this.chatManager.getReservedServerTab());
                 this.serverReservedButton = (GameBarButton) this.buttonList.get(this.chatManager.getOpenTabs().indexOf(this.chatManager.getReservedServerTab()));
             }
-        }
+
 
         /* Declaring everything related to tabs */
         GameBarButton addTabButton;
@@ -181,7 +180,7 @@ public class Chat extends AnimationUI {
             this.fontRendererObj.drawString("Inicia sesión para poder hablar",10, this.height - 10, Color.GRAY.getRGB());
         else
             this.textField.drawTextBox();
-        drawString(this.fontRendererObj, ">", 5, this.height - 10, Color.CYAN.getRGB());
+        this.fontRendererObj.drawString(">", 5, this.height - 10, Color.CYAN.getRGB());
 
         drawRect(0, this.chatHeight - 18, this.width, this.chatHeight,
                 Color.BLACK.getRGB());
@@ -263,11 +262,23 @@ public class Chat extends AnimationUI {
                 if(this.chatManager.getSelectedTab() == this.chatManager.getReservedServerTab())
                     this.mc.thePlayer.sendChatMessage(this.textField.getText().trim());
                 else if(this.chatManager.getSelectedTab() == this.chatManager.getReservedLogTab()) {
-                    this.chatManager.getSelectedTab().addMessage(this.chocomint.getUser().getUsername(), this.textField.getText());
+                    this.chatManager.getSelectedTab().addMessage((this.chocomint.getUser().isDeveloper() ? "§9" : "") + this.chocomint.getUser().getUsername(), this.textField.getText());
                     this.console.processCommand(this.chatManager.getReservedLogTab(), this.textField.getText());
+                } else {
+                    if(this.textField.getText().trim().startsWith("/")) {
+                        if(!this.chatManager.getOpenTabs().contains(this.chatManager.getReservedLogTab()))
+                            this.chatManager.getOpenTabs().add(this.chatManager.getReservedLogTab());
+                        this.chatManager.setSelectedTab(this.chatManager.getReservedLogTab());
+                        this.chatManager.getReservedLogTab().addMessage(null, "\247cPara prevenir tu seguridad, te hemos redireccionado a la pestaña de comandos");
+                        this.chatManager.getSentMessages().add(new Message(this.chocomint.getUser().getUsername(), this.textField.getText().trim()));
+                        this.chatManager.getSelectedTab().addMessage((this.chocomint.getUser().isDeveloper() ? "§9" : "") + this.chocomint.getUser().getUsername(), this.textField.getText().trim());
+                        this.chocomint.getConsole().processCommand(this.chatManager.getReservedLogTab(), this.textField.getText().trim());
+                        this.textField.setText("");
+                        this.update(false);
+                    } else {
+                        this.almendra.sendMessage(this.chatManager.getSelectedTab(), this.textField.getText().trim(), this.chocomint.getUser());
+                    }
                 }
-                else
-                    this.almendra.sendMessage(this.chatManager.getSelectedTab(), this.textField.getText().trim(), this.chocomint.getUser());
                 this.textField.setText("");
             }
         }

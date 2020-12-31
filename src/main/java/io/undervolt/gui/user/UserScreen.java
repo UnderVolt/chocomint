@@ -10,6 +10,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -31,6 +32,8 @@ public class UserScreen extends Menu {
     private final Instant createdAt;
     private final String createdMonth, createdYear;
 
+    private final boolean isFriend;
+
     private GuiScreen prev;
 
     private boolean showDevInfoCard = false;
@@ -39,6 +42,7 @@ public class UserScreen extends Menu {
     private GuiButton profileSettingsButton;
     private GuiButton friendRequestButton;
     private GuiButton sendDMButton;
+    private GuiButton deleteFriendButton;
 
     public UserScreen(GuiScreen prev, Chocomint chocomint, final User user) {
         super(prev, chocomint, "Perfil", 0);
@@ -56,6 +60,8 @@ public class UserScreen extends Menu {
 
         this.createdMonth = ZonedDateTime.ofInstant(createdAt, ZoneId.of("America/Argentina/Buenos_Aires")).format(DateTimeFormatter.ofPattern("MMM"));
         this.createdYear = ZonedDateTime.ofInstant(createdAt, ZoneId.of("America/Argentina/Buenos_Aires")).format(DateTimeFormatter.ofPattern("uuuu"));
+
+        this.isFriend = this.chocomint.getFriendsManager().friendsPool.containsKey(this.user.getUsername());
     }
 
     @Override
@@ -69,8 +75,15 @@ public class UserScreen extends Menu {
             this.buttonList.add(this.logOutButton = new GuiButton(101, 20, 140, this.width - 40, 20, "Cerrar sesión"));
             this.buttonList.add(this.profileSettingsButton = new GuiButton(102, 20, 165, this.width - 40, 20, "Opciones de perfil"));
         } else {
-            this.buttonList.add(this.sendDMButton = new GuiButton(103, 20, 140, this.width - 40, 20, "Enviar un mensaje privado"));
-            this.buttonList.add(this.friendRequestButton = new GuiButton(104, 20, 165, this.width - 40, 20, "Enviar solicitud de amistad"));
+            if(this.isFriend) {
+                this.buttonList.add(this.sendDMButton = new GuiButton(103, 20, 140, this.width - 40, 20, "Enviar un mensaje privado"));
+                this.buttonList.add(this.deleteFriendButton = new GuiButton(105, 20, 165, this.width - 40, 20, "\247cEliminar amigo"));
+                if(!this.user.isOnline()) this.sendDMButton.enabled = false;
+            } else
+                if(this.chocomint.getFriendsManager().friendRequestPool.containsKey(this.user.getUsername()))
+                    this.buttonList.add(this.friendRequestButton = new GuiButton(106, 20, 140, this.width - 40, 20, "Aceptar solicitud de amistad"));
+                else
+                    this.buttonList.add(this.friendRequestButton = new GuiButton(104, 20, 140, this.width - 40, 20, "Enviar solicitud de amistad"));
         }
 
         if(this.user.getUsername().equals("Guest")) {
@@ -102,6 +115,10 @@ public class UserScreen extends Menu {
         GL11.glPopMatrix();
 
         if(drawAlias) this.fontRendererObj.drawString("(" + this.user.getUsername() + ")", 105, 60, Color.LIGHT_GRAY.getRGB());
+        if(isFriend) {
+            this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/icon/friends.png"));
+            drawModalRectWithCustomSizedTexture(84 + (int) (this.mc.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), 40, 0, 0, 20, 20, 20, 20);
+        }
 
         GL11.glPushMatrix();
         GL11.glColor3f(255, 255, 255);
@@ -165,9 +182,17 @@ public class UserScreen extends Menu {
                 this.mc.displayGuiScreen(new Chat("", this, this.chocomint, this.mc.getCurrentServerData()));
                 break;
             case 104:
-                this.chocomint.getNotificationManager().addNotification(
-                        new Notification(Notification.Priority.ALERT, "Soon", "La función no ha sido implementada.", obj->{})
-                );
+                this.user.sendFriendRequest();
+                this.friendRequestButton.displayString = "Solicitud de amistad enviada";
+                this.friendRequestButton.enabled = false;
+                break;
+            case 105:
+                this.user.removeFriend();
+                this.mc.displayGuiScreen(this);
+                break;
+            case 106:
+                this.user.acceptFriendRequest();
+                this.mc.displayGuiScreen(this);
                 break;
         }
 

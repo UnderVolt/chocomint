@@ -16,7 +16,8 @@ public class CountryFlagManager {
         if(this.getFlagCache().containsKey(countryCode)) return this.getFlagCache().get(countryCode);
         else {
             try {
-                final BufferedImage flagTexture = ImageIO.read(new URL("https://www.countryflags.io/" + countryCode + "/flat/64.png"));
+                final BufferedImage flagTexture = ImageIO.read(new URL("https://raw.githubusercontent.com/gosquared/flags/master/flags/flags-iso/flat/64/" +
+                        countryCode + ".png"));
                 final DynamicTexture dynamicTexture = new DynamicTexture(flagTexture);
                 this.getFlagCache().put(countryCode, dynamicTexture);
                 return dynamicTexture;
