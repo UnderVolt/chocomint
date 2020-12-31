@@ -5,6 +5,7 @@ import io.undervolt.console.Console;
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
 import io.undervolt.instance.Chocomint;
+import io.undervolt.utils.AnimationUI;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -18,10 +19,13 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Chat extends GameBar {
+public class Chat extends AnimationUI {
 
     /** Declare Chocomint */
     private final Chocomint chocomint;
+
+    /** GameBar */
+    private final GameBar gameBar;
 
     /** Declare ChatManager */
     private final ChatManager chatManager;
@@ -51,7 +55,6 @@ public class Chat extends GameBar {
     private float scroll = 0;
 
     public Chat(final String initialText, final GuiScreen prev, final Chocomint chocomint, final ServerData serverData) {
-        super(prev, chocomint);
 
         this.prev = prev;
         this.initialText = initialText;
@@ -63,6 +66,7 @@ public class Chat extends GameBar {
         this.serverData = serverData;
 
         this.console = this.chocomint.getConsole();
+        this.gameBar = new GameBar(this, this.chocomint, this.buttonList);
     }
 
     @Override
@@ -81,7 +85,7 @@ public class Chat extends GameBar {
             } else this.chatManager.setSelectedTab(this.chatManager.getReservedServerTab());
         }
 
-        this.textField = new GuiTextField(0, this.fontRendererObj, 10,
+        this.textField = new GuiTextField(0, this.fontRendererObj, 13,
                 this.height - 10, this.width, this.height);
 
         this.textField.setEnableBackgroundDrawing(false);
@@ -101,7 +105,14 @@ public class Chat extends GameBar {
             i.set(i.get() + 1);
         });
 
-        this.serverReservedButton = (GameBarButton) this.buttonList.get(this.chatManager.getOpenTabs().indexOf(this.chatManager.getReservedServerTab()));
+            if(this.chatManager.getOpenTabs().contains(this.chatManager.getReservedServerTab()))
+                this.serverReservedButton = (GameBarButton) this.buttonList.get(this.chatManager.getOpenTabs().indexOf(this.chatManager.getReservedServerTab()));
+            else {
+                this.chatManager.getOpenTabs().set(0, this.chatManager.getReservedServerTab());
+                this.chatManager.setSelectedTab(this.chatManager.getReservedServerTab());
+                this.serverReservedButton = (GameBarButton) this.buttonList.get(this.chatManager.getOpenTabs().indexOf(this.chatManager.getReservedServerTab()));
+            }
+
 
         /* Declaring everything related to tabs */
         GameBarButton addTabButton;
@@ -130,7 +141,9 @@ public class Chat extends GameBar {
             this.serverReservedButton.buttonText = "No está jugando";
         }
 
+        this.gameBar.init(width, height);
         super.initGui();
+
     }
 
     @Override
@@ -138,13 +151,6 @@ public class Chat extends GameBar {
 
         this.drawDefaultBackground();
         drawRect(0, this.chatHeight, this.width, this.height, new Color(36, 36, 36, 100).getRGB());
-
-        if(this.chocomint.getUser().getUsername().equals("Guest") && this.chatManager.getSelectedTab() != this.chatManager.getReservedServerTab()
-                && this.chatManager.getSelectedTab() != this.chatManager.getReservedLogTab())
-            this.fontRendererObj.drawString("Inicia sesión para poder hablar",10, this.height - 10, Color.GRAY.getRGB());
-        else
-            this.textField.drawTextBox();
-        drawString(this.fontRendererObj, ">", 5, this.height - 10, Color.CYAN.getRGB());
 
         GL11.glPushMatrix();
         GlStateManager.translate(0, scroll, 0);
@@ -154,10 +160,10 @@ public class Chat extends GameBar {
         GL11.glColor3f(255,255,255);
 
         if(this.chatManager.getSelectedTab() != null) {
-            int i = this.height - 21;
+            int i = this.height - 23;
             for (int id = this.chatManager.getSelectedTab().getMessages().size(); id-- > 0; ) {
                 Message message = this.chatManager.getSelectedTab().getMessages().get(id);
-                this.fontRendererObj.drawString("\247e" +
+                this.fontRendererObj.drawStringWithShadow("\247e" +
                         (message.getUser() != null ? message.getUser() + "\247f: " : "")
                         + message.getMessage(), 5, i, Color.WHITE.getRGB());
                 i = i - 12;
@@ -168,10 +174,18 @@ public class Chat extends GameBar {
         GL11.glPopMatrix();
         GL11.glPopMatrix();
 
+        drawRect(0, this.height - 12, this.width, this.height, new Color(0,0,0,130).getRGB());
+        if(this.chocomint.getUser().getUsername().equals("Guest") && this.chatManager.getSelectedTab() != this.chatManager.getReservedServerTab()
+                && this.chatManager.getSelectedTab() != this.chatManager.getReservedLogTab())
+            this.fontRendererObj.drawString("Inicia sesión para poder hablar",10, this.height - 10, Color.GRAY.getRGB());
+        else
+            this.textField.drawTextBox();
+        this.fontRendererObj.drawString(">", 5, this.height - 10, Color.CYAN.getRGB());
+
         drawRect(0, this.chatHeight - 18, this.width, this.chatHeight,
                 Color.BLACK.getRGB());
 
-
+        this.gameBar.draw(mouseX, mouseY, partialTicks, width, height);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -203,8 +217,10 @@ public class Chat extends GameBar {
         else if(button.id == 1400000) {
             this.chatManager.removeCurrentTab();
             this.update(false);
-        } else
+        } else {
+            this.gameBar.actionPerformed(button);
             super.actionPerformed(button);
+        }
     }
 
     @Override
@@ -246,11 +262,23 @@ public class Chat extends GameBar {
                 if(this.chatManager.getSelectedTab() == this.chatManager.getReservedServerTab())
                     this.mc.thePlayer.sendChatMessage(this.textField.getText().trim());
                 else if(this.chatManager.getSelectedTab() == this.chatManager.getReservedLogTab()) {
-                    this.chatManager.getSelectedTab().addMessage(this.chocomint.getUser().getUsername(), this.textField.getText());
+                    this.chatManager.getSelectedTab().addMessage((this.chocomint.getUser().isDeveloper() ? "§9" : "") + this.chocomint.getUser().getUsername(), this.textField.getText());
                     this.console.processCommand(this.chatManager.getReservedLogTab(), this.textField.getText());
+                } else {
+                    if(this.textField.getText().trim().startsWith("/")) {
+                        if(!this.chatManager.getOpenTabs().contains(this.chatManager.getReservedLogTab()))
+                            this.chatManager.getOpenTabs().add(this.chatManager.getReservedLogTab());
+                        this.chatManager.setSelectedTab(this.chatManager.getReservedLogTab());
+                        this.chatManager.getReservedLogTab().addMessage(null, "\247cPara prevenir tu seguridad, te hemos redireccionado a la pestaña de comandos");
+                        this.chatManager.getSentMessages().add(new Message(this.chocomint.getUser().getUsername(), this.textField.getText().trim()));
+                        this.chatManager.getSelectedTab().addMessage((this.chocomint.getUser().isDeveloper() ? "§9" : "") + this.chocomint.getUser().getUsername(), this.textField.getText().trim());
+                        this.chocomint.getConsole().processCommand(this.chatManager.getReservedLogTab(), this.textField.getText().trim());
+                        this.textField.setText("");
+                        this.update(false);
+                    } else {
+                        this.almendra.sendMessage(this.chatManager.getSelectedTab(), this.textField.getText().trim(), this.chocomint.getUser());
+                    }
                 }
-                else
-                    this.almendra.sendMessage(this.chatManager.getSelectedTab(), this.textField.getText().trim(), this.chocomint.getUser());
                 this.textField.setText("");
             }
         }
@@ -259,12 +287,14 @@ public class Chat extends GameBar {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         this.textField.mouseClicked(mouseX, mouseY, mouseButton);
+        this.gameBar.mouseClicked(mouseX, mouseY, mouseButton, width, height);
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
+        this.gameBar.handleMouseInput(width, height);
 
         int i = Mouse.getEventDWheel();
 

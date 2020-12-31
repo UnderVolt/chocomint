@@ -1,5 +1,6 @@
 package io.undervolt.instance;
 
+import com.google.common.collect.Lists;
 import io.undervolt.api.almendra.Almendra;
 import io.undervolt.api.event.EventManager;
 import io.undervolt.api.event.events.InitEvent;
@@ -11,43 +12,77 @@ import io.undervolt.bridge.GameBridge;
 import io.undervolt.console.Console;
 import io.undervolt.console.commands.HelpCommand;
 import io.undervolt.console.commands.VersionCommand;
+import io.undervolt.gui.Background;
 import io.undervolt.gui.RenderUtils;
 import io.undervolt.gui.chat.ChatManager;
 import io.undervolt.gui.contributors.ContributorsManager;
+import io.undervolt.gui.friends.FriendsManager;
 import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.gui.notifications.NotificationOverlay;
 import io.undervolt.gui.user.User;
 import io.undervolt.gui.user.UserManager;
+import io.undervolt.mod.ModLoader;
 import io.undervolt.utils.RestUtils;
 import io.undervolt.utils.config.Config;
+import io.undervolt.utils.config.ConfigurableManager;
+import io.undervolt.utils.config.ProfileLoader;
 import net.minecraft.client.Minecraft;
+
+import java.io.File;
 
 public class Chocomint implements Listener {
 
-    private NotificationManager notificationManager;
-    private ChatManager chatManager;
-    private User user;
-    private final String chocomintUser;
-    private GameBridge gameBridge;
-    private final RenderUtils renderUtils;
-    private final RestUtils restUtils;
-    private final EventManager eventManager;
-    private ContributorsManager contributorsManager;
     private final Minecraft mc;
-    private Console console;
-    private final Sambayon sambayon;
-    private ScreenshotUploader screenshotUploader;
-    private Almendra almendra;
-    private final Config config;
-    private final UserManager userManager;
+    private final long millisAtStart;
+    private GameBridge gameBridge;
     private final String clientName;
     private final String commitName;
+
+    private User user;
+    private final String chocomintUser;
+    private final UserManager userManager;
+
+    private final Sambayon sambayon;
+
+    private ChatManager chatManager;
+    private Almendra almendra;
+    private Console console;
+
+    private FriendsManager friendsManager;
+
+    private ContributorsManager contributorsManager;
+
+    private final EventManager eventManager;
+
+    private ScreenshotUploader screenshotUploader;
+
     private NotificationOverlay notificationOverlay;
-    private final long millisAtStart;
+    private NotificationManager notificationManager;
+
+    private final ProfileLoader loader;
+    private final ConfigurableManager configurableManager;
+    private final Config config;
+    private ModLoader modLoader;
+    private File rootPath;
+
+    private final RenderUtils renderUtils;
+    private final RestUtils restUtils;
+
+    // Configurables
+    private Background background;
 
     /** Initialize constructor */
     public Chocomint(final Minecraft mc) {
         this.millisAtStart = System.currentTimeMillis();
+        this.commitName = "testCommit";
+        this.clientName = "chocomint";
+
+        this.rootPath = new File(Minecraft.getMinecraft().mcDataDir + File.separator + getClientName());
+        rootPath.mkdir();
+
+        this.loader = new ProfileLoader(rootPath);
+        this.configurableManager = new ConfigurableManager(this);
+
         this.eventManager = new EventManager();
         this.sambayon = new Sambayon(this);
         this.renderUtils = new RenderUtils(mc);
@@ -55,10 +90,9 @@ public class Chocomint implements Listener {
         this.mc = mc;
         this.chocomintUser = "\247bchocomint";
         this.userManager = new UserManager(this);
+        this.friendsManager = new FriendsManager(this);
         this.config = new Config(this);
         this.user = this.userManager.setUser(this.config.getToken());
-        this.commitName = "testCommit";
-        this.clientName = "chocomint";
     }
 
     public void init(LaunchType type){
@@ -78,6 +112,21 @@ public class Chocomint implements Listener {
                     e.printStackTrace();
                 }
 
+                // ModLoader
+                this.modLoader = new ModLoader(this);
+
+                // Profiles
+                this.loader.availableProfiles.forEach(profile -> System.out.println("Registered profile: " + profile.getName()));
+                System.out.println("Current profile: " + this.loader.selectedProfile.getName());
+
+                // Register configurables
+                this.getEventManager().registerEvents(this.configurableManager);
+                this.background = new Background(this);
+                this.configurableManager.register(this.background);
+                this.modLoader.load(new File(this.rootPath + File.separator + "mods"));
+
+                this.configurableManager.configurableList.forEach(configurable -> System.out.println("Registered configurable: " + configurable.getName()));
+
                 this.eventManager.registerEvents(this);
                 this.eventManager.callEvent(new InitEvent.PreInitEvent());
 
@@ -85,14 +134,15 @@ public class Chocomint implements Listener {
                 //TODO: Load external mods
                 break;
             case INIT:
+
                 this.screenshotUploader = new ScreenshotUploader(this);
                 this.notificationOverlay = new NotificationOverlay(this);
+
+                this.getEventManager().registerEvents(this.notificationOverlay);
 
                 // Register Commands
                 this.console.registerCommand(new VersionCommand(this));
                 this.console.registerCommand(new HelpCommand(this));
-
-                this.getEventManager().registerEvents(this.notificationOverlay);
 
                 this.eventManager.callEvent(new InitEvent.ClientInitEvent());
 
@@ -186,6 +236,22 @@ public class Chocomint implements Listener {
 
     public ScreenshotUploader getScreenshotUploader() {
         return screenshotUploader;
+    }
+
+    public ProfileLoader getLoader() {
+        return loader;
+    }
+
+    public ConfigurableManager getConfigurableManager() {
+        return configurableManager;
+    }
+
+    public Background getBackground() {
+        return background;
+    }
+
+    public FriendsManager getFriendsManager() {
+        return friendsManager;
     }
 
     public String getParsedOpenTime() {

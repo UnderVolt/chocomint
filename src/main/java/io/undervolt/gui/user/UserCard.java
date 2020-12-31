@@ -35,6 +35,11 @@ public class UserCard extends Gui {
 
         if(this.isActive()) {
 
+            String alias = this.user.getAlias();
+            if(this.mc.fontRendererObj.getStringWidth(alias) > 80) {
+                alias = alias.substring(0, Math.min(alias.length(), 10)) + "...";
+            }
+
             this.x = x;
             this.y = y;
 
@@ -54,7 +59,7 @@ public class UserCard extends Gui {
 
             GL11.glPopMatrix();
 
-            drawString(mc.fontRendererObj, this.user.getUsername(), x + 38,
+            drawString(mc.fontRendererObj, alias, x + 38,
                     y + 8, Color.WHITE.getRGB());
             drawString(mc.fontRendererObj, this.user.getStatusString().toUpperCase(),
                     x + 38, y + 20, Color.WHITE.getRGB());
@@ -64,6 +69,16 @@ public class UserCard extends Gui {
             if(this.isSelf)
                 drawString(this.mc.fontRendererObj, "Opciones de perfil",
                     x + 65 - (this.mc.fontRendererObj.getStringWidth("Opciones de perfil") / 2), y + 38, Color.GRAY.getRGB());
+        }
+    }
+
+    public void click(int mouseY, int mouseX) {
+        if(this.isActive()) {
+            if(mouseY > 20) {
+                if (mouseX >= x && mouseY >= y && mouseX <= x + 130 && mouseY <= y + (this.isSelf ? 52 : 38)) {
+                    this.getConsumer().accept(getUser());
+                }
+            }
         }
     }
 

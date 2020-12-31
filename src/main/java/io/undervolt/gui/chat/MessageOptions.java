@@ -2,12 +2,13 @@ package io.undervolt.gui.chat;
 
 import io.undervolt.gui.GameBar;
 import io.undervolt.instance.Chocomint;
+import io.undervolt.utils.AnimationUI;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
 import java.io.IOException;
 
-public class MessageOptions extends GameBar {
+public class MessageOptions extends AnimationUI {
 
     private GuiButton sendPMButton;
     private GuiButton reportMessageButton;
@@ -17,6 +18,7 @@ public class MessageOptions extends GameBar {
     private final ChatManager chatManager;
     private final GuiScreen previous;
     private final Chocomint chocomint;
+    private final GameBar gameBar;
 
     /**
      * Constructor
@@ -25,15 +27,16 @@ public class MessageOptions extends GameBar {
      * @param message
      */
     public MessageOptions(final GuiScreen previousScreen, final Chocomint chocomint, Message message) {
-        super(previousScreen, chocomint);
         this.message = message;
         this.chatManager = chocomint.getChatManager();
         this.previous = previousScreen;
         this.chocomint = chocomint;
+        this.gameBar = new GameBar(this, chocomint, this.buttonList);
     }
 
     @Override
     public void initGui() {
+        this.gameBar.init(width, height);
         this.buttonList.add(this.sendPMButton = new GuiButton(100, this.width / 2 - 100, 25, "Enviar un mensaje privado"));
 
         // Will remove comment when implemented
@@ -44,6 +47,7 @@ public class MessageOptions extends GameBar {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
+        this.gameBar.draw(mouseX, mouseY, partialTicks, width, height);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -61,6 +65,7 @@ public class MessageOptions extends GameBar {
                 }
                 break;
         }
+        this.gameBar.actionPerformed(button);
         super.actionPerformed(button);
     }
 

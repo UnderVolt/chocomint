@@ -16,6 +16,8 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+
+import io.undervolt.gui.Background;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.stream.GuiTwitchUserMode;
 import net.minecraft.client.renderer.GlStateManager;
@@ -81,6 +83,8 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
      */
     private int touchValue;
     private URI clickedLinkURI;
+
+    private Background background;
 
     /**
      * Draws the screen and all the components in it. Args : mouseX, mouseY, renderPartialTicks
@@ -554,6 +558,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
         this.width = width;
         this.height = height;
         this.buttonList.clear();
+        this.background = mc.getChocomint().getBackground();
         this.initGui();
     }
 
@@ -669,6 +674,22 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
     {
         if (this.mc.theWorld == null) {
             this.drawBackground(tint);
+            try {
+                if(background.getBackground() != null) {
+                    this.mc.getTextureManager().bindTexture(this.background.getBackground());
+                    switch (background.drawType) {
+                        case STRETCH:
+                            drawModalRectWithCustomSizedTexture(0, 0, 0, 0, this.width, this.height, this.width, this.height);
+                            break;
+                        case ORIGINAL_SIZE:
+                            drawModalRectWithCustomSizedTexture(0, 0, 0, 0, this.width, this.height, this.background.getImageWidth() / 2, this.background.getImageHeight() / 2);
+                            break;
+                    }
+                    drawRect(0, 0, this.width, this.height, new Color(0, 0, 0, 100).getRGB());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
