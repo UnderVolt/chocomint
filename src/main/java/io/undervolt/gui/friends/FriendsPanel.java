@@ -34,35 +34,35 @@ public class FriendsPanel extends Gui {
 
     public void drawPanel(int screenWidth, int screenHeight) {
         if(this.isActive) {
-            this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 132, 22, 130,
+            this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 140, 22, 138,
                             screenHeight - 24, 4, new Color(28, 28, 28).getRGB());
 
-            drawCenteredString(this.mc.fontRendererObj, "Amigos", screenWidth - 66, 28, Color.WHITE.getRGB());
+            drawCenteredString(this.mc.fontRendererObj, "Amigos", screenWidth - 68, 28, Color.WHITE.getRGB());
 
 
-            AtomicInteger y = new AtomicInteger(40);
+            AtomicInteger y = new AtomicInteger(43);
             this.friendUserCardList.forEach(userCard -> {
-                userCard.drawCard(screenWidth - 132, y.get());
+                userCard.drawCard(screenWidth - 136, y.get());
                 y.set(y.get() + 40);
             });
 
             if(friendUserCardList.isEmpty()) {
-                this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 132, y.get(), 130, 36, 4, new Color(22, 22, 22).getRGB());
-                drawCenteredString(this.mc.fontRendererObj, "No tenés amigos", screenWidth - 66, y.get() + 13, Color.LIGHT_GRAY.getRGB());
+                this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 136, y.get(), 130, 36, 4, new Color(22, 22, 22).getRGB());
+                drawCenteredString(this.mc.fontRendererObj, "No tenés amigos", screenWidth - 68, y.get() + 13, Color.LIGHT_GRAY.getRGB());
                 y.set(y.get() + 40);
             }
 
-            drawCenteredString(this.mc.fontRendererObj, "Solicitudes de amistad", screenWidth - 66, y.get(), Color.WHITE.getRGB());
+            drawCenteredString(this.mc.fontRendererObj, "Solicitudes de amistad", screenWidth - 68, y.get() + 5, Color.WHITE.getRGB());
             y.set(y.get() + 20);
 
             this.frUserCardList.forEach(userCard -> {
-                userCard.drawCard(screenWidth - 132, y.get());
+                userCard.drawCard(screenWidth - 136, y.get());
                 y.set(y.get() + 40);
             });
 
             if(frUserCardList.isEmpty()) {
-                this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 132, y.get(), 130, 36, 4, new Color(22, 22, 22).getRGB());
-                drawCenteredString(this.mc.fontRendererObj, "No hay solicitudes", screenWidth - 66, y.get() + 13, Color.LIGHT_GRAY.getRGB());
+                this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 136, y.get(), 130, 36, 4, new Color(22, 22, 22).getRGB());
+                drawCenteredString(this.mc.fontRendererObj, "No hay solicitudes", screenWidth - 68, y.get() + 13, Color.LIGHT_GRAY.getRGB());
                 y.set(y.get() + 40);
             }
 
