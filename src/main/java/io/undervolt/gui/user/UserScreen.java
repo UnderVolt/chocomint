@@ -78,6 +78,7 @@ public class UserScreen extends Menu {
             if(this.isFriend) {
                 this.buttonList.add(this.sendDMButton = new GuiButton(103, 20, 140, this.width - 40, 20, "Enviar un mensaje privado"));
                 this.buttonList.add(this.deleteFriendButton = new GuiButton(105, 20, 165, this.width - 40, 20, "\247cEliminar amigo"));
+                if(!this.user.isOnline()) this.sendDMButton.enabled = false;
             } else
                 if(this.chocomint.getFriendsManager().friendRequestPool.containsKey(this.user.getUsername()))
                     this.buttonList.add(this.friendRequestButton = new GuiButton(106, 20, 140, this.width - 40, 20, "Aceptar solicitud de amistad"));
