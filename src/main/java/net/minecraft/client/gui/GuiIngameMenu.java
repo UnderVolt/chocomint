@@ -2,18 +2,20 @@ package net.minecraft.client.gui;
 
 import java.io.IOException;
 
+import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
 import io.undervolt.gui.chat.Chat;
 import io.undervolt.instance.Chocomint;
+import io.undervolt.utils.AnimationUI;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.achievement.GuiAchievements;
 import net.minecraft.client.gui.achievement.GuiStats;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.realms.RealmsBridge;
 
-public class GuiIngameMenu extends GameBar
-{
+public class GuiIngameMenu extends AnimationUI {
     private int field_146445_a;
     private int field_146444_f;
     private final Chocomint chocomint;
@@ -21,14 +23,12 @@ public class GuiIngameMenu extends GameBar
     /** Chat button */
     private GameBarButton chatButton;
 
-    /**
-     * Constructor
-     *
-     * @param chocomint
-     */
-    public GuiIngameMenu(final Chocomint chocomint) {
-        super(null, chocomint);
-        this.chocomint = chocomint;
+    private long ftime;
+    private final GameBar gameBar;
+
+    public GuiIngameMenu() {
+        this.chocomint = GameBridge.getChocomint();
+        this.gameBar = new GameBar(this, this.chocomint, this.buttonList);
     }
 
     /**
@@ -57,6 +57,8 @@ public class GuiIngameMenu extends GameBar
                 this.width - 52, this.height - 15, 50, 15, "Chat"));
         this.buttonList.add(new GuiButton(6, this.width / 2 + 2, this.height / 4 + 48 + i, 98, 20, I18n.format("gui.stats", new Object[0])));
         guibutton.enabled = this.mc.isSingleplayer() && !this.mc.getIntegratedServer().getPublic();
+        this.ftime = Minecraft.getSystemTime();
+        this.gameBar.init(width, height);
         super.initGui();
     }
 
@@ -80,16 +82,16 @@ public class GuiIngameMenu extends GameBar
 
                 if (flag)
                 {
-                    this.mc.displayGuiScreen(new GuiMainMenu(this.chocomint));
+                    this.mc.displayGuiScreen(new GuiMainMenu());
                 }
                 else if (flag1)
                 {
                     RealmsBridge realmsbridge = new RealmsBridge();
-                    realmsbridge.switchToRealms(new GuiMainMenu(this.chocomint));
+                    realmsbridge.switchToRealms(new GuiMainMenu());
                 }
                 else
                 {
-                    this.mc.displayGuiScreen(new GuiMultiplayer(new GuiMainMenu(this.chocomint)));
+                    this.mc.displayGuiScreen(new GuiMultiplayer(new GuiMainMenu()));
                 }
 
             case 2:
@@ -116,6 +118,7 @@ public class GuiIngameMenu extends GameBar
             case 103:
                 this.mc.displayGuiScreen(new Chat("", this, this.chocomint, this.mc.getCurrentServerData()));
         }
+        this.gameBar.actionPerformed(button);
         super.actionPerformed(button);
     }
 
@@ -133,6 +136,7 @@ public class GuiIngameMenu extends GameBar
      */
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
+        this.gameBar.draw(mouseX, mouseY, partialTicks, width, height);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

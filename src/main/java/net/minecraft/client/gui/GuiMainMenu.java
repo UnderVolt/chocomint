@@ -6,18 +6,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
 import io.undervolt.gui.chat.AvailableRooms;
 import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.user.UserSearch;
 import io.undervolt.instance.Chocomint;
+import io.undervolt.utils.AnimationUI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -45,7 +44,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.Project;
 
-public class GuiMainMenu extends GameBar implements GuiYesNoCallback
+public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
 {
     private static final AtomicInteger field_175373_f = new AtomicInteger(0);
     private static final Logger logger = LogManager.getLogger();
@@ -97,6 +96,12 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
     /** Chat button */
     private GameBarButton chatButton;
 
+    /** Chocomint */
+    private final Chocomint chocomint;
+
+    /** GameBar */
+    private final GameBar gameBar;
+
     /** Minecraft Realms button. */
     private GuiButton realmsButton;
     private boolean L;
@@ -104,9 +109,9 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
     private GuiButton modButton;
     private GuiScreen modUpdateNotification;
 
-    public GuiMainMenu(final Chocomint chocomint)
-    {
-        super(null, chocomint);
+    public GuiMainMenu() {
+        this.chocomint = GameBridge.getChocomint();
+        this.gameBar = new GameBar(this, this.chocomint, this.buttonList);
         this.openGLWarning2 = field_96138_a;
         this.L = false;
         this.splashText = "missingno";
@@ -220,9 +225,7 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
      * Adds the buttons (and other controls) to the screen in question. Called when the GUI is displayed and when the
      * window resizes, the buttonList is cleared beforehand.
      */
-    public void initGui()
-    {
-        this.setBackgroundDrawing(false);
+    public void initGui() {
         this.viewportTexture = new DynamicTexture(256, 256);
         this.backgroundTexture = this.mc.getTextureManager().getDynamicTextureLocation("background", this.viewportTexture);
         Calendar calendar = Calendar.getInstance();
@@ -270,6 +273,8 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
 
         this.buttonList.add(chatButton = new GameBarButton(103,
                 this.width - 52, this.height - 15, 50, 15, "Chat"));
+        this.buttonList.add(new GameBarButton(104,
+                this.width - 112, this.height - 15, 55, 15, "Usuarios"));
 
         this.mc.setConnectedToRealms(false);
 
@@ -287,6 +292,7 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
         }
         super.initGui();
 
+        this.gameBar.init(width, height);
     }
 
     /**
@@ -381,8 +387,11 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
             }
         }
         if(button.id == 103) this.mc.displayGuiScreen(new Chat("", this, this.mc.getChocomint(), null));
+        if(button.id == 104) this.mc.displayGuiScreen(new UserSearch(this, this.chocomint));
 
         super.actionPerformed(button);
+
+        this.gameBar.actionPerformed(button);
     }
 
     private void f()
@@ -612,7 +621,7 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
         GlStateManager.disableAlpha();
-        this.renderSkybox(mouseX, mouseY, partialTicks);
+        this.drawDefaultBackground();
         GlStateManager.enableAlpha();
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
@@ -631,16 +640,6 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
             i1 = custompanoramaproperties.getOverlay1Bottom();
             j1 = custompanoramaproperties.getOverlay2Top();
             k1 = custompanoramaproperties.getOverlay2Bottom();
-        }
-
-        if (l != 0 || i1 != 0)
-        {
-            this.drawGradientRect(0, 0, this.width, this.height, l, i1);
-        }
-
-        if (j1 != 0 || k1 != 0)
-        {
-            this.drawGradientRect(0, 0, this.width, this.height, j1, k1);
         }
 
         this.mc.getTextureManager().bindTexture(minecraftTitleTextures);
@@ -668,17 +667,12 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
         GlStateManager.scale(f, f, f);
         this.drawCenteredString(this.fontRendererObj, this.splashText, 0, -8, -256);
         GlStateManager.popMatrix();
-        String s = "Minecraft 1.8.9";
-
-        if (this.mc.isDemo())
-        {
-            s = s + " Demo";
-        }
+        String s = this.chocomint.getCommitName();
 
         if (Reflector.FMLCommonHandler_getBrandings.exists())
         {
-            Object object = Reflector.call(Reflector.FMLCommonHandler_instance, new Object[0]);
-            List<String> list = Lists.<String>reverse((List)Reflector.call(object, Reflector.FMLCommonHandler_getBrandings, new Object[] {Boolean.valueOf(true)}));
+            Object object = Reflector.call(Reflector.FMLCommonHandler_instance);
+            List list = Lists.<String>reverse((List) Objects.requireNonNull(Reflector.call(object, Reflector.FMLCommonHandler_getBrandings, true)));
 
             for (int l1 = 0; l1 < list.size(); ++l1)
             {
@@ -692,7 +686,7 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
 
             if (Reflector.ForgeHooksClient_renderMainMenu.exists())
             {
-                Reflector.call(Reflector.ForgeHooksClient_renderMainMenu, new Object[] {this, this.fontRendererObj, Integer.valueOf(this.width), Integer.valueOf(this.height)});
+                Reflector.call(Reflector.ForgeHooksClient_renderMainMenu, this, this.fontRendererObj, this.width, this.height);
             }
         }
         else
@@ -700,15 +694,14 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
             this.drawString(this.fontRendererObj, s, 2, this.height - 10, -1);
         }
 
-        String s2 = "Copyright Mojang AB. Do not distribute!";
-        this.drawString(this.fontRendererObj, s2, this.width - this.fontRendererObj.getStringWidth(s2) - 2, this.height - 10, -1);
-
         if (this.openGLWarning1 != null && this.openGLWarning1.length() > 0)
         {
             drawRect(this.field_92022_t - 2, this.field_92021_u - 2, this.field_92020_v + 2, this.field_92019_w - 1, 1428160512);
             this.drawString(this.fontRendererObj, this.openGLWarning1, this.field_92022_t, this.field_92021_u, -1);
             this.drawString(this.fontRendererObj, this.openGLWarning2, (this.width - this.field_92024_r) / 2, ((GuiButton)this.buttonList.get(0)).yPosition - 12, -1);
         }
+
+        this.gameBar.draw(mouseX, mouseY, partialTicks, width, height);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
@@ -721,6 +714,12 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
         {
             this.modUpdateNotification.drawScreen(mouseX, mouseY, partialTicks);
         }
+    }
+
+    @Override
+    public void handleMouseInput() throws IOException {
+        this.gameBar.handleMouseInput(width, height);
+        super.handleMouseInput();
     }
 
     /**
@@ -744,6 +743,8 @@ public class GuiMainMenu extends GameBar implements GuiYesNoCallback
         {
             this.M.mouseClicked(mouseX, mouseY, mouseButton);
         }
+
+        this.gameBar.mouseClicked(mouseX, mouseY, mouseButton, width, height);
     }
 
     /**
