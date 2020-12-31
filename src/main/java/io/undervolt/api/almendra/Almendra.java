@@ -264,9 +264,13 @@ public class Almendra implements Listener {
 
     public void sendMessage(final Tab tab, final String message, final User user) {
         try {
-            this.socket.emit("sendMessage", new JSONObject(new AlmendraMessage(user, tab.getName(), message).toString()));
-            this.chatManager.getSelectedTab().addMessage((user.isDeveloper() ? "§9" : "") + user.getUsername(), message);
-            this.chatManager.getSentMessages().add(new Message(user.getUsername(), message));
+            if(this.getConnectedUsers().contains(tab.getName()) || tab.getName().startsWith("#")) {
+                this.socket.emit("sendMessage", new JSONObject(new AlmendraMessage(user, tab.getName(), message).toString()));
+                this.chatManager.getSelectedTab().addMessage((user.isDeveloper() ? "§9" : "") + user.getUsername(), message);
+                this.chatManager.getSentMessages().add(new Message(user.getUsername(), message));
+            } else {
+                this.chatManager.getSelectedTab().addMessage(null, "\247cEl usuario que estás intentando contactar está desconectado.");
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
