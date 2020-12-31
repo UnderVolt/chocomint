@@ -16,6 +16,11 @@ public class TextureGameBarButton extends GameBarButton {
         this.texture = new ResourceLocation("/chocomint/icon/" + textureName + ".png");
     }
 
+    public TextureGameBarButton(int buttonId, int x, int y, int w, int h, final ResourceLocation resourceLocation) {
+        super(buttonId, x, y, w, h,"");
+        this.texture = resourceLocation;
+    }
+
     public void drawButton(Minecraft mc, int mouseX, int mouseY) {
         super.drawButton(mc, mouseX, mouseY);
         Minecraft.getMinecraft().getTextureManager().bindTexture(this.texture);
