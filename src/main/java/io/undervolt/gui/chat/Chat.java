@@ -264,9 +264,21 @@ public class Chat extends AnimationUI {
                 else if(this.chatManager.getSelectedTab() == this.chatManager.getReservedLogTab()) {
                     this.chatManager.getSelectedTab().addMessage((this.chocomint.getUser().isDeveloper() ? "§9" : "") + this.chocomint.getUser().getUsername(), this.textField.getText());
                     this.console.processCommand(this.chatManager.getReservedLogTab(), this.textField.getText());
+                } else {
+                    if(this.textField.getText().trim().startsWith("/")) {
+                        if(!this.chatManager.getOpenTabs().contains(this.chatManager.getReservedLogTab()))
+                            this.chatManager.getOpenTabs().add(this.chatManager.getReservedLogTab());
+                        this.chatManager.setSelectedTab(this.chatManager.getReservedLogTab());
+                        this.chatManager.getReservedLogTab().addMessage(null, "\247cPara prevenir tu seguridad, te hemos redireccionado a la pestaña de comandos");
+                        this.chatManager.getSentMessages().add(new Message(this.chocomint.getUser().getUsername(), this.textField.getText().trim()));
+                        this.chatManager.getSelectedTab().addMessage((this.chocomint.getUser().isDeveloper() ? "§9" : "") + this.chocomint.getUser().getUsername(), this.textField.getText().trim());
+                        this.chocomint.getConsole().processCommand(this.chatManager.getReservedLogTab(), this.textField.getText().trim());
+                        this.textField.setText("");
+                        this.update(false);
+                    } else {
+                        this.almendra.sendMessage(this.chatManager.getSelectedTab(), this.textField.getText().trim(), this.chocomint.getUser());
+                    }
                 }
-                else
-                    this.almendra.sendMessage(this.chatManager.getSelectedTab(), this.textField.getText().trim(), this.chocomint.getUser());
                 this.textField.setText("");
             }
         }
