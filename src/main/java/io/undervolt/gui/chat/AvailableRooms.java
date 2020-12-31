@@ -71,7 +71,8 @@ public class AvailableRooms extends AnimationUI {
             this.gameBar.actionPerformed(button);
             if(button.id == 1337) {
                 this.chatManager.setSelectedTab(this.chatManager.getReservedLogTab());
-                this.chatManager.getOpenTabs().add(this.chatManager.getReservedLogTab());
+                if(!this.chatManager.getOpenTabs().contains(this.chatManager.getReservedLogTab()))
+                    this.chatManager.getOpenTabs().add(this.chatManager.getReservedLogTab());
                 this.mc.displayGuiScreen(previous);
             } else {
                 super.actionPerformed(button);
