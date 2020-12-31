@@ -60,6 +60,7 @@ public class GameBar extends Gui {
     private TextureGameBarButton friendsButton;
     private GameBarButton contributorsButton;
     private GameBarButton configButton;
+    private TextureGameBarButton changeMinecraftAccountButton;
 
     /** Declare requirement for previous screen, to prevent accumulation of cached Guis */
     private final GuiScreen parentScreen;
@@ -104,10 +105,14 @@ public class GameBar extends Gui {
         ));
         this.buttonList.add(this.userButton = new TextureGameBarButton(
                 1337102,
-                width - 42, 0, 20, 20,
+                width - 48, 0, 20, 20,
                 this.mc.getTextureManager().getDynamicTextureLocation(this.chocomint.getUser().getUsername(),
                         this.chocomint.getUserManager().getUserProfilePictureManager().getImageAsDynamicTexture(this.chocomint.getUser().getImage())
                 )
+        ));
+        this.buttonList.add(this.changeMinecraftAccountButton = new TextureGameBarButton(
+                1337107,
+                width - 76, 0, 20, 20, "change"
         ));
         this.buttonList.add(this.musicButton = new TextureGameBarButton(
                 1337103,
