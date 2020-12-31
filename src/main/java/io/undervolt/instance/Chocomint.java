@@ -1,5 +1,6 @@
 package io.undervolt.instance;
 
+import com.google.common.collect.Lists;
 import io.undervolt.api.almendra.Almendra;
 import io.undervolt.api.event.EventManager;
 import io.undervolt.api.event.events.InitEvent;
@@ -15,6 +16,7 @@ import io.undervolt.gui.Background;
 import io.undervolt.gui.RenderUtils;
 import io.undervolt.gui.chat.ChatManager;
 import io.undervolt.gui.contributors.ContributorsManager;
+import io.undervolt.gui.friends.FriendsManager;
 import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.gui.notifications.NotificationOverlay;
 import io.undervolt.gui.user.User;
@@ -45,6 +47,8 @@ public class Chocomint implements Listener {
     private ChatManager chatManager;
     private Almendra almendra;
     private Console console;
+
+    private FriendsManager friendsManager;
 
     private ContributorsManager contributorsManager;
 
@@ -86,6 +90,7 @@ public class Chocomint implements Listener {
         this.mc = mc;
         this.chocomintUser = "\247bchocomint";
         this.userManager = new UserManager(this);
+        this.friendsManager = new FriendsManager(this);
         this.config = new Config(this);
         this.user = this.userManager.setUser(this.config.getToken());
     }
@@ -129,6 +134,7 @@ public class Chocomint implements Listener {
                 //TODO: Load external mods
                 break;
             case INIT:
+
                 this.screenshotUploader = new ScreenshotUploader(this);
                 this.notificationOverlay = new NotificationOverlay(this);
 
@@ -242,6 +248,10 @@ public class Chocomint implements Listener {
 
     public Background getBackground() {
         return background;
+    }
+
+    public FriendsManager getFriendsManager() {
+        return friendsManager;
     }
 
     public String getParsedOpenTime() {

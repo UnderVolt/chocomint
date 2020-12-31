@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import io.undervolt.gui.notifications.Notification;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.RestUtils;
 import io.undervolt.utils.config.Config;
@@ -46,7 +47,6 @@ public class UserManager {
             e.printStackTrace();
         }
         this.restUtils.sendJsonRequest("/api/user", json, res -> {
-            System.out.println(res);
             JsonObject jsonObject = this.gson.fromJson(res, JsonObject.class);
             if(jsonObject.get("code").getAsInt() == 200) {
                 JsonObject userObject = jsonObject.getAsJsonObject("user");
@@ -59,6 +59,13 @@ public class UserManager {
                         userObject.get("banner").getAsString(),
                         userObject.get("created").getAsString())
                 );
+                try {
+                    this.chocomint.getFriendsManager().loadFriends(userObject.get("friends").getAsJsonObject().get("list").getAsJsonArray());
+                    this.chocomint.getFriendsManager().loadFriendRequests(userObject.get("friends").getAsJsonObject().get("requests").getAsJsonArray());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    this.chocomint.getNotificationManager().addNotification(new Notification(Notification.Priority.CRITICAL, "Error", "Failed to load friends list", (a)->{}));
+                }
             }
         });
         return user.get();
@@ -81,7 +88,7 @@ public class UserManager {
                     if (jsonObject.get("code").getAsInt() == 200) {
                         JsonObject userObject = jsonObject.getAsJsonObject("user");
                         user.set(new User(userObject.get("user").getAsString(),
-                                User.Status.ONLINE,
+                                User.Status.OFFLINE,
                                 userObject.get("country").getAsString(),
                                 userObject.get("developer").getAsBoolean(),
                                 userObject.get("image").getAsString(),
