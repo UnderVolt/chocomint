@@ -4,6 +4,7 @@ import io.undervolt.instance.Chocomint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import org.lwjgl.opengl.GL11;
 
@@ -45,7 +46,7 @@ public class UserCard extends Gui {
 
             this.chocomint.getRenderUtils().
                     drawRoundedRect(x, y, 130,
-                    isSelf ? 52 : 38, 2, new Color(22, 22, 22).getRGB());
+                    isSelf ? 46 : 38, 2, new Color(22, 22, 22).getRGB());
 
             GL11.glPushMatrix();
             GL11.glColor3f(255, 255, 255);
@@ -59,23 +60,28 @@ public class UserCard extends Gui {
 
             GL11.glPopMatrix();
 
-            drawString(mc.fontRendererObj, alias, x + 38,
-                    y + 8, Color.WHITE.getRGB());
-            drawString(mc.fontRendererObj, this.user.getStatusString().toUpperCase(),
-                    x + 38, y + 20, Color.WHITE.getRGB());
+            drawString(mc.fontRendererObj, alias, x + 38, y + 8, Color.WHITE.getRGB());
+            drawString(mc.fontRendererObj, this.user.getStatusString().toUpperCase(), x + 38, y + 19, Color.WHITE.getRGB());
+
+
             this.chocomint.getRenderUtils().
                     drawFilledCircle(x + 34, y + 33, 3, this.user.getStatusColor());
 
-            if(this.isSelf)
-                drawString(this.mc.fontRendererObj, "Opciones de perfil",
-                    x + 65 - (this.mc.fontRendererObj.getStringWidth("Opciones de perfil") / 2), y + 38, Color.GRAY.getRGB());
+
+            if(this.isSelf) {
+                GL11.glPushMatrix();
+                GlStateManager.translate((x + 126 - (this.mc.fontRendererObj.getStringWidth("Opciones") * 0.825)), y + 36, 0);
+                GlStateManager.scale(0.825, 0.825, 0);
+                drawString(this.mc.fontRendererObj, "Opciones", 0, 0, Color.LIGHT_GRAY.getRGB());
+                GL11.glPopMatrix();
+            }
         }
     }
 
     public void click(int mouseY, int mouseX) {
         if(this.isActive()) {
             if(mouseY > 20) {
-                if (mouseX >= x && mouseY >= y && mouseX <= x + 130 && mouseY <= y + (this.isSelf ? 52 : 38)) {
+                if (mouseX >= x && mouseY >= y && mouseX <= x + 130 && mouseY <= y + (this.isSelf ? 46 : 38)) {
                     this.getConsumer().accept(getUser());
                 }
             }
