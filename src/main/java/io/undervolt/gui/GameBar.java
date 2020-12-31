@@ -82,12 +82,6 @@ public class GameBar extends Gui {
 
     public void init(int width, int height) {
 
-        // Set username trim
-        String username = this.chocomint.getUser().getUsername();
-        if(this.fontRendererObj.getStringWidth("[ ] " + username) > 62) {
-            username = username.substring(0, Math.min(username.length(), 6)) + "...";
-        }
-
         // Initialize Notifications
         this.notificationPanel = new NotificationPanel(this.mc, false,
                 this.chocomint.getNotificationManager());
@@ -108,9 +102,12 @@ public class GameBar extends Gui {
                 1337101,
                 width - 20, 0, 20, 20, "notifications"
         ));
-        this.buttonList.add(this.userButton = new GameBarButton(
+        this.buttonList.add(this.userButton = new TextureGameBarButton(
                 1337102,
-                width - 84, 0, 62, 20, "[ ] " + username
+                width - 42, 0, 20, 20,
+                this.mc.getTextureManager().getDynamicTextureLocation(this.chocomint.getUser().getUsername(),
+                        this.chocomint.getUserManager().getUserProfilePictureManager().getImageAsDynamicTexture(this.chocomint.getUser().getImage())
+                )
         ));
         this.buttonList.add(this.musicButton = new TextureGameBarButton(
                 1337103,
