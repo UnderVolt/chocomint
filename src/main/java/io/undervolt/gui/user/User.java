@@ -100,6 +100,7 @@ public class User {
     }
 
     public void removeFriend() {
+        this.setStatus(GameBridge.getChocomint().getAlmendra().getConnectedUsers().contains(this.getUsername()) ? Status.ONLINE : Status.OFFLINE);
         if (!this.getUsername().equals(GameBridge.getChocomint().getUser().getUsername()) && GameBridge.getChocomint().getFriendsManager().friendsPool.containsKey(this.username)) {
             JSONObject jsonObject = new JSONObject();
             try {
@@ -126,6 +127,7 @@ public class User {
     }
 
     public void acceptFriendRequest() {
+        this.setStatus(GameBridge.getChocomint().getAlmendra().getConnectedUsers().contains(this.getUsername()) ? Status.ONLINE : Status.OFFLINE);
         if (!this.getUsername().equals(GameBridge.getChocomint().getUser().getUsername()) && GameBridge.getChocomint().getFriendsManager().friendRequestPool.containsKey(this.username)) {
             JSONObject jsonObject = new JSONObject();
             try {
@@ -153,6 +155,7 @@ public class User {
     }
 
     public void sendFriendRequest() {
+        this.setStatus(GameBridge.getChocomint().getAlmendra().getConnectedUsers().contains(this.getUsername()) ? Status.ONLINE : Status.OFFLINE);
         if (!this.getUsername().equals(GameBridge.getChocomint().getUser().getUsername()) && !GameBridge.getChocomint().getFriendsManager().friendRequestPool.containsKey(this.username)) {
             JSONObject jsonObject = new JSONObject();
             try {
