@@ -2,6 +2,7 @@ package io.undervolt.gui.user;
 
 import com.google.common.collect.Maps;
 import io.undervolt.api.almendra.Almendra;
+import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.chat.ChatManager;
 import io.undervolt.gui.menu.Menu;
 import io.undervolt.instance.Chocomint;
@@ -87,6 +88,7 @@ public class UserSearch extends Menu {
 
                 for (String username : filteredUserList) {
                     User user = this.chocomint.getUserManager().getUser(username);
+                    user.setStatus(this.chocomint.getAlmendra().getConnectedUsers().contains(user.getUsername()) ? User.Status.ONLINE : User.Status.OFFLINE);
                     this.filteredUserMap.put(username,
                             new UserCard(chocomint, this.mc, user, true, false, (u) ->
                                     this.mc.displayGuiScreen(new UserScreen(this.previous, this.chocomint, u)))
