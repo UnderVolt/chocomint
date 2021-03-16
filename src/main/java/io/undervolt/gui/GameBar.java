@@ -8,6 +8,7 @@ import io.undervolt.gui.contributors.ContributorsPanel;
 import io.undervolt.gui.friends.FriendsManager;
 import io.undervolt.gui.friends.FriendsPanel;
 import io.undervolt.gui.login.LoginGUI;
+import io.undervolt.gui.login.MojangLoginGUI;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.gui.notifications.NotificationPanel;
@@ -60,6 +61,7 @@ public class GameBar extends Gui {
     private TextureGameBarButton friendsButton;
     private GameBarButton contributorsButton;
     private GameBarButton configButton;
+    private TextureGameBarButton changeMinecraftAccountButton;
 
     /** Declare requirement for previous screen, to prevent accumulation of cached Guis */
     private final GuiScreen parentScreen;
@@ -82,12 +84,6 @@ public class GameBar extends Gui {
 
     public void init(int width, int height) {
 
-        // Set username trim
-        String username = this.chocomint.getUser().getUsername();
-        if(this.fontRendererObj.getStringWidth("[ ] " + username) > 62) {
-            username = username.substring(0, Math.min(username.length(), 6)) + "...";
-        }
-
         // Initialize Notifications
         this.notificationPanel = new NotificationPanel(this.mc, false,
                 this.chocomint.getNotificationManager());
@@ -108,26 +104,29 @@ public class GameBar extends Gui {
                 1337101,
                 width - 20, 0, 20, 20, "notifications"
         ));
-        this.buttonList.add(this.userButton = new GameBarButton(
+        this.buttonList.add(this.userButton = new TextureGameBarButton(
                 1337102,
-                width - 84, 0, 62, 20, "[ ] " + username
+                width - 48, 0, 20, 20,
+                this.mc.getTextureManager().getDynamicTextureLocation(this.chocomint.getUser().getUsername(),
+                        this.chocomint.getUserManager().getUserProfilePictureManager().getImageAsDynamicTexture(this.chocomint.getUser().getImage())
+                )
+        ));
+        this.buttonList.add(this.changeMinecraftAccountButton = new TextureGameBarButton(
+                1337107,
+                width - 70, 0, 20, 20, "change"
         ));
         this.buttonList.add(this.musicButton = new TextureGameBarButton(
                 1337103,
-                width - 108, 0, 20, 20, "music"
+                width - 92, 0, 20, 20, "music"
         ));
         this.buttonList.add(this.friendsButton = new TextureGameBarButton(
                 1337104,
-                width - 130, 0, 20, 20, "friends"
-        ));
-        this.buttonList.add(this.contributorsButton = new GameBarButton(
-                1337105,
-                width - 154, 0, 20, 20, "C"
+                width - 114, 0, 20, 20, "friends"
         ));
         if(this.mc.theWorld != null && this.mc.thePlayer != null)
             this.buttonList.add(this.configButton = new GameBarButton(
                     1337106,
-                    width - 178, 0, 20, 20, "C"
+                    width - 136, 0, 20, 20, "C"
             ));
     }
 
@@ -163,6 +162,13 @@ public class GameBar extends Gui {
                     notification.getConsumer().accept(this.parentScreen);
                 }
             }
+        }
+
+        if (mouseX >= 4 && mouseY >= 4 && mouseX <= 16 && mouseY <= 16) {
+            this.notificationPanel.setActive(false);
+            this.userCard.setActive(false);
+            this.friendsPanel.setActive(false);
+            this.contributorsPanel.toggleActive();
         }
 
         // Friends panel click
@@ -204,14 +210,11 @@ public class GameBar extends Gui {
                 this.userCard.setActive(false);
                 this.friendsPanel.toggleActive();
                 break;
-            case 1337105:
-                this.notificationPanel.setActive(false);
-                this.userCard.setActive(false);
-                this.friendsPanel.setActive(false);
-                this.contributorsPanel.toggleActive();
-                break;
             case 1337106:
                 this.mc.displayGuiScreen(new GuiMods(this.parentScreen, this.chocomint));
+                break;
+            case 1337107:
+                this.mc.displayGuiScreen(new MojangLoginGUI(this.parentScreen, this.chocomint));
                 break;
         }
     }

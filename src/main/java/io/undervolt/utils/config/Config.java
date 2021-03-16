@@ -3,16 +3,26 @@ package io.undervolt.utils.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+import com.mojang.authlib.Agent;
+import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
+import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.RestUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.Session;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.lang.reflect.Type;
+import java.net.Proxy;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class Config {
 
@@ -20,6 +30,7 @@ public class Config {
     private final Gson gson;
     private final RestUtils restUtils;
     private final File tkC;
+    private final File mojCrd;
 
     private String mcToken;
 
@@ -29,7 +40,45 @@ public class Config {
         this.restUtils = chocomint.getRestUtils();
 
         this.tkC = new File(this.mc.mcDataDir, "uvpt.json");
+        this.mojCrd = new File(this.mc.mcDataDir, "mojcrd.json");
+
         this.loadToken();
+        this.loadMinecraftSession();
+    }
+
+    private void loadMinecraftSession() {
+        System.out.println("Cargando sesión de Minecraft");
+
+        try {
+            if(mojCrd.exists()) {
+
+                String credentials = IOUtils.toString(new FileInputStream(mojCrd), StandardCharsets.UTF_8);
+
+                YggdrasilAuthenticationService service = new YggdrasilAuthenticationService(Proxy.NO_PROXY, "");
+                YggdrasilUserAuthentication auth = (YggdrasilUserAuthentication)service.createUserAuthentication(Agent.MINECRAFT);
+
+
+                Type typeOfHashMap = new TypeToken<Map<String, Object>>() { }.getType();
+                auth.loadFromStorage(gson.fromJson(credentials, typeOfHashMap));
+
+                if(auth.canLogIn()) {
+                    auth.logIn();
+
+                    this.mc.setSession(new Session(auth.getSelectedProfile().getName(), auth
+                            .getSelectedProfile().getId().toString(),
+                            auth.getAuthenticatedToken(), "mojang"));
+
+                    System.out.println("El sistema ha iniciado sesión con Mojang");
+                } else
+                    System.out.println("El sistema no puede iniciar la sesión.");
+
+            } else {
+                System.out.println("No existían credenciales guardadas.");
+            }
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadToken(){
@@ -79,5 +128,20 @@ public class Config {
                 );
             }
         }
+    }
+
+    public void saveMinecraftCredentials(final Map<String, Object> session) {
+        final Gson gson = new GsonBuilder().create();
+
+        try {
+            final Writer writer = new FileWriter(this.mojCrd);
+            gson.toJson(session, writer);
+            writer.flush();
+
+            System.out.println("Creado archivo de configuración de credenciales");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

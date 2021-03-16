@@ -35,9 +35,9 @@ public class FriendsPanel extends Gui {
     public void drawPanel(int screenWidth, int screenHeight) {
         if(this.isActive) {
             this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 140, 22, 138,
-                            screenHeight - 24, 4, new Color(28, 28, 28).getRGB());
+                            screenHeight - 24, 2, new Color(28, 28, 28).getRGB());
 
-            drawCenteredString(this.mc.fontRendererObj, "Amigos", screenWidth - 68, 28, Color.WHITE.getRGB());
+            drawString(this.mc.fontRendererObj, "Amigos", screenWidth - 134, 30, Color.WHITE.getRGB());
 
 
             AtomicInteger y = new AtomicInteger(43);
@@ -52,8 +52,10 @@ public class FriendsPanel extends Gui {
                 y.set(y.get() + 40);
             }
 
-            drawCenteredString(this.mc.fontRendererObj, "Solicitudes de amistad", screenWidth - 68, y.get() + 5, Color.WHITE.getRGB());
-            y.set(y.get() + 20);
+            this.chocomint.getRenderUtils().drawLine(screenWidth - 134, y.get() + 5, screenWidth - 8, y.get() + 6, 2, Color.LIGHT_GRAY.getRGB());
+
+            drawString(this.mc.fontRendererObj, "Solicitudes de amistad", screenWidth - 134, y.get() + 15, Color.WHITE.getRGB());
+            y.set(y.get() + 30);
 
             this.frUserCardList.forEach(userCard -> {
                 userCard.drawCard(screenWidth - 136, y.get());
