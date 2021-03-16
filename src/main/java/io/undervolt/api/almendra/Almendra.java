@@ -104,7 +104,6 @@ public class Almendra implements Listener {
 
                             if(i == 0) {
                                 this.chatManager.addTab(tab);
-                                this.chatManager.setSelectedTab(tab);
                                 tab.addMessage(null, "\247e¡Bienvenido a chocomint!");
                                 tab.addMessage(null, "\247c" + MOTD);
                             }
