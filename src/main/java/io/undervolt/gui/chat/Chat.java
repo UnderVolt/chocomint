@@ -298,9 +298,9 @@ public class Chat extends AnimationUI {
 
         int i = Mouse.getEventDWheel();
 
-        if (i > 0 && !(this.scroll <= 0)) this.scroll -=2.3;
-        else if (i < 0  && (this.scroll <= (this.chatManager.getSelectedTab().getMessages().size() * 12) -
-                (this.mc.theWorld != null ? this.height * .33 : this.height * .66) + 12)) this.scroll += 2.3;
+        if (i < 0 && !(this.scroll <= 0)) this.scroll -=8.3;
+        else if (i > 0  && (this.scroll <= (this.chatManager.getSelectedTab().getMessages().size() * 12) -
+                (this.mc.theWorld != null ? this.height * .33 : this.height * .66) + 12)) this.scroll += 8.3;
     }
 
     public Console getConsole() {
