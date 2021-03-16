@@ -234,22 +234,19 @@ public class Chat extends AnimationUI {
                     this.mc.displayGuiScreen(new AvailableRooms(this, this.chocomint, this.chatManager));
                     break;
                 case Keyboard.KEY_UP:
-                    if(upKeyCounter - 1 >= this.chatManager.getSentMessages().size()) return;
-                    upKeyCounter = upKeyCounter + 1;
-                    if(this.chatManager.getSentMessages().size() - upKeyCounter < 0
-                        || this.chatManager.getSentMessages().get(this.chatManager.getSentMessages().size() - upKeyCounter) == null) return;
-                    this.textField.setText(this.chatManager.getSentMessages().get(this.chatManager.getSentMessages().size() - upKeyCounter).getMessage());
+                    if(this.chatManager.getSentMessages().size() - 1 > this.upKeyCounter) {
+                        this.textField.setText(this.chatManager.getSentMessages().get(this.upKeyCounter).getMessage());
+                        this.upKeyCounter = this.upKeyCounter + 1;
+                        this.chatManager.getSelectedTab().addMessage("", "+1 " + this.upKeyCounter + " " + (this.chatManager.getSentMessages().size() - 1));
+                    }
                     break;
                 case Keyboard.KEY_DOWN:
-                    if(upKeyCounter <= 1) {
+                    if(this.upKeyCounter <= 0) {
                         this.textField.setText("");
-                        upKeyCounter = upKeyCounter - 1;
                     } else {
-                        upKeyCounter = upKeyCounter - 1;
-                        if (this.chatManager.getSentMessages().size() - upKeyCounter < 0
-                                || this.chatManager.getSentMessages().get(this.chatManager.getSentMessages().size() - upKeyCounter) == null)
-                            return;
-                        this.textField.setText(this.chatManager.getSentMessages().get(this.chatManager.getSentMessages().size() - upKeyCounter).getMessage());
+                        this.upKeyCounter = this.upKeyCounter - 1;
+                        this.textField.setText(this.chatManager.getSentMessages().get(this.upKeyCounter).getMessage());
+                        this.chatManager.getSelectedTab().addMessage("", "-1 " + this.upKeyCounter + " " + (this.chatManager.getSentMessages().size() - 1));
                     }
                     break;
             }
@@ -270,7 +267,6 @@ public class Chat extends AnimationUI {
                             this.chatManager.getOpenTabs().add(this.chatManager.getReservedLogTab());
                         this.chatManager.setSelectedTab(this.chatManager.getReservedLogTab());
                         this.chatManager.getReservedLogTab().addMessage(null, "\247cPara prevenir tu seguridad, te hemos redireccionado a la pestaña de comandos");
-                        this.chatManager.getSentMessages().add(new Message(this.chocomint.getUser().getUsername(), this.textField.getText().trim()));
                         this.chatManager.getSelectedTab().addMessage((this.chocomint.getUser().isDeveloper() ? "§9" : "") + this.chocomint.getUser().getUsername(), this.textField.getText().trim());
                         this.chocomint.getConsole().processCommand(this.chatManager.getReservedLogTab(), this.textField.getText().trim());
                         this.textField.setText("");
@@ -298,9 +294,9 @@ public class Chat extends AnimationUI {
 
         int i = Mouse.getEventDWheel();
 
-        if (i > 0 && !(this.scroll <= 0)) this.scroll -=2.3;
-        else if (i < 0  && (this.scroll <= (this.chatManager.getSelectedTab().getMessages().size() * 12) -
-                (this.mc.theWorld != null ? this.height * .33 : this.height * .66) + 12)) this.scroll += 2.3;
+        if (i < 0 && !(this.scroll <= 0)) this.scroll -=8.3;
+        else if (i > 0  && (this.scroll <= (this.chatManager.getSelectedTab().getMessages().size() * 12) -
+                (this.mc.theWorld != null ? this.height * .33 : this.height * .66) + 12)) this.scroll += 8.3;
     }
 
     public Console getConsole() {
