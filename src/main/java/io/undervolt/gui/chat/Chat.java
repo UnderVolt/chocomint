@@ -234,8 +234,8 @@ public class Chat extends AnimationUI {
                     this.mc.displayGuiScreen(new AvailableRooms(this, this.chocomint, this.chatManager));
                     break;
                 case Keyboard.KEY_UP:
-                    if(this.chatManager.getSentMessages().size() > this.upKeyCounter) {
-                        this.textField.setText(this.chatManager.getSentMessages().get(this.upKeyCounter).getMessage());
+                    if(this.chatManager.getSentMessages().size() > this.upKeyCounter && this.chatManager.getSentMessages().size() != 0) {
+                        this.textField.setText(this.chatManager.getSentMessages().get(this.chatManager.getSentMessages().size() - 1 - this.upKeyCounter).getMessage());
                         this.upKeyCounter = this.upKeyCounter + 1;
                     }
                     break;
@@ -244,7 +244,7 @@ public class Chat extends AnimationUI {
                         this.textField.setText("");
                     } else {
                         this.upKeyCounter = this.upKeyCounter - 1;
-                        this.textField.setText(this.chatManager.getSentMessages().get(this.upKeyCounter).getMessage());
+                        this.textField.setText(this.chatManager.getSentMessages().get(this.chatManager.getSentMessages().size() - 1 - this.upKeyCounter).getMessage());
                     }
                     break;
             }
