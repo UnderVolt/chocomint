@@ -234,10 +234,9 @@ public class Chat extends AnimationUI {
                     this.mc.displayGuiScreen(new AvailableRooms(this, this.chocomint, this.chatManager));
                     break;
                 case Keyboard.KEY_UP:
-                    if(this.chatManager.getSentMessages().size() - 1 > this.upKeyCounter) {
+                    if(this.chatManager.getSentMessages().size() > this.upKeyCounter) {
                         this.textField.setText(this.chatManager.getSentMessages().get(this.upKeyCounter).getMessage());
                         this.upKeyCounter = this.upKeyCounter + 1;
-                        this.chatManager.getSelectedTab().addMessage("", "+1 " + this.upKeyCounter + " " + (this.chatManager.getSentMessages().size() - 1));
                     }
                     break;
                 case Keyboard.KEY_DOWN:
@@ -246,7 +245,6 @@ public class Chat extends AnimationUI {
                     } else {
                         this.upKeyCounter = this.upKeyCounter - 1;
                         this.textField.setText(this.chatManager.getSentMessages().get(this.upKeyCounter).getMessage());
-                        this.chatManager.getSelectedTab().addMessage("", "-1 " + this.upKeyCounter + " " + (this.chatManager.getSentMessages().size() - 1));
                     }
                     break;
             }
@@ -275,6 +273,7 @@ public class Chat extends AnimationUI {
                         this.almendra.sendMessage(this.chatManager.getSelectedTab(), this.textField.getText().trim(), this.chocomint.getUser());
                     }
                 }
+                this.chatManager.getSentMessages().add(new Message(this.chocomint.getUser().getUsername(), this.textField.getText().trim()));
                 this.textField.setText("");
             }
         }
