@@ -11,6 +11,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.MathHelper;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -33,7 +34,8 @@ public class Chat extends AnimationUI {
     /** TextField */
     private GuiTextField textField;
     private final String initialText;
-    private int upKeyCounter = 0;
+    private int sentHistoryCursor = -1;
+    private String historyBuffer = "";
 
     /** Console */
     private final Console console;
@@ -73,6 +75,8 @@ public class Chat extends AnimationUI {
     public void initGui() {
 
         this.chatHeight = (int) (this.mc.theWorld == null ? this.height * .33 : this.height * .66);
+
+        this.sentHistoryCursor = this.chatManager.getSentMessages().size();
 
         if(this.chatManager.getSelectedTab() == null) {
             if (this.mc.theWorld == null || this.mc.thePlayer == null) {
@@ -234,18 +238,10 @@ public class Chat extends AnimationUI {
                     this.mc.displayGuiScreen(new AvailableRooms(this, this.chocomint, this.chatManager));
                     break;
                 case Keyboard.KEY_UP:
-                    if(this.chatManager.getSentMessages().size() > this.upKeyCounter && this.chatManager.getSentMessages().size() != 0) {
-                        this.textField.setText(this.chatManager.getSentMessages().get(this.chatManager.getSentMessages().size() - 1 - this.upKeyCounter).getMessage());
-                        this.upKeyCounter = this.upKeyCounter + 1;
-                    }
+                    this.getSentHistory(-1);
                     break;
                 case Keyboard.KEY_DOWN:
-                    if(this.upKeyCounter <= 0) {
-                        this.textField.setText("");
-                    } else {
-                        this.upKeyCounter = this.upKeyCounter - 1;
-                        this.textField.setText(this.chatManager.getSentMessages().get(this.chatManager.getSentMessages().size() - 1 - this.upKeyCounter).getMessage());
-                    }
+                    this.getSentHistory(1);
                     break;
             }
             if(!(this.chocomint.getUser().getUsername().equals("Guest") && this.chatManager.getSelectedTab() != this.chatManager.getReservedServerTab()
@@ -305,5 +301,30 @@ public class Chat extends AnimationUI {
     public void update(boolean useNew) {
         if(useNew) this.mc.displayGuiScreen(new Chat(this.textField.getText().trim(), this.prev, this.chocomint, this.serverData));
         else this.mc.displayGuiScreen(this);
+    }
+
+    public void getSentHistory(int msgPos) {
+        int i = this.sentHistoryCursor + msgPos;
+        int j = this.chatManager.getSentMessages().size();
+        i = MathHelper.clamp_int(i, 0, j);
+
+        if (i != this.sentHistoryCursor)
+        {
+            if (i == j)
+            {
+                this.sentHistoryCursor = j;
+                this.textField.setText(this.historyBuffer);
+            }
+            else
+            {
+                if (this.sentHistoryCursor == j)
+                {
+                    this.historyBuffer = this.textField.getText();
+                }
+
+                this.textField.setText(this.chatManager.getSentMessages().get(i).getMessage());
+                this.sentHistoryCursor = i;
+            }
+        }
     }
 }
