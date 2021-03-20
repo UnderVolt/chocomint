@@ -63,6 +63,7 @@ public class Config {
 
                 if(auth.canLogIn()) {
                     auth.logIn();
+                    this.saveMinecraftCredentials(auth.saveForStorage());
 
                     this.mc.setSession(new Session(auth.getSelectedProfile().getName(), auth
                             .getSelectedProfile().getId().toString(),
