@@ -52,27 +52,37 @@ public class Config {
         try {
             if(mojCrd.exists()) {
 
+                System.out.println("El archivo de configuración de credenciales existe. Verificando tipo de cuenta...");
+
                 String credentials = IOUtils.toString(new FileInputStream(mojCrd), StandardCharsets.UTF_8);
-
-                YggdrasilAuthenticationService service = new YggdrasilAuthenticationService(Proxy.NO_PROXY, "");
-                YggdrasilUserAuthentication auth = (YggdrasilUserAuthentication)service.createUserAuthentication(Agent.MINECRAFT);
-
-
                 Type typeOfHashMap = new TypeToken<Map<String, Object>>() { }.getType();
-                auth.loadFromStorage(gson.fromJson(credentials, typeOfHashMap));
 
-                if(auth.canLogIn()) {
-                    auth.logIn();
-                    this.saveMinecraftCredentials(auth.saveForStorage());
+                final Map<String, Object> credentialsAsMap = gson.fromJson(credentials, typeOfHashMap);
 
-                    this.mc.setSession(new Session(auth.getSelectedProfile().getName(), auth
-                            .getSelectedProfile().getId().toString(),
-                            auth.getAuthenticatedToken(), "mojang"));
+                if(credentialsAsMap.get("accessToken").equals("")) {
+                    System.out.println("Detectada cuenta offline. Cargando usuario...");
+                    this.mc.setSession(new Session((String) credentialsAsMap.get("username"), "", "", "mojang"));
+                    System.out.println("El sistema ha iniciado sesión fuera de línea");
+                } else {
+                    System.out.println("Detectada cuenta de Mojang. Cargando servicio de autenticación...");
 
-                    System.out.println("El sistema ha iniciado sesión con Mojang");
-                } else
-                    System.out.println("El sistema no puede iniciar la sesión.");
+                    YggdrasilAuthenticationService service = new YggdrasilAuthenticationService(Proxy.NO_PROXY, "");
+                    YggdrasilUserAuthentication auth = (YggdrasilUserAuthentication)service.createUserAuthentication(Agent.MINECRAFT);
 
+                    auth.loadFromStorage(credentialsAsMap);
+
+                    if(auth.canLogIn()) {
+                        auth.logIn();
+                        this.saveMinecraftCredentials(auth.saveForStorage());
+
+                        this.mc.setSession(new Session(auth.getSelectedProfile().getName(), auth
+                                .getSelectedProfile().getId().toString(),
+                                auth.getAuthenticatedToken(), "mojang"));
+
+                        System.out.println("El sistema ha iniciado sesión con Mojang");
+                    } else
+                        System.out.println("El sistema no puede iniciar la sesión.");
+                }
             } else {
                 System.out.println("No existían credenciales guardadas.");
             }

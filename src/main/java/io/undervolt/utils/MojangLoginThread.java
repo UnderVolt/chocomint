@@ -1,11 +1,13 @@
 package io.undervolt.utils;
 
+import com.google.common.collect.Maps;
 import com.mojang.authlib.Agent;
 import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 
 import java.net.Proxy;
+import java.util.Map;
 
 import io.undervolt.utils.config.Config;
 import net.minecraft.client.Minecraft;
@@ -57,6 +59,17 @@ public class MojangLoginThread extends Thread {
         if (this.password.equals("")) {
             this.mc.setSession(new Session(this.username, "", "", "mojang"));
             this.status = ("\247aIniciada la sesión. (" + this.username + " - no premium)");
+
+            final Map<String, Object> offlineCred = Maps.newHashMap();
+
+            offlineCred.put("displayName", this.username);
+            offlineCred.put("accessToken", "");
+            offlineCred.put("userid", "");
+            offlineCred.put("uuid", "");
+            offlineCred.put("username", this.username);
+
+            this.config.saveMinecraftCredentials(offlineCred);
+
             return;
         }
 
