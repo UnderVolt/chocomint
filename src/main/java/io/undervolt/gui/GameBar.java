@@ -1,21 +1,19 @@
 package io.undervolt.gui;
 
 import io.undervolt.bridge.GameBridge;
-import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.config.GuiMods;
 import io.undervolt.gui.contributors.ContributorsManager;
 import io.undervolt.gui.contributors.ContributorsPanel;
 import io.undervolt.gui.friends.FriendsManager;
 import io.undervolt.gui.friends.FriendsPanel;
 import io.undervolt.gui.login.LoginGUI;
-import io.undervolt.gui.login.MojangLoginGUI;
+import io.undervolt.gui.login.MinecraftAccountGUI;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.gui.notifications.NotificationPanel;
 import io.undervolt.gui.user.UserCard;
 import io.undervolt.gui.user.UserScreen;
 import io.undervolt.instance.Chocomint;
-import io.undervolt.utils.AnimationUI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import org.lwjgl.input.Mouse;
@@ -214,7 +212,7 @@ public class GameBar extends Gui {
                 this.mc.displayGuiScreen(new GuiMods(this.parentScreen, this.chocomint));
                 break;
             case 1337107:
-                this.mc.displayGuiScreen(new MojangLoginGUI(this.parentScreen, this.chocomint));
+                this.mc.displayGuiScreen(new MinecraftAccountGUI(this.parentScreen, this.chocomint));
                 break;
         }
     }
