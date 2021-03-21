@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import io.undervolt.gui.chat.Tab;
 import io.undervolt.instance.Chocomint;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Console {
@@ -24,7 +25,7 @@ public class Console {
         final String[] split = text.split(" ");
         this.commandList.forEach(command -> {
             if(split[0].equalsIgnoreCase("/" + command.getText())) {
-                command.execute(debugTab, split);
+                command.execute(debugTab, Arrays.copyOfRange(split, 1, split.length));
             }
         });
     }
