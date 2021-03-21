@@ -11,6 +11,7 @@ import io.undervolt.api.screenshot.ScreenshotUploader;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.console.Console;
 import io.undervolt.console.commands.HelpCommand;
+import io.undervolt.console.commands.ScreenCommand;
 import io.undervolt.console.commands.VersionCommand;
 import io.undervolt.gui.Background;
 import io.undervolt.gui.RenderUtils;
@@ -143,6 +144,7 @@ public class Chocomint implements Listener {
                 // Register Commands
                 this.console.registerCommand(new VersionCommand(this));
                 this.console.registerCommand(new HelpCommand(this));
+                this.console.registerCommand(new ScreenCommand(this));
 
                 this.eventManager.callEvent(new InitEvent.ClientInitEvent());
 
