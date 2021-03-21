@@ -23,7 +23,7 @@ public class Console {
     public void processCommand(final Tab debugTab, final String text) {
         final String[] split = text.split(" ");
         this.commandList.forEach(command -> {
-            if(text.equalsIgnoreCase("/" + command.getText())) {
+            if(split[0].equalsIgnoreCase("/" + command.getText())) {
                 command.execute(debugTab, split);
             }
         });
