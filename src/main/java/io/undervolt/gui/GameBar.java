@@ -7,7 +7,7 @@ import io.undervolt.gui.contributors.ContributorsPanel;
 import io.undervolt.gui.friends.FriendsManager;
 import io.undervolt.gui.friends.FriendsPanel;
 import io.undervolt.gui.login.LoginGUI;
-import io.undervolt.gui.login.MinecraftAccountGUI;
+import io.undervolt.gui.login.MinecraftLoginGUI;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.gui.notifications.NotificationPanel;
@@ -212,7 +212,7 @@ public class GameBar extends Gui {
                 this.mc.displayGuiScreen(new GuiMods(this.parentScreen, this.chocomint));
                 break;
             case 1337107:
-                this.mc.displayGuiScreen(new MinecraftAccountGUI(this.parentScreen, this.chocomint));
+                this.mc.displayGuiScreen(new MinecraftLoginGUI(this.parentScreen, this.chocomint));
                 break;
         }
     }

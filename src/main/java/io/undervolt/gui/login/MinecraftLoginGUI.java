@@ -24,7 +24,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-public class MinecraftAccountGUI extends Menu {
+public class MinecraftLoginGUI extends Menu {
 
     private final Config config;
     private MojangLoginThread thread;
@@ -33,7 +33,7 @@ public class MinecraftAccountGUI extends Menu {
     private GuiTextField user;
     private GuiTextField pass;
 
-    public MinecraftAccountGUI(final GuiScreen parent, final Chocomint chocomint) {
+    public MinecraftLoginGUI(final GuiScreen parent, final Chocomint chocomint) {
         super(parent, chocomint, "Iniciar sesión en Mojang", parent.height);
         this.parent = parent;
         this.config = chocomint.getConfig();
