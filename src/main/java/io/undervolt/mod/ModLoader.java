@@ -1,6 +1,7 @@
 package io.undervolt.mod;
 
 import com.google.common.collect.Lists;
+import io.undervolt.gui.notifications.Notification;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.config.Configurable;
 import io.undervolt.utils.config.ConfigurableManager;
@@ -16,9 +17,12 @@ import java.util.jar.JarFile;
 
 public class ModLoader {
     private final ConfigurableManager configurableManager;
+    private final Chocomint chocomint;
+    private final List<Configurable> loadedMods = Lists.newArrayList();
 
     public ModLoader(final Chocomint chocomint) {
         this.configurableManager = chocomint.getConfigurableManager();
+        this.chocomint = chocomint;
     }
 
     public File[] availableMods(final File modPath) {
@@ -49,7 +53,9 @@ public class ModLoader {
 
             if(c.getSuperclass().equals(Mod.class) || c.getSuperclass().equals(RenderMod.class)) {
                 System.out.println(className + " was assignable from mod");
-                this.configurableManager.register((Configurable) c.newInstance());
+                Configurable mod = (Configurable) c.newInstance();
+                this.configurableManager.register(mod);
+                this.getLoadedMods().add(mod);
             } else {
                 System.out.println(className + " wasn't assignable from mod");
             }
@@ -66,9 +72,16 @@ public class ModLoader {
                 e.printStackTrace();
             }
         }
+
+        this.chocomint.getNotificationManager().addNotification(new Notification(Notification.Priority.NOTICE,
+                "ModLoader", this.getLoadedMods().size() + " mods han sido cargados.", (a) -> {}));
     }
 
     public Mod getMod(Mod mod) {
         return (Mod) this.configurableManager.getUpdatedFields(mod);
+    }
+
+    public List<Configurable> getLoadedMods() {
+        return loadedMods;
     }
 }
