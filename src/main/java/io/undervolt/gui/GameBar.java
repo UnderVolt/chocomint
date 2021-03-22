@@ -10,6 +10,7 @@ import io.undervolt.gui.login.LoginGUI;
 import io.undervolt.gui.login.MinecraftLoginGUI;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.gui.notifications.NotificationManager;
+import io.undervolt.gui.notifications.NotificationOverlay;
 import io.undervolt.gui.notifications.NotificationPanel;
 import io.undervolt.gui.user.UserCard;
 import io.undervolt.gui.user.UserScreen;
@@ -34,6 +35,7 @@ public class GameBar extends Gui {
     private final NotificationManager notificationManager;
     public NotificationPanel notificationPanel;
     private int notificationScroll = 0;
+    private final NotificationOverlay notificationOverlay;
 
     /** Declare User card */
     public UserCard userCard;
@@ -78,6 +80,7 @@ public class GameBar extends Gui {
         this.contributorsManager = chocomint.getContributorsManager();
         this.friendsManager = chocomint.getFriendsManager();
         this.fontRendererObj = this.mc.fontRendererObj;
+        this.notificationOverlay = chocomint.getNotificationOverlay();
     }
 
     public void init(int width, int height) {
@@ -144,6 +147,9 @@ public class GameBar extends Gui {
         this.notificationPanel.drawPanel(width, height, this.notificationScroll);
         this.contributorsPanel.drawPanel(width, height);
         this.friendsPanel.drawPanel(width, height);
+
+        if(!notificationPanel.isActive())
+            this.notificationOverlay.drawOverlay(5, 27);
     }
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton, int width, int height) {
