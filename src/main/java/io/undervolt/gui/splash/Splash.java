@@ -1,4 +1,4 @@
-package io.undervolt.splash;
+package io.undervolt.gui.splash;
 
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
@@ -6,7 +6,6 @@ import net.minecraft.util.ResourceLocation;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
 import java.io.IOException;
 import java.io.InputStream;
 
