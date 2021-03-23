@@ -39,7 +39,7 @@ import javax.imageio.ImageIO;
 import io.undervolt.api.event.events.GameShutdownEvent;
 import io.undervolt.api.event.events.TickEvent;
 import io.undervolt.gui.chat.Chat;
-import io.undervolt.splash.Splash;
+import io.undervolt.gui.splash.Splash;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.audio.MusicTicker;
