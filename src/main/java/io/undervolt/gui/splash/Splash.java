@@ -17,12 +17,11 @@ public class Splash {
 
         splash.setType(Window.Type.UTILITY);
 
-        splash.setSize(260, 260);
+        splash.setSize(260, 200);
 
         splash.setLocationRelativeTo(null);
         splash.setAlwaysOnTop(true);
         splash.setUndecorated(true);
-
 
         splash.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
