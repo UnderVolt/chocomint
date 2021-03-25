@@ -43,10 +43,9 @@ public class Config {
         this.mojCrd = new File(this.mc.mcDataDir, "mojcrd.json");
 
         this.loadToken();
-        this.loadMinecraftSession();
     }
 
-    private void loadMinecraftSession() {
+    public void loadMinecraftSession() {
         System.out.println("Cargando sesión de Minecraft");
 
         try {

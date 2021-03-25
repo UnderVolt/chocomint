@@ -100,17 +100,6 @@ public class Chocomint implements Listener {
             case PREINIT:
                 this.gameBridge = new GameBridge();
                 this.notificationManager = new NotificationManager(this);
-                this.contributorsManager = new ContributorsManager(this.mc);
-
-                this.chatManager = new ChatManager(this);
-                this.console = new Console(this);
-
-                try {
-                    this.almendra = new Almendra(this);
-                    this.getEventManager().registerEvents(this.almendra);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
                 // ModLoader
                 this.modLoader = new ModLoader(this);
@@ -123,6 +112,7 @@ public class Chocomint implements Listener {
                 this.getEventManager().registerEvents(this.configurableManager);
                 this.background = new Background(this);
                 this.configurableManager.register(this.background);
+
                 this.modLoader.load(new File(this.rootPath + File.separator + "mods"));
 
                 this.configurableManager.configurableList.forEach(configurable -> System.out.println("Registered configurable: " + configurable.getName()));
@@ -140,15 +130,27 @@ public class Chocomint implements Listener {
 
                 this.getEventManager().registerEvents(this.notificationOverlay);
 
-                // Register Commands
-                this.console.registerCommand(new VersionCommand(this));
-                this.console.registerCommand(new HelpCommand(this));
-
                 this.eventManager.callEvent(new InitEvent.ClientInitEvent());
 
                 //TODO: Register events & hooks
                 break;
             case POSTINIT:
+                this.getConfig().loadMinecraftSession();
+                this.contributorsManager = new ContributorsManager(this.mc);
+
+                this.chatManager = new ChatManager(this);
+                this.console = new Console(this);
+
+                try {
+                    this.almendra = new Almendra(this);
+                    this.getEventManager().registerEvents(this.almendra);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                // Register Commands
+                this.console.registerCommand(new VersionCommand(this));
+                this.console.registerCommand(new HelpCommand(this));
 
                 this.eventManager.callEvent(new InitEvent.PostInitEvent());
 
