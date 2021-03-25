@@ -145,8 +145,11 @@ public class Almendra implements Listener {
 
                 this.connectedUsers.add(username);
 
-                if(this.chocomint.getFriendsManager().friendsPool.get(username) != null)
+                if(this.chocomint.getFriendsManager().friendsPool.get(username) != null) {
                     this.chocomint.getFriendsManager().setFriendStatus(username, User.Status.ONLINE);
+                    this.chocomint.getNotificationManager().addNotification(
+                            new Notification(Notification.Priority.NOTICE, username, "Se ha conectado", (a)->{}));
+                }
 
                 System.out.println("Añadido " + username + " a la lista de usuarios conectados.");
 
@@ -214,6 +217,7 @@ public class Almendra implements Listener {
 
             socket.on(Socket.EVENT_DISCONNECT, data -> {
                 this.handleEndOfData();
+                this.chocomint.getNotificationManager().addNotification(new Notification(Notification.Priority.CRITICAL, "Desconectado de Almendra", "Reconectando...", (a)->{}));
             });
 
             socket.on(Socket.EVENT_CONNECT_ERROR, data -> {

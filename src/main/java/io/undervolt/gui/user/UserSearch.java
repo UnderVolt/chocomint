@@ -90,7 +90,7 @@ public class UserSearch extends Menu {
                     User user = this.chocomint.getUserManager().getUser(username);
                     user.setStatus(this.chocomint.getAlmendra().getConnectedUsers().contains(user.getUsername()) ? User.Status.ONLINE : User.Status.OFFLINE);
                     this.filteredUserMap.put(username,
-                            new UserCard(chocomint, this.mc, user, true, false, (u) ->
+                            new UserCard(this.mc, user, true, false, (u) ->
                                     this.mc.displayGuiScreen(new UserScreen(this.previous, this.chocomint, u)))
                     );
                 }
