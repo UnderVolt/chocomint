@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import io.undervolt.api.event.events.ConnectToAlmendraEvent;
 import io.undervolt.api.event.events.GameShutdownEvent;
 import io.undervolt.api.event.events.UserLoginEvent;
 import io.undervolt.api.event.handler.EventHandler;
@@ -114,7 +115,8 @@ public class Almendra implements Listener {
 
                         if(i == 0) {
                             this.chatManager.addTab(tab);
-                            tab.addMessage(null, "\247e¡Bienvenido a chocomint!");
+                            tab.addMessage(null, "\247aConectando a Almendra...");
+                            tab.addMessage(null, "\247e¡Bienvenido a Almendra!");
                             tab.addMessage(null, "\247c" + MOTD);
                         }
                     }
@@ -132,6 +134,7 @@ public class Almendra implements Listener {
                 }
 
                 this.setMOTD(r);
+                this.chocomint.getEventManager().callEvent(new ConnectToAlmendraEvent());
 
             });
 
@@ -209,13 +212,33 @@ public class Almendra implements Listener {
                 );
             });
 
-            socket.on("disconnect", data -> {
-               this.setMOTD(null);
-               Multithreading.delay(()-> {
-                   if(!this.chocomint.getUser().getUsername().equals("Guest")) this.connectToSocket(this.ALMENDRA_ENDPOINT);
-               }, 60, TimeUnit.SECONDS);
+            socket.on(Socket.EVENT_DISCONNECT, data -> {
+                this.handleEndOfData();
             });
+
+            socket.on(Socket.EVENT_CONNECT_ERROR, data -> {
+                this.handleEndOfData();
+            });
+
+            socket.on(Socket.EVENT_RECONNECT_FAILED, data -> {
+                this.handleEndOfData();
+            });
+
+            socket.on(Socket.EVENT_CONNECT_TIMEOUT, data -> {
+                this.handleEndOfData();
+            });
+
         });
+    }
+
+    public void handleEndOfData() {
+        this.setMOTD(null);
+        this.getConnectedUsers().clear();
+        this.getAvailableRooms().clear();
+        this.isAuthenticated = false;
+        if(this.mc.currentScreen instanceof Chat) {
+            ((Chat) this.mc.currentScreen).update(false);
+        }
     }
 
     public void sendFriendRequestPacket(String username) {
