@@ -36,10 +36,12 @@ public class Almendra implements Listener {
     private final Sambayon sambayon;
     private final Minecraft mc;
     private final FontRenderer fontRenderer;
+
     private final String ALMENDRA_ENDPOINT;
     private final Map<String, Tab> availableRooms = Maps.newHashMap();
     private List<String> connectedUsers = Lists.newArrayList();
     private String MOTD;
+    private boolean isAuthenticated = false;
 
     public Almendra(final Chocomint chocomint) throws URISyntaxException {
         this.chocomint = chocomint;
@@ -72,9 +74,19 @@ public class Almendra implements Listener {
             System.out.println("Establecida conexión con los servidores de Almendra");
             socket.emit("join", new AlmendraSession(this.chocomint.getConfig().getToken(), this.chocomint.getUser().getUsername()).getParsedData());
 
+            socket.on("auth-fail", response -> {
+                this.isAuthenticated = false;
+                try {
+                    throw new Exception(Arrays.toString(response));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
             socket.on("welcome", response -> {
 
                 System.out.println("Conectado a Almendra con éxito.");
+                this.isAuthenticated = true;
 
                 String r = Arrays.toString(response);
                 r = r.substring(1, r.length() - 1);
@@ -340,5 +352,9 @@ public class Almendra implements Listener {
 
     public List<String> getConnectedUsers() {
         return connectedUsers;
+    }
+
+    public boolean isAuthenticated() {
+        return isAuthenticated;
     }
 }
