@@ -17,18 +17,23 @@ import io.undervolt.gui.RenderUtils;
 import io.undervolt.gui.chat.ChatManager;
 import io.undervolt.gui.contributors.ContributorsManager;
 import io.undervolt.gui.friends.FriendsManager;
+import io.undervolt.gui.notifications.Notification;
 import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.gui.notifications.NotificationOverlay;
 import io.undervolt.gui.user.User;
 import io.undervolt.gui.user.UserManager;
+import io.undervolt.gui.user.UserProfilePictureManager;
 import io.undervolt.mod.ModLoader;
+import io.undervolt.utils.Multithreading;
 import io.undervolt.utils.RestUtils;
 import io.undervolt.utils.config.Config;
 import io.undervolt.utils.config.ConfigurableManager;
 import io.undervolt.utils.config.ProfileLoader;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiMainMenu;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 public class Chocomint implements Listener {
 
@@ -40,7 +45,8 @@ public class Chocomint implements Listener {
 
     private User user;
     private final String chocomintUser;
-    private final UserManager userManager;
+    private UserManager userManager;
+    private final UserProfilePictureManager userProfilePictureManager;
 
     private final Sambayon sambayon;
 
@@ -61,12 +67,14 @@ public class Chocomint implements Listener {
 
     private final ProfileLoader loader;
     private final ConfigurableManager configurableManager;
-    private final Config config;
+    private Config config;
     private ModLoader modLoader;
     private File rootPath;
 
     private final RenderUtils renderUtils;
-    private final RestUtils restUtils;
+    private RestUtils restUtils;
+
+    public boolean IS_ONLINE = false;
 
     // Configurables
     private Background background;
@@ -86,13 +94,9 @@ public class Chocomint implements Listener {
         this.eventManager = new EventManager();
         this.sambayon = new Sambayon(this);
         this.renderUtils = new RenderUtils(mc);
-        this.restUtils = new RestUtils(this);
         this.mc = mc;
         this.chocomintUser = "\247bchocomint";
-        this.userManager = new UserManager(this);
-        this.friendsManager = new FriendsManager(this);
-        this.config = new Config(this);
-        this.user = this.userManager.setUser(this.config.getToken());
+        this.userProfilePictureManager = new UserProfilePictureManager();
     }
 
     public void init(LaunchType type){
@@ -125,28 +129,29 @@ public class Chocomint implements Listener {
                 break;
             case INIT:
 
+                this.initOfflineUser();
                 this.screenshotUploader = new ScreenshotUploader(this);
                 this.notificationOverlay = new NotificationOverlay(this);
 
                 this.getEventManager().registerEvents(this.notificationOverlay);
+                this.config = new Config(this);
+
+                this.getConfig().loadMinecraftSession();
+
+                this.friendsManager = new FriendsManager();
 
                 this.eventManager.callEvent(new InitEvent.ClientInitEvent());
 
                 //TODO: Register events & hooks
                 break;
             case POSTINIT:
-                this.getConfig().loadMinecraftSession();
+
+                Multithreading.schedule(this::checkAndLoadOnlinePlay, 0, 30, TimeUnit.SECONDS);
+
                 this.contributorsManager = new ContributorsManager(this.mc);
 
                 this.chatManager = new ChatManager(this);
                 this.console = new Console(this);
-
-                try {
-                    this.almendra = new Almendra(this);
-                    this.getEventManager().registerEvents(this.almendra);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
                 // Register Commands
                 this.console.registerCommand(new VersionCommand(this));
@@ -157,6 +162,35 @@ public class Chocomint implements Listener {
                 //TODO: Throw post setup
                 break;            
         }
+    }
+
+    public void checkAndLoadOnlinePlay() {
+        if(!this.IS_ONLINE) {
+            if (this.sambayon.isAccesible()) {
+                this.restUtils = new RestUtils(this);
+                this.config = new Config(this);
+                this.userManager = new UserManager(this);
+                this.getConfig().loadToken();
+                this.friendsManager = new FriendsManager();
+                this.user = this.userManager.setUser(this.config.getToken());
+                try {
+                    this.almendra = new Almendra(this);
+                    this.getEventManager().registerEvents(this.almendra);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                this.notificationManager.addNotification(new Notification(Notification.Priority.NOTICE, "Sesión iniciada", "Se ha iniciado la sesión correctamente", (a)->{}));
+                this.IS_ONLINE = true;
+
+            } else {
+                this.notificationManager.addNotification(new Notification(Notification.Priority.CRITICAL, "Sesión fallida", "Reintentando en 30 segundos.", (a)->{}));
+                this.IS_ONLINE = false;
+            }
+        }
+    }
+
+    public void initOfflineUser() {
+        this.user = new User("Guest", User.Status.OFFLINE, null, false, null, null, null, null);
     }
 
     public GameBridge getGameBridge() {
@@ -264,5 +298,9 @@ public class Chocomint implements Listener {
         long seconds = (milliseconds / 1000) % 60;
 
         return minutes + " minutos y " + seconds + " segundos";
+    }
+
+    public UserProfilePictureManager getUserProfilePictureManager() {
+        return userProfilePictureManager;
     }
 }
