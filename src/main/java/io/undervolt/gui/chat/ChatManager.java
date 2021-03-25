@@ -42,7 +42,7 @@ public class ChatManager {
     }
 
     public void removeTabs() {
-        this.openTabs.removeIf(tab -> !tab.equals(this.reservedServerTab) || !tab.equals(this.reservedLogTab));
+        this.openTabs.removeIf(tab -> (tab != this.reservedServerTab) || (tab != this.reservedLogTab));
     }
 
     public Tab getOrCreateTabByName(final String tabName) {
