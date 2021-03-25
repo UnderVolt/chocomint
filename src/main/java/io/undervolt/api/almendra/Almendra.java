@@ -11,7 +11,6 @@ import io.undervolt.api.event.handler.Listener;
 import io.undervolt.api.sambayon.Sambayon;
 import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.chat.ChatManager;
-import io.undervolt.gui.chat.Message;
 import io.undervolt.gui.chat.Tab;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.gui.user.User;
@@ -20,7 +19,6 @@ import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.Multithreading;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiScreen;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,7 +70,7 @@ public class Almendra implements Listener {
 
             socket.on(Socket.EVENT_CONNECT, args -> {
                 System.out.println("Establecida conexión con los servidores de Almendra");
-                socket.emit("join", this.chocomint.getUser().getUsername());
+                socket.emit("join", new AlmendraSession(this.chocomint.getConfig().getToken(), this.chocomint.getUser().getUsername()).getParsedData());
 
                 socket.on("welcome", response -> {
 
@@ -198,7 +196,6 @@ public class Almendra implements Listener {
                             new Notification(Notification.Priority.SOCIAL, "Amigo eliminado", "Ahora " + r + "ya no es tu amigo", a-> {})
                     );
                 });
-
             });
         });
     }
@@ -262,20 +259,36 @@ public class Almendra implements Listener {
     }
 
     public void sendMessage(final Tab tab, final String message, final User user) {
-        try {
-            if(this.getConnectedUsers().contains(tab.getName()) || tab.getName().startsWith("#")) {
-                this.socket.emit("sendMessage", new JSONObject(new AlmendraMessage(user, tab.getName(), message).toString()));
-                this.chatManager.getSelectedTab().addMessage((user.isDeveloper() ? "§9" : "") + user.getUsername(), message);
-            } else {
-                this.chatManager.getSelectedTab().addMessage(null, "\247cEl usuario que estás intentando contactar está desconectado.");
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if(this.getConnectedUsers().contains(tab.getName()) || tab.getName().startsWith("#")) {
+            this.socket.emit("sendMessage", new AlmendraMessage(user, tab.getName(), message).getParsedData());
+            this.chatManager.getSelectedTab().addMessage((user.isDeveloper() ? "§9" : "") + user.getUsername(), message);
+        } else {
+            this.chatManager.getSelectedTab().addMessage(null, "\247cEl usuario que estás intentando contactar está desconectado.");
         }
     }
 
     public Map<String, Tab> getAvailableRooms() {
         return availableRooms;
+    }
+
+    static class AlmendraSession {
+        public final String token, username;
+
+        public AlmendraSession(String token, String username) {
+            this.token = token;
+            this.username = username;
+        }
+
+        public JSONObject getParsedData() {
+            final JSONObject theObject = new JSONObject();
+            try {
+                theObject.put("token", this.token);
+                theObject.put("username", this.username);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return theObject;
+        }
     }
 
     static class AlmendraMessage {
@@ -289,8 +302,17 @@ public class Almendra implements Listener {
             this.message = message;
         }
 
-        public String toString() {
-            return "{\"from\":\"" + from + "\", \"to\":\"" + to + "\", \"message\":\"" + message + "\", \"developer\":" + developer + "}";
+        public JSONObject getParsedData() {
+            final JSONObject theObject = new JSONObject();
+            try {
+                theObject.put("from", this.from);
+                theObject.put("to", this.to);
+                theObject.put("message", this.message);
+                theObject.put("developer", this.developer);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return theObject;
         }
     }
 
