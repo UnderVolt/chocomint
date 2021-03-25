@@ -27,6 +27,7 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class Almendra implements Listener {
     private final Chocomint chocomint;
@@ -61,141 +62,146 @@ public class Almendra implements Listener {
     }
 
     public void connectToSocket(final String endpoint) {
-        Multithreading.runAsync(() -> {
-            try {
-                this.socket = IO.socket(endpoint).connect();
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
+        try {
+            this.socket = IO.socket(endpoint).connect();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
 
-            socket.on(Socket.EVENT_CONNECT, args -> {
-                System.out.println("Establecida conexión con los servidores de Almendra");
-                socket.emit("join", new AlmendraSession(this.chocomint.getConfig().getToken(), this.chocomint.getUser().getUsername()).getParsedData());
+        socket.on(Socket.EVENT_CONNECT, args -> {
+            System.out.println("Establecida conexión con los servidores de Almendra");
+            socket.emit("join", new AlmendraSession(this.chocomint.getConfig().getToken(), this.chocomint.getUser().getUsername()).getParsedData());
 
-                socket.on("welcome", response -> {
+            socket.on("welcome", response -> {
 
-                    System.out.println("Conectado a Almendra con éxito.");
+                System.out.println("Conectado a Almendra con éxito.");
 
-                    String r = Arrays.toString(response);
-                    r = r.substring(1, r.length() - 1);
+                String r = Arrays.toString(response);
+                r = r.substring(1, r.length() - 1);
 
-                    JSONObject json;
+                JSONObject json;
 
-                    JSONArray rooms;
-                    JSONArray connectedUsers;
-                    String MOTD;
+                JSONArray rooms;
+                JSONArray connectedUsers;
+                String MOTD;
 
-                    try {
+                try {
 
-                        json = new JSONObject(r);
+                    json = new JSONObject(r);
 
-                        rooms = json.getJSONArray("rooms");
-                        connectedUsers = json.getJSONArray("connectedUsers");
-                        MOTD = json.getString("MOTD");
+                    rooms = json.getJSONArray("rooms");
+                    connectedUsers = json.getJSONArray("connectedUsers");
+                    MOTD = json.getString("MOTD");
 
-                        this.setMOTD(MOTD);
+                    this.setMOTD(MOTD);
 
-                        for (int i = 0; i < rooms.length(); i++) {
+                    for (int i = 0; i < rooms.length(); i++) {
 
-                            Tab tab = new Tab(true, rooms.getString(i), 0, false);
-                            this.availableRooms.put(rooms.getString(i), tab);
+                        Tab tab = new Tab(true, rooms.getString(i), 0, false);
+                        this.availableRooms.put(rooms.getString(i), tab);
 
-                            if(i == 0) {
-                                this.chatManager.addTab(tab);
-                                tab.addMessage(null, "\247e¡Bienvenido a chocomint!");
-                                tab.addMessage(null, "\247c" + MOTD);
-                            }
+                        if(i == 0) {
+                            this.chatManager.addTab(tab);
+                            tab.addMessage(null, "\247e¡Bienvenido a chocomint!");
+                            tab.addMessage(null, "\247c" + MOTD);
                         }
-
-                        for (int i = 0; i < connectedUsers.length(); i++) {
-                            this.connectedUsers.add(connectedUsers.getString(i));
-                            if(this.chocomint.getFriendsManager().friendsPool.get(connectedUsers.getString(i)) != null)
-                                this.chocomint.getFriendsManager().setFriendStatus(connectedUsers.getString(i), User.Status.ONLINE);
-                        }
-
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
 
-                    this.setMOTD(r);
-
-                });
-
-                socket.on("userConnect", response -> {
-
-                    String username = Arrays.toString(response);
-                    username = username.substring(1, username.length() - 1);
-
-                    this.connectedUsers.add(username);
-
-                    if(this.chocomint.getFriendsManager().friendsPool.get(username) != null)
-                        this.chocomint.getFriendsManager().setFriendStatus(username, User.Status.ONLINE);
-
-                    System.out.println("Añadido " + username + " a la lista de usuarios conectados.");
-
-                });
-
-                socket.on("userDisconnected", response -> {
-                    String username = Arrays.toString(response);
-                    username = username.substring(1, username.length() - 1);
-
-                    this.connectedUsers.remove(username);
-
-                    if(this.chocomint.getFriendsManager().friendsPool.get(username) != null)
-                        this.chocomint.getFriendsManager().setFriendStatus(username, User.Status.OFFLINE);
-
-                    System.out.println("Removido " + username + " a la lista de usuarios conectados.");
-                });
-
-                socket.on("receiveMessage", message -> {
-
-                    String r = Arrays.toString(message);
-                    r = r.substring(1, r.length() - 1);
-
-                    try {
-                        this.receiveMessage(new JSONObject(r));
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    for (int i = 0; i < connectedUsers.length(); i++) {
+                        this.connectedUsers.add(connectedUsers.getString(i));
+                        if(this.chocomint.getFriendsManager().friendsPool.get(connectedUsers.getString(i)) != null)
+                            this.chocomint.getFriendsManager().setFriendStatus(connectedUsers.getString(i), User.Status.ONLINE);
                     }
-                });
 
-                socket.on("receiveFriendRequest", username -> {
-                    String r = Arrays.toString(username);
-                    r = r.substring(1, r.length() - 1);
 
-                    if(!this.chocomint.getFriendsManager().friendRequestPool.containsKey(r)) {
-                        this.chocomint.getFriendsManager().friendRequestPool.put(r, this.chocomint.getUserManager().getUser(r));
-                        String finalR = r;
-                        this.chocomint.getNotificationManager().addNotification(
-                                new Notification(Notification.Priority.SOCIAL, "Nueva solicitud de amistad", r + "quiere ser tu amigo",
-                                        a->this.mc.displayGuiScreen(new UserScreen(a, chocomint, this.chocomint.getUserManager().getUser(finalR))))
-                        );
-                    }
-                });
 
-                socket.on("friendRequestAccepted", username -> {
-                    String r = Arrays.toString(username);
-                    r = r.substring(1, r.length() - 1);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-                    this.chocomint.getFriendsManager().friendsPool.put(r, this.chocomint.getUserManager().getUser(r));
+                this.setMOTD(r);
+
+            });
+
+            socket.on("userConnect", response -> {
+
+                String username = Arrays.toString(response);
+                username = username.substring(1, username.length() - 1);
+
+                this.connectedUsers.add(username);
+
+                if(this.chocomint.getFriendsManager().friendsPool.get(username) != null)
+                    this.chocomint.getFriendsManager().setFriendStatus(username, User.Status.ONLINE);
+
+                System.out.println("Añadido " + username + " a la lista de usuarios conectados.");
+
+            });
+
+            socket.on("userDisconnected", response -> {
+                String username = Arrays.toString(response);
+                username = username.substring(1, username.length() - 1);
+
+                this.connectedUsers.remove(username);
+
+                if(this.chocomint.getFriendsManager().friendsPool.get(username) != null)
+                    this.chocomint.getFriendsManager().setFriendStatus(username, User.Status.OFFLINE);
+
+                System.out.println("Removido " + username + " a la lista de usuarios conectados.");
+            });
+
+            socket.on("receiveMessage", message -> {
+
+                String r = Arrays.toString(message);
+                r = r.substring(1, r.length() - 1);
+
+                try {
+                    this.receiveMessage(new JSONObject(r));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+            socket.on("receiveFriendRequest", username -> {
+                String r = Arrays.toString(username);
+                r = r.substring(1, r.length() - 1);
+
+                if(!this.chocomint.getFriendsManager().friendRequestPool.containsKey(r)) {
+                    this.chocomint.getFriendsManager().friendRequestPool.put(r, this.chocomint.getUserManager().getUser(r));
                     String finalR = r;
                     this.chocomint.getNotificationManager().addNotification(
-                            new Notification(Notification.Priority.SOCIAL, "Solicitud de amistad aceptada", "Ahora " + r + "es tu amigo!",
+                            new Notification(Notification.Priority.SOCIAL, "Nueva solicitud de amistad", r + "quiere ser tu amigo",
                                     a->this.mc.displayGuiScreen(new UserScreen(a, chocomint, this.chocomint.getUserManager().getUser(finalR))))
                     );
-                });
+                }
+            });
 
-                socket.on("friendDeletion", username -> {
-                    String r = Arrays.toString(username);
-                    r = r.substring(1, r.length() - 1);
+            socket.on("friendRequestAccepted", username -> {
+                String r = Arrays.toString(username);
+                r = r.substring(1, r.length() - 1);
 
-                    this.chocomint.getFriendsManager().friendsPool.remove(r);
-                    this.chocomint.getNotificationManager().addNotification(
-                            new Notification(Notification.Priority.SOCIAL, "Amigo eliminado", "Ahora " + r + "ya no es tu amigo", a-> {})
-                    );
-                });
+                this.chocomint.getFriendsManager().friendsPool.put(r, this.chocomint.getUserManager().getUser(r));
+                String finalR = r;
+                this.chocomint.getNotificationManager().addNotification(
+                        new Notification(Notification.Priority.SOCIAL, "Solicitud de amistad aceptada", "Ahora " + r + "es tu amigo!",
+                                a->this.mc.displayGuiScreen(new UserScreen(a, chocomint, this.chocomint.getUserManager().getUser(finalR))))
+                );
+            });
+
+            socket.on("friendDeletion", username -> {
+                String r = Arrays.toString(username);
+                r = r.substring(1, r.length() - 1);
+
+                this.chocomint.getFriendsManager().friendsPool.remove(r);
+                this.chocomint.getNotificationManager().addNotification(
+                        new Notification(Notification.Priority.SOCIAL, "Amigo eliminado", "Ahora " + r + "ya no es tu amigo", a-> {})
+                );
+            });
+
+            socket.on("disconnect", data -> {
+               this.setMOTD(null);
+               Multithreading.delay(()-> {
+                   if(!this.chocomint.getUser().getUsername().equals("Guest")) this.connectToSocket(this.ALMENDRA_ENDPOINT);
+               }, 60, TimeUnit.SECONDS);
             });
         });
     }
