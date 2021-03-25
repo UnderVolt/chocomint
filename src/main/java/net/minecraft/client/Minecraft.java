@@ -582,20 +582,12 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         this.checkGLError("Post startup");
         this.ingameGUI = new GuiIngame(this);
 
-        //[Mint]: Post Init
-        this.mint.init(LaunchType.POSTINIT);
-
-        if (this.serverName != null)
-        {
-            this.displayGuiScreen(new GuiConnecting(new GuiMainMenu(), this, this.serverName, this.serverPort));
-        }
-        else
-        {
-            this.displayGuiScreen(new GuiMainMenu());
-        }
-
         this.renderEngine.deleteTexture(this.mojangLogo);
         this.mojangLogo = null;
+
+        this.displayGuiScreen(new GuiMainMenu());
+        System.out.println("Cargado menú principal");
+
         this.loadingScreen = new LoadingScreenRenderer(this);
 
         if (this.gameSettings.fullScreen && !this.fullscreen)
@@ -614,6 +606,9 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         }
 
         this.renderGlobal.makeEntityOutlineShader();
+
+        //[Mint]: Post Init
+        this.mint.init(LaunchType.POSTINIT);
     }
 
     private void registerMetadataSerializers()
