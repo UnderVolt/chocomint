@@ -44,18 +44,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.audio.MusicTicker;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiControls;
-import net.minecraft.client.gui.GuiGameOver;
-import net.minecraft.client.gui.GuiIngame;
-import net.minecraft.client.gui.GuiIngameMenu;
-import net.minecraft.client.gui.GuiMainMenu;
-import net.minecraft.client.gui.GuiMemoryErrorScreen;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiSleepMP;
-import net.minecraft.client.gui.GuiYesNo;
-import net.minecraft.client.gui.GuiYesNoCallback;
-import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.*;
 import net.minecraft.client.gui.achievement.GuiAchievement;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.gui.stream.GuiStreamUnavailable;
@@ -2106,12 +2095,19 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
 
             while (this.gameSettings.keyBindPlayerList.isPressed() && flag)
             {
-                this.displayGuiScreen(new Chat("", null, this.getChocomint(), this.currentServerData));
+                if(this.getChocomint().IS_ONLINE)
+                    this.displayGuiScreen(new Chat("", null, this.getChocomint(), this.currentServerData));
+                else
+                    this.displayGuiScreen(new GuiChat());
             }
 
             if (this.currentScreen == null && this.gameSettings.keyBindScreenshot.isPressed() && flag)
             {
-                this.displayGuiScreen(new Chat("/", null, this.getChocomint(), this.currentServerData));
+                if(this.getChocomint().IS_ONLINE)
+                    this.displayGuiScreen(new Chat("/", null, this.getChocomint(), this.currentServerData));
+                else
+                    this.displayGuiScreen(new GuiChat("/"));
+
             }
 
             if (this.thePlayer.isUsingItem())

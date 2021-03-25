@@ -41,8 +41,6 @@ public class Config {
 
         this.tkC = new File(this.mc.mcDataDir, "uvpt.json");
         this.mojCrd = new File(this.mc.mcDataDir, "mojcrd.json");
-
-        this.loadToken();
     }
 
     public void loadMinecraftSession() {
@@ -91,7 +89,7 @@ public class Config {
         }
     }
 
-    private void loadToken(){
+    public void loadToken() {
         System.out.println("Cargando token");
 
         try {
