@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.gui.user.User;
 import io.undervolt.gui.user.UserManager;
@@ -27,8 +28,8 @@ public class FriendsManager {
     public final Map<String, User> friendsPool = Maps.newHashMap();
     public final Map<String, User> friendRequestPool = Maps.newHashMap();
 
-    public FriendsManager(final Chocomint chocomint) {
-        this.chocomint = chocomint;
+    public FriendsManager() {
+        this.chocomint = GameBridge.getChocomint();
         this.userManager = chocomint.getUserManager();
         this.restUtils = chocomint.getRestUtils();
         this.gson = new GsonBuilder().create();
