@@ -179,7 +179,7 @@ public class Chat extends AnimationUI {
         GL11.glPopMatrix();
 
         drawRect(0, this.height - 12, this.width, this.height, new Color(0,0,0,130).getRGB());
-        if(this.chocomint.getUser().getUsername().equals("Guest") && this.chatManager.getSelectedTab() != this.chatManager.getReservedServerTab()
+        if((!this.almendra.isAuthenticated()) && this.chatManager.getSelectedTab() != this.chatManager.getReservedServerTab()
                 && this.chatManager.getSelectedTab() != this.chatManager.getReservedLogTab())
             this.fontRendererObj.drawString("Inicia sesión para poder hablar",10, this.height - 10, Color.GRAY.getRGB());
         else
