@@ -2,11 +2,15 @@ package net.minecraft.client.gui;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.*;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import io.undervolt.bridge.GameBridge;
@@ -17,6 +21,7 @@ import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.user.UserSearch;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.AnimationUI;
+import io.undervolt.utils.Multithreading;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -95,6 +100,7 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
 
     /** Chat button */
     private GameBarButton chatButton;
+    private GameBarButton usuariosButton;
 
     /** Chocomint */
     private final Chocomint chocomint;
@@ -108,6 +114,7 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
     private GuiScreen M;
     private GuiButton modButton;
     private GuiScreen modUpdateNotification;
+    private boolean isAuthenticated = false;
 
     public GuiMainMenu() {
         this.chocomint = GameBridge.getChocomint();
@@ -273,8 +280,11 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
 
         this.buttonList.add(chatButton = new GameBarButton(103,
                 this.width - 52, this.height - 15, 50, 15, "Chat"));
-        this.buttonList.add(new GameBarButton(104,
+        this.buttonList.add(usuariosButton = new GameBarButton(104,
                 this.width - 112, this.height - 15, 55, 15, "Usuarios"));
+
+        this.chatButton.enabled = this.isAuthenticated;
+        this.usuariosButton.enabled = this.isAuthenticated;
 
         this.mc.setConnectedToRealms(false);
 
@@ -291,6 +301,11 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
             this.M.initGui();
         }
         super.initGui();
+
+        Multithreading.schedule(()->{
+            if(this.chocomint.getAlmendra() != null)
+                this.isAuthenticated = this.chocomint.getAlmendra().isAuthenticated();
+        }, 0, 5, TimeUnit.SECONDS);
 
         this.gameBar.init(width, height);
     }
@@ -386,8 +401,9 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
                 this.mc.displayGuiScreen(guiyesno);
             }
         }
-        if(button.id == 103) this.mc.displayGuiScreen(new Chat("", this, this.mc.getChocomint(), null));
-        if(button.id == 104) this.mc.displayGuiScreen(new UserSearch(this, this.chocomint));
+
+        if (button.id == 103) this.mc.displayGuiScreen(new Chat("", this, this.mc.getChocomint(), null));
+        if (button.id == 104) this.mc.displayGuiScreen(new UserSearch(this, this.chocomint));
 
         super.actionPerformed(button);
 
@@ -668,6 +684,12 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
         this.drawCenteredString(this.fontRendererObj, this.splashText, 0, -8, -256);
         GlStateManager.popMatrix();
         String s = this.chocomint.getCommitName();
+        this.chatButton.enabled = this.isAuthenticated;
+        this.usuariosButton.enabled = this.isAuthenticated;
+
+        if(!this.isAuthenticated && !this.chocomint.getUser().getUsername().equals("Guest")) {
+            drawCenteredString(this.fontRendererObj, "Conectando a Almendra...", this.width / 2, this.height - 11, Color.white.getRGB());
+        }
 
         if (Reflector.FMLCommonHandler_getBrandings.exists())
         {
