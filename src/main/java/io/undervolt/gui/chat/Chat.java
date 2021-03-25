@@ -74,7 +74,7 @@ public class Chat extends AnimationUI {
     @Override
     public void initGui() {
 
-        this.chatHeight = (int) (this.mc.theWorld == null ? this.height * .33 : this.height * .66);
+        this.chatHeight = (int) (this.height * .33);
 
         this.sentHistoryCursor = this.chatManager.getSentMessages().size();
 
@@ -160,7 +160,7 @@ public class Chat extends AnimationUI {
         GlStateManager.translate(0, scroll, 0);
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor(0, 0, this.width * 2, (int)(this.mc.theWorld == null ? this.height * 2 - this.height * .66 : this.height * .66 + 10));
+        GL11.glScissor(0, 0, this.width * 2, (int)(this.height * 2 - this.height * .66));
         GL11.glColor3f(255,255,255);
 
         if(this.chatManager.getSelectedTab() != null) {
@@ -291,7 +291,7 @@ public class Chat extends AnimationUI {
 
         if (i < 0 && !(this.scroll <= 0)) this.scroll -=7.8;
         else if (i > 0  && (this.scroll <= (this.chatManager.getSelectedTab().getMessages().size() * 12) -
-                (this.mc.theWorld != null ? this.height * .33 : this.height * .66) + 12)) this.scroll += 7.8;
+                (this.height * .66) + 12)) this.scroll += 7.8;
     }
 
     public Console getConsole() {
