@@ -53,7 +53,6 @@ public class Menu extends AnimationUI {
 
         if(tw != 0) {
             tw = (this.getAnimationTime(this.ftime, 3000.0D) * 400D);
-            System.out.println("Set tw to " + tw);
         }
 
         if(tw == 0) {
