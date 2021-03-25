@@ -39,6 +39,7 @@ import javax.imageio.ImageIO;
 import io.undervolt.api.event.events.GameShutdownEvent;
 import io.undervolt.api.event.events.TickEvent;
 import io.undervolt.gui.chat.Chat;
+import io.undervolt.gui.splash.Splash;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.audio.MusicTicker;
@@ -480,7 +481,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
 
         logger.info("LWJGL Version: " + Sys.getVersion());
         this.setWindowIcon();
-        this.setInitialDisplayMode();
+        this.setLoadingScreenDisplayMode();
         this.createDisplay();
         OpenGlHelper.initializeTextures();
         this.framebufferMc = new Framebuffer(this.displayWidth, this.displayHeight, true);
@@ -493,7 +494,8 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         this.refreshResources();
         this.renderEngine = new TextureManager(this.mcResourceManager);
         this.mcResourceManager.registerReloadListener(this.renderEngine);
-        this.drawSplashScreen(this.renderEngine);
+        Splash.launchSplashWindow(this.mcResourceManager);
+        //this.drawSplashScreen(this.renderEngine);
         this.initStream();
         this.skinManager = new SkinManager(this.renderEngine, new File(this.fileAssets, "skins"), this.sessionService);
         this.saveLoader = new AnvilSaveConverter(new File(this.mcDataDir, "saves"));
@@ -569,6 +571,8 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         GlStateManager.viewport(0, 0, this.displayWidth, this.displayHeight);
         this.effectRenderer = new EffectRenderer(this.theWorld, this.renderEngine);
         this.checkGLError("Post startup");
+        this.setInitialDisplayMode();
+        Splash.removeSplashWindow();
         this.ingameGUI = new GuiIngame(this);
 
         this.renderEngine.deleteTexture(this.mojangLogo);
@@ -653,8 +657,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         }
     }
 
-    private void setInitialDisplayMode() throws LWJGLException
-    {
+    private void setInitialDisplayMode() throws LWJGLException {
         if (this.fullscreen)
         {
             Display.setFullscreen(true);
@@ -666,6 +669,10 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         {
             Display.setDisplayMode(new DisplayMode(this.displayWidth, this.displayHeight));
         }
+    }
+
+    private void setLoadingScreenDisplayMode() throws LWJGLException {
+        Display.setDisplayMode(new DisplayMode(0, 0));
     }
 
     private void setWindowIcon()
