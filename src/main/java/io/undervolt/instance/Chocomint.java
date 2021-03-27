@@ -139,6 +139,7 @@ public class Chocomint implements Listener {
                 this.getConfig().loadMinecraftSession();
 
                 this.friendsManager = new FriendsManager();
+                this.contributorsManager = new ContributorsManager(this.mc);
 
                 this.eventManager.callEvent(new InitEvent.ClientInitEvent());
 
@@ -147,8 +148,6 @@ public class Chocomint implements Listener {
             case POSTINIT:
 
                 Multithreading.schedule(this::checkAndLoadOnlinePlay, 0, 30, TimeUnit.SECONDS);
-
-                this.contributorsManager = new ContributorsManager(this.mc);
 
                 this.chatManager = new ChatManager(this);
                 this.console = new Console(this);
