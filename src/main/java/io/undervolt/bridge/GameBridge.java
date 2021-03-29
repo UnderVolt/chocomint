@@ -7,10 +7,16 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 
+import java.time.format.DateTimeFormatter;
+
 public class GameBridge {
 
     public static Chocomint getChocomint() {
         return Minecraft.getMinecraft().getChocomint();
+    }
+
+    public static DateTimeFormatter getHourFormatter() {
+        return DateTimeFormatter.ofPattern("HH:mm:ss");
     }
     
     public static Minecraft getMinecraft() {
