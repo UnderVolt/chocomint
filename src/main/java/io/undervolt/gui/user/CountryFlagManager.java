@@ -13,6 +13,7 @@ public class CountryFlagManager {
     protected static Map<String, DynamicTexture> flagCache = Maps.newHashMap();
 
     public DynamicTexture getCountryFlag(final String countryCode) {
+        if(countryCode == null) return null;
         if(this.getFlagCache().containsKey(countryCode)) return this.getFlagCache().get(countryCode);
         else {
             try {
