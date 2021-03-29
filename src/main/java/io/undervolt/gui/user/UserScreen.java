@@ -128,7 +128,7 @@ public class UserScreen extends Menu {
         GL11.glPopMatrix();
 
         String dateToDraw;
-        if(this.createdMonth.equals("ene.") && this.createdYear.equals("2020"))
+        if(this.createdMonth.contains("ene") && this.createdYear.equals("2020"))
             dateToDraw = "Desde el principio";
         else
             dateToDraw = "Se unió en " + this.createdMonth + " de " + this.createdYear;
