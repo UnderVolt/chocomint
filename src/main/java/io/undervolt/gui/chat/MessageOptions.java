@@ -6,6 +6,7 @@ import io.undervolt.utils.AnimationUI;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
+import java.awt.*;
 import java.io.IOException;
 
 public class MessageOptions extends AnimationUI {
@@ -37,7 +38,7 @@ public class MessageOptions extends AnimationUI {
     @Override
     public void initGui() {
         this.gameBar.init(width, height);
-        this.buttonList.add(this.sendPMButton = new GuiButton(100, this.width / 2 - 100, 25, "Enviar un mensaje privado"));
+        //this.buttonList.add(this.sendPMButton = new GuiButton(100, this.width / 2 - 100, 25, "Enviar un mensaje privado"));
 
         // Will remove comment when implemented
         //this.buttonList.add(this.reportMessageButton = new GuiButton(101, this.width / 2 - 100, 25, "Reportar jugador"));
@@ -48,6 +49,7 @@ public class MessageOptions extends AnimationUI {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         this.gameBar.draw(mouseX, mouseY, partialTicks, width, height);
+        drawCenteredString(this.fontRendererObj, "WIP", this.width / 2, (this.height + this.fontRendererObj.FONT_HEIGHT) / 2, Color.WHITE.getRGB());
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

@@ -54,7 +54,7 @@ public class Chat extends AnimationUI {
     private int chatHeight;
 
     /** Scroll implementation */
-    private float scroll = 0;
+    private int scroll = 0;
 
     public Chat(final String initialText, final GuiScreen prev, final Chocomint chocomint, final ServerData serverData) {
 
@@ -157,25 +157,16 @@ public class Chat extends AnimationUI {
         drawRect(0, this.chatHeight, this.width, this.height, new Color(36, 36, 36, 100).getRGB());
 
         GL11.glPushMatrix();
-        GlStateManager.translate(0, scroll, 0);
-        GL11.glPushMatrix();
-        GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor(0, 0, this.width * 2, (int)(this.height * 2 - this.height * .66));
         GL11.glColor3f(255,255,255);
 
         if(this.chatManager.getSelectedTab() != null) {
-            int i = this.height - 23;
+            int i = this.height - 23 + scroll;
             for (int id = this.chatManager.getSelectedTab().getMessages().size(); id-- > 0; ) {
-                Message message = this.chatManager.getSelectedTab().getMessages().get(id);
-                this.fontRendererObj.drawStringWithShadow("\247e" +
-                        (message.getUser() != null ? message.getUser() + "\247f: " : "")
-                        + message.getMessage(), 5, i, Color.WHITE.getRGB());
+                this.chatManager.getSelectedTab().getMessages().get(id).drawMessage(i, chatHeight);
                 i = i - 12;
             }
         }
 
-        GL11.glDisable(GL11.GL_SCISSOR_TEST);
-        GL11.glPopMatrix();
         GL11.glPopMatrix();
 
         drawRect(0, this.height - 12, this.width, this.height, new Color(0,0,0,130).getRGB());
@@ -279,6 +270,7 @@ public class Chat extends AnimationUI {
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         this.textField.mouseClicked(mouseX, mouseY, mouseButton);
         this.gameBar.mouseClicked(mouseX, mouseY, mouseButton, width, height);
+        this.chatManager.getSelectedTab().getMessages().forEach(message -> message.click(this, mouseX, mouseY));
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
@@ -289,9 +281,9 @@ public class Chat extends AnimationUI {
 
         int i = Mouse.getEventDWheel();
 
-        if (i < 0 && !(this.scroll <= 0)) this.scroll -=7.8;
+        if (i < 0 && !(this.scroll <= 0)) this.scroll -=8;
         else if (i > 0  && (this.scroll <= (this.chatManager.getSelectedTab().getMessages().size() * 12) -
-                (this.height * .66) + 12)) this.scroll += 7.8;
+                (this.height * .66) + 12)) this.scroll += 8;
     }
 
     public Console getConsole() {
