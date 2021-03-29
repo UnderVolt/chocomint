@@ -141,5 +141,9 @@ public class GuiIngameMenu extends AnimationUI {
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
-
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        this.gameBar.mouseClicked(mouseX, mouseY, mouseButton, width, height);
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+    }
 }
