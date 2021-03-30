@@ -69,7 +69,7 @@ public class Menu extends AnimationUI {
 
         this.mc.getTextureManager().bindTexture(this.bracketRes);
 
-        drawModalRectWithCustomSizedTexture(-5, position - 50, 0, 0, this.width + 10, 50, this.width + 10,50);
+        drawModalRectWithCustomSizedTexture(-5, position - 48, 0, 0, this.width + 10, 50, this.width + 10,50);
         drawRect(0, position, this.width, pageSize, new Color(39, 39, 45).getRGB());
         drawRect(0, position, this.width, 20, new Color(54,57,63).getRGB());
 

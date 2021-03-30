@@ -150,7 +150,10 @@ public class UserScreen extends Menu {
             }
         }
 
-        drawRect(0, 120, this.width, this.height, new Color(54,57,63).getRGB());
+        this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/ui/bracket-simple.png"));
+        drawModalRectWithCustomSizedTexture(-1, 120, 0, 0, this.width + 2, 25, this.width + 2, 25);
+
+        drawRect(0, 143, this.width, this.height, new Color(54,57,63).getRGB());
         if(this.user.getUsername().equals(this.chocomint.getUser().getUsername()))
             drawCenteredString(this.fontRendererObj, "Has estado jugando por " + this.chocomint.getParsedOpenTime(), this.width / 2, 195, Color.WHITE.getRGB());
     }
