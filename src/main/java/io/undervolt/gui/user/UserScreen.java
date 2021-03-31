@@ -1,6 +1,7 @@
 package io.undervolt.gui.user;
 
 import io.undervolt.gui.GameBarButton;
+import io.undervolt.gui.MenuScrollClickableButton;
 import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.menu.Menu;
 import io.undervolt.gui.notifications.Notification;
@@ -38,11 +39,11 @@ public class UserScreen extends Menu {
 
     private boolean showDevInfoCard = false;
 
-    private GuiButton logOutButton;
-    private GuiButton profileSettingsButton;
-    private GuiButton friendRequestButton;
-    private GuiButton sendDMButton;
-    private GuiButton deleteFriendButton;
+    private MenuScrollClickableButton logOutButton;
+    private MenuScrollClickableButton profileSettingsButton;
+    private MenuScrollClickableButton friendRequestButton;
+    private MenuScrollClickableButton sendDMButton;
+    private MenuScrollClickableButton deleteFriendButton;
 
     public UserScreen(GuiScreen prev, Chocomint chocomint, final User user) {
         super(prev, chocomint, "Perfil", 0);
@@ -71,27 +72,49 @@ public class UserScreen extends Menu {
             this.drawAlias = false;
         }
 
-        if(this.user.getUsername().equals(this.chocomint.getUser().getUsername())) {
-            this.buttonList.add(this.logOutButton = new GuiButton(101, 20, 140, this.width - 40, 20, "Cerrar sesión"));
-            this.buttonList.add(this.profileSettingsButton = new GuiButton(102, 20, 165, this.width - 40, 20, "Opciones de perfil"));
-        } else {
-            if(this.isFriend) {
-                this.buttonList.add(this.sendDMButton = new GuiButton(103, 20, 140, this.width - 40, 20, "Enviar un mensaje privado"));
-                this.buttonList.add(this.deleteFriendButton = new GuiButton(105, 20, 165, this.width - 40, 20, "\247cEliminar amigo"));
-                if(!this.user.isOnline()) this.sendDMButton.enabled = false;
-            } else
-                if(this.chocomint.getFriendsManager().friendRequestPool.containsKey(this.user.getUsername()))
-                    this.buttonList.add(this.friendRequestButton = new GuiButton(106, 20, 140, this.width - 40, 20, "Aceptar solicitud de amistad"));
-                else
-                    this.buttonList.add(this.friendRequestButton = new GuiButton(104, 20, 140, this.width - 40, 20, "Enviar solicitud de amistad"));
-        }
+        this.logOutButton = new MenuScrollClickableButton("exit", (a)-> {
+            this.chocomint.getConfig().setToken(null);
+            this.chocomint.setUser(this.chocomint.getUserManager().setUser((String) null));
+            this.chocomint.getAlmendra().disconnect();
+            this.chocomint.getChatManager().removeTabs();
+            this.mc.displayGuiScreen(this.prev);
+        }, 20, 20, new Color(32,34,37).getRGB(), new Color(175, 27, 27).getRGB());
 
-        if(this.user.getUsername().equals("Guest")) {
-            this.friendRequestButton.enabled = false;
-            this.sendDMButton.enabled = false;
-            this.logOutButton.enabled = false;
-            this.profileSettingsButton.enabled = false;
-        }
+        this.profileSettingsButton = new MenuScrollClickableButton("external", (a)-> {
+            Desktop desktop = java.awt.Desktop.getDesktop();
+            try {
+                URI oURL = new URI("https://www.undervolt.io/user/" + this.user.getUsername());
+                desktop.browse(oURL);
+            } catch (URISyntaxException | IOException e) {
+                this.chocomint.getNotificationManager().addNotification(
+                        new Notification(Notification.Priority.WARNING, "Error abriendo el navegador", e.getMessage(), obj->{})
+                );
+                e.printStackTrace();
+            }
+        }, 16, 16, new Color(39, 39, 45).getRGB(), new Color(39, 39, 45).getRGB());
+
+        this.sendDMButton = new MenuScrollClickableButton("message", (a)-> {
+            this.chocomint.getChatManager().setSelectedTab(this.chocomint.getChatManager().getOrCreateTabByName(this.user.getUsername()));
+            this.mc.displayGuiScreen(new Chat("", this, this.chocomint, this.mc.getCurrentServerData()));
+        }, 20, 20, new Color(32,34,37).getRGB(), new Color(54,57,63).getRGB());
+
+        this.deleteFriendButton = new MenuScrollClickableButton("remove-friend", (a)-> {
+            this.user.removeFriend();
+            this.mc.displayGuiScreen(this);
+        }, 20, 20, new Color(32, 177, 32).getRGB(), new Color(175, 27, 27).getRGB());
+
+        this.friendRequestButton = new MenuScrollClickableButton(
+                this.chocomint.getFriendsManager().friendRequestPool.containsKey(this.user.getUsername()) ?
+                        "friend-check" : "add-friend", (a)-> {
+                    if(this.chocomint.getFriendsManager().friendRequestPool.containsKey(this.user.getUsername())) {
+                        this.user.acceptFriendRequest();
+                        this.mc.displayGuiScreen(this);
+                    } else {
+                        this.user.sendFriendRequest();
+                        this.friendRequestButton.setTexture("friend-check");
+                    }
+        }, 20, 20, new Color(32,34,37).getRGB(), new Color(54,57,63).getRGB());
+
 
         super.initGui();
     }
@@ -102,27 +125,44 @@ public class UserScreen extends Menu {
     }
 
     @Override
-    public void drawMenuItems(int mouseX, int mouseY, float partialTicks) {
+    public void drawMenuItems(int mouseX, int mouseY, float partialTicks, int x, int scroll) {
         this.setPageSize(this.height);
+
+        if(!this.user.getUsername().equals("Guest")) {
+            if(this.user.getUsername().equals(this.chocomint.getUser().getUsername())) {
+                this.logOutButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + 40);
+            } else {
+                if(this.isFriend) {
+                    this.sendDMButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + 40);
+                    this.deleteFriendButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + 65);
+                    if(!this.user.isOnline()) this.sendDMButton.setEnabled(false);
+                } else
+                if(this.chocomint.getFriendsManager().friendRequestPool.containsKey(this.user.getUsername()))
+                    this.friendRequestButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + 40);
+            }
+        }
+
         this.mc.getTextureManager().bindTexture(
                 this.mc.getTextureManager().getDynamicTextureLocation("pfp1", image));
-        Gui.drawModalRectWithCustomSizedTexture(20, 40, 0, 0, 60, 60, 60, 60);
+        Gui.drawModalRectWithCustomSizedTexture(x + 20, scroll + 40, 0, 0, 60, 60, 60, 60);
 
         GL11.glPushMatrix();
-        GlStateManager.translate(85, 45, 0);
+        GlStateManager.translate(x + 85, scroll + 45, 0);
         GlStateManager.scale(1.5, 1.5, 0);
         this.fontRendererObj.drawString(this.user.getAlias(), 0, 0, Color.white.getRGB());
         GL11.glPopMatrix();
 
-        if(drawAlias) this.fontRendererObj.drawString("(" + this.user.getUsername() + ")", 105, 60, Color.LIGHT_GRAY.getRGB());
+        if(drawAlias) this.fontRendererObj.drawString("(" + this.user.getUsername() + ")", x + 105, scroll + 60, Color.LIGHT_GRAY.getRGB());
         if(isFriend) {
             this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/icon/friends.png"));
-            drawModalRectWithCustomSizedTexture(84 + (int) (this.mc.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), 40, 0, 0, 20, 20, 20, 20);
-        }
+            drawModalRectWithCustomSizedTexture(x + 84 + (int) (this.mc.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), scroll + 40, 0, 0, 20, 20, 20, 20);
+            this.profileSettingsButton.draw(mouseX, mouseY, this.getContentMargin() + 107 + (int)(this.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), scroll + 41);
+        } else
+            this.profileSettingsButton.draw(mouseX, mouseY, this.getContentMargin() + 85 + (int)(this.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), scroll + 41);
 
         GL11.glPushMatrix();
         GL11.glColor3f(255, 255, 255);
-        GlStateManager.translate(85, 57, 0);
+        GlStateManager.translate(x + 85, scroll + 57, 0);
         this.mc.getTextureManager().bindTexture(this.mc.getTextureManager().getDynamicTextureLocation(user.getCountryCode(), this.countryFlag));
         drawModalRectWithCustomSizedTexture(0, 0, 0, 0, 15, 15, 15, 15);
         GL11.glPopMatrix();
@@ -133,17 +173,17 @@ public class UserScreen extends Menu {
         else
             dateToDraw = "Se unió en " + this.createdMonth + " de " + this.createdYear;
 
-        this.fontRendererObj.drawString(dateToDraw, 85, 72, Color.WHITE.getRGB());
+        this.fontRendererObj.drawString(dateToDraw, x + 85, scroll + 72, Color.WHITE.getRGB());
 
         if(this.user.isDeveloper()) {
-            this.chocomint.getRenderUtils().drawRoundedRect(85, 89, 3 + this.fontRendererObj.getStringWidth("DEV"), 11,
+            this.chocomint.getRenderUtils().drawRoundedRect(x + 85, scroll + 89, 3 + this.fontRendererObj.getStringWidth("DEV"), 11,
             3, new Color(47, 56, 168).getRGB());
             GL11.glColor3f(255, 255, 255);
-            this.fontRendererObj.drawString("DEV",87, 91, Color.WHITE.getRGB());
+            this.fontRendererObj.drawString("DEV", x + 87, scroll + 91, Color.WHITE.getRGB());
 
             if(this.showDevInfoCard) {
                 String devInfoCardText = "Este usuario es un desarrollador oficial de chocomint";
-                this.chocomint.getRenderUtils().drawRoundedRect(92 + this.fontRendererObj.getStringWidth("DEV"), 86,
+                this.chocomint.getRenderUtils().drawRoundedRect(x + 92 + this.fontRendererObj.getStringWidth("DEV"), scroll + 86,
                         12 + this.fontRendererObj.getStringWidth(devInfoCardText), 17, 3, new Color(78, 78, 78, 120).getRGB());
                 GL11.glColor3f(255, 255, 255);
                 this.fontRendererObj.drawString(devInfoCardText, 98 + this.fontRendererObj.getStringWidth("DEV"), 91, Color.WHITE.getRGB());
@@ -151,66 +191,44 @@ public class UserScreen extends Menu {
         }
 
         this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/ui/bracket-simple.png"));
-        drawModalRectWithCustomSizedTexture(-1, 120, 0, 0, this.width + 2, 25, this.width + 2, 25);
+        drawModalRectWithCustomSizedTexture(x, scroll + 120, 0, 0, this.getContentWidth(), 25, this.getContentWidth(), 25);
 
-        drawRect(0, 143, this.width, this.height, new Color(54,57,63).getRGB());
+        drawRect(x, scroll + 143, this.getContentMargin() + this.getContentWidth(), this.height, new Color(54,57,63).getRGB());
         if(this.user.getUsername().equals(this.chocomint.getUser().getUsername()))
             drawCenteredString(this.fontRendererObj, "Has estado jugando por " + this.chocomint.getParsedOpenTime(), this.width / 2, 195, Color.WHITE.getRGB());
     }
 
     @Override
-    protected void actionPerformed(GuiButton button) throws IOException {
-        switch(button.id) {
-            case 101:
-                this.chocomint.getConfig().setToken(null);
-                this.chocomint.setUser(this.chocomint.getUserManager().setUser((String) null));
-                this.chocomint.getAlmendra().disconnect();
-                this.chocomint.getChatManager().removeTabs();
-                this.mc.displayGuiScreen(this.prev);
-                break;
-            case 102:
-                Desktop desktop = java.awt.Desktop.getDesktop();
-                try {
-                    URI oURL = new URI("https://undervolt.io");
-                    desktop.browse(oURL);
-                } catch (URISyntaxException e) {
-                    this.chocomint.getNotificationManager().addNotification(
-                            new Notification(Notification.Priority.WARNING, "Error abriendo el navegador", e.getMessage(), obj->{})
-                    );
-                    e.printStackTrace();
-                }
-                break;
-            case 103:
-                this.chocomint.getChatManager().setSelectedTab(this.chocomint.getChatManager().getOrCreateTabByName(this.user.getUsername()));
-                this.mc.displayGuiScreen(new Chat("", this, this.chocomint, this.mc.getCurrentServerData()));
-                break;
-            case 104:
-                this.user.sendFriendRequest();
-                this.friendRequestButton.displayString = "Solicitud de amistad enviada";
-                this.friendRequestButton.enabled = false;
-                break;
-            case 105:
-                this.user.removeFriend();
-                this.mc.displayGuiScreen(this);
-                break;
-            case 106:
-                this.user.acceptFriendRequest();
-                this.mc.displayGuiScreen(this);
-                break;
-        }
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+    }
 
-        super.actionPerformed(button);
+    @Override
+    protected void actionPerformed(GuiButton button) throws IOException {
+        if(button.id == 100) this.mc.displayGuiScreen(prev);
     }
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 
-        if(this.user.isDeveloper() && mouseX >= 85 && mouseY >= 89 && mouseX <= 88 + this.fontRendererObj.getStringWidth("DEV") && mouseY <= 100) {
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+
+        if(this.user.isDeveloper() && mouseX >= this.getContentMargin() + 85 && mouseY >= this.scroll + 89 &&
+                mouseX <= this.getContentMargin() + 88 + this.fontRendererObj.getStringWidth("DEV") && mouseY <= this.scroll + 100) {
             this.showDevInfoCard = true;
         } else {
             this.showDevInfoCard = false;
         }
 
-        super.mouseClicked(mouseX, mouseY, mouseButton);
+        this.sendDMButton.registerClick(mouseX, mouseY);
+        this.profileSettingsButton.registerClick(mouseX, mouseY);
+        this.friendRequestButton.registerClick(mouseX, mouseY);
+        this.deleteFriendButton.registerClick(mouseX, mouseY);
+        this.logOutButton.registerClick(mouseX, mouseY);
+    }
+
+    public boolean isOverButton(MenuScrollClickableButton button, int mouseX, int mouseY) {
+        return button.isEnabled() && (mouseX > button.getX() && mouseY > button.getY() && mouseX < button.getX() + button.getW()
+                && mouseY < button.getY() + button.getH());
     }
 }

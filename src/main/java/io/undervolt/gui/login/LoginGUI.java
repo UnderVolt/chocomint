@@ -119,7 +119,7 @@ public class LoginGUI extends Menu {
     }
 
     @Override
-    public void drawMenuItems(int mouseX, int mouseY, float partialTicks) {
+    public void drawMenuItems(int mouseX, int mouseY, float partialTicks, int x, int scroll) {
 
         GL11.glPushMatrix();
 

@@ -26,11 +26,11 @@ public class GuiEditRenderMod extends Menu {
     }
 
     @Override
-    public void drawMenuItems(int mouseX, int mouseY, float partialTicks) {
+    public void drawMenuItems(int mouseX, int mouseY, float partialTicks, int x, int scroll) {
         this.setPageSize(this.height);
         GL11.glPushMatrix();
         GL11.glColor3f(255,255,255);
-        GL11.glTranslatef((this.width / 2) - ((this.renderMod.width * this.renderMod.scale) / 2), 30, 0);
+        GL11.glTranslatef((this.width / 2) - ((this.renderMod.width * this.renderMod.scale) / 2), 30 + scroll, 0);
         GL11.glScalef(renderMod.scale, renderMod.scale, 0);
         this.renderMod.render();
         this.chocomint.getRenderUtils().drawRoundedRect(-2, -2, renderMod.width + 4, renderMod.height + 4, 1, new Color(255, 255, 255, 50).getRGB());
