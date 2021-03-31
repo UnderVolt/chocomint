@@ -35,21 +35,20 @@ public class UserSearch extends Menu {
     @Override
     public void initGui() {
 
-        this.textField = new GuiTextField(0, this.fontRendererObj, 20,
-                25, this.width - 40, 20);
+        this.textField = new GuiTextField(0, this.fontRendererObj, this.getContentMargin() + 20,
+                25, this.getContentWidth() - 40, 20);
 
         this.textField.setFocused(true);
         super.initGui();
     }
 
     @Override
-    public void drawMenuItems(int mouseX, int mouseY, float partialTicks) {
+    public void drawMenuItems(int mouseX, int mouseY, float partialTicks, int x, int scroll) {
         this.textField.drawTextBox();
 
         AtomicInteger y = new AtomicInteger(60);
-        AtomicInteger x = new AtomicInteger(2);
         this.filteredUserMap.forEach((u, c) -> {
-                c.drawCard(this.width / 2 - 65, y.get());
+                c.drawCard(this.width / 2 - 65, y.get() + scroll);
             y.set(y.get() + 43);
         });
     }

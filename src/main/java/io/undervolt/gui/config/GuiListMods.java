@@ -19,16 +19,16 @@ public class GuiListMods extends Menu {
     }
 
     @Override
-    public void drawMenuItems(int mouseX, int mouseY, float partialTicks) {
+    public void drawMenuItems(int mouseX, int mouseY, float partialTicks, int x, int scroll) {
         this.setPageSize(Math.max(this.height, this.chocomint.getConfigurableManager().modList.size() * 22));
         if(this.chocomint.getConfigurableManager().modList.size() > 0) {
             AtomicInteger y = new AtomicInteger(41);
             this.chocomint.getConfigurableManager().modList.forEach(mod -> {
-                drawString(this.fontRendererObj, mod.getName(), (this.width / 2) - 10 - this.mc.fontRendererObj.getStringWidth(mod.getName()), y.get(), Color.WHITE.getRGB());
+                drawString(this.fontRendererObj, mod.getName(), (this.width / 2) - 10 - this.mc.fontRendererObj.getStringWidth(mod.getName()), y.get() + scroll, Color.WHITE.getRGB());
                 y.set(y.get() + 22);
             });
         } else {
-            drawCenteredString(this.fontRendererObj, "¡No tenés ningún mod instalado!", this.width / 2, this.height / 2 - 4, Color.WHITE.getRGB());
+            drawCenteredString(this.fontRendererObj, "¡No tenés ningún mod instalado!", this.width / 2, this.height / 2 - 4 + scroll, Color.WHITE.getRGB());
         }
     }
 

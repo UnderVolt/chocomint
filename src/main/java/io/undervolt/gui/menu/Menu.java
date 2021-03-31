@@ -24,10 +24,10 @@ public class Menu extends AnimationUI {
     private final String menuName;
 
     private double tw = Integer.MAX_VALUE;
-    private double scroll = 0;
+    protected int scroll = 0;
     private int pageSize;
 
-    private int position = 0;
+    private final int position = 0;
 
     public Menu(final GuiScreen prev, final Chocomint chocomint, final String menuName, final int pageSize) {
         //super(prev, chocomint);
@@ -37,7 +37,7 @@ public class Menu extends AnimationUI {
         this.previous = prev;
     }
 
-    public void drawMenuItems(int mouseX, int mouseY, float partialTicks) {}
+    public void drawMenuItems(int mouseX, int mouseY, float partialTicks, int x, int scroll) {}
 
     private final ResourceLocation bracketRes = new ResourceLocation("/chocomint/ui/bracket.png");
 
@@ -46,6 +46,22 @@ public class Menu extends AnimationUI {
         this.ftime = Minecraft.getSystemTime();
         this.buttonList.add(new TexturedMenuInterfaceButton(100, 0, 0, 20, 20, "back"));
         super.initGui();
+    }
+
+    protected int getContentWidth() {
+        if(this.width < 500) {
+            return this.width;
+        } else {
+            return 500;
+        }
+    }
+
+    protected int getContentMargin() {
+       if(this.getContentWidth() == this.width) {
+           return 0;
+       } else {
+           return (this.width / 2) - 250;
+       }
     }
 
     @Override
@@ -70,15 +86,13 @@ public class Menu extends AnimationUI {
         this.mc.getTextureManager().bindTexture(this.bracketRes);
 
         drawModalRectWithCustomSizedTexture(-5, position - 48, 0, 0, this.width + 10, 50, this.width + 10,50);
-        drawRect(0, position, this.width, pageSize, new Color(39, 39, 45).getRGB());
+        drawRect(0, position, this.width, pageSize, new Color(32,34,37).getRGB());
+        drawGradientRect(0, position, this.width, 250, Color.BLACK.getRGB(), 0);
+        drawRect(this.getContentMargin(), position, this.getContentMargin() + this.getContentWidth(), pageSize, new Color(39, 39, 45).getRGB());
         drawRect(0, position, this.width, 20, new Color(54,57,63).getRGB());
 
         this.fontRendererObj.drawString(this.menuName, 24, position + 7, Color.white.getRGB());
-
-        GL11.glPushMatrix();
-        GlStateManager.translate(0, scroll, 0);
-        drawMenuItems(mouseX, mouseY, partialTicks);
-        GL11.glPopMatrix();
+        drawMenuItems(mouseX, mouseY, partialTicks, this.getContentMargin(), this.scroll);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
@@ -91,14 +105,13 @@ public class Menu extends AnimationUI {
         super.handleMouseInput();
         int i = Mouse.getEventDWheel();
 
-        if (i < 0 && this.scroll < 0) this.scroll += 2.3;
-        else if (i > 0 && this.scroll > (this.width - this.pageSize)) this.scroll -=2.3;
+        if (i < 0 && !(this.scroll <= 0)) this.scroll -=8;
+        else if (i > 0  && (this.scroll <= this.pageSize - this.height)) this.scroll += 8;
     }
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         if(button.id == 100) this.mc.displayGuiScreen(previous);
-        super.actionPerformed(button);
     }
 
     @Override

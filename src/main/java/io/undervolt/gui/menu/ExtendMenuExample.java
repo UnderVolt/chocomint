@@ -11,7 +11,7 @@ public class ExtendMenuExample extends Menu {
     }
 
     @Override
-    public void drawMenuItems(int mouseX, int mouseY, float partialTicks) {
+    public void drawMenuItems(int mouseX, int mouseY, float partialTicks, int x, int scroll) {
         drawCenteredString(this.mc.fontRendererObj, "Texto de ejemplo", this.width / 2, this.height - 10, Color.WHITE.getRGB());
     }
 }
