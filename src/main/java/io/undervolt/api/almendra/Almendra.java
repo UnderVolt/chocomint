@@ -188,7 +188,7 @@ public class Almendra implements Listener {
                     String finalR = r;
                     this.chocomint.getNotificationManager().addNotification(
                             new Notification(Notification.Priority.SOCIAL, "Nueva solicitud de amistad", r + "quiere ser tu amigo",
-                                    a->this.mc.displayGuiScreen(new UserScreen(a, chocomint, this.chocomint.getUserManager().getUser(finalR))))
+                                    a->this.mc.displayGuiScreen(new UserScreen(a, chocomint, finalR)))
                     );
                 }
             });
@@ -201,7 +201,7 @@ public class Almendra implements Listener {
                 String finalR = r;
                 this.chocomint.getNotificationManager().addNotification(
                         new Notification(Notification.Priority.SOCIAL, "Solicitud de amistad aceptada", "Ahora " + r + "es tu amigo!",
-                                a->this.mc.displayGuiScreen(new UserScreen(a, chocomint, this.chocomint.getUserManager().getUser(finalR))))
+                                a->this.mc.displayGuiScreen(new UserScreen(a, chocomint, finalR)))
                 );
             });
 

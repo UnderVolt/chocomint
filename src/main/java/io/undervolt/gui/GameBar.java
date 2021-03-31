@@ -93,7 +93,7 @@ public class GameBar extends Gui {
 
         // Initialize User Card
         this.userCard = new UserCard(this.mc, this.chocomint.getUser(), false, true, (user) -> {
-            this.mc.displayGuiScreen(new UserScreen(this.parentScreen, this.chocomint, this.chocomint.getUser()));
+            this.mc.displayGuiScreen(new UserScreen(this.parentScreen, this.chocomint, this.chocomint.getUser().getUsername()));
         });
 
         // Initialize Contributors Panel

@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 public class MenuScrollClickableButton {
 
     private ResourceLocation texture;
-    private final Consumer consumer;
+    private Consumer consumer;
     private int w, h, c, hc;
     private int x = 100, y;
     private final Minecraft mc;
@@ -54,6 +54,10 @@ public class MenuScrollClickableButton {
     }
     public void setTexture(String textureName) {
         this.setTexture(new ResourceLocation("/chocomint/icon/" + textureName + ".png"));
+    }
+
+    public void setConsumer(Consumer consumer) {
+        this.consumer = consumer;
     }
 
     public void setW(int w) {

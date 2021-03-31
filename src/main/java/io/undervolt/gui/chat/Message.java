@@ -44,9 +44,9 @@ public class Message extends Gui {
         if(mouseY > y && mouseY < y + font_size) {
             if(this.user != null) {
                 if (mouseX > 50 && mouseX < (50 + this.mc.fontRendererObj.getStringWidth(this.getUser()))) {
-                    this.mc.displayGuiScreen(new UserScreen(chat, GameBridge.getChocomint(), GameBridge.getChocomint().getUserManager().getUser(
+                    this.mc.displayGuiScreen(new UserScreen(chat, GameBridge.getChocomint(),
                             this.user.startsWith("\247") ? this.user.substring(2) : this.user
-                    )));
+                    ));
                 }
             }
         }
