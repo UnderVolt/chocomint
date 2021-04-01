@@ -51,8 +51,8 @@ public class User {
     }
 
     public String getBanner() {
-        if(image == null || image.equals("default")) return null;
-        else return image;
+        if(banner == null || banner.equals("default")) return null;
+        else return banner;
     }
 
     public String getCreateDate() {
