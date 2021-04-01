@@ -186,7 +186,7 @@ public class UserScreen extends Menu {
                 this.chocomint.getRenderUtils().drawRoundedRect(x + 92 + this.fontRendererObj.getStringWidth("DEV"), scroll + 86,
                         12 + this.fontRendererObj.getStringWidth(devInfoCardText), 17, 3, new Color(78, 78, 78, 120).getRGB());
                 GL11.glColor3f(255, 255, 255);
-                this.fontRendererObj.drawString(devInfoCardText, 98 + this.fontRendererObj.getStringWidth("DEV"), 91, Color.WHITE.getRGB());
+                this.fontRendererObj.drawString(devInfoCardText, x + 98 + this.fontRendererObj.getStringWidth("DEV"), 91, Color.WHITE.getRGB());
             }
         }
 
