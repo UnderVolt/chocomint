@@ -21,7 +21,7 @@ public class ResourceLocation
 
     public ResourceLocation(String resourceDomainIn, String resourcePathIn)
     {
-        this(0, new String[] {resourceDomainIn, resourcePathIn});
+        this(0, resourceDomainIn, resourcePathIn);
     }
 
     /**
