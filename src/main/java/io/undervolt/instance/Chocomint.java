@@ -16,6 +16,7 @@ import io.undervolt.gui.Background;
 import io.undervolt.gui.RenderUtils;
 import io.undervolt.gui.chat.ChatManager;
 import io.undervolt.gui.contributors.ContributorsManager;
+import io.undervolt.gui.font.FontRenderer;
 import io.undervolt.gui.friends.FriendsManager;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.gui.notifications.NotificationManager;
@@ -64,6 +65,8 @@ public class Chocomint implements Listener {
 
     private NotificationOverlay notificationOverlay;
     private NotificationManager notificationManager;
+
+    private FontRenderer fontRenderer;
 
     private final ProfileLoader loader;
     private final ConfigurableManager configurableManager;
@@ -132,6 +135,8 @@ public class Chocomint implements Listener {
                 this.initOfflineUser();
                 this.screenshotUploader = new ScreenshotUploader(this);
                 this.notificationOverlay = new NotificationOverlay(this);
+
+                this.fontRenderer = new FontRenderer(this.mc, "Trebuchet MS", 20);
 
                 this.getEventManager().registerEvents(this.notificationOverlay);
                 this.config = new Config(this);
@@ -297,6 +302,10 @@ public class Chocomint implements Listener {
         long seconds = (milliseconds / 1000) % 60;
 
         return minutes + " minutos y " + seconds + " segundos";
+    }
+
+    public FontRenderer getFontRenderer() {
+        return fontRenderer;
     }
 
     public UserProfilePictureManager getUserProfilePictureManager() {
