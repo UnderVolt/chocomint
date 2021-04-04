@@ -158,8 +158,7 @@ public class UserScreen extends Menu {
                     this.deleteFriendButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 65);
                     if(!this.user.isOnline()) this.sendDMButton.setEnabled(false);
                 } else
-                if(this.chocomint.getFriendsManager().friendRequestPool.containsKey(this.user.getUsername()))
-                    this.friendRequestButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 40);
+                    this.friendRequestButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 65);
             }
         }
 
