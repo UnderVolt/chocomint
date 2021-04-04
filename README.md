@@ -3,7 +3,7 @@
 </p>
 
 # chocomint
-[![Dev chat](https://discordapp.com/api/guilds/646132850302779405/widget.png?style=shield)](https://discord.gg/PYdEpXp)
+[![Dev chat](https://discordapp.com/api/guilds/646132850302779405/widget.png?style=shield)](https://discord.gg/Bk9f5PJvUg)
 [![CodeFactor](https://www.codefactor.io/repository/github/undervolt/chocomint/badge)](https://www.codefactor.io/repository/github/undervolt/chocomint)
 [![UnderVolt Website Badge](https://img.shields.io/badge/visit%20our-website-red.svg)](https://undervolt.io)
 [![GitHub Forks](https://img.shields.io/github/forks/UnderVolt/Chocomint.svg?style=social&label=Fork&maxAge=2592000)](https://github.com/UnderVolt/Chocomint/network)
