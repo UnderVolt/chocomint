@@ -1,9 +1,7 @@
 package io.undervolt.gui.menu;
 
-import io.undervolt.gui.GameBar;
+import io.undervolt.api.animation.AnimationScreen;
 import io.undervolt.instance.Chocomint;
-import io.undervolt.utils.AnimationUI;
-import io.undervolt.utils.Multithreading;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -14,9 +12,8 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
-public class Menu extends AnimationUI {
+public class Menu extends AnimationScreen {
 
     private final Chocomint chocomint;
     private final GuiScreen previous;
@@ -67,14 +64,8 @@ public class Menu extends AnimationUI {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 
-        if(tw != 0) {
-            tw = (this.getAnimationTime(this.ftime, 3000.0D) * 400D);
-        }
-
-        if(tw == 0) {
-            drawDefaultBackground();
-            drawRect(0, 0, this.width, this.height, new Color(0, 0, 0, 100).getRGB());
-        }
+        drawDefaultBackground();
+        drawRect(0, 0, this.width, this.height, new Color(0, 0, 0, 100).getRGB());
 
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);

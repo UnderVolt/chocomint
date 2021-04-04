@@ -668,6 +668,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         else
         {
             Display.setDisplayMode(new DisplayMode(this.displayWidth, this.displayHeight));
+            Display.setResizable(true);
         }
     }
 

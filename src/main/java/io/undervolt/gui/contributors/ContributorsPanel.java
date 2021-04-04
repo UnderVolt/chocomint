@@ -1,5 +1,7 @@
 package io.undervolt.gui.contributors;
 
+import io.undervolt.api.animation.AnimationRender;
+import io.undervolt.api.animation.AnimationTimings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
@@ -7,12 +9,13 @@ import net.minecraft.client.renderer.GlStateManager;
 import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ContributorsPanel extends Gui {
+public class ContributorsPanel extends AnimationRender {
     private final Minecraft mc;
     private final ContributorsManager contributorsManager;
     private boolean isActive;
 
     public ContributorsPanel(final Minecraft mc, final ContributorsManager contributorsManager, boolean isActive) {
+        super(250, AnimationTimings.QUAD);
         this.mc = mc;
         this.contributorsManager = contributorsManager;
         this.isActive = isActive;
@@ -20,14 +23,18 @@ public class ContributorsPanel extends Gui {
 
     public void drawPanel(int screenWidth, int screenHeight) {
         if(this.isActive) {
-            drawRect(0, 20, 120, screenHeight,
-                    new Color(34,34,34,183).getRGB());
-            drawString(this.mc.fontRendererObj,
-                    this.getContributorsManager().getContributors().isEmpty()
-                            ? "Cargando..." : "Contribuciones", 25,
-                    29, Color.WHITE.getRGB());
-            int x = 5;
+            this.render();
+            GlStateManager.pushMatrix();
+
+            GlStateManager.translate(this.deltaTime * 120, 0, 0);
+
+            drawRect(-120, 20, 0, screenHeight, new Color(34,34,34,183).getRGB());
+            drawString(this.mc.fontRendererObj,  this.getContributorsManager().getContributors().isEmpty() ? "Cargando..." : "Contribuciones", -120 + 25, 29, Color.WHITE.getRGB());
+
+            int x = -115;
+
             AtomicInteger y = new AtomicInteger(50);
+
             this.getContributorsManager().getContributors().forEach((contributorStatistic, textureId) -> {
                 GlStateManager.color(1f, 1f, 1f);
                 GlStateManager.bindTexture(textureId.getGlTextureId());
@@ -38,6 +45,8 @@ public class ContributorsPanel extends Gui {
 
                 y.addAndGet(25);
             });
+
+            GlStateManager.popMatrix();
         }
     }
 

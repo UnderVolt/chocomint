@@ -14,7 +14,8 @@ public class Message extends Gui {
     private final String user, message;
     private final Minecraft mc;
     private final DateTimeFormatter dtf;
-    private int y, font_size;
+    private float x, y;
+    private int font_size;
 
     public Message(final String user, final String message) {
         this.message = message;
@@ -52,12 +53,13 @@ public class Message extends Gui {
         }
     }
 
-    public void drawMessage(int y, int chatHeight) {
+    public void drawMessage(float x, float y, int chatHeight) {
+        this.x = x;
         this.y = y;
         if(y > chatHeight) {
-            this.mc.fontRendererObj.drawString(this.dtf.format(now), 5, y, Color.GRAY.getRGB());
+            this.mc.fontRendererObj.drawString(this.dtf.format(now), x, y, Color.GRAY.getRGB(), false);
             this.mc.fontRendererObj.drawStringWithShadow((this.getUser() != null ? this.getUser() + "\247f: " : "\247f")
-                    + this.getMessage(), 50, y, Color.WHITE.getRGB());
+                    + this.getMessage(), x * 10, y, Color.WHITE.getRGB());
         }
     }
 

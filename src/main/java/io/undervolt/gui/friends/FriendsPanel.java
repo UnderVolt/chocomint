@@ -1,17 +1,20 @@
 package io.undervolt.gui.friends;
 
 import com.google.common.collect.Lists;
+import io.undervolt.api.animation.AnimationRender;
+import io.undervolt.api.animation.AnimationTimings;
 import io.undervolt.gui.user.UserCard;
 import io.undervolt.gui.user.UserScreen;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.GlStateManager;
 
 import java.awt.Color;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class FriendsPanel extends Gui {
+public class FriendsPanel extends AnimationRender {
     private final Minecraft mc;
     private final FriendsManager friendsManager;
     public boolean isActive;
@@ -23,6 +26,7 @@ public class FriendsPanel extends Gui {
     private int clickCounter = 0;
 
     public FriendsPanel(Chocomint chocomint, FriendsManager friendsManager, boolean isActive) {
+        super(250, AnimationTimings.QUAD);
         this.chocomint = chocomint;
         this.mc = chocomint.getMinecraft();
         this.friendsManager = friendsManager;
@@ -34,13 +38,18 @@ public class FriendsPanel extends Gui {
 
     public void drawPanel(int screenWidth, int screenHeight) {
         if(this.isActive) {
-            this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 140, 22, 138,
-                            screenHeight - 24, 2, new Color(28, 28, 28).getRGB());
+            this.render();
+            GlStateManager.pushMatrix();
 
-            drawString(this.mc.fontRendererObj, "Amigos", screenWidth - 134, 30, Color.WHITE.getRGB());
+            GlStateManager.translate(0, (this.deltaTime * 22), 0);
+
+            this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 140, 0, 138,
+                    screenHeight - 24, 2, new Color(28, 28, 28).getRGB());
+
+            drawString(this.mc.fontRendererObj, "Amigos", screenWidth - 134, 10, Color.WHITE.getRGB());
 
 
-            AtomicInteger y = new AtomicInteger(43);
+            AtomicInteger y = new AtomicInteger(22);
             this.friendUserCardList.forEach(userCard -> {
                 userCard.drawCard(screenWidth - 136, y.get());
                 y.set(y.get() + 40);
@@ -68,6 +77,8 @@ public class FriendsPanel extends Gui {
                 y.set(y.get() + 40);
             }
 
+
+            GlStateManager.popMatrix();
         }
     }
 

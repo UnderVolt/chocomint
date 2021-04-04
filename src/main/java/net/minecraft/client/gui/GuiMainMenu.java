@@ -13,14 +13,17 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import io.undervolt.api.animation.AnimationRender;
+import io.undervolt.api.animation.AnimationScreen;
+import io.undervolt.api.animation.AnimationTimings;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
+import io.undervolt.gui.RectangleAnimated;
 import io.undervolt.gui.chat.AvailableRooms;
 import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.user.UserSearch;
 import io.undervolt.instance.Chocomint;
-import io.undervolt.utils.AnimationUI;
 import io.undervolt.utils.Multithreading;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -49,7 +52,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.Project;
 
-public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
+public class GuiMainMenu extends AnimationScreen implements GuiYesNoCallback
 {
     private static final AtomicInteger field_175373_f = new AtomicInteger(0);
     private static final Logger logger = LogManager.getLogger();
@@ -115,6 +118,7 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
     private GuiButton modButton;
     private GuiScreen modUpdateNotification;
     private boolean isAuthenticated = false;
+    private RectangleAnimated xd;
 
     public GuiMainMenu() {
         this.chocomint = GameBridge.getChocomint();
@@ -123,7 +127,6 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
         this.L = false;
         this.splashText = "missingno";
         BufferedReader bufferedreader = null;
-
         try
         {
             List<String> list = Lists.<String>newArrayList();
@@ -308,6 +311,8 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
         }, 0, 5, TimeUnit.SECONDS);
 
         this.gameBar.init(width, height);
+
+        this.xd = new RectangleAnimated();
     }
 
     /**
@@ -736,6 +741,9 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
         {
             this.modUpdateNotification.drawScreen(mouseX, mouseY, partialTicks);
         }
+
+        this.xd.render();
+
     }
 
     @Override
@@ -765,6 +773,9 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
         {
             this.M.mouseClicked(mouseX, mouseY, mouseButton);
         }
+
+        this.xd.toggle();
+
 
         this.gameBar.mouseClicked(mouseX, mouseY, mouseButton, width, height);
     }

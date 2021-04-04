@@ -1,15 +1,15 @@
 package io.undervolt.gui.chat;
 
+import io.undervolt.api.animation.AnimationScreen;
 import io.undervolt.gui.GameBar;
 import io.undervolt.instance.Chocomint;
-import io.undervolt.utils.AnimationUI;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
 import java.awt.*;
 import java.io.IOException;
 
-public class MessageOptions extends AnimationUI {
+public class MessageOptions extends AnimationScreen {
 
     private GuiButton sendPMButton;
     private GuiButton reportMessageButton;

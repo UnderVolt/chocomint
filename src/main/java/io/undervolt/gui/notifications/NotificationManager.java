@@ -27,6 +27,7 @@ public class NotificationManager {
 
     public List<Notification> addNotification(Notification notification) {
         this.notificationList.add(notification);
+        notification.init();
         this.eventManager.callEvent(new NotificationEvent.Add(notification));
         return this.notificationList;
     }

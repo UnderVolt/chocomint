@@ -2,10 +2,10 @@ package io.undervolt.gui.chat;
 
 import com.google.common.collect.Lists;
 import io.undervolt.api.almendra.Almendra;
+import io.undervolt.api.animation.AnimationScreen;
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.user.UserSearch;
 import io.undervolt.instance.Chocomint;
-import io.undervolt.utils.AnimationUI;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class AvailableRooms extends AnimationUI {
+public class AvailableRooms extends AnimationScreen {
 
     private final Almendra almendra;
     private final ChatManager chatManager;

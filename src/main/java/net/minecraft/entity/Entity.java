@@ -2063,13 +2063,13 @@ public abstract class Entity implements ICommandSender
             if (!this.worldObj.isRemote && !pos.equals(this.lastPortalPos))
             {
                 this.lastPortalPos = pos;
-                BlockPattern.PatternHelper blockpattern$patternhelper = Blocks.portal.func_181089_f(this.worldObj, pos);
-                double d0 = blockpattern$patternhelper.getFinger().getAxis() == EnumFacing.Axis.X ? (double)blockpattern$patternhelper.getPos().getZ() : (double)blockpattern$patternhelper.getPos().getX();
-                double d1 = blockpattern$patternhelper.getFinger().getAxis() == EnumFacing.Axis.X ? this.posZ : this.posX;
-                d1 = Math.abs(MathHelper.func_181160_c(d1 - (double)(blockpattern$patternhelper.getFinger().rotateY().getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE ? 1 : 0), d0, d0 - (double)blockpattern$patternhelper.func_181118_d()));
-                double d2 = MathHelper.func_181160_c(this.posY - 1.0D, (double)blockpattern$patternhelper.getPos().getY(), (double)(blockpattern$patternhelper.getPos().getY() - blockpattern$patternhelper.func_181119_e()));
+                BlockPattern.PatternHelper patternhelper = Blocks.portal.func_181089_f(this.worldObj, pos);
+                double d0 = patternhelper.getFinger().getAxis() == EnumFacing.Axis.X ? (double)patternhelper.getPos().getZ() : (double)patternhelper.getPos().getX();
+                double d1 = patternhelper.getFinger().getAxis() == EnumFacing.Axis.X ? this.posZ : this.posX;
+                d1 = Math.abs(MathHelper.func_181160_c(d1 - (double)(patternhelper.getFinger().rotateY().getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE ? 1 : 0), d0, d0 - (double)patternhelper.func_181118_d()));
+                double d2 = MathHelper.func_181160_c(this.posY - 1.0D, (double)patternhelper.getPos().getY(), (double)(patternhelper.getPos().getY() - patternhelper.func_181119_e()));
                 this.lastPortalVec = new Vec3(d1, d2, 0.0D);
-                this.teleportDirection = blockpattern$patternhelper.getFinger();
+                this.teleportDirection = patternhelper.getFinger();
             }
 
             this.inPortal = true;

@@ -2,12 +2,12 @@ package net.minecraft.client.gui;
 
 import java.io.IOException;
 
+import io.undervolt.api.animation.AnimationScreen;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
 import io.undervolt.gui.chat.Chat;
 import io.undervolt.instance.Chocomint;
-import io.undervolt.utils.AnimationUI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.achievement.GuiAchievements;
 import net.minecraft.client.gui.achievement.GuiStats;
@@ -15,7 +15,7 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.realms.RealmsBridge;
 
-public class GuiIngameMenu extends AnimationUI {
+public class GuiIngameMenu extends AnimationScreen {
     private int field_146445_a;
     private int field_146444_f;
     private final Chocomint chocomint;

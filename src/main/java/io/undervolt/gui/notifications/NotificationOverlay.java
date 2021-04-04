@@ -39,6 +39,7 @@ public class NotificationOverlay extends Gui implements Listener {
     @EventHandler public void add(NotificationEvent.Add e) {
         System.out.println(e.notification.title);
         this.notificationsToDraw.add(e.notification);
+        e.notification.init();
         Multithreading.delay(() -> this.notificationsToDraw.remove(e.notification), 8, TimeUnit.SECONDS);
     }
 

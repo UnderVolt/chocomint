@@ -50,7 +50,6 @@ public class GameBar extends Gui {
 
     /** UI elements */
     private final ScaledResolution sr;
-    private long ftime;
     private final FontRenderer fontRendererObj;
 
     /** Declare buttons */
@@ -139,13 +138,6 @@ public class GameBar extends Gui {
 
     public void draw(int mouseX, int mouseY, float partialTicks, int width, int height) {
 
-        // Draw main rectangle (width x g20 res, #222)
-        drawRect(0, 0, width, 20, new Color(32,34,37).getRGB());
-
-        // Draw logo placeholder until resources are loaded
-        drawRect(4, 4, 10, 16, new Color(65, 44, 25).getRGB());
-        drawRect(10, 4, 16, 16, new Color(63, 222, 160).getRGB());
-        drawString(this.fontRendererObj, "chocomint", 20, 6, Color.WHITE.getRGB());
 
         this.userCard.drawCard(width - 132, 22);
         this.notificationPanel.drawPanel(width, height, this.notificationScroll);
@@ -154,6 +146,15 @@ public class GameBar extends Gui {
 
         if(!notificationPanel.isActive())
             this.notificationOverlay.drawOverlay(5, 27);
+
+        // Draw main rectangle (width x g20 res, #222)
+        drawRect(0, 0, width, 20, new Color(32,34,37).getRGB());
+
+        // Draw logo placeholder until resources are loaded
+        drawRect(4, 4, 10, 16, new Color(65, 44, 25).getRGB());
+        drawRect(10, 4, 16, 16, new Color(63, 222, 160).getRGB());
+        drawString(this.fontRendererObj, "chocomint", 20, 6, Color.WHITE.getRGB());
+
     }
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton, int width, int height) {
@@ -164,6 +165,7 @@ public class GameBar extends Gui {
         if(this.notificationPanel.isActive()) {
             if (mouseX < width - 120)
                 this.notificationPanel.setActive(false);
+
 
             for (Notification notification : this.notificationManager.getNotifications()) {
                 if (mouseX >= notification.getX() + notificationScroll && mouseY >= notification.getY() +notificationScroll && mouseX <= notification.getX() + notificationScroll + 110 && mouseY <= notification.getY() + notificationScroll + 35) {
@@ -177,6 +179,7 @@ public class GameBar extends Gui {
             this.userCard.setActive(false);
             this.friendsPanel.setActive(false);
             this.contributorsPanel.toggleActive();
+            this.contributorsPanel.init();
         }
 
         // Friends panel click
@@ -199,7 +202,7 @@ public class GameBar extends Gui {
     public void actionPerformed(GuiButton button) throws IOException {
         switch (button.id) {
             case 1337101:
-                this.notificationPanel.toggleActive();
+                this.notificationPanel.toggle();
                 this.contributorsPanel.setActive(false);
                 this.userCard.setActive(false);
                 this.friendsPanel.setActive(false);
@@ -207,16 +210,17 @@ public class GameBar extends Gui {
             case 1337102:
                 System.out.println(this.userCard.isActive());
                 this.userCard.toggleActive();
-                this.notificationPanel.setActive(false);
+                this.notificationPanel.toggle();
                 this.contributorsPanel.setActive(false);
                 this.friendsPanel.setActive(false);
                 if(this.chocomint.getUser().getUsername().equals("Guest")) this.mc.displayGuiScreen(new LoginGUI(this.parentScreen, this.chocomint));
                 break;
             case 1337104:
-                this.notificationPanel.setActive(false);
+                this.notificationPanel.toggle();
                 this.contributorsPanel.setActive(false);
                 this.userCard.setActive(false);
                 this.friendsPanel.toggleActive();
+                this.friendsPanel.init();
                 break;
             case 1337106:
                 this.mc.displayGuiScreen(new GuiMods(this.parentScreen, this.chocomint));

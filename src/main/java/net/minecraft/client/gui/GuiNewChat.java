@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
 
+import io.undervolt.api.animation.AnimationRender;
+import io.undervolt.api.animation.AnimationTimings;
 import io.undervolt.gui.chat.Chat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -28,24 +30,27 @@ public class GuiNewChat extends Gui
     private final List<ChatLine> drawnChatLines = Lists.<ChatLine>newArrayList();
     private int scrollPos;
     private boolean isScrolled;
+    private AnimationRender animation;
 
     public GuiNewChat(Minecraft mcIn)
     {
         this.mc = mcIn;
+        animation = new AnimationRender(250, AnimationTimings.QUAD);
     }
+
 
     public void drawChat(int updateCounter)
     {
         if(this.mc.currentScreen instanceof Chat) return;
         if (this.mc.gameSettings.chatVisibility != EntityPlayer.EnumChatVisibility.HIDDEN)
         {
-            int i = this.getLineCount();
+            int lineCount = this.getLineCount();
             boolean flag = false;
-            int j = 0;
-            int k = this.drawnChatLines.size();
-            float f = this.mc.gameSettings.chatOpacity * 0.9F + 0.1F;
+            int lineIndex = 0;
+            int chatSize = this.drawnChatLines.size();
+            float chatOpacity = this.mc.gameSettings.chatOpacity * 0.9F + 0.1F;
 
-            if (k > 0)
+            if (chatSize > 0)
             {
                 if (this.getChatOpen())
                 {
@@ -58,7 +63,7 @@ public class GuiNewChat extends Gui
                 GlStateManager.translate(2.0F, 20.0F, 0.0F);
                 GlStateManager.scale(f1, f1, 1.0F);
 
-                for (int i1 = 0; i1 + this.scrollPos < this.drawnChatLines.size() && i1 < i; ++i1)
+                for (int i1 = 0; i1 + this.scrollPos < this.drawnChatLines.size() && i1 < lineCount; ++i1)
                 {
                     ChatLine chatline = (ChatLine)this.drawnChatLines.get(i1 + this.scrollPos);
 
@@ -80,11 +85,12 @@ public class GuiNewChat extends Gui
                                 l1 = 255;
                             }
 
-                            l1 = (int)((float)l1 * f);
-                            ++j;
+                            l1 = (int)((float)l1 * chatOpacity);
+                            ++lineIndex;
 
                             if (l1 > 3)
                             {
+
                                 int i2 = 0;
                                 int j2 = -i1 * 9;
                                 drawRect(i2, j2 - 9, i2 + l + 4, j2, l1 / 2 << 24);
@@ -102,9 +108,9 @@ public class GuiNewChat extends Gui
                 {
                     int k2 = this.mc.fontRendererObj.FONT_HEIGHT;
                     GlStateManager.translate(-3.0F, 0.0F, 0.0F);
-                    int l2 = k * k2 + k;
-                    int i3 = j * k2 + j;
-                    int j3 = this.scrollPos * i3 / k;
+                    int l2 = chatSize * k2 + chatSize;
+                    int i3 = lineIndex * k2 + lineIndex;
+                    int j3 = this.scrollPos * i3 / chatSize;
                     int k1 = i3 * i3 / l2;
 
                     if (l2 != i3)

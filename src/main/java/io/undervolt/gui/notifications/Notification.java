@@ -1,13 +1,16 @@
 package io.undervolt.gui.notifications;
 
+import io.undervolt.api.animation.AnimationRender;
+import io.undervolt.api.animation.AnimationTimings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 
 import java.awt.*;
 import java.util.function.Consumer;
 
-public class Notification extends Gui {
+public class Notification extends AnimationRender {
 
     public enum Priority {
         NOTICE, SOCIAL, WARNING, ALERT, CRITICAL
@@ -20,10 +23,12 @@ public class Notification extends Gui {
     private int x, y;
 
     public Notification(final Priority priority, final String title, final String description, Consumer<GuiScreen> consumer) {
+        super(1000, AnimationTimings.QUAD);
         this.title = title;
         this.description = description;
         this.priority = priority;
         this.consumer = consumer;
+        this.init();
     }
 
     public int getPriorityColor() {
@@ -43,12 +48,18 @@ public class Notification extends Gui {
         }
     }
 
-    public void draw(final Minecraft mc, int x, int y) {
+    public void draw(final Minecraft mc, int xx, int y) {
 
-        this.x = x;
+        //En este caso llamo a this.render, pero también podria ser un override de render llamando al super antes de renderizar cualquier cosa
+        this.render();
+
+        this.x = 0;
         this.y = y;
 
-        mc.getChocomint().getRenderUtils().drawRoundedRect(x, y, 110, 35, 3, Color.WHITE.getRGB());
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(this.deltaTime * xx, 0.0F, 0.0F);
+        mc.getChocomint().getRenderUtils().drawRoundedRect(x, y, 110, 35, 3, Color.white.getRGB());
         mc.getChocomint().getRenderUtils().drawFilledCircle(x + 12, y + 15, 8, this.getPriorityColor());
 
         String title = this.title;
@@ -80,6 +91,10 @@ public class Notification extends Gui {
         } else {
             mc.fontRendererObj.drawString(this.description, x + 24, y + 15, Color.GRAY.getRGB());
         }
+
+        GlStateManager.popMatrix();
+
+
     }
 
     public Consumer<GuiScreen> getConsumer() {

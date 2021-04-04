@@ -1,16 +1,15 @@
 package io.undervolt.gui.chat;
 
 import io.undervolt.api.almendra.Almendra;
+import io.undervolt.api.animation.AnimationScreen;
 import io.undervolt.console.Console;
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
 import io.undervolt.instance.Chocomint;
-import io.undervolt.utils.AnimationUI;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.multiplayer.ServerData;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.MathHelper;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -20,7 +19,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Chat extends AnimationUI {
+public class Chat extends GuiScreen {
 
     /** Declare Chocomint */
     private final Chocomint chocomint;
@@ -56,6 +55,9 @@ public class Chat extends AnimationUI {
     /** Scroll implementation */
     private int scroll = 0;
 
+    /** Chat Animations */
+    private ChatAnimations animations;
+
     public Chat(final String initialText, final GuiScreen prev, final Chocomint chocomint, final ServerData serverData) {
 
         this.prev = prev;
@@ -69,6 +71,8 @@ public class Chat extends AnimationUI {
 
         this.console = this.chocomint.getConsole();
         this.gameBar = new GameBar(this, this.chocomint, this.buttonList);
+
+        this.animations = new ChatAnimations();
     }
 
     @Override
@@ -146,6 +150,7 @@ public class Chat extends AnimationUI {
         }
 
         this.gameBar.init(width, height);
+        this.animations.init();
         super.initGui();
 
     }
@@ -154,15 +159,19 @@ public class Chat extends AnimationUI {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 
         this.drawDefaultBackground();
-        drawRect(0, this.chatHeight, this.width, this.height, new Color(36, 36, 36, 100).getRGB());
+
+        animations.draw(chatHeight, width, height);
+
+
+        drawRect(0, height - animations.deltaTime * (height - 120), width, height, new Color(36, 36, 36, 100).getRGB());
 
         GL11.glPushMatrix();
         GL11.glColor3f(255,255,255);
 
         if(this.chatManager.getSelectedTab() != null) {
-            int i = this.height - 23 + scroll;
+            float i = this.height - 23 + scroll;
             for (int id = this.chatManager.getSelectedTab().getMessages().size(); id-- > 0; ) {
-                this.chatManager.getSelectedTab().getMessages().get(id).drawMessage(i, chatHeight);
+                this.chatManager.getSelectedTab().getMessages().get(id).drawMessage(animations.deltaTime * 5, i, chatHeight);
                 i = i - 12;
             }
         }
@@ -170,6 +179,7 @@ public class Chat extends AnimationUI {
         GL11.glPopMatrix();
 
         drawRect(0, this.height - 12, this.width, this.height, new Color(0,0,0,130).getRGB());
+
         if((!this.almendra.isAuthenticated()) && this.chatManager.getSelectedTab() != this.chatManager.getReservedServerTab()
                 && this.chatManager.getSelectedTab() != this.chatManager.getReservedLogTab())
             this.fontRendererObj.drawString("Inicia sesión para poder hablar",10, this.height - 10, Color.GRAY.getRGB());
@@ -180,8 +190,10 @@ public class Chat extends AnimationUI {
         drawRect(0, this.chatHeight - 18, this.width, this.chatHeight,
                 Color.BLACK.getRGB());
 
-        this.gameBar.draw(mouseX, mouseY, partialTicks, width, height);
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        if(animations.deltaTime == 1) {
+            this.gameBar.draw(mouseX, mouseY, partialTicks, width, height);
+            super.drawScreen(mouseX, mouseY, partialTicks);
+        }
     }
 
     @Override
