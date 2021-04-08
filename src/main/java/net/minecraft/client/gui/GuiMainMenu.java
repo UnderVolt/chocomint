@@ -641,6 +641,9 @@ public class GuiMainMenu extends AnimationScreen implements GuiYesNoCallback
      */
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
+
+
+
         GlStateManager.disableAlpha();
         this.drawDefaultBackground();
         GlStateManager.enableAlpha();
@@ -730,6 +733,7 @@ public class GuiMainMenu extends AnimationScreen implements GuiYesNoCallback
 
         this.gameBar.draw(mouseX, mouseY, partialTicks, width, height);
 
+
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         if (this.a())
@@ -743,7 +747,6 @@ public class GuiMainMenu extends AnimationScreen implements GuiYesNoCallback
         }
 
         this.xd.render();
-
     }
 
     @Override
