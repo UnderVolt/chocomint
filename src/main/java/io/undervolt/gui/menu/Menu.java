@@ -71,8 +71,10 @@ public class Menu extends AnimationScreen {
 
         this.menuAnimations.drawScreen(mouseX, mouseY, partialTicks);
 
-        drawDefaultBackground();
-        drawRect(0, 0, this.width, this.height, new Color(0, 0, 0, 100).getRGB());
+        if(menuAnimations.deltaTime == 1) {
+            drawDefaultBackground();
+            drawRect(0, 0, this.width, this.height, new Color(0, 0, 0, 100).getRGB());
+        }
 
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
@@ -92,9 +94,8 @@ public class Menu extends AnimationScreen {
         this.fontRendererObj.drawString(this.menuName, 24, position + 7, Color.white.getRGB());
         drawMenuItems(mouseX, mouseY, partialTicks, this.getContentMargin(), this.scroll);
 
-        if(menuAnimations.deltaTime == 1) {
+        if(menuAnimations.deltaTime == 1)
             super.drawScreen(mouseX, mouseY, partialTicks);
-        }
 
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glPopMatrix();
