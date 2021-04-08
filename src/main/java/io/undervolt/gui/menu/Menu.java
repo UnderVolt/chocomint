@@ -1,5 +1,6 @@
 package io.undervolt.gui.menu;
 
+import io.undervolt.api.animation.AnimationRender;
 import io.undervolt.api.animation.AnimationScreen;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.Minecraft;
@@ -24,6 +25,8 @@ public class Menu extends AnimationScreen {
     protected int scroll = 0;
     private int pageSize;
 
+    private final MenuAnimations menuAnimations;
+
     private final int position = 0;
 
     public Menu(final GuiScreen prev, final Chocomint chocomint, final String menuName, final int pageSize) {
@@ -32,6 +35,7 @@ public class Menu extends AnimationScreen {
         this.chocomint = chocomint;
         this.pageSize = pageSize;
         this.previous = prev;
+        this.menuAnimations = new MenuAnimations();
     }
 
     public void drawMenuItems(int mouseX, int mouseY, float partialTicks, int x, int scroll) {}
@@ -42,6 +46,7 @@ public class Menu extends AnimationScreen {
     public void initGui() {
         this.ftime = Minecraft.getSystemTime();
         this.buttonList.add(new TexturedMenuInterfaceButton(100, 0, 0, 20, 20, "back"));
+        this.menuAnimations.init();
         super.initGui();
     }
 
@@ -64,13 +69,15 @@ public class Menu extends AnimationScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 
+        this.menuAnimations.drawScreen(mouseX, mouseY, partialTicks);
+
         drawDefaultBackground();
         drawRect(0, 0, this.width, this.height, new Color(0, 0, 0, 100).getRGB());
 
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
 
-        GlStateManager.translate(0, tw,0);
+        GlStateManager.translate(0, this.height * (1-menuAnimations.deltaTime),0);
 
         GL11.glColor3f(255, 255, 255);
 
@@ -85,7 +92,9 @@ public class Menu extends AnimationScreen {
         this.fontRendererObj.drawString(this.menuName, 24, position + 7, Color.white.getRGB());
         drawMenuItems(mouseX, mouseY, partialTicks, this.getContentMargin(), this.scroll);
 
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        if(menuAnimations.deltaTime == 1) {
+            super.drawScreen(mouseX, mouseY, partialTicks);
+        }
 
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glPopMatrix();
