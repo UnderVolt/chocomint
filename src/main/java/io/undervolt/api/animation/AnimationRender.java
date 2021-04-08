@@ -2,9 +2,6 @@ package io.undervolt.api.animation;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.MathHelper;
-
 public class AnimationRender extends Gui {
 
     private float duration;
@@ -49,13 +46,12 @@ public class AnimationRender extends Gui {
 
         this.deltaTime = resolveDeltaTime(timeFraction);
 
-        if (timeFraction > 1) return;
+        if (timeFraction > 1) System.out.println("timeFractionns has a problem");
     }
 
     public float reverse(float reverseMode){
        return reverseMode - ( this.deltaTime * reverseMode);
     }
-
 
     public void  toggle(){
         setReverse(!isReverse());

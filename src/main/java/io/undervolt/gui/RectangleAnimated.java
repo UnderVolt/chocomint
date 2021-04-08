@@ -16,8 +16,10 @@ public class RectangleAnimated extends AnimationRender {
     private final FontRenderer fontRendererObj;
     private Minecraft mc;
 
+    private float lastX = -1;
+
     public RectangleAnimated() {
-        super(1000, AnimationTimings.QUAD);
+        super(1000, AnimationTimings.QUAD, false);
         this.fontRendererObj = GameBridge.getMinecraft().fontRendererObj;
         this.mc = GameBridge.getMinecraft();
     }
@@ -27,24 +29,35 @@ public class RectangleAnimated extends AnimationRender {
 
         super.render();
 
-        ScaledResolution scaledresolution = new ScaledResolution(this.mc);
+       /* ScaledResolution scaledresolution = new ScaledResolution(this.mc);
 
         GlStateManager.pushMatrix();
 
-        float modifier =  (scaledresolution.getScaledWidth() - this.deltaTime * 120);
+        float modifier =  (scaledresolution.getScaledWidth() - this.deltaTime * 200);
 
-        System.out.println(modifier);
+        float reverseMod = scaledresolution.getScaledWidth() + 200;
 
-        GlStateManager.translate(this.isReverse() ? (this.deltaTime * scaledresolution.getScaledWidth()) : modifier, 0, 0);
+        System.out.println(255 - (this.deltaTime * 255));
+
+        this.lastX = this.isReverse() ?  (scaledresolution.getScaledWidth() - 200) + (this.deltaTime * reverseMod) : modifier;
+
+        GlStateManager.translate(lastX, 0, 0);
 
         GlStateManager.enableAlpha();
         GlStateManager.enableBlend();
-        Color color = new Color(255, 255, 255, (int) (isReverse() ? reverse(183) : this.deltaTime * 255));
+        Color color = new Color(255, 255, 255, (int) (isReverse() ? 255 - (this.deltaTime * 255) : this.deltaTime * 255));
         drawRect(0, 0, 200, 200, color.getRGB());
         GlStateManager.disableAlpha();
         GlStateManager.disableBlend();
-        GlStateManager.popMatrix();
+        GlStateManager.popMatrix();*/
 
     }
 
+    @Override
+    public void toggle() {
+        if(!this.isReverse()){
+            setTiming(AnimationTimings.LINEAR);
+        }
+        super.toggle();
+    }
 }

@@ -17,7 +17,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class FriendsPanel extends AnimationRender {
     private final Minecraft mc;
     private final FriendsManager friendsManager;
-    public boolean isActive;
     private final Chocomint chocomint;
 
     private final List<UserCard> friendUserCardList = Lists.newArrayList();
@@ -26,60 +25,58 @@ public class FriendsPanel extends AnimationRender {
     private int clickCounter = 0;
 
     public FriendsPanel(Chocomint chocomint, FriendsManager friendsManager, boolean isActive) {
-        super(250, AnimationTimings.QUAD);
+        super(250, AnimationTimings.QUAD, !isActive);
         this.chocomint = chocomint;
         this.mc = chocomint.getMinecraft();
         this.friendsManager = friendsManager;
-        this.isActive = isActive;
 
         this.updateUserCardList();
 
     }
 
     public void drawPanel(int screenWidth, int screenHeight) {
-        if(this.isActive) {
-            this.render();
-            GlStateManager.pushMatrix();
+        this.render();
 
-            GlStateManager.translate(0, (this.deltaTime * 22), 0);
+        GlStateManager.pushMatrix();
 
-            this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 140, 0, 138,
-                    screenHeight - 24, 2, new Color(28, 28, 28).getRGB());
+        GlStateManager.translate(0, this.isReverse() ? 22 - (this.deltaTime * screenHeight):  -screenHeight + (this.deltaTime * (screenHeight + 22)), 0);
 
-            drawString(this.mc.fontRendererObj, "Amigos", screenWidth - 134, 10, Color.WHITE.getRGB());
+        this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 140, 0, 138,
+                screenHeight - 24, 2, new Color(28, 28, 28).getRGB());
 
-
-            AtomicInteger y = new AtomicInteger(22);
-            this.friendUserCardList.forEach(userCard -> {
-                userCard.drawCard(screenWidth - 136, y.get());
-                y.set(y.get() + 40);
-            });
-
-            if(friendUserCardList.isEmpty()) {
-                this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 136, y.get(), 130, 36, 4, new Color(22, 22, 22).getRGB());
-                drawCenteredString(this.mc.fontRendererObj, "No tenés amigos", screenWidth - 68, y.get() + 13, Color.LIGHT_GRAY.getRGB());
-                y.set(y.get() + 40);
-            }
-
-            this.chocomint.getRenderUtils().drawLine(screenWidth - 134, y.get() + 5, screenWidth - 8, y.get() + 6, 2, Color.LIGHT_GRAY.getRGB());
-
-            drawString(this.mc.fontRendererObj, "Solicitudes de amistad", screenWidth - 134, y.get() + 15, Color.WHITE.getRGB());
-            y.set(y.get() + 30);
-
-            this.frUserCardList.forEach(userCard -> {
-                userCard.drawCard(screenWidth - 136, y.get());
-                y.set(y.get() + 40);
-            });
-
-            if(frUserCardList.isEmpty()) {
-                this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 136, y.get(), 130, 36, 4, new Color(22, 22, 22).getRGB());
-                drawCenteredString(this.mc.fontRendererObj, "No hay solicitudes", screenWidth - 68, y.get() + 13, Color.LIGHT_GRAY.getRGB());
-                y.set(y.get() + 40);
-            }
+        drawString(this.mc.fontRendererObj, "Amigos", screenWidth - 134, 10, Color.WHITE.getRGB());
 
 
-            GlStateManager.popMatrix();
+        AtomicInteger y = new AtomicInteger(22);
+        this.friendUserCardList.forEach(userCard -> {
+            userCard.drawCard(screenWidth - 136, y.get());
+            y.set(y.get() + 40);
+        });
+
+        if (friendUserCardList.isEmpty()) {
+            this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 136, y.get(), 130, 36, 4, new Color(22, 22, 22).getRGB());
+            drawCenteredString(this.mc.fontRendererObj, "No tenés amigos", screenWidth - 68, y.get() + 13, Color.LIGHT_GRAY.getRGB());
+            y.set(y.get() + 40);
         }
+
+        this.chocomint.getRenderUtils().drawLine(screenWidth - 134, y.get() + 5, screenWidth - 8, y.get() + 6, 2, Color.LIGHT_GRAY.getRGB());
+
+        drawString(this.mc.fontRendererObj, "Solicitudes de amistad", screenWidth - 134, y.get() + 15, Color.WHITE.getRGB());
+        y.set(y.get() + 30);
+
+        this.frUserCardList.forEach(userCard -> {
+            userCard.drawCard(screenWidth - 136, y.get());
+            y.set(y.get() + 40);
+        });
+
+        if (frUserCardList.isEmpty()) {
+            this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 136, y.get(), 130, 36, 4, new Color(22, 22, 22).getRGB());
+            drawCenteredString(this.mc.fontRendererObj, "No hay solicitudes", screenWidth - 68, y.get() + 13, Color.LIGHT_GRAY.getRGB());
+            y.set(y.get() + 40);
+        }
+
+
+        GlStateManager.popMatrix();
     }
 
     public void click(int mouseX, int mouseY) {
@@ -102,12 +99,18 @@ public class FriendsPanel extends AnimationRender {
                 (u) -> this.mc.displayGuiScreen(new UserScreen(null, this.chocomint, u)))));
     }
 
-    public void toggleActive() {
-        this.isActive = !this.isActive;
+
+    public boolean isActive() {
+        return !this.isReverse();
+    }
+
+    @Override
+    public void toggle() {
+        if (!this.isReverse()) {
+            setTiming(AnimationTimings.LINEAR);
+        }
+        super.toggle();
         this.updateUserCardList();
     }
 
-    public void setActive(boolean active) {
-        isActive = active;
-    }
 }
