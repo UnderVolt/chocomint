@@ -20,35 +20,29 @@ import java.util.Map;
 
 public class FriendsManager {
 
-    private final Chocomint chocomint;
-    private final UserManager userManager;
-    private final RestUtils restUtils;
     private final Gson gson;
 
     public final Map<String, User> friendsPool = Maps.newHashMap();
     public final Map<String, User> friendRequestPool = Maps.newHashMap();
 
     public FriendsManager() {
-        this.chocomint = GameBridge.getChocomint();
-        this.userManager = chocomint.getUserManager();
-        this.restUtils = chocomint.getRestUtils();
         this.gson = new GsonBuilder().create();
     }
 
-    public void loadFriends(List<String> friendList) {
+    public void loadFriends(UserManager userManager, List<String> friendList) {
         for(String friendName : friendList) {
             this.friendsPool.put(friendName, userManager.getUser(friendName));
         }
     }
 
-    public void loadFriends(JsonArray friendList) throws JSONException {
+    public void loadFriends(UserManager userManager, JsonArray friendList) throws JSONException {
         int len = friendList.size();
         for (int i = 0; i < len; i++){
             this.friendsPool.put(friendList.get(i).getAsString(), userManager.getUser(friendList.get(i).getAsString()));
         }
     }
 
-    public void loadFriendRequests(JsonArray friendList) throws JSONException {
+    public void loadFriendRequests(UserManager userManager, JsonArray friendList) throws JSONException {
         int len = friendList.size();
         for (int i = 0; i < len; i++){
             this.friendRequestPool.put(friendList.get(i).getAsString(), userManager.getUser(friendList.get(i).getAsString()));
@@ -63,7 +57,7 @@ public class FriendsManager {
         this.friendsPool.remove(username);
     }
 
-    public void addFriend(String username) {
+    public void addFriend(UserManager userManager, String username) {
         this.friendsPool.put(username, userManager.getUser(username));
     }
 }
