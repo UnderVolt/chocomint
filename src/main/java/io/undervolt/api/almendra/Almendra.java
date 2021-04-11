@@ -17,7 +17,6 @@ import io.undervolt.gui.notifications.Notification;
 import io.undervolt.gui.user.User;
 import io.undervolt.gui.user.UserScreen;
 import io.undervolt.instance.Chocomint;
-import io.undervolt.utils.Multithreading;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import org.json.JSONArray;
@@ -28,7 +27,6 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class Almendra implements Listener {
     private final Chocomint chocomint;
