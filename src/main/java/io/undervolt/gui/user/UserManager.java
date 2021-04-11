@@ -60,8 +60,8 @@ public class UserManager {
                         userObject.get("created").getAsString())
                 );
                 try {
-                    this.chocomint.getFriendsManager().loadFriends(userObject.get("friends").getAsJsonObject().get("list").getAsJsonArray());
-                    this.chocomint.getFriendsManager().loadFriendRequests(userObject.get("friends").getAsJsonObject().get("requests").getAsJsonArray());
+                    this.chocomint.getFriendsManager().loadFriends(this, userObject.get("friends").getAsJsonObject().get("list").getAsJsonArray());
+                    this.chocomint.getFriendsManager().loadFriendRequests(this, userObject.get("friends").getAsJsonObject().get("requests").getAsJsonArray());
                 } catch (JSONException e) {
                     e.printStackTrace();
                     this.chocomint.getNotificationManager().addNotification(new Notification(Notification.Priority.CRITICAL, "Error", "Failed to load friends list", (a)->{}));

@@ -138,8 +138,8 @@ public class Chocomint implements Listener {
 
                 this.getConfig().loadMinecraftSession();
 
-                this.friendsManager = new FriendsManager();
                 this.contributorsManager = new ContributorsManager(this.mc);
+                this.friendsManager = new FriendsManager();
 
                 this.eventManager.callEvent(new InitEvent.ClientInitEvent());
 
@@ -170,7 +170,6 @@ public class Chocomint implements Listener {
                 this.config = new Config(this);
                 this.userManager = new UserManager(this);
                 this.getConfig().loadToken();
-                this.friendsManager = new FriendsManager();
                 this.user = this.userManager.setUser(this.config.getToken());
                 try {
                     this.almendra = new Almendra(this);
