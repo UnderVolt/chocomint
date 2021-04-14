@@ -11,6 +11,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -209,6 +210,16 @@ public class UserScreen extends Menu {
                 this.fontRendererObj.drawString(devInfoCardText, x + 98 + this.fontRendererObj.getStringWidth("DEV"), scroll + getBannerPadding() + 91, Color.WHITE.getRGB());
             }
         }
+
+        GL11.glPushMatrix();
+        GlStateManager.translate(x + 20, this.scroll + getBannerPadding() + 135, 0);
+        GL11.glScalef(1.1f, 1.1f, 0f);
+        this.fontRendererObj.drawString("Biografía", 0, 0, Color.WHITE.getRGB());
+        GL11.glPopMatrix();
+
+        this.fontRendererObj.drawString("\247oNo tengo biografía", x + 20, this.scroll + getBannerPadding() + 150, Color.WHITE.getRGB());
+
+
 
         //if(this.user.getUsername().equals(this.chocomint.getUser().getUsername()))
         //    drawCenteredString(this.fontRendererObj, "Has estado jugando por " + this.chocomint.getParsedOpenTime(), this.width / 2, 195, Color.WHITE.getRGB());
