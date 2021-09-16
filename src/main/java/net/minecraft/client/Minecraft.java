@@ -37,6 +37,7 @@ import java.util.concurrent.FutureTask;
 import javax.imageio.ImageIO;
 
 import io.undervolt.api.event.events.GameShutdownEvent;
+import io.undervolt.api.event.events.KeyInputEvent;
 import io.undervolt.api.event.events.TickEvent;
 import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.splash.Splash;
@@ -2060,6 +2061,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                         }
                     }
                 }
+                this.getChocomint().getEventManager().callEvent(new KeyInputEvent(Keyboard.getEventKey()));
             }
 
             for (int l = 0; l < 9; ++l)
