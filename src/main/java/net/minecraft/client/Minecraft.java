@@ -673,7 +673,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
     }
 
     private void setLoadingScreenDisplayMode() throws LWJGLException {
-        Display.setDisplayMode(new DisplayMode(0, 0));
+        Display.setDisplayMode(new DisplayMode(1, 1));
     }
 
     private void setWindowIcon()
