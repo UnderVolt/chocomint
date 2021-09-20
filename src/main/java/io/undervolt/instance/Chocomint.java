@@ -1,6 +1,5 @@
 package io.undervolt.instance;
 
-import com.google.common.collect.Lists;
 import io.undervolt.api.almendra.Almendra;
 import io.undervolt.api.event.EventManager;
 import io.undervolt.api.event.events.InitEvent;
@@ -30,7 +29,6 @@ import io.undervolt.utils.config.Config;
 import io.undervolt.utils.config.ConfigurableManager;
 import io.undervolt.utils.config.ProfileLoader;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiMainMenu;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
