@@ -121,9 +121,6 @@ public class Chocomint implements Listener {
 
                 this.eventManager.registerEvents(this);
                 this.eventManager.callEvent(new InitEvent.PreInitEvent());
-
-                //TODO: Load heavy stuff
-                //TODO: Load external mods
                 break;
             case INIT:
 
@@ -140,8 +137,6 @@ public class Chocomint implements Listener {
                 this.friendsManager = new FriendsManager();
 
                 this.eventManager.callEvent(new InitEvent.ClientInitEvent());
-
-                //TODO: Register events & hooks
                 break;
             case POSTINIT:
 
@@ -155,9 +150,7 @@ public class Chocomint implements Listener {
                 this.console.registerCommand(new HelpCommand(this));
 
                 this.eventManager.callEvent(new InitEvent.PostInitEvent());
-
-                //TODO: Throw post setup
-                break;            
+                break;
         }
     }
 
