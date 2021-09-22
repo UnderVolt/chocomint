@@ -31,7 +31,7 @@ public class AvailableRooms extends AnimationUI {
         this.almendra = chocomint.getAlmendra();
         this.chatManager = chatManager;
         this.previous = previous;
-        this.gameBar = new GameBar(this, chocomint, this.buttonList);
+        this.gameBar = chocomint.getGameBar();
     }
 
     @Override
@@ -50,7 +50,7 @@ public class AvailableRooms extends AnimationUI {
         this.buttonList.add(this.pmButton = new GuiButton(1337, this.width / 2 - 100, y.get(), "#comandos"));
 
         super.initGui();
-        this.gameBar.init(width, height);
+        this.gameBar.init(width, height, this.buttonList);
 
     }
 

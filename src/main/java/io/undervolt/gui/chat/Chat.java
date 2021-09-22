@@ -68,7 +68,7 @@ public class Chat extends AnimationUI {
         this.serverData = serverData;
 
         this.console = this.chocomint.getConsole();
-        this.gameBar = new GameBar(this, this.chocomint, this.buttonList);
+        this.gameBar = chocomint.getGameBar();
     }
 
     @Override
@@ -145,7 +145,7 @@ public class Chat extends AnimationUI {
             this.serverReservedButton.buttonText = "No está jugando";
         }
 
-        this.gameBar.init(width, height);
+        this.gameBar.init(width, height, this.buttonList);
         super.initGui();
 
     }
