@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import io.undervolt.api.event.events.UserConnectEvent;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.RestUtils;
@@ -59,6 +60,7 @@ public class UserManager {
                         userObject.get("banner").getAsString(),
                         userObject.get("created").getAsString())
                 );
+                this.chocomint.getEventManager().callEvent(new UserConnectEvent(user.get()));
                 try {
                     this.chocomint.getFriendsManager().loadFriends(this, userObject.get("friends").getAsJsonObject().get("list").getAsJsonArray());
                     this.chocomint.getFriendsManager().loadFriendRequests(this, userObject.get("friends").getAsJsonObject().get("requests").getAsJsonArray());
