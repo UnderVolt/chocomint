@@ -28,7 +28,7 @@ public class GuiIngameMenu extends AnimationUI {
 
     public GuiIngameMenu() {
         this.chocomint = GameBridge.getChocomint();
-        this.gameBar = new GameBar(this, this.chocomint, this.buttonList);
+        this.gameBar = chocomint.getGameBar();
     }
 
     /**
@@ -57,7 +57,7 @@ public class GuiIngameMenu extends AnimationUI {
         this.buttonList.add(new GuiButton(6, this.width / 2 + 2, this.height / 4 + 48 + i, 98, 20, I18n.format("gui.stats", new Object[0])));
         guibutton.enabled = this.mc.isSingleplayer() && !this.mc.getIntegratedServer().getPublic();
         this.ftime = Minecraft.getSystemTime();
-        this.gameBar.init(width, height);
+        this.gameBar.init(width, height, this.buttonList);
         super.initGui();
     }
 
