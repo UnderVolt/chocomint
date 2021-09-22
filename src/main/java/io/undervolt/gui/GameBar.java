@@ -1,5 +1,11 @@
 package io.undervolt.gui;
 
+import io.undervolt.api.cache.ImageCache;
+import io.undervolt.api.event.events.ScreenChangeEvent;
+import io.undervolt.api.event.events.UserConnectEvent;
+import io.undervolt.api.event.events.UserLoginEvent;
+import io.undervolt.api.event.handler.EventHandler;
+import io.undervolt.api.event.handler.Listener;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.config.GuiMods;
 import io.undervolt.gui.contributors.ContributorsManager;
@@ -13,17 +19,19 @@ import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.gui.notifications.NotificationOverlay;
 import io.undervolt.gui.notifications.NotificationPanel;
 import io.undervolt.gui.user.UserCard;
+import io.undervolt.gui.user.UserProfilePictureManager;
 import io.undervolt.gui.user.UserScreen;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
+import net.minecraft.client.renderer.texture.TextureManager;
 import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
-public class GameBar extends Gui {
+public class GameBar extends Gui implements Listener {
 
     /** Declare Minecraft */
     private final Minecraft mc;
@@ -81,8 +89,6 @@ public class GameBar extends Gui {
         this.notificationOverlay = chocomint.getNotificationOverlay();
     }
 
-
-
     public void init(int width, int height, List<GuiButton> buttonList) {
 
         // Initialize Notifications
@@ -132,6 +138,18 @@ public class GameBar extends Gui {
             ));
     }
 
+    @EventHandler public void login(UserConnectEvent event) {
+        if(this.parentScreen.buttonList != null) {
+            int index = this.parentScreen.buttonList.indexOf(this.userButton);
+            ((TextureGameBarButton) this.parentScreen.buttonList.get(index)).setTexture(
+                    this.mc.getTextureManager().getDynamicTextureLocation("pingo",
+                            this.chocomint.getUserProfilePictureManager().getCachedDynamicTexture(
+                                    event.getUser().getImage()
+                            )
+                    )
+            );
+        }
+    }
 
     private double dw;
 
@@ -208,7 +226,7 @@ public class GameBar extends Gui {
                 this.notificationPanel.setActive(false);
                 this.contributorsPanel.setActive(false);
                 this.friendsPanel.setActive(false);
-                if(this.chocomint.getUser().getUsername().equals("Guest")) this.mc.displayGuiScreen(new LoginGUI(this.parentScreen, this.chocomint));
+                if(this.chocomint.getUser().getUsername().equals("Guest")) this.mc.displayGuiScreen(new LoginGUI(this.mc.currentScreen, this.chocomint));
                 break;
             case 1337104:
                 this.notificationPanel.setActive(false);
