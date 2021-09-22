@@ -3,7 +3,9 @@ package io.undervolt.instance;
 import io.undervolt.api.almendra.Almendra;
 import io.undervolt.api.event.EventManager;
 import io.undervolt.api.event.events.InitEvent;
+import io.undervolt.api.event.events.ScreenChangeEvent;
 import io.undervolt.api.event.events.UserLoginEvent;
+import io.undervolt.api.event.handler.EventHandler;
 import io.undervolt.api.event.handler.Listener;
 import io.undervolt.api.sambayon.Sambayon;
 import io.undervolt.api.screenshot.ScreenshotUploader;
@@ -12,6 +14,7 @@ import io.undervolt.console.Console;
 import io.undervolt.console.commands.HelpCommand;
 import io.undervolt.console.commands.VersionCommand;
 import io.undervolt.gui.Background;
+import io.undervolt.gui.GameBar;
 import io.undervolt.gui.RenderUtils;
 import io.undervolt.gui.chat.ChatManager;
 import io.undervolt.gui.contributors.ContributorsManager;
@@ -62,6 +65,8 @@ public class Chocomint implements Listener {
 
     private NotificationOverlay notificationOverlay;
     private NotificationManager notificationManager;
+
+    private GameBar gameBar;
 
     private final ProfileLoader loader;
     private final ConfigurableManager configurableManager;
@@ -136,6 +141,8 @@ public class Chocomint implements Listener {
                 this.contributorsManager = new ContributorsManager(this.mc);
                 this.friendsManager = new FriendsManager();
 
+                this.gameBar = new GameBar(this.mc.currentScreen, this);
+
                 this.eventManager.callEvent(new InitEvent.ClientInitEvent());
                 break;
             case POSTINIT:
@@ -180,6 +187,10 @@ public class Chocomint implements Listener {
 
     public void initOfflineUser() {
         this.user = new User("Guest", User.Status.OFFLINE, null, false, null, null, null, null);
+    }
+
+    @EventHandler public void updateGamebar(ScreenChangeEvent event) {
+        this.gameBar.setParentScreen(event.getScreen());
     }
 
     public GameBridge getGameBridge() {
@@ -291,5 +302,9 @@ public class Chocomint implements Listener {
 
     public UserProfilePictureManager getUserProfilePictureManager() {
         return userProfilePictureManager;
+    }
+
+    public GameBar getGameBar() {
+        return gameBar;
     }
 }
