@@ -149,6 +149,7 @@ public class GameBar extends Gui implements Listener {
                     )
             );
         }
+        this.userCard.setUser(event.getUser());
     }
 
     private double dw;
