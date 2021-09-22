@@ -14,11 +14,11 @@ import java.util.function.Consumer;
 
 public class UserCard extends Gui {
 
-    private final User user;
+    private User user;
     private final Chocomint chocomint;
     private final Minecraft mc;
     private boolean isActive;
-    private final DynamicTexture dynamicTexture;
+    private DynamicTexture dynamicTexture;
     private final boolean isSelf;
     private final Consumer<User> consumer;
     public int x, y;
@@ -91,6 +91,11 @@ public class UserCard extends Gui {
                 }
             }
         }
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+        this.dynamicTexture = this.chocomint.getUserProfilePictureManager().getCachedDynamicTexture(user.getImage());
     }
 
     public User getUser() {
