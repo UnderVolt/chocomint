@@ -118,7 +118,7 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
 
     public GuiMainMenu() {
         this.chocomint = GameBridge.getChocomint();
-        this.gameBar = new GameBar(this, this.chocomint, this.buttonList);
+        this.gameBar = chocomint.getGameBar();
         this.openGLWarning2 = field_96138_a;
         this.L = false;
         this.splashText = "missingno";
@@ -307,7 +307,7 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
                 this.isAuthenticated = this.chocomint.getAlmendra().isAuthenticated();
         }, 0, 5, TimeUnit.SECONDS);
 
-        this.gameBar.init(width, height);
+        this.gameBar.init(width, height, this.buttonList);
     }
 
     /**

@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import io.undervolt.api.event.events.UserConnectEvent;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.RestUtils;
@@ -49,6 +50,7 @@ public class UserManager {
         this.restUtils.sendJsonRequest("/api/user", json, res -> {
             JsonObject jsonObject = this.gson.fromJson(res, JsonObject.class);
             if(jsonObject.get("code").getAsInt() == 200) {
+                this.chocomint.getUserProfilePictureManager().addImageToCache(jsonObject.getAsJsonObject("user").get("image").getAsString());
                 JsonObject userObject = jsonObject.getAsJsonObject("user");
                 user.set(new User(userObject.get("user").getAsString(),
                         User.Status.ONLINE,
@@ -66,6 +68,7 @@ public class UserManager {
                     e.printStackTrace();
                     this.chocomint.getNotificationManager().addNotification(new Notification(Notification.Priority.CRITICAL, "Error", "Failed to load friends list", (a)->{}));
                 }
+                this.chocomint.getEventManager().callEvent(new UserConnectEvent(user.get()));
             }
         });
         return user.get();
