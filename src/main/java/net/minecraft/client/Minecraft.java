@@ -38,6 +38,7 @@ import javax.imageio.ImageIO;
 
 import io.undervolt.api.event.events.GameShutdownEvent;
 import io.undervolt.api.event.events.KeyInputEvent;
+import io.undervolt.api.event.events.ScreenChangeEvent;
 import io.undervolt.api.event.events.TickEvent;
 import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.splash.Splash;
@@ -51,7 +52,6 @@ import net.minecraft.client.gui.achievement.GuiAchievement;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.gui.stream.GuiStreamUnavailable;
 import net.minecraft.client.main.GameConfiguration;
-import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -316,7 +316,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
     private IReloadableResourceManager mcResourceManager;
     private final IMetadataSerializer metadataSerializer_ = new IMetadataSerializer();
     private final List<IResourcePack> defaultResourcePacks = Lists.<IResourcePack>newArrayList();
-    private final DefaultResourcePack mcDefaultResourcePack;
+    public final DefaultResourcePack mcDefaultResourcePack;
     private ResourcePackRepository mcResourcePackRepository;
     private LanguageManager mcLanguageManager;
     private IStream stream;
@@ -994,6 +994,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
      */
     public void displayGuiScreen(GuiScreen guiScreenIn)
     {
+        this.getChocomint().getEventManager().callEvent(new ScreenChangeEvent(guiScreenIn));
         if (this.currentScreen != null)
         {
             this.currentScreen.onGuiClosed();

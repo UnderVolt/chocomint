@@ -118,22 +118,22 @@ public class TextureManager implements ITickable, IResourceManagerReloadListener
         return this.mapTextureObjects.get(textureLocation);
     }
 
-    public ResourceLocation getDynamicTextureLocation(String name, DynamicTexture texture)
+    public ResourceLocation getDynamicTextureLocation(String name, AbstractTexture texture)
     {
-        if (name.equals("logo"))
+        if (name.equals("logo") && texture instanceof DynamicTexture)
         {
-            texture = Config.getMojangLogoTexture(texture);
+            texture = Config.getMojangLogoTexture((DynamicTexture) texture);
         }
 
-        Integer integer = this.mapTextureCounters.get(name);
+        Integer integer = (Integer)this.mapTextureCounters.get(name);
 
         if (integer == null)
         {
-            integer = Integer.valueOf(1);
+            integer = 1;
         }
         else
         {
-            integer = Integer.valueOf(integer.intValue() + 1);
+            integer = integer + 1;
         }
 
         this.mapTextureCounters.put(name, integer);
