@@ -1,6 +1,7 @@
 package io.undervolt.instance;
 
 import io.undervolt.api.almendra.Almendra;
+import io.undervolt.api.cache.ImageCache;
 import io.undervolt.api.event.EventManager;
 import io.undervolt.api.event.events.InitEvent;
 import io.undervolt.api.event.events.ScreenChangeEvent;
@@ -68,6 +69,8 @@ public class Chocomint implements Listener {
 
     private GameBar gameBar;
 
+    private final ImageCache imageCache;
+
     private final ProfileLoader loader;
     private final ConfigurableManager configurableManager;
     private Config config;
@@ -100,6 +103,7 @@ public class Chocomint implements Listener {
         this.mc = mc;
         this.chocomintUser = "\247bchocomint";
         this.userProfilePictureManager = new UserProfilePictureManager();
+        this.imageCache = new ImageCache();
     }
 
     public void init(LaunchType type){
@@ -132,16 +136,19 @@ public class Chocomint implements Listener {
                 this.initOfflineUser();
                 this.screenshotUploader = new ScreenshotUploader(this);
                 this.notificationOverlay = new NotificationOverlay(this);
-
                 this.getEventManager().registerEvents(this.notificationOverlay);
+
                 this.config = new Config(this);
 
                 this.getConfig().loadMinecraftSession();
+
+                this.getEventManager().registerEvents(this.userProfilePictureManager);
 
                 this.contributorsManager = new ContributorsManager(this.mc);
                 this.friendsManager = new FriendsManager();
 
                 this.gameBar = new GameBar(this.mc.currentScreen, this);
+                this.getEventManager().registerEvents(this.gameBar);
 
                 this.eventManager.callEvent(new InitEvent.ClientInitEvent());
                 break;
@@ -302,6 +309,10 @@ public class Chocomint implements Listener {
 
     public UserProfilePictureManager getUserProfilePictureManager() {
         return userProfilePictureManager;
+    }
+
+    public ImageCache getImageCache() {
+        return imageCache;
     }
 
     public GameBar getGameBar() {
