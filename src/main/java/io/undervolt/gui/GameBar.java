@@ -154,6 +154,10 @@ public class GameBar extends Gui {
 
         if(!notificationPanel.isActive())
             this.notificationOverlay.drawOverlay(5, 27);
+
+        if(mouseY < 20) {
+            drawGradientRect(0, 20, width, 30, new Color(0, 0, 0, 100).getRGB(), new Color(0, 0, 0, 0).getRGB());
+        }
     }
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton, int width, int height) {
