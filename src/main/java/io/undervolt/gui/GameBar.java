@@ -142,7 +142,7 @@ public class GameBar extends Gui implements Listener {
         if(this.parentScreen.buttonList != null) {
             int index = this.parentScreen.buttonList.indexOf(this.userButton);
             ((TextureGameBarButton) this.parentScreen.buttonList.get(index)).setTexture(
-                    this.mc.getTextureManager().getDynamicTextureLocation("pingo",
+                    this.mc.getTextureManager().getDynamicTextureLocation(event.getUser().getImage(),
                             this.chocomint.getUserProfilePictureManager().getCachedDynamicTexture(
                                     event.getUser().getImage()
                             )
