@@ -226,7 +226,6 @@ public class GameBar extends Gui implements Listener {
                 this.friendsPanel.setActive(false);
                 break;
             case 1337102:
-                System.out.println(this.userCard.isActive());
                 this.userCard.toggleActive();
                 this.notificationPanel.setActive(false);
                 this.contributorsPanel.setActive(false);
