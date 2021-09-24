@@ -17,10 +17,7 @@ import io.undervolt.gui.friends.FriendsManager;
 import io.undervolt.gui.friends.FriendsPanel;
 import io.undervolt.gui.login.LoginGUI;
 import io.undervolt.gui.login.MinecraftLoginGUI;
-import io.undervolt.gui.notifications.Notification;
-import io.undervolt.gui.notifications.NotificationManager;
-import io.undervolt.gui.notifications.NotificationOverlay;
-import io.undervolt.gui.notifications.NotificationPanel;
+import io.undervolt.gui.notifications.*;
 import io.undervolt.gui.user.UserCard;
 import io.undervolt.gui.user.UserScreen;
 import io.undervolt.instance.Chocomint;
@@ -112,10 +109,9 @@ public class GameBar extends Gui implements Listener {
         // Add buttons to the buttonList variable
         this.notificationsButton = new TextureGameBarButton(
                 width - 20, 0, 20, 20, "notifications", (a) -> {
-            this.notificationPanel.toggleActive();
-            this.contributorsPanel.setActive(false);
-            this.userCard.setActive(false);
-            this.friendsPanel.setActive(false);
+            if(!(this.mc.currentScreen instanceof Panel))
+                this.mc.displayGuiScreen(new NotificationScreen(this.mc.currentScreen));
+            else this.mc.displayGuiScreen(((Panel) this.mc.currentScreen).previousScreen);
         });
 
         this.changeMinecraftAccountButton = new TextureGameBarButton(
@@ -178,7 +174,7 @@ public class GameBar extends Gui implements Listener {
         this.contributorsPanel.drawPanel(width, height);
         this.friendsPanel.drawPanel(width, height);
 
-        if(!notificationPanel.isActive())
+        if(!(this.mc.currentScreen instanceof NotificationScreen))
             this.notificationOverlay.drawOverlay(5, 27);
 
         boolean isAuthenticated = this.chocomint.getAlmendra() != null && this.chocomint.getAlmendra().isAuthenticated();

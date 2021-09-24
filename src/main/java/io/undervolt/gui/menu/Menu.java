@@ -27,6 +27,8 @@ public class Menu extends AnimationUI {
     protected int scroll = 0;
     private int pageSize;
 
+    private boolean backwards = false;
+
     private final int position = 0;
 
     public Menu(final GuiScreen prev, final Chocomint chocomint, final String menuName, final int pageSize) {
@@ -52,6 +54,8 @@ public class Menu extends AnimationUI {
     @Override
     public void initGui() {
         this.ftime = Minecraft.getSystemTime();
+        previous.width = width;
+        previous.height = height;
         this.chocomint.getGameBar().init(width, height);
         super.initGui();
     }
@@ -77,24 +81,26 @@ public class Menu extends AnimationUI {
 
         int hue = 0;
 
+        if(tw != 0) {
+            tw = this.getAnimationTime(this.ftime, 3500.0D) * height;
+        } else {
+            if(backwards) this.mc.displayGuiScreen(this.previous);
+        }
+
+        if(!backwards) {
+            hue = 130 - (int)(this.getAnimationTime(this.ftime, 4000.0D) * 130);
+        } else {
+            hue = (int)(this.getAnimationTime(this.ftime, 4000.0D) * 130);
+        }
+
         if(this.mc.theWorld == null && this.mc.thePlayer == null)
             previous.drawScreen(mouseX, mouseY, partialTicks);
-
-        if(tw != 0) {
-            tw = (this.getAnimationTime(this.ftime, 4000.0D) * height);
-        }
-
-        if(tw/100 > 1) {
-            hue = 130 / ((int) tw / 100);
-        } else {
-            hue = 130;
-        }
 
         drawRect(0, 0, width, height, new Color(0, 0, 0, hue).getRGB());
 
         GL11.glPushMatrix();
 
-        GlStateManager.translate(0, tw,0);
+        GlStateManager.translate(0, backwards ? height - tw : tw,0);
 
         GL11.glColor3f(255, 255, 255);
 
@@ -141,15 +147,23 @@ public class Menu extends AnimationUI {
         else if (i > 0  && (this.scroll <= this.pageSize - this.height)) this.scroll += 8;
     }
 
+    public void fadeOut() {
+        this.backwards = true;
+        this.ftime = Minecraft.getSystemTime();
+        this.tw = 0.1;
+    }
+
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
+        if(mouseY > 20 && (mouseX < getContentMargin() || mouseX > getContentMargin() + getContentWidth()))
+            this.fadeOut();
         this.chocomint.getGameBar().mouseClicked(mouseX, mouseY, mouseButton, width, height);
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if(keyCode == 1) this.mc.displayGuiScreen(previous);
+        if(keyCode == 1) this.fadeOut();
     }
 
     public void setPageSize(int pageSize) {
