@@ -49,7 +49,7 @@ public class UserScreen extends Menu {
     private MenuScrollClickableButton deleteFriendButton;
 
     public UserScreen(GuiScreen prev, Chocomint chocomint, final User user) {
-        super(prev, chocomint, "Perfil", 0);
+        super(prev, chocomint, "Perfil", "user", 0);
         this.chocomint = chocomint;
         this.prev = prev;
         this.user = user;
@@ -141,49 +141,49 @@ public class UserScreen extends Menu {
 
         if(this.banner != null) {
             this.mc.getTextureManager().bindTexture(this.mc.getTextureManager().getDynamicTextureLocation("banner", this.banner));
-            Gui.drawModalRectWithCustomSizedTexture(x, 20 + scroll, 0, 0, this.getContentWidth(),
-                    getBannerPadding() + 25, this.getContentWidth(),
+            Gui.drawModalRectWithCustomSizedTexture(x, 50 + scroll, 0, 0, this.getContentWidth(),
+                    getBannerPadding() + 22, this.getContentWidth(),
                     this.getContentWidth() / (this.bannerBufferedImage.getWidth() / this.bannerBufferedImage.getHeight()));
         }
 
         this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/ui/bracket-simple.png"));
-        drawModalRectWithCustomSizedTexture(x, scroll + getBannerPadding(), 0, 0, this.getContentWidth(), 25, this.getContentWidth(), 25);
-        drawRect(x, scroll + getBannerPadding() + 23, this.getContentMargin() + this.getContentWidth(), scroll + getBannerPadding() + 120, new Color(54,57,63).getRGB());
+        drawModalRectWithCustomSizedTexture(x, scroll + getBannerPadding() + 30, 0, 0, this.getContentWidth(), 25, this.getContentWidth(), 25);
+        drawRect(x, scroll + getBannerPadding() + 53, this.getContentMargin() + this.getContentWidth(), scroll + getBannerPadding() + 150, new Color(54,57,63).getRGB());
 
         if(!this.user.getUsername().equals("Guest")) {
             if(this.user.getUsername().equals(this.chocomint.getUser().getUsername())) {
-                this.logOutButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 40);
+                this.logOutButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 70);
             } else {
                 if(this.isFriend) {
-                    this.sendDMButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 40);
-                    this.deleteFriendButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 65);
+                    this.sendDMButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 70);
+                    this.deleteFriendButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 95);
                     if(!this.user.isOnline()) this.sendDMButton.setEnabled(false);
                 } else
-                    this.friendRequestButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 65);
+                    this.friendRequestButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 95);
             }
         }
 
         this.mc.getTextureManager().bindTexture(
                 this.mc.getTextureManager().getDynamicTextureLocation("pfp1", image));
-        Gui.drawModalRectWithCustomSizedTexture(x + 20, scroll + getBannerPadding() + 40, 0, 0, 60, 60, 60, 60);
+        Gui.drawModalRectWithCustomSizedTexture(x + 20, scroll + getBannerPadding() + 70, 0, 0, 60, 60, 60, 60);
 
         GL11.glPushMatrix();
-        GlStateManager.translate(x + 85, scroll + getBannerPadding() + 45, 0);
+        GlStateManager.translate(x + 85, scroll + getBannerPadding() + 75, 0);
         GlStateManager.scale(1.5, 1.5, 0);
         this.fontRendererObj.drawString(this.user.getAlias(), 0, 0, Color.white.getRGB());
         GL11.glPopMatrix();
 
-        if(drawAlias) this.fontRendererObj.drawString("(" + this.user.getUsername() + ")", x + 105, scroll + getBannerPadding() + 60, Color.LIGHT_GRAY.getRGB());
+        if(drawAlias) this.fontRendererObj.drawString("(" + this.user.getUsername() + ")", x + 105, scroll + getBannerPadding() + 90, Color.LIGHT_GRAY.getRGB());
         if(isFriend) {
             this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/icon/friends.png"));
-            drawModalRectWithCustomSizedTexture(x + 84 + (int) (this.mc.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), scroll + getBannerPadding() + 40, 0, 0, 20, 20, 20, 20);
-            this.profileSettingsButton.draw(mouseX, mouseY, this.getContentMargin() + 107 + (int)(this.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), scroll + getBannerPadding() + 41);
+            drawModalRectWithCustomSizedTexture(x + 84 + (int) (this.mc.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), scroll + getBannerPadding() + 70, 0, 0, 20, 20, 20, 20);
+            this.profileSettingsButton.draw(mouseX, mouseY, this.getContentMargin() + 107 + (int)(this.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), scroll + getBannerPadding() + 71);
         } else
-            this.profileSettingsButton.draw(mouseX, mouseY, this.getContentMargin() + 85 + (int)(this.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), scroll + getBannerPadding() + 41);
+            this.profileSettingsButton.draw(mouseX, mouseY, this.getContentMargin() + 85 + (int)(this.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), scroll + getBannerPadding() + 71);
 
         GL11.glPushMatrix();
         GL11.glColor3f(255, 255, 255);
-        GlStateManager.translate(x + 85, scroll + getBannerPadding() + 57, 0);
+        GlStateManager.translate(x + 85, scroll + getBannerPadding() + 87, 0);
         this.mc.getTextureManager().bindTexture(this.mc.getTextureManager().getDynamicTextureLocation(user.getCountryCode(), this.countryFlag));
         drawModalRectWithCustomSizedTexture(0, 0, 0, 0, 15, 15, 15, 15);
         GL11.glPopMatrix();
@@ -194,30 +194,30 @@ public class UserScreen extends Menu {
         else
             dateToDraw = "Se unió en " + this.createdMonth + " de " + this.createdYear;
 
-        this.fontRendererObj.drawString(dateToDraw, x + 85, scroll + getBannerPadding() + 72, Color.WHITE.getRGB());
+        this.fontRendererObj.drawString(dateToDraw, x + 85, scroll + getBannerPadding() + 102, Color.WHITE.getRGB());
 
         if(this.user.isDeveloper()) {
-            this.chocomint.getRenderUtils().drawRoundedRect(x + 85, scroll + getBannerPadding() + 89, 3 + this.fontRendererObj.getStringWidth("DEV"), 11,
+            this.chocomint.getRenderUtils().drawRoundedRect(x + 85, scroll + getBannerPadding() + 119, 3 + this.fontRendererObj.getStringWidth("DEV"), 11,
             3, new Color(47, 56, 168).getRGB());
             GL11.glColor3f(255, 255, 255);
-            this.fontRendererObj.drawString("DEV", x + 87, scroll + getBannerPadding() + 91, Color.WHITE.getRGB());
+            this.fontRendererObj.drawString("DEV", x + 87, scroll + getBannerPadding() + 121, Color.WHITE.getRGB());
 
             if(this.showDevInfoCard) {
                 String devInfoCardText = "Este usuario es un desarrollador oficial de chocomint";
-                this.chocomint.getRenderUtils().drawRoundedRect(x + 92 + this.fontRendererObj.getStringWidth("DEV"), scroll + getBannerPadding() + 86,
+                this.chocomint.getRenderUtils().drawRoundedRect(x + 92 + this.fontRendererObj.getStringWidth("DEV"), scroll + getBannerPadding() + 116,
                         12 + this.fontRendererObj.getStringWidth(devInfoCardText), 17, 3, new Color(78, 78, 78, 120).getRGB());
                 GL11.glColor3f(255, 255, 255);
-                this.fontRendererObj.drawString(devInfoCardText, x + 98 + this.fontRendererObj.getStringWidth("DEV"), scroll + getBannerPadding() + 91, Color.WHITE.getRGB());
+                this.fontRendererObj.drawString(devInfoCardText, x + 98 + this.fontRendererObj.getStringWidth("DEV"), scroll + getBannerPadding() + 121, Color.WHITE.getRGB());
             }
         }
 
         GL11.glPushMatrix();
-        GlStateManager.translate(x + 20, this.scroll + getBannerPadding() + 135, 0);
+        GlStateManager.translate(x + 20, this.scroll + getBannerPadding() + 165, 0);
         GL11.glScalef(1.1f, 1.1f, 0f);
         this.fontRendererObj.drawString("Biografía", 0, 0, Color.WHITE.getRGB());
         GL11.glPopMatrix();
 
-        this.fontRendererObj.drawString("\247oNo tengo biografía", x + 20, this.scroll + getBannerPadding() + 150, Color.WHITE.getRGB());
+        this.fontRendererObj.drawString("\247oNo tengo biografía", x + 20, this.scroll + getBannerPadding() + 180, Color.WHITE.getRGB());
 
 
 
@@ -240,8 +240,8 @@ public class UserScreen extends Menu {
 
         super.mouseClicked(mouseX, mouseY, mouseButton);
 
-        if(this.user.isDeveloper() && mouseX >= this.getContentMargin() + 85 && mouseY >= this.scroll + getBannerPadding() + 89 &&
-                mouseX <= this.getContentMargin() + 88 + this.fontRendererObj.getStringWidth("DEV") && mouseY <= this.scroll + getBannerPadding() + 100) {
+        if(this.user.isDeveloper() && mouseX >= this.getContentMargin() + 115 && mouseY >= this.scroll + getBannerPadding() + 119 &&
+                mouseX <= this.getContentMargin() + 118 + this.fontRendererObj.getStringWidth("DEV") && mouseY <= this.scroll + getBannerPadding() + 130) {
             this.showDevInfoCard = true;
         } else {
             this.showDevInfoCard = false;
