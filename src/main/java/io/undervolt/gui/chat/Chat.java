@@ -6,6 +6,7 @@ import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.AnimationUI;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -55,6 +56,8 @@ public class Chat extends AnimationUI {
 
     /** Scroll implementation */
     private int scroll = 0;
+    private double tw = Integer.MAX_VALUE;
+    protected long ftime;
 
     public Chat(final String initialText, final GuiScreen prev, final Chocomint chocomint, final ServerData serverData) {
 
@@ -73,6 +76,8 @@ public class Chat extends AnimationUI {
 
     @Override
     public void initGui() {
+
+        this.ftime = Minecraft.getSystemTime();
 
         this.chatHeight = (int) (this.height * .33);
 
@@ -153,7 +158,27 @@ public class Chat extends AnimationUI {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 
-        this.drawDefaultBackground();
+        int hue = 0;
+
+        if(tw != 0) {
+            tw = (this.getAnimationTime(this.ftime, 3000.0D) * height);
+        }
+
+        if(tw/100 > 1) {
+            hue = 130 / ((int) tw / 100);
+        } else {
+            hue = 130;
+        }
+
+        if(this.mc.theWorld == null && this.mc.thePlayer == null) {
+            prev.drawScreen(mouseX, mouseY, partialTicks);
+            drawRect(0, 0, width, height, new Color(0, 0, 0, hue).getRGB());
+        }
+
+        GL11.glPushMatrix();
+
+        GlStateManager.translate(0, tw, 0);
+
         drawRect(0, this.chatHeight, this.width, this.height, new Color(36, 36, 36, 100).getRGB());
 
         GL11.glPushMatrix();
@@ -179,6 +204,8 @@ public class Chat extends AnimationUI {
 
         drawRect(0, this.chatHeight - 18, this.width, this.chatHeight,
                 Color.BLACK.getRGB());
+
+        GL11.glPopMatrix();
 
         this.gameBar.draw(mouseX, mouseY, partialTicks, width, height);
         super.drawScreen(mouseX, mouseY, partialTicks);
