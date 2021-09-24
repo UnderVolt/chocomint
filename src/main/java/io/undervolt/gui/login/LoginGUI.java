@@ -34,7 +34,7 @@ public class LoginGUI extends Menu {
     private GuiTextField pass;
 
     public LoginGUI(final GuiScreen parent, final Chocomint chocomint) {
-        super(parent, chocomint, "Iniciar sesión", parent.height);
+        super(parent, chocomint, "Iniciar sesión", "user", parent.height);
         this.parent = parent;
         this.restUtils = chocomint.getRestUtils();
         this.config = chocomint.getConfig();
