@@ -189,8 +189,10 @@ public class GameBar extends Gui implements Listener {
         this.userButton.draw(mouseX, mouseY);
         this.notificationsButton.draw(mouseX, mouseY);
         this.changeMinecraftAccountButton.draw(mouseX, mouseY);
-        this.friendsButton.draw(mouseX, mouseY);
-        this.chatButton.draw(mouseX, mouseY);
+        if(!this.chocomint.getUser().getUsername().equalsIgnoreCase("Guest")) {
+            this.friendsButton.draw(mouseX, mouseY);
+            this.chatButton.draw(mouseX, mouseY);
+        }
 
         if(this.mc.theWorld != null && this.mc.thePlayer != null)
             this.configButton.draw(mouseX, mouseY);
