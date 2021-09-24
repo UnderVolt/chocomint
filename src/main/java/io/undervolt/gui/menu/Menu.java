@@ -52,6 +52,8 @@ public class Menu extends AnimationUI {
     @Override
     public void initGui() {
         this.ftime = Minecraft.getSystemTime();
+        previous.width = width;
+        previous.height = height;
         this.chocomint.getGameBar().init(width, height);
         super.initGui();
     }
