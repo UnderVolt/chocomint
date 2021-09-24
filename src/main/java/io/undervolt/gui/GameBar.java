@@ -5,6 +5,7 @@ import io.undervolt.api.event.events.UserConnectEvent;
 import io.undervolt.api.event.handler.EventHandler;
 import io.undervolt.api.event.handler.Listener;
 import io.undervolt.bridge.GameBridge;
+import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.clickable.Clickable;
 import io.undervolt.gui.clickable.GameBarButton;
 import io.undervolt.gui.clickable.TextureGameBarButton;
@@ -64,7 +65,7 @@ public class GameBar extends Gui implements Listener {
     /** Declare buttons */
     private TextureGameBarButton notificationsButton;
     private UserGameBarButton userButton;
-    private TextureGameBarButton musicButton;
+    private TextureGameBarButton chatButton;
     private TextureGameBarButton friendsButton;
     private GameBarButton configButton;
     private TextureGameBarButton changeMinecraftAccountButton;
@@ -141,7 +142,15 @@ public class GameBar extends Gui implements Listener {
             this.friendsPanel.toggleActive();
         });
 
-        this.configButton = new GameBarButton(width - 114 - this.mc.fontRendererObj.getStringWidth(this.chocomint.getUser().getUsername()), 0, 20, 20, "C",
+        this.chatButton = new TextureGameBarButton(width - 114 - this.mc.fontRendererObj.getStringWidth(this.chocomint.getUser().getUsername()), 0, 20, 20, "chat", (a) -> {
+            this.notificationPanel.setActive(false);
+            this.contributorsPanel.setActive(false);
+            this.userCard.setActive(false);
+            this.friendsPanel.setActive(false);
+            this.mc.displayGuiScreen(new Chat("", this.mc.currentScreen, this.chocomint, this.mc.getCurrentServerData()));
+        });
+
+        this.configButton = new GameBarButton(width - 136 - this.mc.fontRendererObj.getStringWidth(this.chocomint.getUser().getUsername()), 0, 20, 20, "C",
                 (a) -> {
                     this.mc.displayGuiScreen(new GuiMods(this.parentScreen, this.chocomint));
                 });
@@ -172,10 +181,17 @@ public class GameBar extends Gui implements Listener {
         if(!notificationPanel.isActive())
             this.notificationOverlay.drawOverlay(5, 27);
 
+        boolean isAuthenticated = this.chocomint.getAlmendra() != null && this.chocomint.getAlmendra().isAuthenticated();
+
+        this.friendsButton.setEnabled(isAuthenticated);
+        this.chatButton.setEnabled(isAuthenticated);
+
         this.userButton.draw(mouseX, mouseY);
         this.notificationsButton.draw(mouseX, mouseY);
         this.changeMinecraftAccountButton.draw(mouseX, mouseY);
         this.friendsButton.draw(mouseX, mouseY);
+        this.chatButton.draw(mouseX, mouseY);
+
         if(this.mc.theWorld != null && this.mc.thePlayer != null)
             this.configButton.draw(mouseX, mouseY);
     }
@@ -212,6 +228,7 @@ public class GameBar extends Gui implements Listener {
         this.notificationsButton.click(mouseX, mouseY);
         this.changeMinecraftAccountButton.click(mouseX, mouseY);
         this.friendsButton.click(mouseX, mouseY);
+        this.chatButton.click(mouseX, mouseY);
         if(this.mc.theWorld != null && this.mc.thePlayer != null)
             this.configButton.click(mouseX, mouseY);
 
