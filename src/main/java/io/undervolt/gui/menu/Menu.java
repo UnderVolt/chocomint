@@ -21,7 +21,7 @@ public class Menu extends AnimationUI {
     private final Chocomint chocomint;
     private final GuiScreen previous;
     protected long ftime;
-    private final String menuName;
+    private final String menuName, menuIcon;
 
     private double tw = Integer.MAX_VALUE;
     protected int scroll = 0;
@@ -30,8 +30,16 @@ public class Menu extends AnimationUI {
     private final int position = 0;
 
     public Menu(final GuiScreen prev, final Chocomint chocomint, final String menuName, final int pageSize) {
-        //super(prev, chocomint);
+        this.menuIcon = null;
         this.menuName = menuName;
+        this.chocomint = chocomint;
+        this.pageSize = pageSize;
+        this.previous = prev;
+    }
+
+    public Menu(final GuiScreen prev, final Chocomint chocomint, final String menuName, final String menuIcon, final int pageSize) {
+        this.menuName = menuName;
+        this.menuIcon = menuIcon;
         this.chocomint = chocomint;
         this.pageSize = pageSize;
         this.previous = prev;
@@ -44,7 +52,7 @@ public class Menu extends AnimationUI {
     @Override
     public void initGui() {
         this.ftime = Minecraft.getSystemTime();
-        this.buttonList.add(new TexturedMenuInterfaceButton(100, 0, 0, 20, 20, "back"));
+        this.chocomint.getGameBar().init(width, height);
         super.initGui();
     }
 
@@ -67,37 +75,61 @@ public class Menu extends AnimationUI {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 
+        int hue = 0;
+
+        if(this.mc.theWorld == null && this.mc.thePlayer == null)
+            previous.drawScreen(mouseX, mouseY, partialTicks);
+
         if(tw != 0) {
-            tw = (this.getAnimationTime(this.ftime, 3000.0D) * 400D);
+            tw = (this.getAnimationTime(this.ftime, 4000.0D) * height);
         }
 
-        if(tw == 0) {
-            drawDefaultBackground();
-            drawRect(0, 0, this.width, this.height, new Color(0, 0, 0, 100).getRGB());
+        if(tw/100 > 1) {
+            hue = 130 / ((int) tw / 100);
+        } else {
+            hue = 130;
         }
+
+        drawRect(0, 0, width, height, new Color(0, 0, 0, hue).getRGB());
 
         GL11.glPushMatrix();
-        GL11.glEnable(GL11.GL_BLEND);
 
         GlStateManager.translate(0, tw,0);
 
         GL11.glColor3f(255, 255, 255);
 
+        GL11.glPushMatrix();
+        GlStateManager.translate(this.getContentMargin(), 0, 0);
+        GL11.glRotatef(90, 0, 0, 1);
+        drawGradientRect(0, 0, height, 10, new Color(0, 0, 0, 100).getRGB(), 0);
+        GL11.glPopMatrix();
+
+        GL11.glPushMatrix();
+        GlStateManager.translate(this.getContentMargin() + this.getContentWidth() + 10, 0, 0);
+        GL11.glRotatef(90, 0, 0, 1);
+        drawGradientRect(0, 0, height, 10, 0, new Color(0, 0, 0, 100).getRGB());
+        GL11.glPopMatrix();
+
         this.mc.getTextureManager().bindTexture(this.bracketRes);
-
-        drawModalRectWithCustomSizedTexture(-5, position - 48, 0, 0, this.width + 10, 50, this.width + 10,50);
-        drawRect(0, position, this.width, pageSize, new Color(32,34,37).getRGB());
-        drawGradientRect(0, position, this.width, 250, Color.BLACK.getRGB(), 0);
+        drawModalRectWithCustomSizedTexture(this.getContentMargin(), position - 48, 0, 0, this.getContentWidth(), 50, this.getContentWidth(),50);
         drawRect(this.getContentMargin(), position, this.getContentMargin() + this.getContentWidth(), pageSize, new Color(39, 39, 45).getRGB());
-        drawRect(0, position, this.width, 20, new Color(54,57,63).getRGB());
+        drawRect(this.getContentMargin(), position, this.getContentMargin() + this.getContentWidth(), 50, new Color(54,57,63).getRGB());
 
-        this.fontRendererObj.drawString(this.menuName, 24, position + 7, Color.white.getRGB());
+        GL11.glColor3f(255,255,255);
+        if(this.menuIcon != null) {
+            this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/icon/" + menuIcon + ".png"));
+            drawModalRectWithCustomSizedTexture(this.getContentMargin() + 5, position + 28, 0, 0, 20, 20, 20,20);
+            this.fontRendererObj.drawString(this.menuName, this.getContentMargin() + 24, position + 36, Color.white.getRGB());
+        } else
+            this.fontRendererObj.drawString(this.menuName, this.getContentMargin() + 5, position + 36, Color.white.getRGB());
         drawMenuItems(mouseX, mouseY, partialTicks, this.getContentMargin(), this.scroll);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        GL11.glDisable(GL11.GL_BLEND);
         GL11.glPopMatrix();
+
+        this.chocomint.getGameBar().draw(mouseX, mouseY, partialTicks, width, height);
+        GL11.glDisable(GL11.GL_BLEND);
     }
 
     @Override
@@ -110,8 +142,9 @@ public class Menu extends AnimationUI {
     }
 
     @Override
-    protected void actionPerformed(GuiButton button) throws IOException {
-        if(button.id == 100) this.mc.displayGuiScreen(previous);
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+        this.chocomint.getGameBar().mouseClicked(mouseX, mouseY, mouseButton, width, height);
     }
 
     @Override
