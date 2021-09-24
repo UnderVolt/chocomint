@@ -307,7 +307,7 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
                 this.isAuthenticated = this.chocomint.getAlmendra().isAuthenticated();
         }, 0, 5, TimeUnit.SECONDS);
 
-        this.gameBar.init(width, height, this.buttonList);
+        this.gameBar.init(width, height);
     }
 
     /**
@@ -406,8 +406,6 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
         if (button.id == 104) this.mc.displayGuiScreen(new UserSearch(this, this.chocomint));
 
         super.actionPerformed(button);
-
-        this.gameBar.actionPerformed(button);
     }
 
     private void f()

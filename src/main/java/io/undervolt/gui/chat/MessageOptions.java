@@ -37,7 +37,7 @@ public class MessageOptions extends AnimationUI {
 
     @Override
     public void initGui() {
-        this.gameBar.init(width, height, this.buttonList);
+        this.gameBar.init(width, height);
         //this.buttonList.add(this.sendPMButton = new GuiButton(100, this.width / 2 - 100, 25, "Enviar un mensaje privado"));
 
         // Will remove comment when implemented
@@ -67,7 +67,6 @@ public class MessageOptions extends AnimationUI {
                 }
                 break;
         }
-        this.gameBar.actionPerformed(button);
         super.actionPerformed(button);
     }
 

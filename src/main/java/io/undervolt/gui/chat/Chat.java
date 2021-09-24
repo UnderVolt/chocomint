@@ -145,7 +145,7 @@ public class Chat extends AnimationUI {
             this.serverReservedButton.buttonText = "No está jugando";
         }
 
-        this.gameBar.init(width, height, this.buttonList);
+        this.gameBar.init(width, height);
         super.initGui();
 
     }
@@ -213,7 +213,6 @@ public class Chat extends AnimationUI {
             this.chatManager.removeCurrentTab();
             this.update(false);
         } else {
-            this.gameBar.actionPerformed(button);
             super.actionPerformed(button);
         }
     }

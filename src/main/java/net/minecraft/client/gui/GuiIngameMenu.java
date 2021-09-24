@@ -57,7 +57,7 @@ public class GuiIngameMenu extends AnimationUI {
         this.buttonList.add(new GuiButton(6, this.width / 2 + 2, this.height / 4 + 48 + i, 98, 20, I18n.format("gui.stats", new Object[0])));
         guibutton.enabled = this.mc.isSingleplayer() && !this.mc.getIntegratedServer().getPublic();
         this.ftime = Minecraft.getSystemTime();
-        this.gameBar.init(width, height, this.buttonList);
+        this.gameBar.init(width, height);
         super.initGui();
     }
 
@@ -119,7 +119,6 @@ public class GuiIngameMenu extends AnimationUI {
                     this.mc.displayGuiScreen(new Chat("", this, this.chocomint, this.mc.getCurrentServerData()));
                 else this.mc.displayGuiScreen(new GuiChat());
         }
-        this.gameBar.actionPerformed(button);
         super.actionPerformed(button);
     }
 

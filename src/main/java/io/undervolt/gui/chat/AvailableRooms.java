@@ -50,7 +50,7 @@ public class AvailableRooms extends AnimationUI {
         this.buttonList.add(this.pmButton = new GuiButton(1337, this.width / 2 - 100, y.get(), "#comandos"));
 
         super.initGui();
-        this.gameBar.init(width, height, this.buttonList);
+        this.gameBar.init(width, height);
 
     }
 
@@ -68,7 +68,6 @@ public class AvailableRooms extends AnimationUI {
             this.chatManager.setSelectedTab(this.chatManager.getOrCreateTabByName(availableRooms.get(button.id).getName()));
             this.mc.displayGuiScreen(previous);
         } else {
-            this.gameBar.actionPerformed(button);
             if(button.id == 1337) {
                 this.chatManager.setSelectedTab(this.chatManager.getReservedLogTab());
                 if(!this.chatManager.getOpenTabs().contains(this.chatManager.getReservedLogTab()))
