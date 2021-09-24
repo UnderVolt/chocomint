@@ -84,11 +84,11 @@ public class FriendsPanel extends Gui {
     public void updateUserCardList() {
         this.friendUserCardList.clear();
         this.friendsManager.friendsPool.forEach((username, user) -> this.friendUserCardList.add(new UserCard(this.mc, user, true, false,
-                (u) -> this.mc.displayGuiScreen(new UserScreen(null, this.chocomint, u)))));
+                (u) -> this.mc.displayGuiScreen(new UserScreen(this.mc.currentScreen, this.chocomint, u)))));
 
         this.frUserCardList.clear();
         this.friendsManager.friendRequestPool.forEach((username, user) -> this.frUserCardList.add(new UserCard(this.mc, user, true, false,
-                (u) -> this.mc.displayGuiScreen(new UserScreen(null, this.chocomint, u)))));
+                (u) -> this.mc.displayGuiScreen(new UserScreen(this.mc.currentScreen, this.chocomint, u)))));
     }
 
     public void toggleActive() {
