@@ -44,11 +44,15 @@ public class Notification extends Gui {
     }
 
     public void draw(final Minecraft mc, int x, int y) {
+        this.draw(mc, x, y, 120);
+    }
+
+    public void draw(final Minecraft mc, int x, int y, int width) {
 
         this.x = x;
         this.y = y;
 
-        mc.getChocomint().getRenderUtils().drawRoundedRect(x, y, 110, 35, 3, Color.WHITE.getRGB());
+        mc.getChocomint().getRenderUtils().drawRoundedRect(x, y, width, 35, 3, Color.WHITE.getRGB());
         mc.getChocomint().getRenderUtils().drawFilledCircle(x + 12, y + 15, 8, this.getPriorityColor());
 
         String title = this.title;
@@ -58,20 +62,20 @@ public class Notification extends Gui {
 
         mc.fontRendererObj.drawString(title, x + 24, y + 4, Color.BLACK.getRGB());
 
-        if(mc.fontRendererObj.getStringWidth(this.description) > 70 ) {
+        if(mc.fontRendererObj.getStringWidth(this.description) > width - 40 ) {
             String splitSeq = this.description.contains(" ") ? " " : "(?!^)";
             String firstLine = "";
             String secondLine = "";
 
             for (String msgSplit : this.description.split(splitSeq)){
-                if(mc.fontRendererObj.getStringWidth(firstLine + msgSplit) < 70) {
+                if(mc.fontRendererObj.getStringWidth(firstLine + msgSplit) < width - 40) {
                     firstLine = firstLine + msgSplit + splitSeq.replace("(?!^)", "");
                 } else {
                     secondLine = secondLine + msgSplit + splitSeq.replace("(?!^)", "");
                 }
             }
 
-            if(mc.fontRendererObj.getStringWidth(secondLine) > 65) {
+            if(mc.fontRendererObj.getStringWidth(secondLine) > width - 45) {
                 secondLine = secondLine.substring(0, Math.min(secondLine.length(), 14)) + "...";
             }
 
