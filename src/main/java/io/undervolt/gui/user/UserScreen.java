@@ -49,7 +49,7 @@ public class UserScreen extends Menu {
     private MenuScrollClickableButton deleteFriendButton;
 
     public UserScreen(GuiScreen prev, Chocomint chocomint, final User user) {
-        super(prev, chocomint, "Perfil", "user", 0);
+        super(prev, chocomint, "Perfil de usuario", "user", 0);
         this.chocomint = chocomint;
         this.prev = prev;
         this.user = user;
