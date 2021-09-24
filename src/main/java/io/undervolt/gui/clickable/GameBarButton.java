@@ -12,7 +12,7 @@ public class GameBarButton extends Clickable {
 
     protected final ScaledResolution sr;
     protected final Minecraft mc;
-    private boolean enabled = true;
+    protected boolean enabled = true;
     private String buttonText;
 
     public GameBarButton(int x, int y, int width, int height, String buttonText, Consumer consumer) {
@@ -27,24 +27,23 @@ public class GameBarButton extends Clickable {
 
         boolean isOverButton = (mouseX >= this.x) && (mouseX <= this.x + this.width) && (mouseY >= this.y) && (
                 mouseY <= this.y + this.height);
+
+        drawRect(this.x, this.y, this.x + this.width,
+                    this.y + this.height, new Color(32,34,37).getRGB());
         if(enabled) {
             if (isOverButton)
-            {
                 drawRect(this.x, this.y, this.x + this.width,
-                        this.y + this.height, new Color(54,57,63).getRGB());
-            }
-            else
-            {
-                drawRect(this.x, this.y, this.x + this.width,
-                        this.y + this.height, new Color(32,34,37).getRGB());
-            }
+                    this.y + this.height, new Color(54,57,63).getRGB());
             drawCenteredString(mc.fontRendererObj, this.buttonText, this.x + (this.width / 2), this.y + (this.height / 3), Color.WHITE.getRGB());
         } else {
-            drawRect(this.x, this.y, this.x + this.width,
-                    this.y + this.height, new Color(41,43,47).getRGB());
-            GL11.glColor3f(255, 255, 255);
             drawCenteredString(mc.fontRendererObj, this.buttonText, this.x + (this.width / 2), this.y + (this.height / 3), Color.LIGHT_GRAY.getRGB());
         }
+    }
+
+    @Override
+    public void click(int mouseX, int mouseY) {
+        if(enabled)
+            super.click(mouseX, mouseY);
     }
 
     public void setEnabled(boolean enabled) {

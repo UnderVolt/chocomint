@@ -24,8 +24,7 @@ public class TextureGameBarButton extends GameBarButton {
     public void draw(int mouseX, int mouseY) {
         super.draw(mouseX, mouseY);
         this.mc.getTextureManager().bindTexture(this.texture);
-        GL11.glColor3f(255,255,255);
-        Gui.drawModalRectWithCustomSizedTexture(this.x + 2,this.y + 2,0,0,this.width - 4,
+        drawModalRectWithCustomSizedTexture(this.x + 2,this.y + 2,0,0,this.width - 4,
                 this.height - 4, this.width - 4, this.height - 4);
     }
 
