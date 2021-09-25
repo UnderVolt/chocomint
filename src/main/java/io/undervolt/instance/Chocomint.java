@@ -16,10 +16,13 @@ import io.undervolt.console.commands.HelpCommand;
 import io.undervolt.console.commands.VersionCommand;
 import io.undervolt.gui.Background;
 import io.undervolt.gui.GameBar;
+import io.undervolt.gui.Panel;
 import io.undervolt.gui.RenderUtils;
+import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.chat.ChatManager;
 import io.undervolt.gui.contributors.ContributorsManager;
 import io.undervolt.gui.friends.FriendsManager;
+import io.undervolt.gui.menu.Menu;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.gui.notifications.NotificationOverlay;
@@ -27,6 +30,7 @@ import io.undervolt.gui.user.User;
 import io.undervolt.gui.user.UserManager;
 import io.undervolt.gui.user.UserProfilePictureManager;
 import io.undervolt.mod.ModLoader;
+import io.undervolt.utils.AnimationUI;
 import io.undervolt.utils.Multithreading;
 import io.undervolt.utils.RestUtils;
 import io.undervolt.utils.config.Config;
@@ -168,6 +172,25 @@ public class Chocomint implements Listener {
         }
     }
 
+    public void displayMenuOrPanel(AnimationUI ui) {
+        if(this.mc.currentScreen instanceof Menu) {
+            Menu menu = ((Menu) this.mc.currentScreen);
+            if(ui instanceof Menu)
+                ((Menu) ui).previous = menu.previous;
+            else if (ui instanceof Panel)
+                ((Panel) ui).previousScreen = menu.previous;
+            menu.displayNewUI(ui);
+        } else if (this.mc.currentScreen instanceof Panel) {
+            Panel panel = ((Panel) this.mc.currentScreen);
+            if(ui instanceof Menu)
+                ((Menu) ui).previous = panel.previousScreen;
+            else if (ui instanceof Panel)
+                ((Panel) ui).previousScreen = panel.previousScreen;
+            panel.displayNewUI(ui);
+            ((Panel) this.mc.currentScreen).displayNewUI(ui);
+        } else this.mc.displayGuiScreen(ui);
+    }
+
     public void checkAndLoadOnlinePlay() {
         if(!this.IS_ONLINE) {
             if (this.sambayon.isAccesible()) {
@@ -182,7 +205,6 @@ public class Chocomint implements Listener {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                this.notificationManager.addNotification(new Notification(Notification.Priority.NOTICE, "Sesión iniciada", "Se ha iniciado la sesión correctamente", (a)->{}));
                 this.IS_ONLINE = true;
 
             } else {
