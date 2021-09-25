@@ -4,15 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import io.undervolt.gui.GuiPasswordField;
-import io.undervolt.gui.TextureGameBarButton;
-import io.undervolt.gui.menu.Menu;
+import io.undervolt.gui.Panel;
+import io.undervolt.gui.clickable.Button;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.RestUtils;
 import io.undervolt.utils.config.Config;
 import net.minecraft.client.gui.*;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -23,19 +21,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-public class LoginGUI extends Menu {
+public class LoginGUI extends Panel {
 
     private final RestUtils restUtils;
     private final Config config;
     private final Chocomint chocomint;
 
-    private final GuiScreen parent;
+    private Button linkAccount;
+
     private GuiTextField user;
     private GuiTextField pass;
 
     public LoginGUI(final GuiScreen parent, final Chocomint chocomint) {
-        super(parent, chocomint, "Iniciar sesión", "user", parent.height);
-        this.parent = parent;
+        super(parent, "Iniciar sesión", parent.height);
+        this.previousScreen = parent;
         this.restUtils = chocomint.getRestUtils();
         this.config = chocomint.getConfig();
         this.chocomint = chocomint;
@@ -43,10 +42,10 @@ public class LoginGUI extends Menu {
 
     @Override
     public void initGui() {
-        this.user = new GuiTextField(99, mc.fontRendererObj, this.width / 2 - 75, this.height / 3 + 37, 150, 18);
-        this.pass = new GuiPasswordField(99, this.width / 2 - 75, this.height / 3 + 60, 150, 18);
+        this.user = new GuiTextField(99, mc.fontRendererObj, this.width - this.getPanelWidth() + 10, this.scroll + 90, this.getPanelWidth() - 20, 18);
+        this.pass = new GuiPasswordField(99, this.width - this.getPanelWidth() + 10, this.scroll + 120, this.getPanelWidth() - 20, 18);
 
-        this.buttonList.add(new GuiButton(1, this.width / 2 - 50, this.height / 3 + 90, 100, 20, "Vincular cuenta"));
+        this.linkAccount = new Button(this.width - this.getPanelWidth() + 9, this.scroll + 145, this.getPanelWidth() - 20, 20, "Vincular cuenta", (a) -> this.login());
         super.initGui();
     }
 
@@ -62,7 +61,8 @@ public class LoginGUI extends Menu {
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         this.user.mouseClicked(mouseX, mouseY, mouseButton);
         this.pass.mouseClicked(mouseX, mouseY, mouseButton);
-
+        this.linkAccount.click(mouseX, mouseY);
+        this.chocomint.getGameBar().mouseClicked(mouseX, mouseY, mouseButton, width, scroll);
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
@@ -85,7 +85,7 @@ public class LoginGUI extends Menu {
                     }
                     this.config.setToken(js.get("accessToken").getAsString());
                     this.chocomint.setUser(this.chocomint.getUserManager().setUser(js.get("accessToken").getAsString()));
-                    this.mc.displayGuiScreen(this.parent);
+                    this.fadeOut();
                 }
 
             });
@@ -119,19 +119,17 @@ public class LoginGUI extends Menu {
     }
 
     @Override
-    public void drawMenuItems(int mouseX, int mouseY, float partialTicks, int x, int scroll) {
+    public void drawContent(int mouseX, int mouseY, float partialTicks, int panelWidth, int scroll) {
 
         GL11.glPushMatrix();
-
-        GL11.glColor3f(255, 255, 255);
-        this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/ui/undervolt.png"));
-        drawModalRectWithCustomSizedTexture(this.width / 2 - 25, this.height / 3 - 38, 0, 0, 50, 57, 50, 57);
 
         this.user.drawTextBox();
         this.pass.drawTextBox();
 
-        this.drawString(mc.fontRendererObj, this.user.isFocused() || this.user.getText().length() > 0 ? "" : "Usuario", this.width / 2 - 70, this.height / 3 + 42, -1);
-        this.drawString(mc.fontRendererObj, this.pass.isFocused() || this.pass.getText().length() > 0 ? "" : "Contraseña", this.width / 2 - 70, this.height / 3 + 65, -1);
+        this.linkAccount.draw(mouseX, mouseY);
+
+        this.drawString(mc.fontRendererObj, this.user.isFocused() || this.user.getText().length() > 0 ? "" : "Usuario", this.width - this.getPanelWidth() + 15, 95, -1);
+        this.drawString(mc.fontRendererObj, this.pass.isFocused() || this.pass.getText().length() > 0 ? "" : "Contraseña", this.width - this.getPanelWidth() + 15,  125, -1);
 
         GL11.glPopMatrix();
 
