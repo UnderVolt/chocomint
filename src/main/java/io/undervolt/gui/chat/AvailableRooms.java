@@ -81,7 +81,6 @@ public class AvailableRooms extends AnimationUI {
 
     @Override
     public void handleMouseInput() throws IOException {
-        this.gameBar.handleMouseInput(width, height);
         super.handleMouseInput();
     }
 
