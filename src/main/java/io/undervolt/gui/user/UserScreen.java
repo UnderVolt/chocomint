@@ -48,8 +48,10 @@ public class UserScreen extends Menu {
     private MenuScrollClickableButton sendDMButton;
     private MenuScrollClickableButton deleteFriendButton;
 
+    private ResourceLocation bracketSimple;
+
     public UserScreen(GuiScreen prev, Chocomint chocomint, final User user) {
-        super(prev, chocomint, "Perfil de usuario", "user", 0);
+        super(prev, chocomint, "Perfil de usuario", MenuColor.GREEN,"user", 0);
         this.chocomint = chocomint;
         this.prev = prev;
         this.user = user;
@@ -74,6 +76,8 @@ public class UserScreen extends Menu {
 
     @Override
     public void initGui() {
+
+        this.bracketSimple = this.getSimpleBracket();
 
         if(user.getAlias().toLowerCase().equals(user.getUsername())) {
             this.drawAlias = false;
@@ -146,9 +150,9 @@ public class UserScreen extends Menu {
                     this.getContentWidth() / (this.bannerBufferedImage.getWidth() / this.bannerBufferedImage.getHeight()));
         }
 
-        this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/ui/bracket-simple.png"));
+        this.mc.getTextureManager().bindTexture(this.bracketSimple);
         drawModalRectWithCustomSizedTexture(x, scroll + getBannerPadding() + 30, 0, 0, this.getContentWidth(), 25, this.getContentWidth(), 25);
-        drawRect(x, scroll + getBannerPadding() + 53, this.getContentMargin() + this.getContentWidth(), scroll + getBannerPadding() + 150, new Color(54,57,63).getRGB());
+        drawRect(x, scroll + getBannerPadding() + 53, this.getContentMargin() + this.getContentWidth(), scroll + getBannerPadding() + 150, this.getMenuTitleColor());
 
         if(!this.user.getUsername().equals("Guest")) {
             if(this.user.getUsername().equals(this.chocomint.getUser().getUsername())) {
@@ -233,6 +237,10 @@ public class UserScreen extends Menu {
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         if(button.id == 100) this.mc.displayGuiScreen(prev);
+    }
+
+    public ResourceLocation getSimpleBracket() {
+        return new ResourceLocation("/chocomint/ui/bracket/" + this.color.getName() + "/simple.png");
     }
 
     @Override
