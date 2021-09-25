@@ -20,10 +20,10 @@ public class NotificationScreen extends Panel {
     }
 
     @Override
-    public void drawContent(int mouseX, int mouseY, float partialTicks, int panelWidth, int scroll) {
+    public void drawContent(int mouseX, int mouseY, float partialTicks, int margin, int scroll) {
         AtomicInteger y = new AtomicInteger(scroll);
         this.notificationManager.getNotifications().forEach(notification -> {
-            notification.draw(this.mc, 5, y.get(), panelWidth - 10);
+            notification.draw(this.mc, margin + 5, y.get() + 50, this.getPanelWidth() - 10);
             y.set(y.get() + 45);
         });
 
