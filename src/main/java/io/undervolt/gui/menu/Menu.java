@@ -89,7 +89,8 @@ public class Menu extends AnimationUI {
         int hue = 0;
 
         if(tw != 0) {
-            tw = this.getAnimationTime(this.ftime, 3500.0D) * height;
+            tw = this.getAnimationTime(this.ftime, 3500.0D) * (height + 170);
+            if(backwards) tw = this.getAnimationTime(this.ftime, 2100.0D) * height;
         } else {
             if(backwards)
                 if(newScreen != null)
@@ -109,27 +110,63 @@ public class Menu extends AnimationUI {
         drawRect(0, 0, width, height, new Color(0, 0, 0, hue).getRGB());
 
         GL11.glPushMatrix();
+        GL11.glEnable(GL11.GL_BLEND);
 
         GlStateManager.translate(0, backwards ? height - tw : tw,0);
-
-        GL11.glColor3f(255, 255, 255);
 
         GL11.glPushMatrix();
         GlStateManager.translate(this.getContentMargin(), 0, 0);
         GL11.glRotatef(90, 0, 0, 1);
-        drawGradientRect(0, 0, height, 10, new Color(0, 0, 0, 100).getRGB(), 0);
+        drawGradientRect(-60, 0, height, 10, new Color(0, 0, 0, 100).getRGB(), 0);
         GL11.glPopMatrix();
 
         GL11.glPushMatrix();
         GlStateManager.translate(this.getContentMargin() + this.getContentWidth() + 10, 0, 0);
         GL11.glRotatef(90, 0, 0, 1);
-        drawGradientRect(0, 0, height, 10, 0, new Color(0, 0, 0, 100).getRGB());
+        drawGradientRect(-60, 0, height, 10, 0, new Color(0, 0, 0, 100).getRGB());
         GL11.glPopMatrix();
 
-        this.mc.getTextureManager().bindTexture(this.bracketRes);
-        drawModalRectWithCustomSizedTexture(this.getContentMargin(), position - 48, 0, 0, this.getContentWidth(), 50, this.getContentWidth(),50);
-        drawRect(this.getContentMargin(), position, this.getContentMargin() + this.getContentWidth(), pageSize, new Color(39, 39, 45).getRGB());
-        drawRect(this.getContentMargin(), position, this.getContentMargin() + this.getContentWidth(), 50, new Color(54,57,63).getRGB());
+        // Bracket animation layer 1
+        GL11.glPushMatrix();
+        int layer1Y = (int)(this.getAnimationTime(this.ftime, 3000.0D) * (this.height + 40));
+        if(backwards) {
+            layer1Y = (this.height + 40) - (int)(this.getAnimationTime(this.ftime, 4200.0D) * (this.height + 40));
+        }
+        GlStateManager.translate(0, layer1Y, 0);
+        this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/ui/bracket/layer1.png"));
+        GL11.glColor3f(67, 102, 182);
+        drawModalRectWithCustomSizedTexture(this.getContentMargin(),  position - 50, 0, 0, this.getContentWidth(),
+                100, this.getContentWidth(), 100);
+        GL11.glPopMatrix();
+
+        // Bracket animation layer 2
+        GL11.glPushMatrix();
+        int layer2Y = (int)(this.getAnimationTime(this.ftime, 3500.0D) * (this.height + 40));
+        if(backwards) {
+            layer2Y = (this.height + 40) - (int)(this.getAnimationTime(this.ftime, 3800.0D) * (this.height + 40));
+        }
+        GlStateManager.translate(0, layer2Y, 0);
+        this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/ui/bracket/layer2.png"));
+        GL11.glColor3f(116, 142, 202);
+        drawModalRectWithCustomSizedTexture(this.getContentMargin(),  position - 30, 0, 0, this.getContentWidth(),
+                100, this.getContentWidth(), 100);
+        GL11.glPopMatrix();
+
+        // Bracket animation layer 3
+        GL11.glPushMatrix();
+        int layer3Y = (int)(this.getAnimationTime(this.ftime, 3700.0D) * (this.height + 50));
+        if(backwards) {
+            layer3Y = (this.height + 50) - (int)(this.getAnimationTime(this.ftime, 3400.0D) * (this.height + 50));
+        }
+        GlStateManager.translate(0, layer3Y, 0);
+        this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/ui/bracket/layer3.png"));
+        GL11.glColor3f(62, 68, 82);
+        drawModalRectWithCustomSizedTexture(this.getContentMargin(),  position, 0, 0, this.getContentWidth(),
+                100, this.getContentWidth(), 100);
+        GL11.glPopMatrix();
+
+        drawRect(this.getContentMargin(), position, this.getContentMargin() + this.getContentWidth(), pageSize, new Color(35, 35, 40).getRGB());
+        drawRect(this.getContentMargin(), position, this.getContentMargin() + this.getContentWidth(), 50, new Color(37, 40, 44).getRGB());
 
         GL11.glColor3f(255,255,255);
         if(this.menuIcon != null) {
@@ -142,6 +179,7 @@ public class Menu extends AnimationUI {
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
+        GL11.glDisable(GL11.GL_BLEND);
         GL11.glPopMatrix();
 
         this.chocomint.getGameBar().draw(mouseX, mouseY, partialTicks, width, height);
