@@ -134,7 +134,6 @@ public class Menu extends AnimationUI {
         }
         GlStateManager.translate(0, layer1Y, 0);
         this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/ui/bracket/layer1.png"));
-        GL11.glColor3f(67, 102, 182);
         drawModalRectWithCustomSizedTexture(this.getContentMargin(),  position - 50, 0, 0, this.getContentWidth(),
                 100, this.getContentWidth(), 100);
         GL11.glPopMatrix();
@@ -147,7 +146,6 @@ public class Menu extends AnimationUI {
         }
         GlStateManager.translate(0, layer2Y, 0);
         this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/ui/bracket/layer2.png"));
-        GL11.glColor3f(116, 142, 202);
         drawModalRectWithCustomSizedTexture(this.getContentMargin(),  position - 30, 0, 0, this.getContentWidth(),
                 100, this.getContentWidth(), 100);
         GL11.glPopMatrix();
@@ -160,7 +158,6 @@ public class Menu extends AnimationUI {
         }
         GlStateManager.translate(0, layer3Y, 0);
         this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/ui/bracket/layer3.png"));
-        GL11.glColor3f(62, 68, 82);
         drawModalRectWithCustomSizedTexture(this.getContentMargin(),  position, 0, 0, this.getContentWidth(),
                 100, this.getContentWidth(), 100);
         GL11.glPopMatrix();
