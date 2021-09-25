@@ -738,7 +738,6 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
 
     @Override
     public void handleMouseInput() throws IOException {
-        this.gameBar.handleMouseInput(width, height);
         super.handleMouseInput();
     }
 
