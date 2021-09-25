@@ -42,7 +42,7 @@ public class Chat extends AnimationUI {
     private final Console console;
 
     /** Previous GuiScreen */
-    private final GuiScreen prev;
+    public final GuiScreen prev;
 
     /** Server */
     private final ServerData serverData;
@@ -303,7 +303,6 @@ public class Chat extends AnimationUI {
     @Override
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
-        this.gameBar.handleMouseInput(width, height);
 
         int i = Mouse.getEventDWheel();
 
