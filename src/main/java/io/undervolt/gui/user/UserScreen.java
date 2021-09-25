@@ -51,7 +51,7 @@ public class UserScreen extends Menu {
     private ResourceLocation bracketSimple;
 
     public UserScreen(GuiScreen prev, Chocomint chocomint, final User user) {
-        super(prev, chocomint, "Perfil de usuario", MenuColor.GREEN,"user", 0);
+        super(prev, chocomint, "Perfil de usuario", MenuColor.PURPLE,"user", 0);
         this.chocomint = chocomint;
         this.prev = prev;
         this.user = user;
