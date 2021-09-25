@@ -19,13 +19,15 @@ import java.util.concurrent.TimeUnit;
 public class Menu extends AnimationUI {
 
     private final Chocomint chocomint;
-    private final GuiScreen previous;
+    public GuiScreen previous;
     protected long ftime;
     private final String menuName, menuIcon;
 
     private double tw = Integer.MAX_VALUE;
     protected int scroll = 0;
     private int pageSize;
+
+    private AnimationUI newScreen;
 
     private boolean backwards = false;
 
@@ -76,6 +78,11 @@ public class Menu extends AnimationUI {
        }
     }
 
+    public void displayNewUI(AnimationUI ui) {
+        this.fadeOut();
+        this.newScreen = ui;
+    }
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 
@@ -84,7 +91,10 @@ public class Menu extends AnimationUI {
         if(tw != 0) {
             tw = this.getAnimationTime(this.ftime, 3500.0D) * height;
         } else {
-            if(backwards) this.mc.displayGuiScreen(this.previous);
+            if(backwards)
+                if(newScreen != null)
+                    this.mc.displayGuiScreen(this.newScreen);
+                else this.mc.displayGuiScreen(this.previous);
         }
 
         if(!backwards) {
@@ -135,7 +145,6 @@ public class Menu extends AnimationUI {
         GL11.glPopMatrix();
 
         this.chocomint.getGameBar().draw(mouseX, mouseY, partialTicks, width, height);
-        GL11.glDisable(GL11.GL_BLEND);
     }
 
     @Override
@@ -148,9 +157,11 @@ public class Menu extends AnimationUI {
     }
 
     public void fadeOut() {
-        this.backwards = true;
-        this.ftime = Minecraft.getSystemTime();
-        this.tw = 0.1;
+        if(!this.backwards) {
+            this.backwards = true;
+            this.ftime = Minecraft.getSystemTime();
+            this.tw = 0.1;
+        }
     }
 
     @Override
