@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class Panel extends AnimationUI {
 
-    public final GuiScreen previousScreen;
+    public GuiScreen previousScreen;
     private final String name;
     protected final Chocomint chocomint;
 
@@ -25,6 +25,8 @@ public class Panel extends AnimationUI {
 
     protected int scroll = 0;
     protected int pageSize;
+
+    private AnimationUI newScreen;
 
     public Panel(GuiScreen previousScreen, String name, int pageSize) {
         this.previousScreen = previousScreen;
@@ -43,9 +45,16 @@ public class Panel extends AnimationUI {
     }
 
     public void fadeOut() {
-        this.backwards = true;
-        this.ftime = Minecraft.getSystemTime();
-        this.tw = 0.1;
+        if(!this.backwards) {
+            this.backwards = true;
+            this.ftime = Minecraft.getSystemTime();
+            this.tw = 0.1;
+        }
+    }
+
+    public void displayNewUI(AnimationUI ui) {
+        this.newScreen = ui;
+        this.fadeOut();
     }
 
     @Override
@@ -57,7 +66,10 @@ public class Panel extends AnimationUI {
         if(tw != 0) {
             tw = this.getAnimationTime(this.ftime, 3500.0D) * getPanelWidth();
         } else {
-            if(backwards) this.mc.displayGuiScreen(this.previousScreen);
+            if(backwards)
+                if(newScreen != null)
+                    this.mc.displayGuiScreen(this.newScreen);
+                else this.mc.displayGuiScreen(this.previousScreen);
         }
 
         if(!backwards) {
@@ -80,23 +92,15 @@ public class Panel extends AnimationUI {
         GlStateManager.translate(backwards ? getPanelWidth() - tw : tw, 0, 0);
 
         GL11.glPushMatrix();
-        GlStateManager.translate(this.width - this.getPanelWidth(), 20, 0);
-
-        GL11.glPushMatrix();
-        GlStateManager.translate(0, 0, 0);
+        GlStateManager.translate(this.width - getPanelWidth(), 0, 0);
         GL11.glRotatef(90, 0, 0, 1);
         drawGradientRect(0, 0, height, 10, new Color(0, 0, 0, 100).getRGB(), 0);
         GL11.glPopMatrix();
 
-        drawRect(0, 0, this.width, this.height, new Color(22, 24, 26).getRGB());
-        this.mc.fontRendererObj.drawString(this.name, 5, 5, Color.WHITE.getRGB());
+        drawRect(this.width - getPanelWidth(), 0, this.width, this.height, new Color(22, 24, 26).getRGB());
+        this.mc.fontRendererObj.drawString(this.name, this.width - getPanelWidth() + 8, 28, Color.WHITE.getRGB());
 
-        GL11.glPushMatrix();
-        GlStateManager.translate(0, 20, 0);
-        drawContent(mouseX, mouseY, partialTicks, getPanelWidth(), scroll);
-        GL11.glPopMatrix();
-
-        GL11.glPopMatrix();
+        drawContent(mouseX, mouseY, partialTicks, this.width - getPanelWidth(), scroll);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
         GL11.glPopMatrix();
@@ -121,7 +125,7 @@ public class Panel extends AnimationUI {
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
         this.chocomint.getGameBar().mouseClicked(mouseX, mouseY, mouseButton, width, height);
-        if(mouseX < this.width - this.getPanelWidth()) this.fadeOut();
+        if(mouseX < this.width - this.getPanelWidth() || mouseY < 20) this.fadeOut();
     }
 
     protected int getPanelWidth() {
