@@ -23,11 +23,8 @@ import io.undervolt.gui.user.UserScreen;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
-import org.lwjgl.input.Mouse;
 
 import java.awt.*;
-import java.io.IOException;
-import java.util.List;
 
 public class GameBar extends Gui implements Listener {
 
@@ -38,9 +35,6 @@ public class GameBar extends Gui implements Listener {
     private final Chocomint chocomint;
 
     /** Declare panel status */
-    private final NotificationManager notificationManager;
-    public NotificationPanel notificationPanel;
-    private int notificationScroll = 0;
     private final NotificationOverlay notificationOverlay;
 
     /** Declare User card */
@@ -67,8 +61,6 @@ public class GameBar extends Gui implements Listener {
     private GameBarButton configButton;
     private TextureGameBarButton changeMinecraftAccountButton;
 
-    private final List<Clickable> clickableList = Lists.newArrayList();
-
     /** Declare requirement for previous screen, to prevent accumulation of cached Guis */
     private GuiScreen parentScreen;
 
@@ -80,7 +72,6 @@ public class GameBar extends Gui implements Listener {
         this.parentScreen = parentScreen;
         this.chocomint = GameBridge.getChocomint();
         this.mc = GameBridge.getMinecraft();
-        this.notificationManager = chocomint.getNotificationManager();
         this.sr = GameBridge.getScaledResolution();
         this.contributorsManager = chocomint.getContributorsManager();
         this.friendsManager = chocomint.getFriendsManager();
@@ -90,13 +81,9 @@ public class GameBar extends Gui implements Listener {
 
     public void init(int width, int height) {
 
-        // Initialize Notifications
-        this.notificationPanel = new NotificationPanel(this.mc, false,
-                this.chocomint.getNotificationManager());
-
         // Initialize User Card
         this.userCard = new UserCard(this.mc, this.chocomint.getUser(), false, true, (user) -> {
-            this.mc.displayGuiScreen(new UserScreen(this.mc.currentScreen, this.chocomint, this.chocomint.getUser()));
+            this.chocomint.displayMenuOrPanel(new UserScreen(this.mc.currentScreen, this.chocomint, this.chocomint.getUser()));
             this.userCard.setActive(false);
         });
 
@@ -110,21 +97,19 @@ public class GameBar extends Gui implements Listener {
         this.notificationsButton = new TextureGameBarButton(
                 width - 20, 0, 20, 20, "notifications", (a) -> {
             if(!(this.mc.currentScreen instanceof Panel))
-                this.mc.displayGuiScreen(new NotificationScreen(this.mc.currentScreen));
-            else this.mc.displayGuiScreen(((Panel) this.mc.currentScreen).previousScreen);
+                this.chocomint.displayMenuOrPanel(new NotificationScreen(this.mc.currentScreen));
         });
 
         this.changeMinecraftAccountButton = new TextureGameBarButton(
                 width - 70 - this.mc.fontRendererObj.getStringWidth(this.chocomint.getUser().getUsername()), 0, 20, 20, "change", (a) -> {
-            this.mc.displayGuiScreen(new MinecraftLoginGUI(this.mc.currentScreen, this.chocomint));
+            this.chocomint.displayMenuOrPanel(new MinecraftLoginGUI(this.mc.currentScreen, this.chocomint));
         });
 
         this.userButton = new UserGameBarButton(width - 48 - this.mc.fontRendererObj.getStringWidth(this.chocomint.getUser().getUsername()),
                 0, this.chocomint.getUser(), (a) -> {
-            if(this.chocomint.getUser().getUsername().equals("Guest")) this.mc.displayGuiScreen(new LoginGUI(this.mc.currentScreen, this.chocomint));
+            if(this.chocomint.getUser().getUsername().equals("Guest")) this.chocomint.displayMenuOrPanel(new LoginGUI(this.mc.currentScreen, this.chocomint));
             else {
                 this.userCard.toggleActive();
-                this.notificationPanel.setActive(false);
                 this.contributorsPanel.setActive(false);
                 this.friendsPanel.setActive(false);
             }
@@ -132,18 +117,16 @@ public class GameBar extends Gui implements Listener {
 
         this.friendsButton = new TextureGameBarButton(
                 width - 92 - this.mc.fontRendererObj.getStringWidth(this.chocomint.getUser().getUsername()), 0, 20, 20, "friends", (a) -> {
-            this.notificationPanel.setActive(false);
             this.contributorsPanel.setActive(false);
             this.userCard.setActive(false);
             this.friendsPanel.toggleActive();
         });
 
         this.chatButton = new TextureGameBarButton(width - 114 - this.mc.fontRendererObj.getStringWidth(this.chocomint.getUser().getUsername()), 0, 20, 20, "chat", (a) -> {
-            this.notificationPanel.setActive(false);
             this.contributorsPanel.setActive(false);
             this.userCard.setActive(false);
             this.friendsPanel.setActive(false);
-            this.mc.displayGuiScreen(new Chat("", this.mc.currentScreen, this.chocomint, this.mc.getCurrentServerData()));
+            this.chocomint.displayMenuOrPanel(new Chat("", this.mc.currentScreen, this.chocomint, this.mc.getCurrentServerData()));
         });
 
         this.configButton = new GameBarButton(width - 136 - this.mc.fontRendererObj.getStringWidth(this.chocomint.getUser().getUsername()), 0, 20, 20, "C",
@@ -170,7 +153,6 @@ public class GameBar extends Gui implements Listener {
         drawString(this.fontRendererObj, "chocomint", 20, 6, Color.WHITE.getRGB());
 
         this.userCard.drawCard(width - 132, 22);
-        this.notificationPanel.drawPanel(width, height, this.notificationScroll);
         this.contributorsPanel.drawPanel(width, height);
         this.friendsPanel.drawPanel(width, height);
 
@@ -198,20 +180,7 @@ public class GameBar extends Gui implements Listener {
         // Toggle off userCard's visibility if clicked outside of rendered area
         this.userCard.click(mouseY, mouseX);
 
-        // Same as above, but with Notifications
-        if(this.notificationPanel.isActive()) {
-            if (mouseX < width - 120)
-                this.notificationPanel.setActive(false);
-
-            for (Notification notification : this.notificationManager.getNotifications()) {
-                if (mouseX >= notification.getX() + notificationScroll && mouseY >= notification.getY() +notificationScroll && mouseX <= notification.getX() + notificationScroll + 110 && mouseY <= notification.getY() + notificationScroll + 35) {
-                    notification.getConsumer().accept(this.parentScreen);
-                }
-            }
-        }
-
         if (mouseX >= 4 && mouseY >= 4 && mouseX <= 16 && mouseY <= 16) {
-            this.notificationPanel.setActive(false);
             this.userCard.setActive(false);
             this.friendsPanel.setActive(false);
             this.contributorsPanel.toggleActive();
@@ -230,17 +199,6 @@ public class GameBar extends Gui implements Listener {
         if(this.mc.theWorld != null && this.mc.thePlayer != null)
             this.configButton.click(mouseX, mouseY);
 
-    }
-
-    public void handleMouseInput(int width, int height) throws IOException {
-
-        int i = Mouse.getEventDWheel();
-
-        if(notificationPanel.isActive()) {
-            if (i > 0 && (this.notificationScroll <= 0)) this.notificationScroll += 4.5;
-            else if (i < 0 && !((this.notificationManager.getNotifications().size() * 45) <= (height - 45) - this.notificationScroll))
-                this.notificationScroll -= 4.5;
-        }
     }
 
     public void setBackgroundDrawing(boolean backgroundDrawing) {
