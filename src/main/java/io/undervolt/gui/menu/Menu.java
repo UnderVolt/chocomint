@@ -88,10 +88,10 @@ public class Menu extends AnimationUI {
     }
 
     protected int getContentWidth() {
-        if(this.width < 500) {
+        if(this.width < 600) {
             return this.width;
         } else {
-            return 500;
+            return 600;
         }
     }
 
@@ -99,7 +99,7 @@ public class Menu extends AnimationUI {
        if(this.getContentWidth() == this.width) {
            return 0;
        } else {
-           return (this.width / 2) - 250;
+           return (this.width / 2) - 300;
        }
     }
 
