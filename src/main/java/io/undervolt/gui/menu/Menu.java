@@ -119,7 +119,7 @@ public class Menu extends AnimationUI {
             if(backwards) tw = this.getAnimationTime(this.ftime, 1600.0D) * height;
         }
 
-        if(layer1Y == this.height + 40)
+        if(layer1Y == this.height + 50)
             if(backwards)
                 if(newScreen != null)
                     this.mc.displayGuiScreen(this.newScreen);
@@ -159,7 +159,7 @@ public class Menu extends AnimationUI {
         GL11.glPushMatrix();
         layer1Y = (this.getAnimationTime(this.ftime, 3000.0D) * (this.height + 40));
         if(backwards) {
-            layer1Y = (this.height + 40) - (this.getAnimationTime(this.ftime, 6000.0D) * (this.height + 40));
+            layer1Y = (this.height + 50) - (this.getAnimationTime(this.ftime, 5500.0D) * (this.height + 50));
         }
         GlStateManager.translate(0, layer1Y, 0);
         this.mc.getTextureManager().bindTexture(this.bracketLayer1);
@@ -171,7 +171,7 @@ public class Menu extends AnimationUI {
         GL11.glPushMatrix();
         int layer2Y = (int)(this.getAnimationTime(this.ftime, 3500.0D) * (this.height + 40));
         if(backwards) {
-            layer2Y = (this.height + 40) - (int)(this.getAnimationTime(this.ftime, 5000.0D) * (this.height));
+            layer2Y = (this.height + 40) - (int)(this.getAnimationTime(this.ftime, 4000.0D) * (this.height) + 10);
         }
         GlStateManager.translate(0, layer2Y, 0);
         this.mc.getTextureManager().bindTexture(this.bracketLayer2);
