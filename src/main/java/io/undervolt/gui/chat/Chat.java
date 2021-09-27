@@ -119,13 +119,6 @@ public class Chat extends AnimationUI {
                 this.chatHeight - 18, 18, 18, "+"));
         if(this.chocomint.getUser().getUsername().equals("Guest")) addTabButton.enabled = false;
 
-        GameBarButton closeTabButton;
-        this.buttonList.add(closeTabButton = new GameBarButton(1400000, this.width - 18,
-                this.chatHeight, 18, 18, "✕"));
-        if(this.chatManager.getSelectedTab().equals(this.chatManager.getReservedServerTab()) ||
-                (this.chocomint.getUser().getUsername().equals("Guest") && this.chatManager.getSelectedTab().equals(this.chatManager.getReservedLogTab())))
-            closeTabButton.enabled = false;
-
         this.gameBar.init(width, height);
         super.initGui();
 
