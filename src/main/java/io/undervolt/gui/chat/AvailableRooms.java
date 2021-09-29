@@ -1,18 +1,25 @@
 package io.undervolt.gui.chat;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import io.undervolt.api.almendra.Almendra;
+import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.GameBar;
+import io.undervolt.gui.clickable.Clickable;
+import io.undervolt.gui.clickable.ClickableLabel;
 import io.undervolt.gui.user.UserSearch;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.AnimationUI;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AvailableRooms extends AnimationUI {
@@ -24,59 +31,58 @@ public class AvailableRooms extends AnimationUI {
     private final Chocomint chocomint;
     private GuiButton pmButton;
 
-    private final GameBar gameBar;
+    private final int chatHeight;
 
-    public AvailableRooms(final GuiScreen previous, final Chocomint chocomint, final ChatManager chatManager) {
-        this.chocomint = chocomint;
+    private final Map<String, Clickable> clickableMap = Maps.newHashMap();
+    private final AtomicInteger y = new AtomicInteger(30);
+
+    public AvailableRooms(final GuiScreen previous, final int chatHeight) {
+        this.chocomint = GameBridge.getChocomint();
         this.almendra = chocomint.getAlmendra();
-        this.chatManager = chatManager;
+        this.chatManager = chocomint.getChatManager();
+        this.chatHeight = chatHeight;
         this.previous = previous;
-        this.gameBar = chocomint.getGameBar();
     }
 
     @Override
     public void initGui() {
-
-        AtomicInteger i = new AtomicInteger(0);
-        AtomicInteger y = new AtomicInteger(25);
-
         this.almendra.getAvailableRooms().forEach((roomName, tab) -> {
-            this.availableRooms.add(tab);
-            this.buttonList.add(new GuiButton(i.get(), this.width / 2 - 100, y.get(), roomName));
-            i.set(i.get() + 1);
-            y.set(y.get() + 22);
+            this.clickableMap.put(roomName, new ClickableLabel(15, this.chatHeight - 18 + y.get(), roomName, a->{
+                this.chatManager.setSelectedTab(this.chatManager.getOrCreateTabByName(roomName));
+                this.mc.displayGuiScreen(previous);
+            }));
+            y.set(y.get() + 15);
         });
 
-        this.buttonList.add(this.pmButton = new GuiButton(1337, this.width / 2 - 100, y.get(), "#comandos"));
+        this.clickableMap.put("#comandos", new ClickableLabel(15, this.chatHeight - 18 + y.get() + 20,  "#comandos", a->{
+            this.chatManager.setSelectedTab(this.chatManager.getReservedLogTab());
+            if(!this.chatManager.getOpenTabs().contains(this.chatManager.getReservedLogTab()))
+                this.chatManager.getOpenTabs().add(this.chatManager.getReservedLogTab());
+            this.mc.displayGuiScreen(previous);
+        }));
+
+        this.clickableMap.put("USERSEARCH_RESERVED", new ClickableLabel(5, this.chatHeight - 18 + y.get() + 40,
+                "> Buscar usuario", Color.WHITE.getRGB(),
+                a-> this.chocomint.displayMenuOrPanel(new UserSearch(this.previous, chocomint))));
 
         super.initGui();
-        this.gameBar.init(width, height);
+        this.chocomint.getGameBar().init(width, height);
 
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        this.drawDefaultBackground();
-        drawRect(0,0,this.width,this.height, new Color(0,0,0,100).getRGB());
-        this.gameBar.draw(mouseX, mouseY, partialTicks, width, height);
-        super.drawScreen(mouseX, mouseY, partialTicks);
-    }
+        this.previous.drawScreen(mouseX, mouseY, partialTicks);
 
-    @Override
-    protected void actionPerformed(GuiButton button) throws IOException {
-        if(button.id < 30) {
-            this.chatManager.setSelectedTab(this.chatManager.getOrCreateTabByName(availableRooms.get(button.id).getName()));
-            this.mc.displayGuiScreen(previous);
-        } else {
-            if(button.id == 1337) {
-                this.chatManager.setSelectedTab(this.chatManager.getReservedLogTab());
-                if(!this.chatManager.getOpenTabs().contains(this.chatManager.getReservedLogTab()))
-                    this.chatManager.getOpenTabs().add(this.chatManager.getReservedLogTab());
-                this.mc.displayGuiScreen(previous);
-            } else {
-                super.actionPerformed(button);
-            }
-        }
+        drawRect(0,this.chatHeight - 18, 120, this.height, new Color(32,34,37).getRGB());
+
+        this.fontRendererObj.drawString("> Salas globales", 5, this.chatHeight - 18 + 15, Color.WHITE.getRGB());
+        this.fontRendererObj.drawString("> Salas locales", 5, this.chatHeight - 18 + y.get() + 5, Color.WHITE.getRGB());
+        this.clickableMap.forEach((k, v) -> v.draw(mouseX, mouseY));
+
+        super.drawScreen(mouseX, mouseY, partialTicks);
+
+        this.chocomint.getGameBar().draw(mouseX, mouseY, partialTicks, width, height);
     }
 
     @Override
@@ -86,7 +92,8 @@ public class AvailableRooms extends AnimationUI {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        this.gameBar.mouseClicked(mouseX, mouseY, mouseButton, width, height);
+        this.clickableMap.forEach((k, v) -> v.click(mouseX, mouseY, mouseButton));
+        this.chocomint.getGameBar().mouseClicked(mouseX, mouseY, mouseButton, width, height);
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
