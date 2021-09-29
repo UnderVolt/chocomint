@@ -77,7 +77,7 @@ public class UserSearch extends Menu {
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if(keyCode != 28 && keyCode != 156) {
-            if(keyCode == 1) this.mc.displayGuiScreen(this.previous);
+            if(keyCode == 1) this.fadeOut();
             this.textField.textboxKeyTyped(typedChar, keyCode);
 
             this.filteredUserMap.clear();
