@@ -9,6 +9,7 @@ import io.undervolt.instance.Chocomint;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,7 @@ public class UserSearch extends Menu {
     private GuiTextField textField;
 
     public UserSearch(final GuiScreen previous, final Chocomint chocomint) {
-        super(previous, chocomint, "Buscar un usuario", 0);
+        super(previous, chocomint, "Buscar un usuario", MenuColor.YELLOW, "friends", 0);
         this.chocomint = chocomint;
         this.previous = previous;
         this.chatManager = chocomint.getChatManager();
@@ -36,7 +37,7 @@ public class UserSearch extends Menu {
     public void initGui() {
 
         this.textField = new GuiTextField(0, this.fontRendererObj, this.getContentMargin() + 20,
-                25, this.getContentWidth() - 40, 20);
+                55, this.getContentWidth() - 40, 20);
 
         this.textField.setFocused(true);
         super.initGui();
@@ -46,9 +47,9 @@ public class UserSearch extends Menu {
     public void drawMenuItems(int mouseX, int mouseY, float partialTicks, int x, int scroll) {
         this.textField.drawTextBox();
 
-        AtomicInteger y = new AtomicInteger(60);
+        AtomicInteger y = new AtomicInteger(85);
         this.filteredUserMap.forEach((u, c) -> {
-                c.drawCard(this.width / 2 - 65, y.get() + scroll, mouseX, mouseY);
+                c.drawCard(this.width / 2 - 65, y.get() + scroll, mouseX, mouseY, new Color(225, 179, 110).getRGB());
             y.set(y.get() + 43);
         });
     }
