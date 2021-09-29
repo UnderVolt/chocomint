@@ -19,7 +19,7 @@ public class ClickableTab extends Clickable {
     private String tabName;
 
     public ClickableTab(int x, int y, Tab tab) {
-        super(x, y, 50, 20, null);
+        super(x, y, 50, 18, null);
         this.chocomint = GameBridge.getChocomint();
         this.mc = GameBridge.getMinecraft();
         this.tab = tab;
@@ -32,7 +32,7 @@ public class ClickableTab extends Clickable {
         boolean isMouseOver = (mouseX >= this.x) && (mouseX <= this.x + this.width) && (mouseY >= this.y) && (
                 mouseY <= this.y + this.height);
 
-        boolean mouseOverCloseButton = (mouseX > x + width - 15 && mouseY > y + 5 && mouseX < x + width - 6 && mouseY < y + 15);
+        boolean mouseOverCloseButton = (mouseX > x + width - 15 && mouseY > y + 4 && mouseX < x + width - 6 && mouseY < y + 15);
 
         this.width = 24 + this.mc.fontRendererObj.getStringWidth(this.tabName);
         this.chocomint.getRenderUtils().drawRoundedRect(x, y, x + width, y + height,
@@ -40,13 +40,13 @@ public class ClickableTab extends Clickable {
                 this.chocomint.getChatManager().getSelectedTab().equals(this.tab) ?  new Color(79, 82, 92).getRGB()
                         : (isMouseOver ?  new Color(54,57,63).getRGB() : new Color(32,34,37).getRGB()));
         GL11.glColor3f(255, 255, 255);
-        this.mc.fontRendererObj.drawString(this.tabName, x + 5, y + 7, tab.isRead() ? Color.WHITE.getRGB() :  new Color(255, 218, 108).getRGB());
+        this.mc.fontRendererObj.drawString(this.tabName, x + 5, y + 6, tab.isRead() ? Color.WHITE.getRGB() :  new Color(255, 218, 108).getRGB());
         if(!tab.getName().equals("SERVER_RESERVED")) {
             if(isMouseOver) {
-                this.chocomint.getRenderUtils().drawFilledCircle(x + width - 10, y + 11, 4,
+                this.chocomint.getRenderUtils().drawFilledCircle(x + width - 10, y + 10, 4,
                         mouseOverCloseButton ? new Color(255, 81, 81).getRGB() : 0);
                 GL11.glPushMatrix();
-                GlStateManager.translate(x + width - 12, y + 8.5, 0);
+                GlStateManager.translate(x + width - 12, y + 7.5, 0);
                 GL11.glScalef(0.75f, 0.75f, 0);
                 this.mc.fontRendererObj.drawString("✕", 0, 0, Color.WHITE.getRGB());
                 GL11.glPopMatrix();

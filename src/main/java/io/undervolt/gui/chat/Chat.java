@@ -203,11 +203,11 @@ public class Chat extends AnimationUI {
         this.chatManager.getOpenTabs().forEach(tab -> {
             if(!clickableTabList.containsKey(tab.getName())) {
                 if (this.mc.theWorld != null) {
-                    clickableTabList.put(tab.getName(), new ClickableTab(x.get(), this.chatHeight - 20, tab));
+                    clickableTabList.put(tab.getName(), new ClickableTab(x.get(), this.chatHeight - 18, tab));
                     x.set(x.get() + 26 + this.fontRendererObj.getStringWidth(tab.getName()));
                 } else {
                     if (!tab.getName().equals("SERVER_RESERVED")) {
-                        clickableTabList.put(tab.getName(), new ClickableTab(x.get(), this.chatHeight - 20, tab));
+                        clickableTabList.put(tab.getName(), new ClickableTab(x.get(), this.chatHeight - 18, tab));
                         x.set(x.get() + 26 + this.fontRendererObj.getStringWidth(tab.getName()));
                     }
                 }
