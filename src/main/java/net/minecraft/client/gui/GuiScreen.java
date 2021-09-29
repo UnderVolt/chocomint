@@ -45,6 +45,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 import tv.twitch.chat.ChatUserInfo;
 
 public abstract class GuiScreen extends Gui implements GuiYesNoCallback
@@ -269,7 +270,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
 
     /**
      * Draws the hover event specified by the given chat component
-     *  
+     *
      * @param component The IChatComponent to render
      * @param x The x position where to render
      * @param y The y position where to render
@@ -383,7 +384,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
 
     /**
      * Executes the click event specified by the given chat component
-     *  
+     *
      * @param component The ChatComponent to check for click
      */
     protected boolean handleComponentClick(IChatComponent component)
@@ -672,6 +673,9 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
 
     public void drawWorldBackground(int tint)
     {
+        GL11.glPushMatrix();
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glColor3f(1, 1, 1);
         if (this.mc.theWorld == null) {
             this.drawBackground(tint);
             try {
@@ -691,6 +695,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
                 e.printStackTrace();
             }
         }
+        GL11.glPopMatrix();
     }
 
     /**
@@ -795,7 +800,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
 
     /**
      * Called when the GUI is resized in order to update the world and the resolution
-     *  
+     *
      * @param w The width of the screen
      * @param h The height of the screen
      */
