@@ -119,7 +119,7 @@ public class Chat extends AnimationUI {
         this.textField.setText(this.initialText);
 
         this.clickableTabList.put("ADDTAB_RESERVED", new CircularGameBarButton(2, this.chatHeight - 17, 8, "+",
-                a -> this.mc.displayGuiScreen(new AvailableRooms(this, chocomint, this.chatManager))));
+                a -> this.mc.displayGuiScreen(new AvailableRooms(this, chatHeight))));
 
         this.gameBar.init(width, height);
         super.initGui();
@@ -193,7 +193,7 @@ public class Chat extends AnimationUI {
         if(!clickablesToRemove.isEmpty()) {
             clickableTabList.clear();
             this.clickableTabList.put("ADDTAB_RESERVED", new CircularGameBarButton(2, this.chatHeight - 17, 8, "+",
-                    a -> this.mc.displayGuiScreen(new AvailableRooms(this, chocomint, this.chatManager))));
+                    a -> this.chocomint.displayMenuOrPanel(new AvailableRooms(this, chatHeight))));
             x.set(23);
         }
 
@@ -220,7 +220,7 @@ public class Chat extends AnimationUI {
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         if(button.id == 1337097)
-            this.mc.displayGuiScreen(new AvailableRooms(this, this.chocomint, this.chatManager));
+            this.mc.displayGuiScreen(new AvailableRooms(this, this.chatHeight));
         else if(button.id == 1400000) {
             this.chatManager.removeCurrentTab();
             this.update(false);
@@ -237,7 +237,7 @@ public class Chat extends AnimationUI {
                     this.mc.displayGuiScreen(this.prev);
                     break;
                 case Keyboard.KEY_F9:
-                    this.mc.displayGuiScreen(new AvailableRooms(this, this.chocomint, this.chatManager));
+                    this.mc.displayGuiScreen(new AvailableRooms(this, this.chatHeight));
                     break;
                 case Keyboard.KEY_UP:
                     this.getSentHistory(-1);
@@ -282,7 +282,7 @@ public class Chat extends AnimationUI {
         this.textField.mouseClicked(mouseX, mouseY, mouseButton);
         this.gameBar.mouseClicked(mouseX, mouseY, mouseButton, width, height);
         this.chatManager.getSelectedTab().getMessages().forEach(message -> message.click(this, mouseX, mouseY));
-        clickableTabList.forEach((name, tab) -> tab.click(mouseX, mouseY));
+        clickableTabList.forEach((name, tab) -> tab.click(mouseX, mouseY, mouseButton));
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
