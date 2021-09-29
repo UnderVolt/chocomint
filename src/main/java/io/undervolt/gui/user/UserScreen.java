@@ -6,6 +6,7 @@ import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.menu.Menu;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.instance.Chocomint;
+import io.undervolt.utils.Multithreading;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -26,17 +27,21 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class UserScreen extends Menu {
-    private final User user;
+    private User user;
     private final Chocomint chocomint;
     private final UserManager userManager;
-    private final DynamicTexture image, banner, countryFlag;
-    private final BufferedImage bannerBufferedImage;
+    private DynamicTexture image;
+    private DynamicTexture banner;
+    private DynamicTexture countryFlag;
+    private BufferedImage bannerBufferedImage;
     private boolean drawAlias = true;
 
-    private final Instant createdAt;
-    private final String createdMonth, createdYear;
+    private Instant createdAt;
+    private String createdMonth;
+    private String createdYear;
+    private String username;
 
-    private final boolean isFriend;
+    private boolean isFriend;
 
     private GuiScreen prev;
 
@@ -50,17 +55,50 @@ public class UserScreen extends Menu {
 
     private ResourceLocation bracketSimple;
 
+    public UserScreen(GuiScreen prev, Chocomint chocomint, final String username) {
+        super(prev, chocomint, "Perfil de usuario", MenuColor.PURPLE,"user", 0);
+        this.chocomint = chocomint;
+        this.prev = prev;
+        this.userManager = chocomint.getUserManager();
+        this.username = username.toLowerCase();
+
+        Multithreading.runAsync(()->{
+            this.user = this.userManager.getUser(username);
+            this.chocomint.getUserProfilePictureManager().addImageToCache(this.user.getImage());
+            this.chocomint.getCountryFlagManager().addToQueue(user.getCountryCode());
+            if(this.user.getBanner() != null) {
+                this.banner = this.chocomint.getUserProfilePictureManager().getImageAsDynamicTexture(this.user.getBanner());
+                this.bannerBufferedImage = this.chocomint.getUserProfilePictureManager().getImageAsBufferedImage(this.user.getBanner());
+            } else {
+                this.banner = null;
+                this.bannerBufferedImage = null;
+            }
+
+            this.createdAt = Instant.parse(this.user.getCreateDate());
+
+            this.createdMonth = ZonedDateTime.ofInstant(createdAt, ZoneId.of("America/Argentina/Buenos_Aires")).format(DateTimeFormatter.ofPattern("MMM"));
+            this.createdYear = ZonedDateTime.ofInstant(createdAt, ZoneId.of("America/Argentina/Buenos_Aires")).format(DateTimeFormatter.ofPattern("uuuu"));
+
+            this.isFriend = this.chocomint.getFriendsManager().friendsPool.containsKey(this.username);
+
+            if(user.getAlias().equalsIgnoreCase(this.username)) {
+                this.drawAlias = false;
+            }
+        });
+    }
+
     public UserScreen(GuiScreen prev, Chocomint chocomint, final User user) {
         super(prev, chocomint, "Perfil de usuario", MenuColor.PURPLE,"user", 0);
         this.chocomint = chocomint;
         this.prev = prev;
         this.user = user;
         this.userManager = chocomint.getUserManager();
-        this.image = this.userManager.getUserProfilePictureManager().getImageAsDynamicTexture(this.user.getImage());
-        this.countryFlag = this.userManager.getCountryFlagManager().getCountryFlag(user.getCountryCode());
+        this.username = this.user.getUsername();
+        this.image = this.chocomint.getUserProfilePictureManager().getImageAsDynamicTexture(this.user.getImage());
+        this.countryFlag = this.chocomint.getCountryFlagManager().getCountryFlag(user.getCountryCode());
         if(this.user.getBanner() != null) {
-            this.banner = this.userManager.getUserProfilePictureManager().getImageAsDynamicTexture(this.user.getBanner());
-            this.bannerBufferedImage = this.userManager.getUserProfilePictureManager().getImageAsBufferedImage(this.user.getBanner());
+            this.banner = this.chocomint.getUserProfilePictureManager().getImageAsDynamicTexture(this.user.getBanner());
+            this.bannerBufferedImage = this.chocomint.getUserProfilePictureManager().getImageAsBufferedImage(this.user.getBanner());
         } else {
             this.banner = null;
             this.bannerBufferedImage = null;
@@ -71,17 +109,17 @@ public class UserScreen extends Menu {
         this.createdMonth = ZonedDateTime.ofInstant(createdAt, ZoneId.of("America/Argentina/Buenos_Aires")).format(DateTimeFormatter.ofPattern("MMM"));
         this.createdYear = ZonedDateTime.ofInstant(createdAt, ZoneId.of("America/Argentina/Buenos_Aires")).format(DateTimeFormatter.ofPattern("uuuu"));
 
-        this.isFriend = this.chocomint.getFriendsManager().friendsPool.containsKey(this.user.getUsername());
+        this.isFriend = this.chocomint.getFriendsManager().friendsPool.containsKey(this.username);
+
+        if(user.getAlias().equalsIgnoreCase(this.username)) {
+            this.drawAlias = false;
+        }
     }
 
     @Override
     public void initGui() {
 
         this.bracketSimple = this.getSimpleBracket();
-
-        if(user.getAlias().toLowerCase().equals(user.getUsername())) {
-            this.drawAlias = false;
-        }
 
         this.logOutButton = new MenuScrollClickableButton("exit", (a)-> {
             this.chocomint.getConfig().setToken(null);
@@ -94,7 +132,7 @@ public class UserScreen extends Menu {
         this.profileSettingsButton = new MenuScrollClickableButton("external", (a)-> {
             Desktop desktop = java.awt.Desktop.getDesktop();
             try {
-                URI oURL = new URI("https://www.undervolt.io/user/" + this.user.getUsername());
+                URI oURL = new URI("https://www.undervolt.io/user/" + this.username);
                 desktop.browse(oURL);
             } catch (URISyntaxException | IOException e) {
                 this.chocomint.getNotificationManager().addNotification(
@@ -105,7 +143,7 @@ public class UserScreen extends Menu {
         }, 16, 16, new Color(0, 0, 0, 0).getRGB(), new Color(0, 0, 0, 0).getRGB());
 
         this.sendDMButton = new MenuScrollClickableButton("message", (a)-> {
-            this.chocomint.getChatManager().setSelectedTab(this.chocomint.getChatManager().getOrCreateTabByName(this.user.getUsername()));
+            this.chocomint.getChatManager().setSelectedTab(this.chocomint.getChatManager().getOrCreateTabByName(this.username));
             this.mc.displayGuiScreen(new Chat("", this, this.chocomint, this.mc.getCurrentServerData()));
         }, 20, 20, new Color(32,34,37).getRGB(), new Color(54,57,63).getRGB());
 
@@ -115,9 +153,9 @@ public class UserScreen extends Menu {
         }, 20, 20, new Color(32, 177, 32).getRGB(), new Color(175, 27, 27).getRGB());
 
         this.friendRequestButton = new MenuScrollClickableButton(
-                this.chocomint.getFriendsManager().friendRequestPool.containsKey(this.user.getUsername()) ?
+                this.chocomint.getFriendsManager().friendRequestPool.containsKey(this.username) ?
                         "friend-check" : "add-friend", (a)-> {
-                    if(this.chocomint.getFriendsManager().friendRequestPool.containsKey(this.user.getUsername())) {
+                    if(this.chocomint.getFriendsManager().friendRequestPool.containsKey(this.username)) {
                         this.user.acceptFriendRequest();
                         this.mc.displayGuiScreen(this);
                     } else {
@@ -125,7 +163,6 @@ public class UserScreen extends Menu {
                         this.friendRequestButton.setTexture("friend-check");
                     }
         }, 20, 20, new Color(32,34,37).getRGB(), new Color(54,57,63).getRGB());
-
 
         super.initGui();
     }
@@ -150,68 +187,80 @@ public class UserScreen extends Menu {
                     this.getContentWidth() / (this.bannerBufferedImage.getWidth() / this.bannerBufferedImage.getHeight()));
         }
 
+        GL11.glColor3f(1, 1, 1);
         this.mc.getTextureManager().bindTexture(this.bracketSimple);
         drawModalRectWithCustomSizedTexture(x, scroll + getBannerPadding() + 30, 0, 0, this.getContentWidth(), 25, this.getContentWidth(), 25);
         drawRect(x, scroll + getBannerPadding() + 53, this.getContentMargin() + this.getContentWidth(), scroll + getBannerPadding() + 150, this.getMenuTitleColor());
 
-        if(!this.user.getUsername().equals("Guest")) {
-            if(this.user.getUsername().equals(this.chocomint.getUser().getUsername())) {
-                this.logOutButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 70);
-            } else {
-                if(this.isFriend) {
-                    this.sendDMButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 70);
-                    this.deleteFriendButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 95);
-                    if(!this.user.isOnline()) this.sendDMButton.setEnabled(false);
-                } else
-                    this.friendRequestButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 95);
+        if(this.createdMonth != null) {
+            if(this.image == null)
+                this.image = this.chocomint.getUserProfilePictureManager().getImageAsDynamicTexture(this.user.getImage());
+            if(this.countryFlag == null)
+                this.countryFlag = this.chocomint.getCountryFlagManager().getCachedCountryFlag(this.user.getCountryCode());
+            if (!this.username.equals("Guest")) {
+                if (this.username.equals(this.chocomint.getUser().getUsername())) {
+                    this.logOutButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 70);
+                } else {
+                    if (this.isFriend) {
+                        this.sendDMButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 70);
+                        this.deleteFriendButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 95);
+                        if (!this.user.isOnline()) this.sendDMButton.setEnabled(false);
+                    } else
+                        this.friendRequestButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 95);
+                }
             }
-        }
 
-        this.mc.getTextureManager().bindTexture(
-                this.mc.getTextureManager().getDynamicTextureLocation("pfp1", image));
-        Gui.drawModalRectWithCustomSizedTexture(x + 20, scroll + getBannerPadding() + 70, 0, 0, 60, 60, 60, 60);
+            if(this.image != null) {
+                this.mc.getTextureManager().bindTexture(
+                        this.mc.getTextureManager().getDynamicTextureLocation("pfp1", image));
+                Gui.drawModalRectWithCustomSizedTexture(x + 20, scroll + getBannerPadding() + 70, 0, 0, 60, 60, 60, 60);
+            }
 
-        GL11.glPushMatrix();
-        GlStateManager.translate(x + 85, scroll + getBannerPadding() + 75, 0);
-        GlStateManager.scale(1.5, 1.5, 0);
-        this.fontRendererObj.drawString(this.user.getAlias(), 0, 0, Color.white.getRGB());
-        GL11.glPopMatrix();
+            GL11.glPushMatrix();
+            GlStateManager.translate(x + 85, scroll + getBannerPadding() + 75, 0);
+            GlStateManager.scale(1.5, 1.5, 0);
+            this.fontRendererObj.drawString(this.user.getAlias(), 0, 0, Color.white.getRGB());
+            GL11.glPopMatrix();
 
-        if(drawAlias) this.fontRendererObj.drawString("(" + this.user.getUsername() + ")", x + 105, scroll + getBannerPadding() + 90, Color.LIGHT_GRAY.getRGB());
-        if(isFriend) {
-            this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/icon/friends.png"));
-            drawModalRectWithCustomSizedTexture(x + 84 + (int) (this.mc.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), scroll + getBannerPadding() + 70, 0, 0, 20, 20, 20, 20);
-            this.profileSettingsButton.draw(mouseX, mouseY, this.getContentMargin() + 107 + (int)(this.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), scroll + getBannerPadding() + 71);
-        } else
-            this.profileSettingsButton.draw(mouseX, mouseY, this.getContentMargin() + 85 + (int)(this.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), scroll + getBannerPadding() + 71);
+            if (drawAlias)
+                this.fontRendererObj.drawString("(" + this.username + ")", x + 105, scroll + getBannerPadding() + 90, Color.LIGHT_GRAY.getRGB());
+            if (isFriend) {
+                this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/icon/friends.png"));
+                drawModalRectWithCustomSizedTexture(x + 84 + (int) (this.mc.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), scroll + getBannerPadding() + 70, 0, 0, 20, 20, 20, 20);
+                this.profileSettingsButton.draw(mouseX, mouseY, this.getContentMargin() + 107 + (int) (this.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), scroll + getBannerPadding() + 71);
+            } else
+                this.profileSettingsButton.draw(mouseX, mouseY, this.getContentMargin() + 85 + (int) (this.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), scroll + getBannerPadding() + 71);
 
-        GL11.glPushMatrix();
-        GL11.glColor3f(255, 255, 255);
-        GlStateManager.translate(x + 85, scroll + getBannerPadding() + 87, 0);
-        this.mc.getTextureManager().bindTexture(this.mc.getTextureManager().getDynamicTextureLocation(user.getCountryCode(), this.countryFlag));
-        drawModalRectWithCustomSizedTexture(0, 0, 0, 0, 15, 15, 15, 15);
-        GL11.glPopMatrix();
-
-        String dateToDraw;
-        if(this.createdMonth.contains("ene") && this.createdYear.equals("2020"))
-            dateToDraw = "Desde el principio";
-        else
-            dateToDraw = "Se unió en " + this.createdMonth + " de " + this.createdYear;
-
-        this.fontRendererObj.drawString(dateToDraw, x + 85, scroll + getBannerPadding() + 102, Color.WHITE.getRGB());
-
-        if(this.user.isDeveloper()) {
-            this.chocomint.getRenderUtils().drawRoundedRect(x + 85, scroll + getBannerPadding() + 119, 3 + this.fontRendererObj.getStringWidth("DEV"), 11,
-            3, new Color(47, 56, 168).getRGB());
-            GL11.glColor3f(255, 255, 255);
-            this.fontRendererObj.drawString("DEV", x + 87, scroll + getBannerPadding() + 121, Color.WHITE.getRGB());
-
-            if(this.showDevInfoCard) {
-                String devInfoCardText = "Este usuario es un desarrollador oficial de chocomint";
-                this.chocomint.getRenderUtils().drawRoundedRect(x + 92 + this.fontRendererObj.getStringWidth("DEV"), scroll + getBannerPadding() + 116,
-                        12 + this.fontRendererObj.getStringWidth(devInfoCardText), 17, 3, new Color(78, 78, 78, 120).getRGB());
+            if(this.countryFlag != null) {
+                GL11.glPushMatrix();
                 GL11.glColor3f(255, 255, 255);
-                this.fontRendererObj.drawString(devInfoCardText, x + 98 + this.fontRendererObj.getStringWidth("DEV"), scroll + getBannerPadding() + 121, Color.WHITE.getRGB());
+                GlStateManager.translate(x + 85, scroll + getBannerPadding() + 87, 0);
+                this.mc.getTextureManager().bindTexture(this.mc.getTextureManager().getDynamicTextureLocation(user.getCountryCode(), this.countryFlag));
+                drawModalRectWithCustomSizedTexture(0, 0, 0, 0, 15, 15, 15, 15);
+                GL11.glPopMatrix();
+            }
+
+            String dateToDraw;
+            if (this.createdMonth.contains("ene") && this.createdYear.equals("2020"))
+                dateToDraw = "Desde el principio";
+            else
+                dateToDraw = "Se unió en " + this.createdMonth + " de " + this.createdYear;
+
+            this.fontRendererObj.drawString(dateToDraw, x + 85, scroll + getBannerPadding() + 102, Color.WHITE.getRGB());
+
+            if (this.user.isDeveloper()) {
+                this.chocomint.getRenderUtils().drawRoundedRect(x + 85, scroll + getBannerPadding() + 119, 3 + this.fontRendererObj.getStringWidth("DEV"), 11,
+                        3, new Color(47, 56, 168).getRGB());
+                GL11.glColor3f(255, 255, 255);
+                this.fontRendererObj.drawString("DEV", x + 87, scroll + getBannerPadding() + 121, Color.WHITE.getRGB());
+
+                if (this.showDevInfoCard) {
+                    String devInfoCardText = "Este usuario es un desarrollador oficial de chocomint";
+                    this.chocomint.getRenderUtils().drawRoundedRect(x + 92 + this.fontRendererObj.getStringWidth("DEV"), scroll + getBannerPadding() + 116,
+                            12 + this.fontRendererObj.getStringWidth(devInfoCardText), 17, 3, new Color(78, 78, 78, 120).getRGB());
+                    GL11.glColor3f(255, 255, 255);
+                    this.fontRendererObj.drawString(devInfoCardText, x + 98 + this.fontRendererObj.getStringWidth("DEV"), scroll + getBannerPadding() + 121, Color.WHITE.getRGB());
+                }
             }
         }
 
@@ -225,7 +274,7 @@ public class UserScreen extends Menu {
 
 
 
-        //if(this.user.getUsername().equals(this.chocomint.getUser().getUsername()))
+        //if(this.username.equals(this.chocomint.getUser().getUsername()))
         //    drawCenteredString(this.fontRendererObj, "Has estado jugando por " + this.chocomint.getParsedOpenTime(), this.width / 2, 195, Color.WHITE.getRGB());
     }
 
