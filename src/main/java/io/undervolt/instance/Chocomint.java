@@ -137,8 +137,6 @@ public class Chocomint implements Listener {
 
                 this.eventManager.registerEvents(this);
 
-                Multithreading.schedule(this::checkAndLoadOnlinePlay, 0, 30, TimeUnit.SECONDS);
-
                 this.eventManager.callEvent(new InitEvent.PreInitEvent());
                 break;
             case INIT:
@@ -173,6 +171,8 @@ public class Chocomint implements Listener {
                 this.console.registerCommand(new HelpCommand(this));
 
                 this.eventManager.callEvent(new InitEvent.PostInitEvent());
+
+                Multithreading.schedule(this::checkAndLoadOnlinePlay, 0, 30, TimeUnit.SECONDS);
                 break;
         }
     }
