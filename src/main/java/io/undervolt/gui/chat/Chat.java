@@ -6,6 +6,7 @@ import io.undervolt.api.almendra.Almendra;
 import io.undervolt.console.Console;
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
+import io.undervolt.gui.clickable.CircularGameBarButton;
 import io.undervolt.gui.clickable.Clickable;
 import io.undervolt.gui.clickable.ClickableTab;
 import io.undervolt.instance.Chocomint;
@@ -68,6 +69,7 @@ public class Chat extends AnimationUI {
     /** Tabs */
     public Map<String, Clickable> clickableTabList = Maps.newHashMap();
     public List<String> clickablesToRemove = Lists.newArrayList();
+    private AtomicInteger x = new AtomicInteger(23);
 
     public Chat(final String initialText, final GuiScreen prev, final Chocomint chocomint, final ServerData serverData) {
 
@@ -102,6 +104,9 @@ public class Chat extends AnimationUI {
                     this.chatManager.setSelectedTab(this.chatManager.getReservedLogTab());
                 }
             } else this.chatManager.setSelectedTab(this.chatManager.getReservedServerTab());
+        } else if(this.chatManager.getSelectedTab() == this.chatManager.getReservedServerTab()
+                && this.mc.theWorld == null) {
+            this.chatManager.setSelectedTab(this.almendra.getAvailableRooms().getOrDefault("#general", this.chatManager.getReservedLogTab()));
         }
 
         this.textField = new GuiTextField(0, this.fontRendererObj, 13,
@@ -113,11 +118,8 @@ public class Chat extends AnimationUI {
         this.textField.setCanLoseFocus(false);
         this.textField.setText(this.initialText);
 
-        /* Declaring everything related to tabs */
-        GameBarButton addTabButton;
-        this.buttonList.add(addTabButton = new GameBarButton(1337097, this.width - 18,
-                this.chatHeight - 18, 18, 18, "+"));
-        if(this.chocomint.getUser().getUsername().equals("Guest")) addTabButton.enabled = false;
+        this.clickableTabList.put("ADDTAB_RESERVED", new CircularGameBarButton(2, this.chatHeight - 17, 8, "+",
+                a -> this.mc.displayGuiScreen(new AvailableRooms(this, chocomint, this.chatManager))));
 
         this.gameBar.init(width, height);
         super.initGui();
@@ -190,9 +192,14 @@ public class Chat extends AnimationUI {
     public void tabUpdateLoop() {
         if(!clickablesToRemove.isEmpty()) {
             clickableTabList.clear();
+            this.clickableTabList.put("ADDTAB_RESERVED", new CircularGameBarButton(2, this.chatHeight - 17, 8, "+",
+                    a -> this.mc.displayGuiScreen(new AvailableRooms(this, chocomint, this.chatManager))));
+            x.set(23);
         }
 
-        AtomicInteger x = new AtomicInteger(23);
+        if(this.clickableTabList.containsKey("SERVER_RESERVED"))
+            ((ClickableTab) this.clickableTabList.get("SERVER_RESERVED")).setTabName("Chat del juego");
+
         this.chatManager.getOpenTabs().forEach(tab -> {
             if(!clickableTabList.containsKey(tab.getName())) {
                 if (this.mc.theWorld != null) {
@@ -206,6 +213,8 @@ public class Chat extends AnimationUI {
                 }
             }
         });
+
+        clickablesToRemove.clear();
     }
 
     @Override
