@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 public class ChatManager {
 
     private final Chocomint chocomint;
-    private final Tab reservedServerTab = new Tab(true, "server_reserved", -1, true);
+    private final Tab reservedServerTab = new Tab(true, "SERVER_RESERVED", -1, true);
     private final Tab reservedLogTab = new Tab(true, "#comandos", -1, true);
     private final List<Tab> openTabs = Lists.newArrayList(reservedServerTab);
     private final List<Message> sentMessages = Lists.newArrayList();
@@ -62,12 +62,6 @@ public class ChatManager {
             }
             this.addTab(tab);
         }
-
-        if(this.chocomint.getMinecraft().currentScreen != null && this.chocomint.getMinecraft().currentScreen instanceof Chat) {
-            System.out.println("Updated chat screen");
-            ((Chat) this.chocomint.getMinecraft().currentScreen).update(true);
-        }
-
         return tab;
     }
 
