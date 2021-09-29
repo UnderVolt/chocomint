@@ -74,11 +74,19 @@ public class AvailableRooms extends AnimationUI {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.previous.drawScreen(mouseX, mouseY, partialTicks);
 
+        drawRect(120, this.chatHeight - 18, this.width, this.height, new Color(0, 0, 0, 100).getRGB());
+
         drawRect(0,this.chatHeight - 18, 120, this.height, new Color(32,34,37).getRGB());
 
         this.fontRendererObj.drawString("> Salas globales", 5, this.chatHeight - 18 + 15, Color.WHITE.getRGB());
         this.fontRendererObj.drawString("> Salas locales", 5, this.chatHeight - 18 + y.get() + 5, Color.WHITE.getRGB());
         this.clickableMap.forEach((k, v) -> v.draw(mouseX, mouseY));
+
+        GL11.glPushMatrix();
+        GlStateManager.translate(130, this.chatHeight - 18, 0);
+        GL11.glRotatef(90, 0, 0, 1);
+        drawGradientRect(0, 0, this.height - this.chatHeight + 18, 10, 0, new Color(0, 0, 0, 100).getRGB());
+        GL11.glPopMatrix();
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
