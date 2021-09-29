@@ -13,7 +13,7 @@ public class GameBarButton extends Clickable {
     protected final ScaledResolution sr;
     protected final Minecraft mc;
     protected boolean enabled = true;
-    private String buttonText;
+    protected String buttonText;
 
     public GameBarButton(int x, int y, int width, int height, String buttonText, Consumer consumer) {
         super(x, y, width, height, consumer);
