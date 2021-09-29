@@ -41,9 +41,9 @@ public class Button extends Clickable {
     }
 
     @Override
-    public void click(int mouseX, int mouseY) {
+    public void click(int mouseX, int mouseY, int mouseButton) {
         if(enabled)
-            super.click(mouseX, mouseY);
+            super.click(mouseX, mouseY, mouseButton);
     }
 
     public void setEnabled(boolean enabled) {
