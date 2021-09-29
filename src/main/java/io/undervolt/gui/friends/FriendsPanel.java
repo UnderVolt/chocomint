@@ -32,7 +32,7 @@ public class FriendsPanel extends Gui {
 
     }
 
-    public void drawPanel(int screenWidth, int screenHeight) {
+    public void drawPanel(int screenWidth, int screenHeight, int mouseX, int mouseY) {
         if(this.isActive) {
             this.chocomint.getRenderUtils().drawRoundedRect(screenWidth - 140, 22, 138,
                             screenHeight - 24, 2, new Color(28, 28, 28).getRGB());
@@ -42,7 +42,7 @@ public class FriendsPanel extends Gui {
 
             AtomicInteger y = new AtomicInteger(43);
             this.friendUserCardList.forEach(userCard -> {
-                userCard.drawCard(screenWidth - 136, y.get());
+                userCard.drawCard(screenWidth - 136, y.get(), mouseX, mouseY);
                 y.set(y.get() + 40);
             });
 
@@ -58,7 +58,7 @@ public class FriendsPanel extends Gui {
             y.set(y.get() + 30);
 
             this.frUserCardList.forEach(userCard -> {
-                userCard.drawCard(screenWidth - 136, y.get());
+                userCard.drawCard(screenWidth - 136, y.get(), mouseX, mouseY);
                 y.set(y.get() + 40);
             });
 
