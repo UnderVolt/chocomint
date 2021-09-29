@@ -179,7 +179,7 @@ public class Chat extends AnimationUI {
         this.fontRendererObj.drawString(">", 5, this.height - 10, Color.CYAN.getRGB());
 
         drawRect(0, this.chatHeight - 18, this.width, this.chatHeight,
-                Color.BLACK.getRGB());
+                new Color(22, 24, 26).getRGB());
 
         clickableTabList.forEach((name, tab) -> tab.draw(mouseX, mouseY));
 
