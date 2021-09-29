@@ -26,6 +26,7 @@ import io.undervolt.gui.menu.Menu;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.gui.notifications.NotificationManager;
 import io.undervolt.gui.notifications.NotificationOverlay;
+import io.undervolt.gui.user.CountryFlagManager;
 import io.undervolt.gui.user.User;
 import io.undervolt.gui.user.UserManager;
 import io.undervolt.gui.user.UserProfilePictureManager;
@@ -53,6 +54,7 @@ public class Chocomint implements Listener {
     private final String chocomintUser;
     private UserManager userManager;
     private final UserProfilePictureManager userProfilePictureManager;
+    private final CountryFlagManager countryFlagManager;
 
     private final Sambayon sambayon;
 
@@ -107,6 +109,7 @@ public class Chocomint implements Listener {
         this.mc = mc;
         this.chocomintUser = "\247bchocomint";
         this.userProfilePictureManager = new UserProfilePictureManager();
+        this.countryFlagManager = new CountryFlagManager();
         this.imageCache = new ImageCache();
     }
 
@@ -147,6 +150,7 @@ public class Chocomint implements Listener {
                 this.getConfig().loadMinecraftSession();
 
                 this.getEventManager().registerEvents(this.userProfilePictureManager);
+                this.getEventManager().registerEvents(this.countryFlagManager);
 
                 this.contributorsManager = new ContributorsManager(this.mc);
                 this.friendsManager = new FriendsManager();
@@ -331,6 +335,10 @@ public class Chocomint implements Listener {
 
     public UserProfilePictureManager getUserProfilePictureManager() {
         return userProfilePictureManager;
+    }
+
+    public CountryFlagManager getCountryFlagManager() {
+        return countryFlagManager;
     }
 
     public ImageCache getImageCache() {
