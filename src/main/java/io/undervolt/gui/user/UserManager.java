@@ -31,7 +31,7 @@ public class UserManager {
         this.config = chocomint.getConfig();
         this.gson = new GsonBuilder().create();
         this.userProfilePictureManager = new UserProfilePictureManager();
-        this.countryFlagManager = new CountryFlagManager();
+        this.countryFlagManager = this.chocomint.getCountryFlagManager();
     }
 
     public User setUser(final JsonObject tokenObj) {
@@ -105,13 +105,5 @@ public class UserManager {
                 return user.get();
             }
         }
-    }
-
-    public UserProfilePictureManager getUserProfilePictureManager() {
-        return userProfilePictureManager;
-    }
-
-    public CountryFlagManager getCountryFlagManager() {
-        return countryFlagManager;
     }
 }
