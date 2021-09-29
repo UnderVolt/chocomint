@@ -38,6 +38,10 @@ public class UserCard extends Gui {
     }
 
     public void drawCard(int x, int y, int mouseX, int mouseY) {
+        this.drawCard(x, y, mouseX, mouseY, new Color(104, 143, 205).getRGB());
+    }
+
+    public void drawCard(int x, int y, int mouseX, int mouseY, int color) {
 
         boolean isMouseOver = (mouseX > x && mouseY > y && mouseX < x + 130 && mouseY < y + (isSelf ? 46 : 38));
 
@@ -48,7 +52,7 @@ public class UserCard extends Gui {
             if(isMouseOver)
                 this.chocomint.getRenderUtils().
                         drawRoundedRect(x - 1, y - 1, 132,
-                                isSelf ? 48 : 40, 2, new Color(104, 143, 205).getRGB());
+                                isSelf ? 48 : 40, 2, color);
 
             String alias = this.user.getAlias();
             if(this.mc.fontRendererObj.getStringWidth(alias) > 80) {
@@ -60,7 +64,7 @@ public class UserCard extends Gui {
 
             this.chocomint.getRenderUtils().
                     drawRoundedRect(x, y, 130,
-                    isSelf ? 46 : 38, 2, new Color(22, 22, 22).getRGB());
+                            isSelf ? 46 : 38, 2, new Color(22, 22, 22).getRGB());
 
             GL11.glPushMatrix();
             GL11.glColor3f(255, 255, 255);
