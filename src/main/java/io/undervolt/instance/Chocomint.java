@@ -136,6 +136,9 @@ public class Chocomint implements Listener {
                 this.configurableManager.configurableList.forEach(configurable -> System.out.println("Registered configurable: " + configurable.getName()));
 
                 this.eventManager.registerEvents(this);
+
+                Multithreading.schedule(this::checkAndLoadOnlinePlay, 0, 30, TimeUnit.SECONDS);
+
                 this.eventManager.callEvent(new InitEvent.PreInitEvent());
                 break;
             case INIT:
@@ -161,8 +164,6 @@ public class Chocomint implements Listener {
                 this.eventManager.callEvent(new InitEvent.ClientInitEvent());
                 break;
             case POSTINIT:
-
-                Multithreading.schedule(this::checkAndLoadOnlinePlay, 0, 30, TimeUnit.SECONDS);
 
                 this.chatManager = new ChatManager(this);
                 this.console = new Console(this);
