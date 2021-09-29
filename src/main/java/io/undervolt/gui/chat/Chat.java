@@ -63,13 +63,17 @@ public class Chat extends AnimationUI {
 
     /** Scroll implementation */
     private int scroll = 0;
+
+    /** Animation */
+    private boolean backwards = false;
     private double tw = Integer.MAX_VALUE;
     protected long ftime;
+    private AnimationUI newScreen;
 
     /** Tabs */
     public Map<String, Clickable> clickableTabList = Maps.newHashMap();
     public List<String> clickablesToRemove = Lists.newArrayList();
-    private AtomicInteger x = new AtomicInteger(23);
+    private final AtomicInteger x = new AtomicInteger(23);
 
     public Chat(final String initialText, final GuiScreen prev, final Chocomint chocomint, final ServerData serverData) {
 
@@ -84,6 +88,19 @@ public class Chat extends AnimationUI {
 
         this.console = this.chocomint.getConsole();
         this.gameBar = chocomint.getGameBar();
+    }
+
+    public void fadeOut() {
+        if(!this.backwards) {
+            this.backwards = true;
+            this.ftime = Minecraft.getSystemTime();
+            this.tw = 0.1;
+        }
+    }
+
+    public void displayNewUI(AnimationUI ui) {
+        this.newScreen = ui;
+        this.fadeOut();
     }
 
     @Override
@@ -133,12 +150,17 @@ public class Chat extends AnimationUI {
 
         if(tw != 0) {
             tw = (this.getAnimationTime(this.ftime, 3000.0D) * height);
+        } else {
+            if(backwards)
+                if(newScreen != null)
+                    this.mc.displayGuiScreen(this.newScreen);
+                else this.mc.displayGuiScreen(this.prev);
         }
 
-        if(tw/100 > 1) {
-            hue = 130 / ((int) tw / 100);
+        if(!backwards) {
+            hue = 130 - (int)(this.getAnimationTime(this.ftime, 3500.0D) * 130);
         } else {
-            hue = 130;
+            hue = (int)(this.getAnimationTime(this.ftime, 3500.0D) * 130);
         }
 
         if(this.mc.theWorld == null && this.mc.thePlayer == null) {
@@ -150,7 +172,7 @@ public class Chat extends AnimationUI {
 
         GL11.glPushMatrix();
 
-        GlStateManager.translate(0, tw, 0);
+        GlStateManager.translate(0,  backwards ? height - tw : tw, 0);
 
         drawRect(0, this.chatHeight, this.width, this.height, new Color(36, 36, 36, 100).getRGB());
 
@@ -164,9 +186,6 @@ public class Chat extends AnimationUI {
                 i = i - 12;
             }
         }
-
-        this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/icon/chat.png"));
-        drawModalRectWithCustomSizedTexture(0, this.chatHeight - 20, 0, 0, 20, 20, 20, 20);
 
         GL11.glPopMatrix();
 
@@ -234,7 +253,7 @@ public class Chat extends AnimationUI {
         if(keyCode != 28 && keyCode != 156) {
             switch(keyCode) {
                 case 1:
-                    this.mc.displayGuiScreen(this.prev);
+                    this.fadeOut();
                     break;
                 case Keyboard.KEY_F9:
                     this.mc.displayGuiScreen(new AvailableRooms(this, this.chatHeight));
@@ -279,6 +298,8 @@ public class Chat extends AnimationUI {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        if(mouseY < this.chatHeight - 20)
+            this.fadeOut();
         this.textField.mouseClicked(mouseX, mouseY, mouseButton);
         this.gameBar.mouseClicked(mouseX, mouseY, mouseButton, width, height);
         this.chatManager.getSelectedTab().getMessages().forEach(message -> message.click(this, mouseX, mouseY));
