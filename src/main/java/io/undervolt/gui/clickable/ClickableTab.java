@@ -57,11 +57,12 @@ public class ClickableTab extends Clickable {
     }
 
     @Override
-    public void click(int mouseX, int mouseY) {
-        if(mouseX > x + width - 15 && mouseY > y + 5 && mouseX < x + width - 6 && mouseY < y + 15) {
+    public void click(int mouseX, int mouseY, int mouseButton) {
+        if((mouseX > x + width - 15 && mouseY > y + 5 && mouseX < x + width - 6 && mouseY < y + 15)
+        || (mouseX > x && mouseY > y && mouseX < x + width && mouseY < y + height && mouseButton == 2)) {
             this.chocomint.getChatManager().removeTab(tab);
             ((Chat) this.mc.currentScreen).clickablesToRemove.add(tab.getName());
-        } else super.click(mouseX, mouseY);
+        } else super.click(mouseX, mouseY, mouseButton);
     }
 
     public void setTabName(String tabName) {

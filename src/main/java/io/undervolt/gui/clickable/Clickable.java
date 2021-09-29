@@ -17,7 +17,7 @@ public class Clickable extends Gui {
     }
 
     public void draw(int mouseX, int mouseY) {}
-    public void click(int mouseX, int mouseY) {
+    public void click(int mouseX, int mouseY, int mouseButton) {
         if(mouseX > x && mouseY > y && mouseX < x + width && mouseY < y + height) {
             consumer.accept(0);
         }

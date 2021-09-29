@@ -61,7 +61,7 @@ public class LoginGUI extends Panel {
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         this.user.mouseClicked(mouseX, mouseY, mouseButton);
         this.pass.mouseClicked(mouseX, mouseY, mouseButton);
-        this.linkAccount.click(mouseX, mouseY);
+        this.linkAccount.click(mouseX, mouseY, mouseButton);
         this.chocomint.getGameBar().mouseClicked(mouseX, mouseY, mouseButton, width, scroll);
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
