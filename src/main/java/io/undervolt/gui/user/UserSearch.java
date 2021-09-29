@@ -66,7 +66,7 @@ public class UserSearch extends Menu {
         if(filteredUserMap.size() > 0) {
             this.filteredUserMap.forEach((user, userCard) -> {
                 if (mouseX >= userCard.x && mouseY >= userCard.y && mouseX <= userCard.x + 130 && mouseY <= userCard.y + 38) {
-                    userCard.getConsumer().accept(userCard.getUser());
+                    if(userCard.getUser() != null) userCard.getConsumer().accept(userCard.getUser());
                 }
             });
         }
@@ -87,11 +87,9 @@ public class UserSearch extends Menu {
                         .startsWith(this.textField.getText().toLowerCase())).collect(Collectors.toList());
 
                 for (String username : filteredUserList) {
-                    User user = this.chocomint.getUserManager().getUser(username);
-                    user.setStatus(this.chocomint.getAlmendra().getConnectedUsers().contains(user.getUsername()) ? User.Status.ONLINE : User.Status.OFFLINE);
                     this.filteredUserMap.put(username,
-                            new UserCard(this.mc, user, true, false, (u) ->
-                                    this.mc.displayGuiScreen(new UserScreen(this.previous, this.chocomint, u)))
+                            new UserCard(this.mc, username, true, false, (u) ->
+                                    this.chocomint.displayMenuOrPanel(new UserScreen(this.previous, this.chocomint, u)))
                     );
                 }
             }
