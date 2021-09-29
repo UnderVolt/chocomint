@@ -152,9 +152,9 @@ public class GameBar extends Gui implements Listener {
         drawRect(10, 4, 16, 16, new Color(63, 222, 160).getRGB());
         drawString(this.fontRendererObj, "chocomint", 20, 6, Color.WHITE.getRGB());
 
-        this.userCard.drawCard(width - 132, 22);
+        this.userCard.drawCard(width - 132, 22, mouseX, mouseY);
         this.contributorsPanel.drawPanel(width, height);
-        this.friendsPanel.drawPanel(width, height);
+        this.friendsPanel.drawPanel(width, height, mouseX, mouseY);
 
         if(!(this.mc.currentScreen instanceof NotificationScreen))
             this.notificationOverlay.drawOverlay(5, 27);

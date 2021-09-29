@@ -48,7 +48,7 @@ public class UserSearch extends Menu {
 
         AtomicInteger y = new AtomicInteger(60);
         this.filteredUserMap.forEach((u, c) -> {
-                c.drawCard(this.width / 2 - 65, y.get() + scroll);
+                c.drawCard(this.width / 2 - 65, y.get() + scroll, mouseX, mouseY);
             y.set(y.get() + 43);
         });
     }
