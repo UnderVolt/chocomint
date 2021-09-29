@@ -10,6 +10,7 @@ import io.undervolt.gui.clickable.ClickableLabel;
 import io.undervolt.gui.user.UserSearch;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.AnimationUI;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -26,17 +27,22 @@ public class AvailableRooms extends AnimationUI {
 
     private final Almendra almendra;
     private final ChatManager chatManager;
-    private List<Tab> availableRooms = Lists.newArrayList();
-    public final GuiScreen previous;
+    public final Chat previous;
     private final Chocomint chocomint;
-    private GuiButton pmButton;
+
+    private boolean backwards = false;
+    private double tw = Integer.MAX_VALUE;
+    protected long ftime;
+
+    private AnimationUI newScreen;
 
     private final int chatHeight;
 
     private final Map<String, Clickable> clickableMap = Maps.newHashMap();
     private final AtomicInteger y = new AtomicInteger(30);
 
-    public AvailableRooms(final GuiScreen previous, final int chatHeight) {
+    public AvailableRooms(final Chat previous, final int chatHeight) {
+        this.ftime = Minecraft.getSystemTime();
         this.chocomint = GameBridge.getChocomint();
         this.almendra = chocomint.getAlmendra();
         this.chatManager = chocomint.getChatManager();
@@ -46,10 +52,11 @@ public class AvailableRooms extends AnimationUI {
 
     @Override
     public void initGui() {
+        super.initGui();
         this.almendra.getAvailableRooms().forEach((roomName, tab) -> {
             this.clickableMap.put(roomName, new ClickableLabel(15, this.chatHeight - 18 + y.get(), roomName, a->{
                 this.chatManager.setSelectedTab(this.chatManager.getOrCreateTabByName(roomName));
-                this.mc.displayGuiScreen(previous);
+                this.fadeOut();
             }));
             y.set(y.get() + 15);
         });
@@ -58,24 +65,46 @@ public class AvailableRooms extends AnimationUI {
             this.chatManager.setSelectedTab(this.chatManager.getReservedLogTab());
             if(!this.chatManager.getOpenTabs().contains(this.chatManager.getReservedLogTab()))
                 this.chatManager.getOpenTabs().add(this.chatManager.getReservedLogTab());
-            this.mc.displayGuiScreen(previous);
+            this.fadeOut();
         }));
 
         this.clickableMap.put("USERSEARCH_RESERVED", new ClickableLabel(5, this.chatHeight - 18 + y.get() + 40,
                 "> Buscar usuario", Color.WHITE.getRGB(),
                 a-> this.chocomint.displayMenuOrPanel(new UserSearch(this.previous, chocomint))));
 
-        super.initGui();
+        previous.width = width;
+        previous.height = height;
+        this.ftime = Minecraft.getSystemTime();
         this.chocomint.getGameBar().init(width, height);
 
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+
+        int hue = 0;
+
+        if(tw != 0) {
+            tw = this.getAnimationTime(this.ftime, 2500.0D) * 120;
+        } else {
+            if(backwards)
+                if(newScreen != null)
+                    this.mc.displayGuiScreen(this.newScreen);
+                else this.mc.displayGuiScreen(this.previous);
+        }
+
+        if(!backwards) {
+            hue = 130 - (int)(this.getAnimationTime(this.ftime, 3500.0D) * 130);
+        } else {
+            hue = (int)(this.getAnimationTime(this.ftime, 3500.0D) * 130);
+        }
+
         this.previous.drawScreen(mouseX, mouseY, partialTicks);
 
-        drawRect(120, this.chatHeight - 18, this.width, this.height, new Color(0, 0, 0, 100).getRGB());
+        GL11.glPushMatrix();
+        GlStateManager.translate(backwards ? -120 + tw : -tw, 0, 0);
 
+        drawRect(120, this.chatHeight - 18, this.width + 120, this.height, new Color(0, 0, 0, hue).getRGB());
         drawRect(0,this.chatHeight - 18, 120, this.height, new Color(32,34,37).getRGB());
 
         this.fontRendererObj.drawString("> Salas globales", 5, this.chatHeight - 18 + 15, Color.WHITE.getRGB());
@@ -90,6 +119,8 @@ public class AvailableRooms extends AnimationUI {
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
+        GL11.glPopMatrix();
+
         this.chocomint.getGameBar().draw(mouseX, mouseY, partialTicks, width, height);
     }
 
@@ -98,11 +129,25 @@ public class AvailableRooms extends AnimationUI {
         super.handleMouseInput();
     }
 
+    public void fadeOut() {
+        if(!this.backwards) {
+            this.backwards = true;
+            this.ftime = Minecraft.getSystemTime();
+            this.tw = 0.1;
+        }
+    }
+
+    public void displayNewUI(AnimationUI ui) {
+        this.newScreen = ui;
+        this.fadeOut();
+    }
+
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        if(mouseX > 120 || mouseY < this.chatHeight - 18)
+            this.fadeOut();
         this.clickableMap.forEach((k, v) -> v.click(mouseX, mouseY, mouseButton));
         this.chocomint.getGameBar().mouseClicked(mouseX, mouseY, mouseButton, width, height);
-        super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
@@ -111,17 +156,8 @@ public class AvailableRooms extends AnimationUI {
             case Keyboard.KEY_F9:
                 this.mc.displayGuiScreen(new UserSearch(this, this.chocomint));
                 break;
-            case Keyboard.KEY_F10:
-                this.chatManager.addTab(this.chatManager.getReservedLogTab());
-                this.chatManager.setSelectedTab(this.chatManager.getReservedLogTab());
-                if(previous instanceof Chat)
-                    this.mc.displayGuiScreen(previous);
-                else
-                    this.mc.displayGuiScreen(new Chat("", this.previous, this.chocomint, this.mc.getCurrentServerData()));
-                this.mc.displayGuiScreen(previous);
-                break;
             case 1:
-                this.mc.displayGuiScreen(previous);
+                this.fadeOut();
         }
         super.keyTyped(typedChar, keyCode);
     }
