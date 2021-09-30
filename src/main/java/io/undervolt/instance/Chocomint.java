@@ -20,6 +20,7 @@ import io.undervolt.gui.Panel;
 import io.undervolt.gui.RenderUtils;
 import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.chat.ChatManager;
+import io.undervolt.gui.chat.ChatSettings;
 import io.undervolt.gui.contributors.ContributorsManager;
 import io.undervolt.gui.friends.FriendsManager;
 import io.undervolt.gui.menu.Menu;
@@ -89,6 +90,7 @@ public class Chocomint implements Listener {
 
     // Configurables
     private Background background;
+    private ChatSettings chatSettings;
 
     /** Initialize constructor */
     public Chocomint(final Minecraft mc) {
@@ -126,15 +128,18 @@ public class Chocomint implements Listener {
 
                 // Register configurables
                 this.getEventManager().registerEvents(this.configurableManager);
+
                 this.background = new Background(this);
                 this.configurableManager.register(this.background);
+
+                this.chatSettings = new ChatSettings();
+                this.configurableManager.register(this.chatSettings);
 
                 this.modLoader.load(new File(this.rootPath + File.separator + "mods"));
 
                 this.configurableManager.configurableList.forEach(configurable -> System.out.println("Registered configurable: " + configurable.getName()));
 
                 this.eventManager.registerEvents(this);
-
                 this.eventManager.callEvent(new InitEvent.PreInitEvent());
                 break;
             case INIT:
@@ -342,5 +347,9 @@ public class Chocomint implements Listener {
 
     public GameBar getGameBar() {
         return gameBar;
+    }
+
+    public ChatSettings getChatSettings() {
+        return chatSettings;
     }
 }
