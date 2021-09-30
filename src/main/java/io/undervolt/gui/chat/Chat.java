@@ -346,10 +346,10 @@ public class Chat extends AnimationUI {
         if(i > 0) {
             if (this.scroll < (this.chatManager.getSelectedTab().getMessages().size() * 12)
                     - (this.height - this.chatHeight) + 12)
-                this.scroll(5);
+                this.scroll += 6;
         } else if(i < 0) {
             if (this.scroll > 0)
-                this.scroll(-5);
+                this.scroll -= 6;
         }
 
     }
