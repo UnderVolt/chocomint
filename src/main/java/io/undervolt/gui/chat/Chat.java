@@ -59,10 +59,14 @@ public class Chat extends AnimationUI {
     private final Almendra almendra;
 
     /** Chat height */
+    private boolean dragged = false;
     private int chatHeight;
 
     /** Scroll implementation */
     private int scroll = 0;
+    private boolean isScrolling = false;
+    private int scrollAmount = 0;
+    protected long sftime;
 
     /** Animation */
     private boolean backwards = false;
@@ -73,7 +77,7 @@ public class Chat extends AnimationUI {
     /** Tabs */
     public Map<String, Clickable> clickableTabList = Maps.newHashMap();
     public List<String> clickablesToRemove = Lists.newArrayList();
-    private final AtomicInteger x = new AtomicInteger(23);
+    private AtomicInteger x = new AtomicInteger(23);
 
     public Chat(final String initialText, final GuiScreen prev, final Chocomint chocomint, final ServerData serverData) {
 
@@ -85,6 +89,8 @@ public class Chat extends AnimationUI {
         this.almendra = this.chocomint.getAlmendra();
 
         this.serverData = serverData;
+
+        this.chatHeight = this.chocomint.getChatSettings().getChatHeight();
 
         this.console = this.chocomint.getConsole();
         this.gameBar = chocomint.getGameBar();
@@ -107,9 +113,7 @@ public class Chat extends AnimationUI {
     public void initGui() {
 
         this.ftime = Minecraft.getSystemTime();
-
-        this.chatHeight = (int) (this.height * .33);
-
+        this.sftime = Minecraft.getSystemTime();
         this.sentHistoryCursor = this.chatManager.getSentMessages().size();
 
         if(this.chatManager.getSelectedTab() == null) {
@@ -135,12 +139,18 @@ public class Chat extends AnimationUI {
         this.textField.setCanLoseFocus(false);
         this.textField.setText(this.initialText);
 
-        this.clickableTabList.put("ADDTAB_RESERVED", new CircularGameBarButton(2, this.chatHeight - 17, 8, "+",
+        this.clickableTabList.put("ADDTAB_RESERVED", new CircularGameBarButton(3, this.chatHeight - 16, 8, "+",
                 a -> this.mc.displayGuiScreen(new AvailableRooms(this, chatHeight))));
 
         this.gameBar.init(width, height);
         super.initGui();
 
+    }
+
+    public void scroll(int amount) {
+        this.sftime = Minecraft.getSystemTime();
+        this.isScrolling = true;
+        this.scrollAmount = amount;
     }
 
     @Override
@@ -169,6 +179,20 @@ public class Chat extends AnimationUI {
         }
 
         this.tabUpdateLoop();
+
+        if(this.dragged) {
+            this.chatHeight = mouseY;
+            this.clickableTabList.forEach((k, v) -> v.y = this.chatHeight - 18);
+        }
+
+        if(this.isScrolling) {
+            double amount = (this.getAnimationTime(this.sftime, 650.0D) * scrollAmount);
+            this.scroll += scrollAmount - amount;
+            if(amount == 0) {
+                this.scrollAmount = 0;
+                this.isScrolling = false;
+            }
+        }
 
         GL11.glPushMatrix();
 
@@ -211,7 +235,7 @@ public class Chat extends AnimationUI {
     public void tabUpdateLoop() {
         if(!clickablesToRemove.isEmpty()) {
             clickableTabList.clear();
-            this.clickableTabList.put("ADDTAB_RESERVED", new CircularGameBarButton(2, this.chatHeight - 17, 8, "+",
+            this.clickableTabList.put("ADDTAB_RESERVED", new CircularGameBarButton(3, this.chatHeight - 16, 8, "+",
                     a -> this.chocomint.displayMenuOrPanel(new AvailableRooms(this, chatHeight))));
             x.set(23);
         }
@@ -238,14 +262,7 @@ public class Chat extends AnimationUI {
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
-        if(button.id == 1337097)
-            this.mc.displayGuiScreen(new AvailableRooms(this, this.chatHeight));
-        else if(button.id == 1400000) {
-            this.chatManager.removeCurrentTab();
-            this.update(false);
-        } else {
-            super.actionPerformed(button);
-        }
+        super.actionPerformed(button);
     }
 
     @Override
@@ -298,13 +315,26 @@ public class Chat extends AnimationUI {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        if(mouseY < this.chatHeight - 20)
-            this.fadeOut();
+
         this.textField.mouseClicked(mouseX, mouseY, mouseButton);
         this.gameBar.mouseClicked(mouseX, mouseY, mouseButton, width, height);
         this.chatManager.getSelectedTab().getMessages().forEach(message -> message.click(this, mouseX, mouseY));
         clickableTabList.forEach((name, tab) -> tab.click(mouseX, mouseY, mouseButton));
+
+        if(mouseY < this.chatHeight - 20)
+            this.fadeOut();
+        else if(mouseY > this.chatHeight - 20 && mouseY < this.chatHeight && mouseX > x.get() + 10)
+            this.dragged = true;
+
         super.mouseClicked(mouseX, mouseY, mouseButton);
+    }
+
+    @Override
+    protected void mouseReleased(int mouseX, int mouseY, int state) {
+        super.mouseReleased(mouseX, mouseY, state);
+        this.dragged = false;
+        this.chocomint.getChatSettings().setChatHeight(this.chatHeight);
+        this.chocomint.getChatSettings().saveConfig(this.chocomint.getLoader().selectedProfile);
     }
 
     @Override
@@ -313,9 +343,15 @@ public class Chat extends AnimationUI {
 
         int i = Mouse.getEventDWheel();
 
-        if (i < 0 && !(this.scroll <= 0)) this.scroll -=8;
-        else if (i > 0  && (this.scroll <= (this.chatManager.getSelectedTab().getMessages().size() * 12) -
-                (this.height * .66) + 12)) this.scroll += 8;
+        if(i > 0) {
+            if (this.scroll < (this.chatManager.getSelectedTab().getMessages().size() * 12)
+                    - (this.height - this.chatHeight) + 12)
+                this.scroll(5);
+        } else if(i < 0) {
+            if (this.scroll > 0)
+                this.scroll(-5);
+        }
+
     }
 
     public Console getConsole() {
