@@ -46,7 +46,6 @@ public class Chocomint implements Listener {
 
     private final Minecraft mc;
     private final long millisAtStart;
-    private GameBridge gameBridge;
     private final String clientName;
     private final String commitName;
 
@@ -116,7 +115,6 @@ public class Chocomint implements Listener {
     public void init(LaunchType type){
         switch(type){
             case PREINIT:
-                this.gameBridge = new GameBridge();
                 this.notificationManager = new NotificationManager(this);
 
                 // ModLoader
@@ -225,10 +223,6 @@ public class Chocomint implements Listener {
 
     @EventHandler public void updateGamebar(ScreenChangeEvent event) {
         this.gameBar.setParentScreen(event.getScreen());
-    }
-
-    public GameBridge getGameBridge() {
-        return gameBridge;
     }
 
     public NotificationManager getNotificationManager() {

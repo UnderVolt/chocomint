@@ -5,6 +5,7 @@ import io.undervolt.api.event.events.NotificationEvent;
 import io.undervolt.api.event.events.RenderGameOverlayEvent;
 import io.undervolt.api.event.handler.EventHandler;
 import io.undervolt.api.event.handler.Listener;
+import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.chat.Message;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.Multithreading;
@@ -25,7 +26,7 @@ public class NotificationOverlay extends Gui implements Listener {
     public NotificationOverlay(Chocomint chocomint) {
         this.chocomint = chocomint;
         this.mc = chocomint.getMinecraft();
-        this.scaledResolution = this.chocomint.getGameBridge().getScaledResolution();
+        this.scaledResolution = GameBridge.getScaledResolution();
     }
 
     public void drawOverlay(int x, int y) {
