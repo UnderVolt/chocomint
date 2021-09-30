@@ -9,10 +9,10 @@ import java.util.function.Consumer;
 public class CircularGameBarButton extends GameBarButton {
 
     private final Chocomint chocomint;
-    private int radius;
+    private float radius;
 
-    public CircularGameBarButton(int x, int y, int radius, String buttonText, Consumer consumer) {
-        super(x, y, radius * 2, radius * 2, buttonText, consumer);
+    public CircularGameBarButton(int x, int y, float radius, String buttonText, Consumer consumer) {
+        super(x, y, (int)radius * 2, (int)radius * 2, buttonText, consumer);
         this.chocomint = GameBridge.getChocomint();
         this.radius = radius;
     }
@@ -27,7 +27,9 @@ public class CircularGameBarButton extends GameBarButton {
                 c = new Color(54, 57, 63).getRGB();
         }
 
-        this.chocomint.getRenderUtils().drawFilledCircle(this.x + radius, this.y + radius, this.radius, c);
-        drawCenteredString(mc.fontRendererObj, this.buttonText, this.x + (this.width / 2), this.y + (this.height / 3), Color.WHITE.getRGB());
+        this.chocomint.getRenderUtils().drawFilledCircle(this.x + (int)radius, this.y + (int)radius, this.radius, c);
+        this.mc.fontRendererObj.drawString(this.buttonText,
+                this.x + (this.width / 2) - (this.mc.fontRendererObj.getStringWidth(this.buttonText) / 2),
+                this.y + (this.height / 3), Color.WHITE.getRGB());
     }
 }
