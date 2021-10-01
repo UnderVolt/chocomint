@@ -133,7 +133,6 @@ public class UserCard extends Gui {
                 if (mouseX >= x && mouseY >= y && mouseX <= x + 130 && mouseY <= y + (this.isSelf ? 46 : 38)) {
                     if(this.user != null) {
                         this.getConsumer().accept(this.user);
-                        System.out.println("LOL");
                     }
                 }
             }
