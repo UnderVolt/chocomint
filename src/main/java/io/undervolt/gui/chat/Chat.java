@@ -139,7 +139,7 @@ public class Chat extends AnimationUI {
         this.textField.setCanLoseFocus(false);
         this.textField.setText(this.initialText);
 
-        this.clickableTabList.put("ADDTAB_RESERVED", new CircularGameBarButton(3, this.chatHeight - 16, 8, "+",
+        this.clickableTabList.put("ADDTAB_RESERVED", new CircularGameBarButton(3, this.chatHeight - 17, 8, "+",
                 a -> this.mc.displayGuiScreen(new AvailableRooms(this, chatHeight))));
 
         this.gameBar.init(width, height);
@@ -182,7 +182,9 @@ public class Chat extends AnimationUI {
 
         if(this.dragged) {
             this.chatHeight = mouseY;
-            this.clickableTabList.forEach((k, v) -> v.y = this.chatHeight - 18);
+            this.clickableTabList.forEach((k, v) -> {
+                    v.y = this.chatHeight - ((v instanceof CircularGameBarButton) ? 17 : 18);
+            });
         }
 
         if(this.isScrolling) {
@@ -235,7 +237,7 @@ public class Chat extends AnimationUI {
     public void tabUpdateLoop() {
         if(!clickablesToRemove.isEmpty()) {
             clickableTabList.clear();
-            this.clickableTabList.put("ADDTAB_RESERVED", new CircularGameBarButton(3, this.chatHeight - 16, 8, "+",
+            this.clickableTabList.put("ADDTAB_RESERVED", new CircularGameBarButton(3, this.chatHeight - 17, 8, "+",
                     a -> this.chocomint.displayMenuOrPanel(new AvailableRooms(this, chatHeight))));
             x.set(23);
         }
