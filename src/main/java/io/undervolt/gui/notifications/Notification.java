@@ -56,7 +56,7 @@ public class Notification extends Gui {
         mc.getChocomint().getRenderUtils().drawFilledCircle(x + 12, y + 15, 8, this.getPriorityColor());
 
         String title = this.title;
-        if(mc.fontRendererObj.getStringWidth(title) > 85) {
+        if(mc.fontRendererObj.getStringWidth(title) > width - 35) {
             title = title.substring(0, Math.min(title.length(), 14)) + "...";
         }
 
