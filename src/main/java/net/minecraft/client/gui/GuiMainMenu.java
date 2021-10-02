@@ -677,10 +677,6 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
         this.chatButton.enabled = this.isAuthenticated;
         this.usuariosButton.enabled = this.isAuthenticated;
 
-        if(!this.isAuthenticated && !this.chocomint.getUser().getUsername().equals("Guest")) {
-            drawCenteredString(this.fontRendererObj, "Conectando a Almendra...", this.width / 2, this.height - 11, Color.white.getRGB());
-        }
-
         if (Reflector.FMLCommonHandler_getBrandings.exists())
         {
             Object object = Reflector.call(Reflector.FMLCommonHandler_instance);
