@@ -42,7 +42,8 @@ public class UserGameBarButton extends GameBarButton {
 
     public void setUser(User user) {
         this.user = user;
-        this.pictureLocation = this.mc.getTextureManager().getDynamicTextureLocation(user.getUsername(), this.chocomint.getUserProfilePictureManager().getCachedDynamicTexture(user.getImage()));
+        this.setPictureLocation(this.mc.getTextureManager().getDynamicTextureLocation(user.getUsername(),
+                this.chocomint.getUserProfilePictureManager().getCachedDynamicTexture(user.getImage())));
     }
 
     public void setPictureLocation(ResourceLocation resourceLocation) {
