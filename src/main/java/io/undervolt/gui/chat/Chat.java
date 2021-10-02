@@ -181,7 +181,7 @@ public class Chat extends AnimationUI {
         this.tabUpdateLoop();
 
         if(this.dragged) {
-            this.chatHeight = mouseY;
+            this.chatHeight = mouseY + 9;
             this.clickableTabList.forEach((k, v) -> {
                     v.y = this.chatHeight - ((v instanceof CircularGameBarButton) ? 17 : 18);
             });
