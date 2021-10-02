@@ -223,7 +223,7 @@ public class Chocomint implements Listener {
     }
 
     public void initOfflineUser() {
-        this.user = new User("Guest", User.Status.OFFLINE, null, false, null, null, null, null);
+        this.user = new User("Guest", User.Status.OFFLINE, null, false, null, "Guest", null, null);
     }
 
     @EventHandler public void updateGamebar(ScreenChangeEvent event) {

@@ -39,7 +39,7 @@ public class UserManager {
     }
 
     public User setUser(final String token) {
-        AtomicReference<User> user = new AtomicReference<>(new User("Guest", User.Status.ONLINE, null, false, null, null, null, null));
+        AtomicReference<User> user = new AtomicReference<>(new User("Guest", User.Status.ONLINE, null, false, null, "Guest", null, null));
         if(token == null) return user.get();
         JSONObject json = new JSONObject();
         try {
