@@ -14,9 +14,9 @@ public class User {
         ONLINE, AWAY, BUSY, OFFLINE;
     }
 
-    private final String username, image, alias, banner, createDate;
+    private final String username, image, banner, createDate, countryCode;
+    private String alias;
     private Status status;
-    private final String countryCode;
     private final boolean developer;
 
     public User(final String username, final Status status, String countryCode, boolean developer, String image, String alias, String banner, String createDate) {
@@ -179,4 +179,10 @@ public class User {
             });
         }
     }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
+
 }
