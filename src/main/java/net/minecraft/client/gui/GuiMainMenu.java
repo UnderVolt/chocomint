@@ -98,6 +98,10 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
     private int field_92019_w;
     private ResourceLocation backgroundTexture;
 
+    /** Chat button */
+    private GameBarButton chatButton;
+    private GameBarButton usuariosButton;
+
     /** Chocomint */
     private final Chocomint chocomint;
 
@@ -268,6 +272,12 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
             this.field_92019_w = this.field_92021_u + 24;
         }
 
+        this.buttonList.add(chatButton = new GameBarButton(103,
+                this.width - 52, Integer.MIN_VALUE, 50, 15, "Chat"));
+        this.buttonList.add(usuariosButton = new GameBarButton(104,
+                this.width - 112, Integer.MIN_VALUE, 55, 15, "Usuarios"));
+
+
         this.mc.setConnectedToRealms(false);
 
         if (Minecraft.getMinecraft().gameSettings.getOptionOrdinalValue(GameSettings.Options.enumFloat) && !this.L)
@@ -383,6 +393,9 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
                 this.mc.displayGuiScreen(guiyesno);
             }
         }
+
+        if (button.id == 103) this.mc.displayGuiScreen(new Chat("", this, this.mc.getChocomint(), null));
+        if (button.id == 104) this.mc.displayGuiScreen(new UserSearch(this, this.chocomint));
 
         super.actionPerformed(button);
     }
@@ -661,6 +674,8 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
         this.drawCenteredString(this.fontRendererObj, this.splashText, 0, -8, -256);
         GlStateManager.popMatrix();
         String s = this.chocomint.getCommitName();
+        this.chatButton.enabled = this.isAuthenticated;
+        this.usuariosButton.enabled = this.isAuthenticated;
 
         if(!this.isAuthenticated && !this.chocomint.getUser().getUsername().equals("Guest")) {
             drawCenteredString(this.fontRendererObj, "Conectando a Almendra...", this.width / 2, this.height - 11, Color.white.getRGB());
