@@ -45,7 +45,8 @@ public class UserProfilePictureManager implements Listener {
                 BufferedImage image;
                 byte[] imageByte;
 
-                String imageString = imgStr.split(",")[1];
+                String[] imgStrArr = imgStr.split(",");
+                String imageString = imgStrArr.length > 1 ? imgStrArr[1] : imgStrArr[0];
                 try {
                     imageByte = decoder.decode(imageString);
                     ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
