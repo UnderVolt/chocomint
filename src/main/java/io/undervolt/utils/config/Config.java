@@ -8,6 +8,7 @@ import com.mojang.authlib.Agent;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 import io.undervolt.gui.notifications.Notification;
+import io.undervolt.gui.user.User;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.RestUtils;
 import net.minecraft.client.Minecraft;
@@ -94,16 +95,16 @@ public class Config {
 
         try {
             if(tkC.exists()){
+                this.mc.getChocomint().getUser().setAlias("Logging in...");
                 try {
                     String js = IOUtils.toString(new FileInputStream(tkC), StandardCharsets.UTF_8);
                     JSONObject json = new JSONObject(js);
 
                     this.restUtils.sendJsonRequest("api/user", json, (obj)->{
                         try {
-                            System.out.println(json.getString("token"));
-                            System.out.println(obj);
                             JsonObject res = this.gson.fromJson(obj, JsonObject.class);
                             if(res.get("code").getAsInt() == 200) this.mcToken = json.getString("token");
+                            else this.mc.getChocomint().getUser().setAlias("Guest");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
