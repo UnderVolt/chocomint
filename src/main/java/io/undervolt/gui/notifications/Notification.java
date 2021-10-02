@@ -64,23 +64,23 @@ public class Notification extends Gui {
 
         if(mc.fontRendererObj.getStringWidth(this.description) > width - 40 ) {
             String splitSeq = this.description.contains(" ") ? " " : "(?!^)";
-            String firstLine = "";
-            String secondLine = "";
+            StringBuilder firstLine = new StringBuilder();
+            StringBuilder secondLine = new StringBuilder();
 
             for (String msgSplit : this.description.split(splitSeq)){
                 if(mc.fontRendererObj.getStringWidth(firstLine + msgSplit) < width - 40) {
-                    firstLine = firstLine + msgSplit + splitSeq.replace("(?!^)", "");
+                    firstLine.append(msgSplit).append(splitSeq.replace("(?!^)", ""));
                 } else {
-                    secondLine = secondLine + msgSplit + splitSeq.replace("(?!^)", "");
+                    secondLine.append(msgSplit).append(splitSeq.replace("(?!^)", ""));
                 }
             }
 
-            if(mc.fontRendererObj.getStringWidth(secondLine) > width - 45) {
-                secondLine = secondLine.substring(0, Math.min(secondLine.length(), 14)) + "...";
+            if(mc.fontRendererObj.getStringWidth(secondLine.toString()) > width - 45) {
+                secondLine = new StringBuilder(secondLine.substring(0, Math.min(secondLine.length(), 14)) + "...");
             }
 
-            mc.fontRendererObj.drawString(firstLine, x + 24, y + 15, Color.GRAY.getRGB());
-            mc.fontRendererObj.drawString(secondLine, x + 24, y + 23, Color.GRAY.getRGB());
+            mc.fontRendererObj.drawString(firstLine.toString(), x + 24, y + 15, Color.GRAY.getRGB());
+            mc.fontRendererObj.drawString(secondLine.toString(), x + 24, y + 23, Color.GRAY.getRGB());
         } else {
             mc.fontRendererObj.drawString(this.description, x + 24, y + 15, Color.GRAY.getRGB());
         }
