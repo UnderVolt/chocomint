@@ -25,6 +25,7 @@ import io.undervolt.instance.Chocomint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
@@ -102,36 +103,38 @@ public class GameBar extends Gui implements Listener {
                 this.chocomint.displayMenuOrPanel(new NotificationScreen(this.mc.currentScreen));
         });
 
-        this.changeMinecraftAccountButton = new TextureGameBarButton(
-                width - 70 - this.mc.fontRendererObj.getStringWidth(this.chocomint.getUser().getUsername()), 0, 20, 20, "change", (a) -> {
-            this.chocomint.displayMenuOrPanel(new MinecraftLoginGUI(this.mc.currentScreen, this.chocomint));
-        });
-
-        this.userButton = new UserGameBarButton(width - 48 - this.mc.fontRendererObj.getStringWidth(this.chocomint.getUser().getUsername()),
+        this.userButton = new UserGameBarButton(width - 48 - this.mc.fontRendererObj.getStringWidth(this.chocomint.getUser().getAlias()),
                 0, this.chocomint.getUser(), (a) -> {
-            if(this.chocomint.getUser().getUsername().equals("Guest")) this.chocomint.displayMenuOrPanel(new LoginGUI(this.mc.currentScreen, this.chocomint));
-            else {
+            if(this.chocomint.getUser().getUsername().equals("Guest")) {
+                if (!this.chocomint.getUser().getAlias().equals("Logging in..."))
+                    this.chocomint.displayMenuOrPanel(new LoginGUI(this.mc.currentScreen, this.chocomint));
+            } else {
                 this.userCard.toggleActive();
                 this.contributorsPanel.setActive(false);
                 this.friendsPanel.setActive(false);
             }
         });
 
+        this.changeMinecraftAccountButton = new TextureGameBarButton(
+                width - 57 - this.userButton.width, 0, 20, 20, "change", (a) -> {
+            this.chocomint.displayMenuOrPanel(new MinecraftLoginGUI(this.mc.currentScreen, this.chocomint));
+        });
+
         this.friendsButton = new TextureGameBarButton(
-                width - 92 - this.mc.fontRendererObj.getStringWidth(this.chocomint.getUser().getUsername()), 0, 20, 20, "friends", (a) -> {
+                width - 79 - this.userButton.width, 0, 20, 20, "friends", (a) -> {
             this.contributorsPanel.setActive(false);
             this.userCard.setActive(false);
             this.friendsPanel.toggleActive();
         });
 
-        this.chatButton = new TextureGameBarButton(width - 114 - this.mc.fontRendererObj.getStringWidth(this.chocomint.getUser().getUsername()), 0, 20, 20, "chat", (a) -> {
+        this.chatButton = new TextureGameBarButton(width - 101 - this.userButton.width, 0, 20, 20, "chat", (a) -> {
             this.contributorsPanel.setActive(false);
             this.userCard.setActive(false);
             this.friendsPanel.setActive(false);
             this.chocomint.displayMenuOrPanel(new Chat("", this.mc.currentScreen, this.chocomint, this.mc.getCurrentServerData()));
         });
 
-        this.configButton = new GameBarButton(width - 136 - this.mc.fontRendererObj.getStringWidth(this.chocomint.getUser().getUsername()), 0, 20, 20, "C",
+        this.configButton = new GameBarButton(width - 123 - this.userButton.width, 0, 20, 20, "C",
                 (a) -> {
                     this.mc.displayGuiScreen(new GuiMods(this.parentScreen, this.chocomint));
                 });
@@ -164,8 +167,10 @@ public class GameBar extends Gui implements Listener {
         this.chatButton.setEnabled(isAuthenticated);
 
         this.userButton.draw(mouseX, mouseY);
+        this.userButton.setX(width - 45 - this.mc.fontRendererObj.getStringWidth(this.chocomint.getUser().getAlias()));
         this.notificationsButton.draw(mouseX, mouseY);
         this.changeMinecraftAccountButton.draw(mouseX, mouseY);
+        this.changeMinecraftAccountButton.setX(width - 47 - this.userButton.width);
         if(!this.chocomint.getUser().getUsername().equalsIgnoreCase("Guest")) {
             this.friendsButton.draw(mouseX, mouseY);
             this.chatButton.draw(mouseX, mouseY);
@@ -197,6 +202,8 @@ public class GameBar extends Gui implements Listener {
         this.chatButton.click(mouseX, mouseY, mouseButton);
         if(this.mc.theWorld != null && this.mc.thePlayer != null)
             this.configButton.click(mouseX, mouseY, mouseButton);
+
+        GL11.glColor3f(1, 1, 1);
 
     }
 
