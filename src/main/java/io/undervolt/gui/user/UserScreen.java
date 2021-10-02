@@ -252,12 +252,15 @@ public class UserScreen extends Menu {
                 GL11.glColor3f(255, 255, 255);
                 this.fontRendererObj.drawString("DEV", x + 92, scroll + getBannerPadding() + 121, Color.WHITE.getRGB());
 
-                if (this.showDevInfoCard) {
+                boolean isOverBadge = (mouseX > x + 90 && mouseY > scroll + getBannerPadding() + 119
+                        && mouseX < x + 93 + this.fontRendererObj.getStringWidth("DEV") && mouseY < scroll + getBannerPadding() + 130);
+
+                if (isOverBadge) {
                     String devInfoCardText = "Este usuario es un desarrollador oficial de chocomint";
-                    this.chocomint.getRenderUtils().drawRoundedRect(x + 97 + this.fontRendererObj.getStringWidth("DEV"), scroll + getBannerPadding() + 116,
-                            12 + this.fontRendererObj.getStringWidth(devInfoCardText), 17, 3, new Color(78, 78, 78, 120).getRGB());
+                    this.chocomint.getRenderUtils().drawRoundedRect(mouseX, mouseY,
+                            12 + this.fontRendererObj.getStringWidth(devInfoCardText), 17, 3, new Color(50, 50, 50, 200).getRGB());
                     GL11.glColor3f(255, 255, 255);
-                    this.fontRendererObj.drawString(devInfoCardText, x + 103 + this.fontRendererObj.getStringWidth("DEV"), scroll + getBannerPadding() + 121, Color.WHITE.getRGB());
+                    this.fontRendererObj.drawString(devInfoCardText, mouseX + 6, mouseY + 6, Color.WHITE.getRGB());
                 }
             }
         }
@@ -290,12 +293,8 @@ public class UserScreen extends Menu {
 
         super.mouseClicked(mouseX, mouseY, mouseButton);
 
-        if(this.user.isDeveloper() && mouseX >= this.getContentMargin() + 115 && mouseY >= this.scroll + getBannerPadding() + 119 &&
-                mouseX <= this.getContentMargin() + 118 + this.fontRendererObj.getStringWidth("DEV") && mouseY <= this.scroll + getBannerPadding() + 130) {
-            this.showDevInfoCard = true;
-        } else {
-            this.showDevInfoCard = false;
-        }
+        this.showDevInfoCard = this.user.isDeveloper() && mouseX >= this.getContentMargin() + 115 && mouseY >= this.scroll + getBannerPadding() + 119 &&
+                mouseX <= this.getContentMargin() + 118 + this.fontRendererObj.getStringWidth("DEV") && mouseY <= this.scroll + getBannerPadding() + 130;
 
         this.sendDMButton.registerClick(mouseX, mouseY);
         this.profileSettingsButton.registerClick(mouseX, mouseY);
