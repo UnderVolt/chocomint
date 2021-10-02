@@ -323,7 +323,7 @@ public class Chat extends AnimationUI {
         this.chatManager.getSelectedTab().getMessages().forEach(message -> message.click(this, mouseX, mouseY));
         clickableTabList.forEach((name, tab) -> tab.click(mouseX, mouseY, mouseButton));
 
-        if(mouseY < this.chatHeight - 20)
+        if(mouseY < this.chatHeight - 20 && mouseY > 20)
             this.fadeOut();
         else if(mouseY > this.chatHeight - 20 && mouseY < this.chatHeight && mouseX > x.get() + 10)
             this.dragged = true;
