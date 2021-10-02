@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mojang.authlib.Agent;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
+import io.undervolt.gui.login.LoginGUI;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.gui.user.User;
 import io.undervolt.instance.Chocomint;
@@ -112,6 +113,8 @@ public class Config {
                 }catch (Exception e){
                     System.out.println(e.getMessage());
                 }
+            } else {
+                this.mc.getChocomint().displayMenuOrPanel(new LoginGUI(this.mc.currentScreen, this.mc.getChocomint()));
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
