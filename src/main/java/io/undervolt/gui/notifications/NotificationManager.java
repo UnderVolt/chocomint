@@ -11,6 +11,7 @@ public class NotificationManager {
 
     private List<Notification> notificationList = Lists.newArrayList();
     private final EventManager eventManager;
+    private boolean read;
 
     public NotificationManager(Chocomint chocomint) {
         this.eventManager = chocomint.getEventManager();
@@ -41,5 +42,13 @@ public class NotificationManager {
         this.notificationList.clear();
         this.eventManager.callEvent(new NotificationEvent.Clear());
         return this.notificationList;
+    }
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
     }
 }
