@@ -219,9 +219,6 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
             case Keyboard.KEY_F8:
                 this.mc.displayGuiScreen(new Chat("", this, this.mc.getChocomint(), null));
                 break;
-            case Keyboard.KEY_F10:
-                this.mc.displayGuiScreen(new UserSearch(this, this.mc.getChocomint()));
-                break;
         }
     }
 
