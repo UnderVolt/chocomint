@@ -33,13 +33,19 @@ public class NotificationScreen extends Panel {
     @Override
     public void drawContent(int mouseX, int mouseY, float partialTicks, int margin, int scroll) {
         this.clearNotificationsButton.draw(mouseX, mouseY);
-        AtomicInteger y = new AtomicInteger(scroll);
-        this.notificationManager.getNotifications().forEach(notification -> {
-            notification.draw(this.mc, margin + 5, y.get() + 50, this.getPanelWidth() - 10);
-            y.set(y.get() + 45);
-        });
-
-        this.pageSize = y.get();
+        if(this.notificationManager.getNotifications().isEmpty()) {
+            this.chocomint.getRenderUtils().drawRoundedRect(margin + 5, 50, this.getPanelWidth() - 10, 35, 3, new Color(22, 22, 22).getRGB());
+            drawCenteredString(this.mc.fontRendererObj, "No tenés", margin + 5 + (this.getPanelWidth() - 10) / 2, 58, Color.LIGHT_GRAY.getRGB());
+            drawCenteredString(this.mc.fontRendererObj, "notificaciones.", margin + 5 + (this.getPanelWidth() - 10) / 2, 67, Color.LIGHT_GRAY.getRGB());
+            this.pageSize = 77;
+        } else {
+            AtomicInteger y = new AtomicInteger(scroll);
+            this.notificationManager.getNotifications().forEach(notification -> {
+                notification.draw(this.mc, margin + 5, y.get() + 50, this.getPanelWidth() - 10);
+                y.set(y.get() + 45);
+            });
+            this.pageSize = y.get();
+        }
     }
 
     @Override
