@@ -175,16 +175,24 @@ public class UserScreen extends Menu {
     private int getBannerPadding() {
         return (int)(this.height * .16 > 160 ? 160 : this.height * .16) + 10;
     }
+    private ResourceLocation defaultBannerLocation = new ResourceLocation("/chocomint/ui/banner/default.jpg");
 
     @Override
     public void drawMenuItems(int mouseX, int mouseY, float partialTicks, int x, int scroll) {
         this.setPageSize(this.height);
 
-        if(this.banner != null) {
-            this.mc.getTextureManager().bindTexture(this.mc.getTextureManager().getDynamicTextureLocation("banner", this.banner));
-            Gui.drawModalRectWithCustomSizedTexture(x, 50 + scroll, 0, 0, this.getContentWidth(),
-                    getBannerPadding() + 22, this.getContentWidth(),
-                    this.getContentWidth() / (this.bannerBufferedImage.getWidth() / this.bannerBufferedImage.getHeight()));
+        if(this.createdMonth != null) {
+            if (this.banner == null) {
+                this.mc.getTextureManager().bindTexture(this.defaultBannerLocation);
+                Gui.drawModalRectWithCustomSizedTexture(x, 50 + scroll, 0, 0, this.getContentWidth(),
+                        getBannerPadding() + 22, this.getContentWidth(),
+                        this.getContentWidth() / (1600/1000));
+            } else {
+                this.mc.getTextureManager().bindTexture(this.mc.getTextureManager().getDynamicTextureLocation("banner", this.banner));
+                Gui.drawModalRectWithCustomSizedTexture(x, 50 + scroll, 0, 0, this.getContentWidth(),
+                        getBannerPadding() + 22, this.getContentWidth(),
+                        this.getContentWidth() / (this.bannerBufferedImage.getWidth() / this.bannerBufferedImage.getHeight()));
+            }
         }
 
         GL11.glColor3f(1, 1, 1);
