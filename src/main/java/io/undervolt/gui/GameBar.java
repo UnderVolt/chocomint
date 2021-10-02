@@ -158,9 +158,6 @@ public class GameBar extends Gui implements Listener {
         this.contributorsPanel.drawPanel(width, height);
         this.friendsPanel.drawPanel(width, height, mouseX, mouseY);
 
-        if(!(this.mc.currentScreen instanceof NotificationScreen))
-            this.notificationOverlay.drawOverlay(5, 27);
-
         boolean isAuthenticated = this.chocomint.getAlmendra() != null && this.chocomint.getAlmendra().isAuthenticated();
 
         this.friendsButton.setEnabled(isAuthenticated);
