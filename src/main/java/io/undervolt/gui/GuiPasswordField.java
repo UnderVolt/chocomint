@@ -16,7 +16,7 @@ public class GuiPasswordField extends GuiTextField
     public void drawTextBox()
     {
         String password = getText();
-        replaceText(Strings.repeat('*', getText().length()));
+        replaceText(Strings.repeat('●', getText().length()));
         super.drawTextBox();
         replaceText(password);
     }
