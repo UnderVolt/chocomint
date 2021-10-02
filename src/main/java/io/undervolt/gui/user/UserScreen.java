@@ -221,7 +221,7 @@ public class UserScreen extends Menu {
             GL11.glPopMatrix();
 
             if (drawAlias)
-                this.fontRendererObj.drawString("(" + this.username + ")", x + 105, scroll + getBannerPadding() + 90, Color.LIGHT_GRAY.getRGB());
+                this.fontRendererObj.drawString("(" + this.username + ")", x + 110, scroll + getBannerPadding() + 91, Color.LIGHT_GRAY.getRGB());
             if (isFriend) {
                 this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/icon/friends.png"));
                 drawModalRectWithCustomSizedTexture(x + 89 + (int) (this.mc.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), scroll + getBannerPadding() + 70, 0, 0, 20, 20, 20, 20);
