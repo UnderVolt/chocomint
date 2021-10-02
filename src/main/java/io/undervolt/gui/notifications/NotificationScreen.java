@@ -2,6 +2,7 @@ package io.undervolt.gui.notifications;
 
 import io.undervolt.gui.Panel;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -16,6 +17,9 @@ public class NotificationScreen extends Panel {
 
     @Override
     public void initGui() {
+        this.chocomint.getGameBar().notificationsButton.setTexture(
+                new ResourceLocation("/chocomint/icon/notifications.png")
+        );
         super.initGui();
     }
 

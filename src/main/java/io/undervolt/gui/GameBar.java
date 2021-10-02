@@ -1,6 +1,7 @@
 package io.undervolt.gui;
 
 import com.google.common.collect.Lists;
+import io.undervolt.api.event.events.NotificationEvent;
 import io.undervolt.api.event.events.UserConnectEvent;
 import io.undervolt.api.event.handler.EventHandler;
 import io.undervolt.api.event.handler.Listener;
@@ -23,6 +24,7 @@ import io.undervolt.gui.user.UserScreen;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
+import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
 
@@ -54,7 +56,7 @@ public class GameBar extends Gui implements Listener {
     private final FontRenderer fontRendererObj;
 
     /** Declare buttons */
-    private TextureGameBarButton notificationsButton;
+    public TextureGameBarButton notificationsButton;
     private UserGameBarButton userButton;
     private TextureGameBarButton chatButton;
     private TextureGameBarButton friendsButton;
@@ -199,6 +201,16 @@ public class GameBar extends Gui implements Listener {
         if(this.mc.theWorld != null && this.mc.thePlayer != null)
             this.configButton.click(mouseX, mouseY, mouseButton);
 
+    }
+
+    @EventHandler public void notif(NotificationEvent.Add e) {
+        if(!(this.mc.currentScreen instanceof NotificationScreen))
+            if (this.chocomint.getNotificationManager().getNotifications().size() > 0 &&
+                !this.chocomint.getNotificationManager().isRead()) {
+                this.chocomint.getGameBar().notificationsButton.setTexture(
+                        new ResourceLocation("/chocomint/icon/notifications_unread.png")
+                );
+            }
     }
 
     public void setBackgroundDrawing(boolean backgroundDrawing) {
