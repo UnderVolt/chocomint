@@ -98,7 +98,7 @@ public class Panel extends AnimationUI {
         GL11.glPopMatrix();
 
         drawRect(this.width - getPanelWidth(), 0, this.width, this.height, new Color(22, 24, 26).getRGB());
-        this.mc.fontRendererObj.drawString(this.name, this.width - getPanelWidth() + 8, 28, Color.WHITE.getRGB());
+        this.mc.fontRendererObj.drawString(this.name, this.width - getPanelWidth() + 5, 28, Color.WHITE.getRGB());
 
         drawContent(mouseX, mouseY, partialTicks, this.width - getPanelWidth(), scroll);
 
