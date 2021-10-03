@@ -27,11 +27,15 @@ public class FloatingLabel extends Gui {
     }
 
     public void drawLabel(int mouseX, int mouseY) {
+        int width = 12 + this.fontRenderer.getStringWidth(text);
+        int height = 17;
+        int x = (mouseX + width > GameBridge.getScaledResolution().getScaledWidth()) ? mouseX - width : mouseX;
+        int y = (mouseY < width) ? mouseY : mouseY - 17;
         if (enabled) {
-            this.chocomint.getRenderUtils().drawRoundedRect(mouseX, mouseY - 17,
-                    12 + this.fontRenderer.getStringWidth(text), 17, 3, new Color(50, 50, 50, 200).getRGB());
+            this.chocomint.getRenderUtils().drawRoundedRect(x, y, width, height, 3,
+                    new Color(58, 58, 58, 200).getRGB());
             GL11.glColor3f(255, 255, 255);
-            this.fontRenderer.drawString(text, mouseX + 6, mouseY - 12, Color.WHITE.getRGB());
+            this.fontRenderer.drawString(text, x + 6, y + 5, Color.WHITE.getRGB());
         }
     }
 
