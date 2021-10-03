@@ -130,7 +130,8 @@ public class UserScreen extends Menu {
             this.chocomint.getAlmendra().disconnect();
             this.chocomint.getChatManager().removeTabs();
             this.mc.displayGuiScreen(this.prev);
-        }, 20, 20, new Color(32,34,37).getRGB(), new Color(175, 27, 27).getRGB());
+        }, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 70, 20, 20,
+                new Color(32,34,37).getRGB(), new Color(175, 27, 27).getRGB());
 
         this.profileSettingsButton = new MenuScrollClickableButton("external", (a)-> {
             Desktop desktop = java.awt.Desktop.getDesktop();
@@ -143,17 +144,20 @@ public class UserScreen extends Menu {
                 );
                 e.printStackTrace();
             }
-        }, 16, 16, new Color(0, 0, 0, 0).getRGB(), new Color(0, 0, 0, 0).getRGB());
+        }, this.getContentMargin() + 112 + (int) (this.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5),
+                scroll + getBannerPadding() + 71, 16, 16, new Color(0, 0, 0, 0).getRGB(), new Color(0, 0, 0, 0).getRGB());
 
         this.sendDMButton = new MenuScrollClickableButton("message", (a)-> {
             this.chocomint.getChatManager().setSelectedTab(this.chocomint.getChatManager().getOrCreateTabByName(this.username));
             this.mc.displayGuiScreen(new Chat("", this, this.chocomint, this.mc.getCurrentServerData()));
-        }, 20, 20, new Color(32,34,37).getRGB(), new Color(54,57,63).getRGB());
+        }, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 70, 20, 20,
+                new Color(32,34,37).getRGB(), new Color(54,57,63).getRGB());
 
         this.deleteFriendButton = new MenuScrollClickableButton("remove-friend", (a)-> {
             this.user.removeFriend();
             this.mc.displayGuiScreen(this);
-        }, 20, 20, new Color(32, 177, 32).getRGB(), new Color(175, 27, 27).getRGB());
+        }, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 95, 20, 20,
+                new Color(32, 177, 32).getRGB(), new Color(175, 27, 27).getRGB());
 
         this.friendRequestButton = new MenuScrollClickableButton(
                 this.chocomint.getFriendsManager().friendRequestPool.containsKey(this.username) ?
@@ -165,7 +169,8 @@ public class UserScreen extends Menu {
                         this.user.sendFriendRequest();
                         this.friendRequestButton.setTexture("friend-check");
                     }
-        }, 20, 20, new Color(32,34,37).getRGB(), new Color(54,57,63).getRGB());
+        }, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 95, 20, 20,
+                new Color(32,34,37).getRGB(), new Color(54,57,63).getRGB());
 
         this.devFloatingLabel = new FloatingLabel("Este usuario es un desarrollador de chocomint");
 
@@ -210,14 +215,14 @@ public class UserScreen extends Menu {
                 this.countryFlag = this.chocomint.getCountryFlagManager().getCachedCountryFlag(this.user.getCountryCode());
             if (!this.username.equals("Guest")) {
                 if (this.username.equals(this.chocomint.getUser().getUsername())) {
-                    this.logOutButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 70);
+                    this.logOutButton.draw(mouseX, mouseY);
                 } else {
                     if (this.isFriend) {
-                        this.sendDMButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 70);
-                        this.deleteFriendButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 95);
+                        this.sendDMButton.draw(mouseX, mouseY);
+                        this.deleteFriendButton.draw(mouseX, mouseY);
                         if (!this.user.isOnline()) this.sendDMButton.setEnabled(false);
                     } else
-                        this.friendRequestButton.draw(mouseX, mouseY, this.getContentMargin() + this.getContentWidth() - 30, scroll + getBannerPadding() + 95);
+                        this.friendRequestButton.draw(mouseX, mouseY);
                 }
             }
 
@@ -238,9 +243,12 @@ public class UserScreen extends Menu {
             if (isFriend) {
                 this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/icon/friends.png"));
                 drawModalRectWithCustomSizedTexture(x + 89 + (int) (this.mc.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), scroll + getBannerPadding() + 70, 0, 0, 20, 20, 20, 20);
-                this.profileSettingsButton.draw(mouseX, mouseY, this.getContentMargin() + 112 + (int) (this.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), scroll + getBannerPadding() + 71);
-            } else
-                this.profileSettingsButton.draw(mouseX, mouseY, this.getContentMargin() + 90 + (int) (this.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), scroll + getBannerPadding() + 71);
+                this.profileSettingsButton.draw(mouseX, mouseY);
+            } else {
+                this.profileSettingsButton.setX(this.getContentMargin() + 90 + (int) (this.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5));
+                this.profileSettingsButton.setY(scroll + getBannerPadding() + 71);
+                this.profileSettingsButton.draw(mouseX, mouseY);
+            }
 
             if(this.countryFlag != null) {
                 GL11.glPushMatrix();
@@ -305,15 +313,10 @@ public class UserScreen extends Menu {
         this.showDevInfoCard = this.user.isDeveloper() && mouseX >= this.getContentMargin() + 115 && mouseY >= this.scroll + getBannerPadding() + 119 &&
                 mouseX <= this.getContentMargin() + 118 + this.fontRendererObj.getStringWidth("DEV") && mouseY <= this.scroll + getBannerPadding() + 130;
 
-        this.sendDMButton.registerClick(mouseX, mouseY);
-        this.profileSettingsButton.registerClick(mouseX, mouseY);
-        this.friendRequestButton.registerClick(mouseX, mouseY);
-        this.deleteFriendButton.registerClick(mouseX, mouseY);
-        this.logOutButton.registerClick(mouseX, mouseY);
-    }
-
-    public boolean isOverButton(MenuScrollClickableButton button, int mouseX, int mouseY) {
-        return button.isEnabled() && (mouseX > button.getX() && mouseY > button.getY() && mouseX < button.getX() + button.getW()
-                && mouseY < button.getY() + button.getH());
+        this.sendDMButton.click(mouseX, mouseY, mouseButton);
+        this.profileSettingsButton.click(mouseX, mouseY, mouseButton);
+        this.friendRequestButton.click(mouseX, mouseY, mouseButton);
+        this.deleteFriendButton.click(mouseX, mouseY, mouseButton);
+        this.logOutButton.click(mouseX, mouseY, mouseButton);
     }
 }
