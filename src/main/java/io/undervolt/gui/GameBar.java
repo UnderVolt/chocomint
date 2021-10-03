@@ -145,7 +145,11 @@ public class GameBar extends Gui implements Listener {
         this.userCard.setUser(event.getUser());
     }
 
-    private double dw;
+    private final FloatingLabel notificationContext = new FloatingLabel("Notificationes (Ctrl + P)");
+    private final FloatingLabel changeMinecraftAccountContext = new FloatingLabel("Cuenta de Minecraft (Ctrl + I)");
+    private final FloatingLabel friendsContext = new FloatingLabel("Amigos y solicitudes (Ctrl + U)");
+    private final FloatingLabel chatContext = new FloatingLabel("Chat (Ctrl + Y)");
+    private final FloatingLabel configContext = new FloatingLabel("Configuración de mods (Ctrl + T)");
 
     public void draw(int mouseX, int mouseY, float partialTicks, int width, int height) {
 
@@ -176,8 +180,16 @@ public class GameBar extends Gui implements Listener {
             this.chatButton.draw(mouseX, mouseY);
         }
 
-        if(this.mc.theWorld != null && this.mc.thePlayer != null)
+        if(this.mc.theWorld != null && this.mc.thePlayer != null) {
             this.configButton.draw(mouseX, mouseY);
+            this.configButton.appendLabel(configContext, mouseX, mouseY);
+        }
+
+        this.notificationsButton.appendLabel(notificationContext, mouseX, mouseY);
+        this.changeMinecraftAccountButton.appendLabel(changeMinecraftAccountContext, mouseX, mouseY);
+        this.friendsButton.appendLabel(friendsContext, mouseX, mouseY);
+        this.chatButton.appendLabel(chatContext, mouseX, mouseY);
+
     }
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton, int width, int height) {
