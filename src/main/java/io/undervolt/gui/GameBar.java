@@ -1,13 +1,11 @@
 package io.undervolt.gui;
 
-import com.google.common.collect.Lists;
 import io.undervolt.api.event.events.NotificationEvent;
 import io.undervolt.api.event.events.UserConnectEvent;
 import io.undervolt.api.event.handler.EventHandler;
 import io.undervolt.api.event.handler.Listener;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.chat.Chat;
-import io.undervolt.gui.clickable.Clickable;
 import io.undervolt.gui.clickable.GameBarButton;
 import io.undervolt.gui.clickable.TextureGameBarButton;
 import io.undervolt.gui.clickable.UserGameBarButton;
@@ -15,7 +13,6 @@ import io.undervolt.gui.config.GuiMods;
 import io.undervolt.gui.contributors.ContributorsManager;
 import io.undervolt.gui.contributors.ContributorsPanel;
 import io.undervolt.gui.friends.FriendsManager;
-import io.undervolt.gui.friends.FriendsPanel;
 import io.undervolt.gui.friends.FriendsScreen;
 import io.undervolt.gui.login.LoginGUI;
 import io.undervolt.gui.login.MinecraftLoginGUI;
