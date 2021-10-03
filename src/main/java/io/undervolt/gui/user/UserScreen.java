@@ -1,5 +1,6 @@
 package io.undervolt.gui.user;
 
+import io.undervolt.gui.FloatingLabel;
 import io.undervolt.gui.GameBarButton;
 import io.undervolt.gui.MenuScrollClickableButton;
 import io.undervolt.gui.chat.Chat;
@@ -52,6 +53,8 @@ public class UserScreen extends Menu {
     private MenuScrollClickableButton friendRequestButton;
     private MenuScrollClickableButton sendDMButton;
     private MenuScrollClickableButton deleteFriendButton;
+
+    private FloatingLabel devFloatingLabel;
 
     private ResourceLocation bracketSimple;
 
@@ -164,6 +167,8 @@ public class UserScreen extends Menu {
                     }
         }, 20, 20, new Color(32,34,37).getRGB(), new Color(54,57,63).getRGB());
 
+        this.devFloatingLabel = new FloatingLabel("Este usuario es un desarrollador de chocomint");
+
         super.initGui();
     }
 
@@ -264,11 +269,7 @@ public class UserScreen extends Menu {
                         && mouseX < x + 93 + this.fontRendererObj.getStringWidth("DEV") && mouseY < scroll + getBannerPadding() + 130);
 
                 if (isOverBadge) {
-                    String devInfoCardText = "Este usuario es un desarrollador oficial de chocomint";
-                    this.chocomint.getRenderUtils().drawRoundedRect(mouseX, mouseY,
-                            12 + this.fontRendererObj.getStringWidth(devInfoCardText), 17, 3, new Color(50, 50, 50, 200).getRGB());
-                    GL11.glColor3f(255, 255, 255);
-                    this.fontRendererObj.drawString(devInfoCardText, mouseX + 6, mouseY + 6, Color.WHITE.getRGB());
+                    this.devFloatingLabel.drawLabel(mouseX, mouseY);
                 }
             }
         }
