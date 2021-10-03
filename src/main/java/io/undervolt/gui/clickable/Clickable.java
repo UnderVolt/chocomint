@@ -1,5 +1,6 @@
 package io.undervolt.gui.clickable;
 
+import io.undervolt.gui.FloatingLabel;
 import net.minecraft.client.gui.Gui;
 
 import java.util.function.Consumer;
@@ -21,6 +22,13 @@ public class Clickable extends Gui {
         if(mouseX > x && mouseY > y && mouseX < x + width && mouseY < y + height) {
             consumer.accept(0);
         }
+    }
+
+    public Clickable appendLabel(FloatingLabel floatingLabel, int mouseX, int mouseY) {
+        if(mouseX > x && mouseY > y && mouseX < x + width && mouseY < y + height) {
+            floatingLabel.drawLabel(mouseX, mouseY);
+        }
+        return this;
     }
 
     public int getX() {
