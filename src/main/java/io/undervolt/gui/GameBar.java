@@ -16,6 +16,7 @@ import io.undervolt.gui.contributors.ContributorsManager;
 import io.undervolt.gui.contributors.ContributorsPanel;
 import io.undervolt.gui.friends.FriendsManager;
 import io.undervolt.gui.friends.FriendsPanel;
+import io.undervolt.gui.friends.FriendsScreen;
 import io.undervolt.gui.login.LoginGUI;
 import io.undervolt.gui.login.MinecraftLoginGUI;
 import io.undervolt.gui.notifications.*;
@@ -49,7 +50,7 @@ public class GameBar extends Gui implements Listener {
 
     /** Declare friends panel */
     private final FriendsManager friendsManager;
-    public FriendsPanel friendsPanel;
+    public FriendsScreen friendsPanel;
 
     /** UI elements */
     private final ScaledResolution sr;
@@ -93,9 +94,6 @@ public class GameBar extends Gui implements Listener {
         // Initialize Contributors Panel
         this.contributorsPanel = new ContributorsPanel(this.mc, this.contributorsManager, false);
 
-        // Initialize Friends Panel
-        this.friendsPanel = new FriendsPanel(this.chocomint, this.friendsManager, false);
-
         // Add buttons to the buttonList variable
         this.notificationsButton = new TextureGameBarButton(
                 width - 20, 0, 20, 20, "notifications", (a) -> {
@@ -111,7 +109,6 @@ public class GameBar extends Gui implements Listener {
             } else {
                 this.userCard.toggleActive();
                 this.contributorsPanel.setActive(false);
-                this.friendsPanel.setActive(false);
             }
         });
 
@@ -122,15 +119,12 @@ public class GameBar extends Gui implements Listener {
 
         this.friendsButton = new TextureGameBarButton(
                 width - 79 - this.userButton.width, 0, 20, 20, "friends", (a) -> {
-            this.contributorsPanel.setActive(false);
-            this.userCard.setActive(false);
-            this.friendsPanel.toggleActive();
+            this.chocomint.displayMenuOrPanel(new FriendsScreen(this.mc.currentScreen));
         });
 
         this.chatButton = new TextureGameBarButton(width - 101 - this.userButton.width, 0, 20, 20, "chat", (a) -> {
             this.contributorsPanel.setActive(false);
             this.userCard.setActive(false);
-            this.friendsPanel.setActive(false);
             this.chocomint.displayMenuOrPanel(new Chat("", this.mc.currentScreen, this.chocomint, this.mc.getCurrentServerData()));
         });
 
@@ -163,7 +157,6 @@ public class GameBar extends Gui implements Listener {
 
         this.userCard.drawCard(width - 132, 22, mouseX, mouseY);
         this.contributorsPanel.drawPanel(width, height);
-        this.friendsPanel.drawPanel(width, height, mouseX, mouseY);
 
         boolean isAuthenticated = this.chocomint.getAlmendra() != null && this.chocomint.getAlmendra().isAuthenticated();
 
@@ -198,13 +191,7 @@ public class GameBar extends Gui implements Listener {
 
         if (mouseX >= 4 && mouseY >= 4 && mouseX <= 16 && mouseY <= 16) {
             this.userCard.setActive(false);
-            this.friendsPanel.setActive(false);
             this.contributorsPanel.toggleActive();
-        }
-
-        // Friends panel click
-        if(this.friendsPanel.isActive) {
-            this.friendsPanel.click(mouseX, mouseY);
         }
 
         this.userButton.click(mouseX, mouseY, mouseButton);
