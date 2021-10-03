@@ -187,6 +187,12 @@ public class UserScreen extends Menu {
     }
     private ResourceLocation defaultBannerLocation = new ResourceLocation("/chocomint/ui/banner/default.jpg");
 
+    private final FloatingLabel logOutContext = new FloatingLabel("Cerrar sesión");
+    private final FloatingLabel sendDMContext = new FloatingLabel("Enviar un mensaje privado");
+    private final FloatingLabel deleteFriendContext = new FloatingLabel("Eliminar amigo");
+    private final FloatingLabel friendRequestContext = new FloatingLabel("Enviar solicitud de amistad");
+    private final FloatingLabel externalContext = new FloatingLabel("Abrir perfil completo");
+
     @Override
     public void drawMenuItems(int mouseX, int mouseY, float partialTicks, int x, int scroll) {
         this.setPageSize(this.height);
@@ -216,13 +222,18 @@ public class UserScreen extends Menu {
             if (!this.username.equals("Guest")) {
                 if (this.username.equals(this.chocomint.getUser().getUsername())) {
                     this.logOutButton.draw(mouseX, mouseY);
+                    this.logOutButton.appendLabel(logOutContext, mouseX, mouseY);
                 } else {
                     if (this.isFriend) {
                         this.sendDMButton.draw(mouseX, mouseY);
                         this.deleteFriendButton.draw(mouseX, mouseY);
                         if (!this.user.isOnline()) this.sendDMButton.setEnabled(false);
-                    } else
+                        else this.sendDMButton.appendLabel(sendDMContext, mouseX, mouseY);
+                        this.deleteFriendButton.appendLabel(deleteFriendContext, mouseX, mouseY);
+                    } else {
                         this.friendRequestButton.draw(mouseX, mouseY);
+                        this.friendRequestButton.appendLabel(friendRequestContext, mouseX, mouseY);
+                    }
                 }
             }
 
@@ -249,6 +260,8 @@ public class UserScreen extends Menu {
                 this.profileSettingsButton.setY(scroll + getBannerPadding() + 71);
                 this.profileSettingsButton.draw(mouseX, mouseY);
             }
+
+            this.profileSettingsButton.appendLabel(externalContext, mouseX, mouseY);
 
             if(this.countryFlag != null) {
                 GL11.glPushMatrix();
