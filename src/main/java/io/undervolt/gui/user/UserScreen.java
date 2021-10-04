@@ -227,16 +227,20 @@ public class UserScreen extends Menu {
                 this.countryFlag = this.chocomint.getCountryFlagManager().getCachedCountryFlag(this.user.getCountryCode());
             if (!this.username.equals("Guest")) {
                 if (this.username.equals(this.chocomint.getUser().getUsername())) {
+                    this.logOutButton.setY(scroll + getBannerPadding() + 70);
                     this.logOutButton.draw(mouseX, mouseY);
                     this.logOutButton.appendLabel(logOutContext, mouseX, mouseY);
                 } else {
                     if (this.isFriend) {
+                        this.sendDMButton.setY(scroll + getBannerPadding() + 70);
                         this.sendDMButton.draw(mouseX, mouseY);
+                        this.deleteFriendButton.setY(scroll + getBannerPadding() + 95);
                         this.deleteFriendButton.draw(mouseX, mouseY);
                         if (!this.user.isOnline()) this.sendDMButton.setEnabled(false);
                         else this.sendDMButton.appendLabel(sendDMContext, mouseX, mouseY);
                         this.deleteFriendButton.appendLabel(deleteFriendContext, mouseX, mouseY);
                     } else {
+                        this.friendRequestButton.setY(scroll + getBannerPadding() + 95);
                         this.friendRequestButton.draw(mouseX, mouseY);
                         this.friendRequestButton.appendLabel(friendRequestContext, mouseX, mouseY);
                     }
