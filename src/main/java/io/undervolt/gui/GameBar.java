@@ -177,9 +177,10 @@ public class GameBar extends Gui implements Listener {
 
         this.notificationsButton.appendLabel(notificationContext, mouseX, mouseY);
         this.changeMinecraftAccountButton.appendLabel(changeMinecraftAccountContext, mouseX, mouseY);
-        this.friendsButton.appendLabel(friendsContext, mouseX, mouseY);
-        this.chatButton.appendLabel(chatContext, mouseX, mouseY);
-
+        if(!this.chocomint.getUser().getUsername().equalsIgnoreCase("Guest")) {
+            this.friendsButton.appendLabel(friendsContext, mouseX, mouseY);
+            this.chatButton.appendLabel(chatContext, mouseX, mouseY);
+        }
     }
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton, int width, int height) {
@@ -194,8 +195,10 @@ public class GameBar extends Gui implements Listener {
         this.userButton.click(mouseX, mouseY, mouseButton);
         this.notificationsButton.click(mouseX, mouseY, mouseButton);
         this.changeMinecraftAccountButton.click(mouseX, mouseY, mouseButton);
-        this.friendsButton.click(mouseX, mouseY, mouseButton);
-        this.chatButton.click(mouseX, mouseY, mouseButton);
+        if(!this.chocomint.getUser().getUsername().equalsIgnoreCase("Guest")) {
+            this.friendsButton.click(mouseX, mouseY, mouseButton);
+            this.chatButton.click(mouseX, mouseY, mouseButton);
+        }
         if(this.mc.theWorld != null && this.mc.thePlayer != null)
             this.configButton.click(mouseX, mouseY, mouseButton);
 
