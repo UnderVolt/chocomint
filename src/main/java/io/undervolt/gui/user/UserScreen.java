@@ -218,8 +218,8 @@ public class UserScreen extends Menu {
         if(this.createdMonth != null) {
             if(this.banner == null)
                 if(this.user.getBanner() != null) {
-                    this.banner = this.chocomint.getUserProfilePictureManager().getCachedDynamicTexture(this.user.getImage());
-                    this.bannerBufferedImage = this.chocomint.getUserProfilePictureManager().getCachedBufferedImage(this.user.getImage());
+                    this.banner = this.chocomint.getUserProfilePictureManager().getCachedDynamicTexture(this.user.getBanner());
+                    this.bannerBufferedImage = this.chocomint.getUserProfilePictureManager().getCachedBufferedImage(this.user.getBanner());
                 }
             if(this.image == null)
                 this.image = this.chocomint.getUserProfilePictureManager().getImageAsDynamicTexture(this.user.getImage());
