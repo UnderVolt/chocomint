@@ -19,6 +19,7 @@ import java.util.Map;
 public class UserProfilePictureManager implements Listener {
 
     private final List<String> dynamicTextureQueue = Lists.newArrayList();
+    private final List<String> bufferedImageQueue = Lists.newArrayList();
 
     private final Map<String, DynamicTexture> dynamicTextureMap = Maps.newHashMap();
     private final Map<String, BufferedImage> bufferedImageMap = Maps.newHashMap();
@@ -29,14 +30,23 @@ public class UserProfilePictureManager implements Listener {
            this.getImageAsDynamicTexture(dynamicTextureQueue.get(0));
            this.dynamicTextureQueue.remove(0);
        }
+        if(!bufferedImageQueue.isEmpty()) {
+            this.getImageAsBufferedImage(bufferedImageQueue.get(0));
+            this.bufferedImageQueue.remove(0);
+        }
     }
 
     public void addImageToCache(String imgStr) {
         this.dynamicTextureQueue.add(imgStr);
+        this.bufferedImageQueue.add(imgStr);
     }
 
     public DynamicTexture getCachedDynamicTexture(String imgStr) {
         return this.dynamicTextureMap.get(imgStr);
+    }
+
+    public BufferedImage getCachedBufferedImage(String imgStr) {
+        return this.bufferedImageMap.get(imgStr);
     }
 
     public DynamicTexture getImageAsDynamicTexture(String imgStr) {
