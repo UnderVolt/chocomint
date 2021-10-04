@@ -73,7 +73,7 @@ public class FriendsScreen extends Panel {
         if(frUserCardList.isEmpty()) {
             this.chocomint.getRenderUtils().drawRoundedRect(margin + 5, y.get(), 130, 36, 4, new Color(22, 22, 22).getRGB());
             drawCenteredString(this.mc.fontRendererObj, "No hay solicitudes", margin + 5 + (this.getPanelWidth() - 10) / 2, y.get() + 13, Color.LIGHT_GRAY.getRGB());
-            y.set(y.get() + 50);
+            y.set(y.get() + 65);
         }
 
         this.pageSize = y.get();
