@@ -23,7 +23,7 @@ public class UserCard extends Gui {
     private DynamicTexture dynamicTexture;
     private final boolean isSelf;
     private final Consumer<User> consumer;
-    public int x, y;
+    public int x, y, width, height;
 
     public UserCard(final Minecraft mc, final User user, boolean isActive, boolean isSelf, Consumer<User> consumer) {
         this.chocomint = GameBridge.getChocomint();
@@ -66,6 +66,9 @@ public class UserCard extends Gui {
     }
 
     public void drawCard(int x, int y, int width, int height, int mouseX, int mouseY, int color) {
+
+        this.width = width;
+        this.height = height;
 
         if(user != null) {
             this.dynamicTexture = this.chocomint.getUserProfilePictureManager().getImageAsDynamicTexture(user.getImage());
@@ -138,7 +141,7 @@ public class UserCard extends Gui {
     public void click(int mouseY, int mouseX) {
         if(this.isActive()) {
             if(mouseY > 20) {
-                if (mouseX >= x && mouseY >= y && mouseX <= x + 130 && mouseY <= y + (this.isSelf ? 46 : 38)) {
+                if (mouseX >= x && mouseY >= y && mouseX <= x + width && mouseY <= y + height) {
                     if(this.user != null) {
                         this.getConsumer().accept(this.user);
                     }
