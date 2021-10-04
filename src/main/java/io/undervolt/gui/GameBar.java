@@ -136,7 +136,7 @@ public class GameBar extends Gui implements Listener {
         this.userCard.setUser(event.getUser());
     }
 
-    private final FloatingLabel notificationContext = new FloatingLabel("Notificationes (Ctrl + P)");
+    private final FloatingLabel notificationContext = new FloatingLabel("Notificaciones (Ctrl + P)");
     private final FloatingLabel changeMinecraftAccountContext = new FloatingLabel("Cuenta de Minecraft (Ctrl + I)");
     private final FloatingLabel friendsContext = new FloatingLabel("Amigos y solicitudes (Ctrl + U)");
     private final FloatingLabel chatContext = new FloatingLabel("Chat (Ctrl + Y)");
