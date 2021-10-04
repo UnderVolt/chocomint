@@ -47,7 +47,11 @@ public class UserSearch extends Menu {
     public void drawMenuItems(int mouseX, int mouseY, float partialTicks, int x, int scroll) {
         this.textField.drawTextBox();
 
-        AtomicInteger y = new AtomicInteger(85);
+        if(this.textField.getText().length() >= 3) {
+            drawRect(this.getContentMargin(), 80, this.getContentWidth() + this.getContentMargin(), this.height, this.getMenuTitleColor());
+            this.fontRendererObj.drawString("Resultados:", this.getContentMargin() + 8, 88, Color.white.getRGB());
+        }
+        AtomicInteger y = new AtomicInteger(105);
         this.filteredUserMap.forEach((u, c) -> {
                 c.drawCard(this.getContentMargin() + 8, y.get() + scroll, this.getContentWidth() - 16, 38, mouseX, mouseY, new Color(225, 179, 110).getRGB());
             y.set(y.get() + 43);
