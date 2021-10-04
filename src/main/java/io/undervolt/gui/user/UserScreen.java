@@ -124,6 +124,7 @@ public class UserScreen extends Menu {
         this.bracketSimple = this.getSimpleBracket();
 
         this.logOutButton = new MenuScrollClickableButton("exit", (a)-> {
+            this.chocomint.getUser().setStatus(User.Status.OFFLINE);
             this.chocomint.getConfig().setToken(null);
             this.chocomint.getFriendsManager().friendsPool.clear();
             this.chocomint.getFriendsManager().friendRequestPool.clear();
