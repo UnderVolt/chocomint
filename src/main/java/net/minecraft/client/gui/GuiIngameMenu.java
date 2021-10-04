@@ -145,4 +145,10 @@ public class GuiIngameMenu extends AnimationUI {
         this.gameBar.mouseClicked(mouseX, mouseY, mouseButton, width, height);
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
+
+    @Override
+    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        this.chocomint.getGameBar().key(typedChar, keyCode);
+        super.keyTyped(typedChar, keyCode);
+    }
 }

@@ -50,7 +50,7 @@ public class Chat extends AnimationUI {
     private final Console console;
 
     /** Previous GuiScreen */
-    public final GuiScreen prev;
+    public GuiScreen prev;
 
     /** Server */
     private final ServerData serverData;
@@ -269,6 +269,7 @@ public class Chat extends AnimationUI {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        this.chocomint.getGameBar().key(typedChar, keyCode);
         if(keyCode != 28 && keyCode != 156) {
             switch(keyCode) {
                 case 1:

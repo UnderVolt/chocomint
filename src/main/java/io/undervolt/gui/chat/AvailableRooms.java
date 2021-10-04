@@ -152,6 +152,7 @@ public class AvailableRooms extends AnimationUI {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        this.chocomint.getGameBar().key(typedChar, keyCode);
         switch(keyCode) {
             case Keyboard.KEY_F9:
                 this.mc.displayGuiScreen(new UserSearch(this, this.chocomint));
