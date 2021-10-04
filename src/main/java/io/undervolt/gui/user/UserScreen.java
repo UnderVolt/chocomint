@@ -337,10 +337,19 @@ public class UserScreen extends Menu {
         this.showDevInfoCard = this.user.isDeveloper() && mouseX >= this.getContentMargin() + 115 && mouseY >= this.scroll + getBannerPadding() + 119 &&
                 mouseX <= this.getContentMargin() + 118 + this.fontRendererObj.getStringWidth("DEV") && mouseY <= this.scroll + getBannerPadding() + 130;
 
-        this.sendDMButton.click(mouseX, mouseY, mouseButton);
+        if (!this.username.equals("Guest")) {
+            if (this.username.equals(this.chocomint.getUser().getUsername())) {
+                this.logOutButton.click(mouseX, mouseY, mouseButton);
+            } else {
+                if (this.isFriend) {
+                    if(this.sendDMButton.isEnabled()) this.sendDMButton.click(mouseX, mouseY, mouseButton);
+                    this.deleteFriendButton.click(mouseX, mouseY, mouseButton);
+                } else {
+                    this.friendRequestButton.click(mouseX, mouseY, mouseButton);
+                }
+            }
+        }
+
         this.profileSettingsButton.click(mouseX, mouseY, mouseButton);
-        this.friendRequestButton.click(mouseX, mouseY, mouseButton);
-        this.deleteFriendButton.click(mouseX, mouseY, mouseButton);
-        this.logOutButton.click(mouseX, mouseY, mouseButton);
     }
 }
