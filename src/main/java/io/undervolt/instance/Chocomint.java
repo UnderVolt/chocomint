@@ -187,6 +187,8 @@ public class Chocomint implements Listener {
                 ((Menu) ui).previous = menu.previous;
             else if (ui instanceof Panel)
                 ((Panel) ui).previousScreen = menu.previous;
+            else if (ui instanceof Chat)
+                ((Chat) ui).prev = menu.previous;
             menu.displayNewUI(ui);
         } else if (this.mc.currentScreen instanceof Panel) {
             Panel panel = ((Panel) this.mc.currentScreen);
@@ -194,8 +196,18 @@ public class Chocomint implements Listener {
                 ((Menu) ui).previous = panel.previousScreen;
             else if (ui instanceof Panel)
                 ((Panel) ui).previousScreen = panel.previousScreen;
+            else if (ui instanceof Chat)
+                ((Chat) ui).prev = panel.previousScreen;
             panel.displayNewUI(ui);
-            ((Panel) this.mc.currentScreen).displayNewUI(ui);
+        } else if (this.mc.currentScreen instanceof Chat) {
+            Chat chat = ((Chat) this.mc.currentScreen);
+            if(ui instanceof Menu)
+                ((Menu) ui).previous = chat.prev;
+            else if (ui instanceof Panel)
+                ((Panel) ui).previousScreen = chat.prev;
+            else if (ui instanceof Chat)
+                ((Chat) ui).prev = chat.prev;
+            chat.displayNewUI(ui);
         } else this.mc.displayGuiScreen(ui);
     }
 
