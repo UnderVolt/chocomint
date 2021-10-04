@@ -22,7 +22,9 @@ import io.undervolt.gui.user.UserScreen;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -181,6 +183,35 @@ public class GameBar extends Gui implements Listener {
             this.friendsButton.appendLabel(friendsContext, mouseX, mouseY);
             this.chatButton.appendLabel(chatContext, mouseX, mouseY);
         }
+    }
+
+    public void key(char typedChar, int key) {
+        if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
+            switch (key) {
+                case Keyboard.KEY_P:
+                    this.chocomint.displayMenuOrPanel(new NotificationScreen(this.mc.currentScreen));
+                    break;
+                case Keyboard.KEY_O:
+                    if(!this.chocomint.getUser().getUsername().equalsIgnoreCase("Guest"))
+                        this.chocomint.displayMenuOrPanel(new UserScreen(this.mc.currentScreen, this.chocomint, this.chocomint.getUser()));
+                    else
+                        this.chocomint.displayMenuOrPanel(new LoginGUI(this.mc.currentScreen, this.chocomint));
+                    break;
+                case Keyboard.KEY_I:
+                    this.chocomint.displayMenuOrPanel(new MinecraftLoginGUI(this.mc.currentScreen, this.chocomint));
+                    break;
+                case Keyboard.KEY_U:
+                    if(!this.chocomint.getUser().getUsername().equalsIgnoreCase("Guest"))
+                        this.chocomint.displayMenuOrPanel(new FriendsScreen(this.mc.currentScreen));
+                    break;
+                case Keyboard.KEY_Y:
+                    this.chocomint.displayMenuOrPanel(new Chat("", this.mc.currentScreen, this.chocomint, this.mc.getCurrentServerData()));
+                    break;
+                case Keyboard.KEY_T:
+                    if(this.mc.theWorld != null && this.mc.thePlayer != null)
+                        this.mc.displayGuiScreen(new GuiMods(this.parentScreen, this.chocomint));
+                    break;
+            }
     }
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton, int width, int height) {

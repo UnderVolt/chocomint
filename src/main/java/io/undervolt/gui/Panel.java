@@ -138,6 +138,7 @@ public class Panel extends AnimationUI {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        this.chocomint.getGameBar().key(typedChar, keyCode);
         if(keyCode == 1) this.fadeOut();
     }
 }
