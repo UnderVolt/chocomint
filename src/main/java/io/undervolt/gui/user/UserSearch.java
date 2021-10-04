@@ -36,8 +36,8 @@ public class UserSearch extends Menu {
     @Override
     public void initGui() {
 
-        this.textField = new GuiTextField(0, this.fontRendererObj, this.getContentMargin() + 20,
-                55, this.getContentWidth() - 40, 20);
+        this.textField = new GuiTextField(0, this.fontRendererObj, this.getContentMargin() + 8,
+                55 + scroll, this.getContentWidth() - 16, 20);
 
         this.textField.setFocused(true);
         super.initGui();
@@ -49,7 +49,7 @@ public class UserSearch extends Menu {
 
         AtomicInteger y = new AtomicInteger(85);
         this.filteredUserMap.forEach((u, c) -> {
-                c.drawCard(this.width / 2 - 65, y.get() + scroll, mouseX, mouseY, new Color(225, 179, 110).getRGB());
+                c.drawCard(this.getContentMargin() + 8, y.get() + scroll, this.getContentWidth() - 16, 38, mouseX, mouseY, new Color(225, 179, 110).getRGB());
             y.set(y.get() + 43);
         });
     }
@@ -65,9 +65,7 @@ public class UserSearch extends Menu {
 
         if(filteredUserMap.size() > 0) {
             this.filteredUserMap.forEach((user, userCard) -> {
-                if (mouseX >= userCard.x && mouseY >= userCard.y && mouseX <= userCard.x + 130 && mouseY <= userCard.y + 38) {
-                    if(userCard.getUser() != null) userCard.getConsumer().accept(userCard.getUser());
-                }
+                if(userCard.getUser() != null) userCard.click(mouseY, mouseX);
             });
         }
 
