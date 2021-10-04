@@ -195,7 +195,8 @@ public class GameBar extends Gui implements Listener {
                     if(!this.chocomint.getUser().getUsername().equalsIgnoreCase("Guest"))
                         this.chocomint.displayMenuOrPanel(new UserScreen(this.mc.currentScreen, this.chocomint, this.chocomint.getUser()));
                     else
-                        this.chocomint.displayMenuOrPanel(new LoginGUI(this.mc.currentScreen, this.chocomint));
+                        if(!this.chocomint.getUser().getAlias().equalsIgnoreCase("Logging in..."))
+                            this.chocomint.displayMenuOrPanel(new LoginGUI(this.mc.currentScreen, this.chocomint));
                     break;
                 case Keyboard.KEY_I:
                     this.chocomint.displayMenuOrPanel(new MinecraftLoginGUI(this.mc.currentScreen, this.chocomint));
