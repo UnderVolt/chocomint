@@ -208,7 +208,10 @@ public class GameBar extends Gui implements Listener {
                         this.chocomint.displayMenuOrPanel(new FriendsScreen(this.mc.currentScreen));
                     break;
                 case Keyboard.KEY_Y:
-                    this.chocomint.displayMenuOrPanel(new Chat("", this.mc.currentScreen, this.chocomint, this.mc.getCurrentServerData()));
+                    if(!this.chocomint.getUser().getUsername().equalsIgnoreCase("Guest"))
+                        if(this.chocomint.getAlmendra() != null)
+                            if(this.chocomint.getAlmendra().getMOTD() != null)
+                                this.chocomint.displayMenuOrPanel(new Chat("", this.mc.currentScreen, this.chocomint, this.mc.getCurrentServerData()));
                     break;
                 case Keyboard.KEY_T:
                     if(this.mc.theWorld != null && this.mc.thePlayer != null)
