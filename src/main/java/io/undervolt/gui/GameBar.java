@@ -100,7 +100,7 @@ public class GameBar extends Gui implements Listener {
                 this.chocomint.displayMenuOrPanel(new NotificationScreen(this.mc.currentScreen));
         });
 
-        this.userButton = new UserGameBarButton(width - 48 - this.mc.fontRendererObj.getStringWidth(this.chocomint.getUser().getAlias()),
+        this.userButton = new UserGameBarButton(width - 45 - this.mc.fontRendererObj.getStringWidth(this.chocomint.getUser().getAlias()),
                 0, this.chocomint.getUser(), (a) -> {
             if(this.chocomint.getUser().getUsername().equals("Guest")) {
                 if (!this.chocomint.getUser().getAlias().equals("Logging in..."))
@@ -169,7 +169,9 @@ public class GameBar extends Gui implements Listener {
         this.changeMinecraftAccountButton.setX(width - 47 - this.userButton.width);
         if(!this.chocomint.getUser().getUsername().equalsIgnoreCase("Guest")) {
             this.friendsButton.draw(mouseX, mouseY);
+            this.friendsButton.setX(width - 69 - this.userButton.width);
             this.chatButton.draw(mouseX, mouseY);
+            this.chatButton.setX(width - 91 - this.userButton.width);
         }
 
         if(this.mc.theWorld != null && this.mc.thePlayer != null) {
