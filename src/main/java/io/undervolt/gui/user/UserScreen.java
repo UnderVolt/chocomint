@@ -70,12 +70,11 @@ public class UserScreen extends Menu {
             this.chocomint.getUserProfilePictureManager().addImageToCache(this.user.getImage());
             this.chocomint.getCountryFlagManager().addToQueue(user.getCountryCode());
             if(this.user.getBanner() != null) {
-                this.banner = this.chocomint.getUserProfilePictureManager().getImageAsDynamicTexture(this.user.getBanner());
-                this.bannerBufferedImage = this.chocomint.getUserProfilePictureManager().getImageAsBufferedImage(this.user.getBanner());
-            } else {
-                this.banner = null;
-                this.bannerBufferedImage = null;
+                this.chocomint.getUserProfilePictureManager().addImageToCache(this.user.getBanner());
             }
+
+            this.banner = null;
+            this.bannerBufferedImage = null;
 
             this.createdAt = Instant.parse(this.user.getCreateDate());
 
@@ -126,6 +125,8 @@ public class UserScreen extends Menu {
 
         this.logOutButton = new MenuScrollClickableButton("exit", (a)-> {
             this.chocomint.getConfig().setToken(null);
+            this.chocomint.getFriendsManager().friendsPool.clear();
+            this.chocomint.getFriendsManager().friendRequestPool.clear();
             this.chocomint.setUser(this.chocomint.getUserManager().setUser((String) null));
             this.chocomint.getAlmendra().disconnect();
             this.chocomint.getChatManager().removeTabs();
@@ -144,8 +145,8 @@ public class UserScreen extends Menu {
                 );
                 e.printStackTrace();
             }
-        }, this.getContentMargin() + 112 + (int) (this.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5),
-                scroll + getBannerPadding() + 71, 16, 16, new Color(0, 0, 0, 0).getRGB(), new Color(0, 0, 0, 0).getRGB());
+        }, 0,scroll + getBannerPadding() + 71, 16, 16, new Color(0, 0, 0, 0).getRGB(),
+                new Color(0, 0, 0, 0).getRGB());
 
         this.sendDMButton = new MenuScrollClickableButton("message", (a)-> {
             this.chocomint.getChatManager().setSelectedTab(this.chocomint.getChatManager().getOrCreateTabByName(this.username));
@@ -215,6 +216,11 @@ public class UserScreen extends Menu {
         drawRect(x, scroll + getBannerPadding() + 53, this.getContentMargin() + this.getContentWidth(), scroll + getBannerPadding() + 146, this.getMenuTitleColor());
 
         if(this.createdMonth != null) {
+            if(this.banner == null)
+                if(this.user.getBanner() != null) {
+                    this.banner = this.chocomint.getUserProfilePictureManager().getCachedDynamicTexture(this.user.getImage());
+                    this.bannerBufferedImage = this.chocomint.getUserProfilePictureManager().getCachedBufferedImage(this.user.getImage());
+                }
             if(this.image == null)
                 this.image = this.chocomint.getUserProfilePictureManager().getImageAsDynamicTexture(this.user.getImage());
             if(this.countryFlag == null)
@@ -254,6 +260,7 @@ public class UserScreen extends Menu {
             if (isFriend) {
                 this.mc.getTextureManager().bindTexture(new ResourceLocation("/chocomint/icon/friends.png"));
                 drawModalRectWithCustomSizedTexture(x + 89 + (int) (this.mc.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5), scroll + getBannerPadding() + 70, 0, 0, 20, 20, 20, 20);
+                this.profileSettingsButton.setX(this.getContentMargin() + 112 + (int) (this.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5));
                 this.profileSettingsButton.draw(mouseX, mouseY);
             } else {
                 this.profileSettingsButton.setX(this.getContentMargin() + 90 + (int) (this.fontRendererObj.getStringWidth(this.user.getAlias()) * 1.5));
