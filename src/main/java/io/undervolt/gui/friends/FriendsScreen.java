@@ -47,10 +47,8 @@ public class FriendsScreen extends Panel {
 
     @Override
     public void drawContent(int mouseX, int mouseY, float partialTicks, int margin, int scroll) {
-        drawString(this.mc.fontRendererObj, "Amigos", margin + 5, 30, Color.WHITE.getRGB());
-
-
         AtomicInteger y = new AtomicInteger(43 + scroll);
+        drawString(this.mc.fontRendererObj, "Amigos", margin + 5, y.get() - 15, Color.WHITE.getRGB());
         this.friendUserCardList.forEach(userCard -> {
             userCard.drawCard(margin + 5, y.get(), mouseX, mouseY);
             y.set(y.get() + 40);
@@ -75,7 +73,7 @@ public class FriendsScreen extends Panel {
         if(frUserCardList.isEmpty()) {
             this.chocomint.getRenderUtils().drawRoundedRect(margin + 5, y.get(), 130, 36, 4, new Color(22, 22, 22).getRGB());
             drawCenteredString(this.mc.fontRendererObj, "No hay solicitudes", margin + 5 + (this.getPanelWidth() - 10) / 2, y.get() + 13, Color.LIGHT_GRAY.getRGB());
-            y.set(y.get() + 40);
+            y.set(y.get() + 50);
         }
 
         this.pageSize = y.get();
