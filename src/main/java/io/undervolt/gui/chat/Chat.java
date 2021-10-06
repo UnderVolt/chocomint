@@ -94,6 +94,8 @@ public class Chat extends AnimationUI {
 
         this.console = this.chocomint.getConsole();
         this.gameBar = chocomint.getGameBar();
+
+        this.sentHistoryCursor = this.chatManager.getSentMessages().size();
     }
 
     public void fadeOut() {
@@ -114,7 +116,6 @@ public class Chat extends AnimationUI {
 
         this.ftime = Minecraft.getSystemTime();
         this.sftime = Minecraft.getSystemTime();
-        this.sentHistoryCursor = this.chatManager.getSentMessages().size();
 
         if(this.chatManager.getSelectedTab() == null) {
             if (this.mc.theWorld == null || this.mc.thePlayer == null) {
@@ -310,7 +311,8 @@ public class Chat extends AnimationUI {
                         this.almendra.sendMessage(this.chatManager.getSelectedTab(), this.textField.getText().trim(), this.chocomint.getUser());
                     }
                 }
-                this.chatManager.getSentMessages().add(new Message(this.chocomint.getUser().getUsername(), this.textField.getText().trim()));
+                this.chatManager.addToSentMessages(new Message(this.chocomint.getUser().getUsername(), this.textField.getText().trim()));
+                this.sentHistoryCursor = this.chatManager.getSentMessages().size();
                 this.textField.setText("");
             }
         }
@@ -367,26 +369,22 @@ public class Chat extends AnimationUI {
     }
 
     public void getSentHistory(int msgPos) {
-        int i = this.sentHistoryCursor + msgPos;
-        int j = this.chatManager.getSentMessages().size();
-        i = MathHelper.clamp_int(i, 0, j);
+        int hisId = this.sentHistoryCursor + msgPos;
+        int hisLen = this.chatManager.getSentMessages().size();
+        hisId = MathHelper.clamp_int(hisId, 0, hisLen);
 
-        if (i != this.sentHistoryCursor)
-        {
-            if (i == j)
-            {
-                this.sentHistoryCursor = j;
+        System.out.println(hisId);
+
+        if (hisId != this.sentHistoryCursor) {
+            if (hisId == hisLen) {
+                this.sentHistoryCursor = hisLen;
                 this.textField.setText(this.historyBuffer);
-            }
-            else
-            {
-                if (this.sentHistoryCursor == j)
-                {
+            } else {
+                if (this.sentHistoryCursor == hisLen)
                     this.historyBuffer = this.textField.getText();
-                }
 
-                this.textField.setText(this.chatManager.getSentMessages().get(i).getMessage());
-                this.sentHistoryCursor = i;
+                this.textField.setText(this.chatManager.getSentMessages().get(hisId).getMessage());
+                this.sentHistoryCursor = hisId;
             }
         }
     }
