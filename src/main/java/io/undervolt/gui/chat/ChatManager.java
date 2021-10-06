@@ -94,6 +94,12 @@ public class ChatManager {
         return sentMessages;
     }
 
+    public void addToSentMessages(Message message) {
+        if (this.sentMessages.isEmpty() || !(this.sentMessages.get(this.sentMessages.size() - 1).getMessage()).equals(message.getMessage())) {
+            this.sentMessages.add(message);
+        }
+    }
+
     public Tab getSelectedTab() {
         return selectedTab;
     }
