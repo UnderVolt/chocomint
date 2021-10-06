@@ -373,8 +373,6 @@ public class Chat extends AnimationUI {
         int hisLen = this.chatManager.getSentMessages().size();
         hisId = MathHelper.clamp_int(hisId, 0, hisLen);
 
-        System.out.println(hisId);
-
         if (hisId != this.sentHistoryCursor) {
             if (hisId == hisLen) {
                 this.sentHistoryCursor = hisLen;
