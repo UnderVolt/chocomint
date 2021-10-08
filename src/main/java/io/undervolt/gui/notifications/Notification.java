@@ -53,16 +53,16 @@ public class Notification extends Gui {
         this.y = y;
 
         mc.getChocomint().getRenderUtils().drawRoundedRect(x, y, width, 35, 3, Color.WHITE.getRGB());
-        mc.getChocomint().getRenderUtils().drawFilledCircle(x + 12, y + 15, 8, this.getPriorityColor());
+        mc.getChocomint().getRenderUtils().drawRoundedRect(x + 3, y + 3, 10, 29, 3, this.getPriorityColor());
 
         String title = this.title;
         if(mc.fontRendererObj.getStringWidth(title) > width - 35) {
             title = title.substring(0, Math.min(title.length(), 14)) + "...";
         }
 
-        mc.fontRendererObj.drawString(title, x + 24, y + 4, Color.BLACK.getRGB());
+        mc.fontRendererObj.drawString(title, x + 20, y + 4, Color.BLACK.getRGB());
 
-        if(mc.fontRendererObj.getStringWidth(this.description) > width - 40 ) {
+        if(mc.fontRendererObj.getStringWidth(this.description) > width - 44 ) {
             String splitSeq = this.description.contains(" ") ? " " : "(?!^)";
             StringBuilder firstLine = new StringBuilder();
             StringBuilder secondLine = new StringBuilder();
@@ -79,10 +79,10 @@ public class Notification extends Gui {
                 secondLine = new StringBuilder(secondLine.substring(0, Math.min(secondLine.length(), 14)) + "...");
             }
 
-            mc.fontRendererObj.drawString(firstLine.toString(), x + 24, y + 15, Color.GRAY.getRGB());
-            mc.fontRendererObj.drawString(secondLine.toString(), x + 24, y + 23, Color.GRAY.getRGB());
+            mc.fontRendererObj.drawString(firstLine.toString(), x + 20, y + 15, Color.GRAY.getRGB());
+            mc.fontRendererObj.drawString(secondLine.toString(), x + 20, y + 23, Color.GRAY.getRGB());
         } else {
-            mc.fontRendererObj.drawString(this.description, x + 24, y + 15, Color.GRAY.getRGB());
+            mc.fontRendererObj.drawString(this.description, x + 20, y + 15, Color.GRAY.getRGB());
         }
     }
 
