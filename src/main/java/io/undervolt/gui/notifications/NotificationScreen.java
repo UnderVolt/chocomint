@@ -41,7 +41,7 @@ public class NotificationScreen extends Panel {
         } else {
             AtomicInteger y = new AtomicInteger(scroll);
             this.notificationManager.getNotifications().forEach(notification -> {
-                notification.draw(this.mc, margin + 5, y.get() + 50, this.getPanelWidth() - 10);
+                notification.draw(this.mc, margin + 5, y.get() + 50, this.getPanelWidth() - 10, mouseX, mouseY);
                 y.set(y.get() + 45);
             });
             this.pageSize = y.get();
@@ -51,6 +51,7 @@ public class NotificationScreen extends Panel {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         this.clearNotificationsButton.click(mouseX, mouseY, mouseButton);
+        this.notificationManager.getNotifications().forEach(notification -> notification.click(mouseX, mouseY, mouseButton));
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 }
