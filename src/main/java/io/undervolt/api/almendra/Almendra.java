@@ -215,7 +215,7 @@ public class Almendra implements Listener {
 
             socket.on(Socket.EVENT_DISCONNECT, data -> {
                 this.handleEndOfData();
-                this.chocomint.getNotificationManager().addNotification(new Notification(Notification.Priority.CRITICAL, "Desconectado de Almendra", "Reconectando...", (a)->{}));
+                this.chocomint.getNotificationManager().addNotification(new Notification(Notification.Priority.CRITICAL, "Desconectado de Almendra", "", (a)->{}));
             });
 
             socket.on(Socket.EVENT_CONNECT_ERROR, data -> {
