@@ -275,14 +275,14 @@ public class Almendra implements Listener {
                     ((Chat) this.chocomint.getMinecraft().currentScreen).update(false);
                 } else {
                     this.chocomint.getNotificationManager().addNotification(
-                            new Notification(Notification.Priority.SOCIAL, (message.getBoolean("developer") ? "§9" : "") +  message.getString("from"), message.getString("message"),
+                            new Notification(Notification.Priority.SOCIAL, message.getString("from"), message.getString("message"),
                                     (previous) -> {
                                         try {
                                             this.chatManager.setSelectedTab(this.chatManager.getOrCreateTabByName(message.getString("from")));
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
-                                        this.mc.displayGuiScreen(new Chat("", previous, this.chocomint, this.chocomint.getMinecraft().getCurrentServerData()));
+                                        this.chocomint.displayMenuOrPanel(new Chat("", previous, this.chocomint, this.chocomint.getMinecraft().getCurrentServerData()));
                                     })
                     );
                 }
