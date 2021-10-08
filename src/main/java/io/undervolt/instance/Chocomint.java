@@ -118,6 +118,7 @@ public class Chocomint implements Listener {
         switch(type){
             case PREINIT:
                 this.notificationManager = new NotificationManager(this);
+                this.getEventManager().registerEvents(this.notificationManager);
 
                 // ModLoader
                 this.modLoader = new ModLoader(this);
