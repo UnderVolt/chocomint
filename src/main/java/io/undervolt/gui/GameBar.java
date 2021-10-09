@@ -85,7 +85,7 @@ public class GameBar extends Gui implements Listener {
     public void init(int width, int height) {
 
         // Initialize User Card
-        this.userCard = new UserCard(this.mc, this.chocomint.getUser(), false, true, (user) -> {
+        this.userCard = new UserCard(this.mc, this.chocomint.getUser(), false, false, (user) -> {
             this.chocomint.displayMenuOrPanel(new UserScreen(this.mc.currentScreen, this.chocomint, this.chocomint.getUser()));
             this.userCard.setActive(false);
         });
