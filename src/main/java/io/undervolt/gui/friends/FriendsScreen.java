@@ -51,13 +51,13 @@ public class FriendsScreen extends Panel {
         drawString(this.mc.fontRendererObj, "Amigos", margin + 5, y.get() - 15, Color.WHITE.getRGB());
         this.friendUserCardList.forEach(userCard -> {
             userCard.drawCard(margin + 5, y.get(), getPanelWidth() - 10, 38, mouseX, mouseY);
-            y.set(y.get() + 40);
+            y.set(y.get() + 45);
         });
 
         if(friendUserCardList.isEmpty()) {
             this.chocomint.getRenderUtils().drawRoundedRect(margin + 5, y.get(), 130, 36, 4, new Color(22, 22, 22).getRGB());
             drawCenteredString(this.mc.fontRendererObj, "No tenés amigos", margin + 5 + (this.getPanelWidth() - 10) / 2, y.get() + 13, Color.LIGHT_GRAY.getRGB());
-            y.set(y.get() + 40);
+            y.set(y.get() + 45);
         }
 
         this.chocomint.getRenderUtils().drawLine(margin + 5, y.get() + 5, margin + getPanelWidth() - 8, y.get() + 6, 2, Color.LIGHT_GRAY.getRGB());
@@ -67,7 +67,7 @@ public class FriendsScreen extends Panel {
 
         this.frUserCardList.forEach(userCard -> {
             userCard.drawCard(margin + 5, y.get(), getPanelWidth() - 10, 38, mouseX, mouseY);
-            y.set(y.get() + 40);
+            y.set(y.get() + 45);
         });
 
         if(frUserCardList.isEmpty()) {
