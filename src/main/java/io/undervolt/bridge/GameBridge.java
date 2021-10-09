@@ -16,7 +16,7 @@ public class GameBridge {
     }
 
     public static DateTimeFormatter getHourFormatter() {
-        return DateTimeFormatter.ofPattern("HH:mm:ss");
+        return DateTimeFormatter.ofPattern("HH:mm");
     }
     
     public static Minecraft getMinecraft() {
