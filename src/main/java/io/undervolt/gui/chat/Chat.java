@@ -209,7 +209,7 @@ public class Chat extends AnimationUI {
         if(this.chatManager.getSelectedTab() != null) {
             int i = this.height - 23 + scroll;
             for (int id = this.chatManager.getSelectedTab().getMessages().size(); id-- > 0; ) {
-                this.chatManager.getSelectedTab().getMessages().get(id).drawMessage(i, chatHeight);
+                this.chatManager.getSelectedTab().getMessages().get(id).drawMessage(i, chatHeight, mouseX, mouseY);
                 i = i - 12;
             }
         }

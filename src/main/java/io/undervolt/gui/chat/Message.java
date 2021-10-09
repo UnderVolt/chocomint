@@ -43,7 +43,7 @@ public class Message extends Gui {
     public void click(final Chat chat, int mouseX, int mouseY) {
         if(mouseY > y && mouseY < y + font_size) {
             if(this.user != null) {
-                if (mouseX > 50 && mouseX < (50 + this.mc.fontRendererObj.getStringWidth(this.getUser()))) {
+                if (mouseX > 35 && mouseX < (35 + this.mc.fontRendererObj.getStringWidth(this.getUser()))) {
                     this.mc.displayGuiScreen(new UserScreen(chat, GameBridge.getChocomint(),
                             this.user.startsWith("\247") ? this.user.substring(2) : this.user
                     ));
@@ -52,12 +52,16 @@ public class Message extends Gui {
         }
     }
 
-    public void drawMessage(int y, int chatHeight) {
+    public void drawMessage(int y, int chatHeight, int mouseX, int mouseY) {
         this.y = y;
+        int x = (35 + this.mc.fontRendererObj.getStringWidth(this.getUser()));
+        boolean mouseOver = (mouseY > y && mouseY < y + font_size && mouseX > 35 && mouseX < (35 + this.mc.fontRendererObj.getStringWidth(this.getUser())));
         if(y > chatHeight) {
             this.mc.fontRendererObj.drawString(this.dtf.format(now), 5, y, Color.GRAY.getRGB());
-            this.mc.fontRendererObj.drawStringWithShadow((this.getUser() != null ? this.getUser() + "\247f: " : "\247f")
-                    + this.getMessage(), 50, y, Color.WHITE.getRGB());
+            if(this.getUser() != null) {
+                this.mc.fontRendererObj.drawStringWithShadow(this.getUser(), 35, y, mouseOver ? new Color(255, 218, 108).getRGB() : Color.WHITE.getRGB());
+                this.mc.fontRendererObj.drawStringWithShadow("\247f: " + this.getMessage(), x, y, Color.WHITE.getRGB());
+            } else this.mc.fontRendererObj.drawStringWithShadow("\247f" + this.getMessage(), 35, y, Color.WHITE.getRGB());
         }
     }
 
