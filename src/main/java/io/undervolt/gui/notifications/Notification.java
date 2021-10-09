@@ -37,13 +37,13 @@ public class Notification extends Gui {
             case ALERT:
                 return new Color(255, 80, 0).getRGB();
             case NOTICE:
-                return Color.GREEN.getRGB();
+                return new Color(1, 247, 33).getRGB();
             case SOCIAL:
-                return Color.CYAN.getRGB();
+                return new Color(1, 99, 247).getRGB();
             case WARNING:
-                return Color.ORANGE.getRGB();
+                return new Color(255, 216, 0).getRGB();
             case CRITICAL:
-                return Color.RED.getRGB();
+                return new Color(255, 71, 71).getRGB();
             default:
                 return Color.GRAY.getRGB();
         }
@@ -63,15 +63,17 @@ public class Notification extends Gui {
         this.y = y;
         this.width = width;
 
-        mc.getChocomint().getRenderUtils().drawRoundedRect(x, y, width, 35, 3, Color.WHITE.getRGB());
-        mc.getChocomint().getRenderUtils().drawRoundedRect(x + 3, y + 3, 10, 29, 3, this.getPriorityColor());
+        mc.getChocomint().getRenderUtils().drawRoundedRect(x, y, width, 35, 3, new Color(32, 34, 36).getRGB());
+        mc.getChocomint().getRenderUtils().drawRoundedRect(x, y, x + 16, y + 34, 3, 0, 3, 0, new Color(28, 32, 34).getRGB());
+        mc.getChocomint().getRenderUtils().drawFilledCircle(x + 8, y + 17, 2, this.getPriorityColor());
+        //mc.getChocomint().getRenderUtils().drawRoundedRect(x + 3, y + 3, 10, 29, 3, this.getPriorityColor());
 
         String title = this.title;
         if(mc.fontRendererObj.getStringWidth(title) > width - 35) {
             title = title.substring(0, Math.min(title.length(), 14)) + "...";
         }
 
-        mc.fontRendererObj.drawString(title, x + 20, y + 4, Color.BLACK.getRGB());
+        mc.fontRendererObj.drawString(title, x + 23, y + 4, this.getPriorityColor());
 
         if(mc.fontRendererObj.getStringWidth(this.description) > width - 44 ) {
             String splitSeq = this.description.contains(" ") ? " " : "(?!^)";
@@ -90,10 +92,10 @@ public class Notification extends Gui {
                 secondLine = new StringBuilder(secondLine.substring(0, Math.min(secondLine.length(), 14)) + "...");
             }
 
-            mc.fontRendererObj.drawString(firstLine.toString(), x + 20, y + 15, Color.GRAY.getRGB());
-            mc.fontRendererObj.drawString(secondLine.toString(), x + 20, y + 23, Color.GRAY.getRGB());
+            mc.fontRendererObj.drawString(firstLine.toString(), x + 23, y + 15, new Color(111, 112, 113).getRGB());
+            mc.fontRendererObj.drawString(secondLine.toString(), x + 23, y + 23, new Color(111, 112, 113).getRGB());
         } else {
-            mc.fontRendererObj.drawString(this.description, x + 20, y + 15, Color.GRAY.getRGB());
+            mc.fontRendererObj.drawString(this.description, x + 23, y + 15, new Color(111, 112, 113).getRGB());
         }
 
         if(mouseX > this.x && mouseY > this.y && mouseX < this.x + this.width && mouseY < this.y + 35) {
@@ -102,7 +104,9 @@ public class Notification extends Gui {
                     ? new Color(255, 81, 81).getRGB() : new Color(22, 24, 26).getRGB());
             GL11.glPushMatrix();
             GL11.glTranslatef(this.x + this.width - 13, this.y + 13.5f, 0);
-            mc.fontRendererObj.drawString("\247l✕", 0, 0, Color.WHITE.getRGB());
+            mc.fontRendererObj.drawString("\247l✕", 0, 0,
+                    (mouseX > this.x + this.width - 15 && mouseY > this.y + 12 && mouseX < this.x + this.width - 5 && mouseY < this.y + 22)
+                    ? Color.white.getRGB() : Color.gray.getRGB());
             GL11.glPopMatrix();
         }
     }
