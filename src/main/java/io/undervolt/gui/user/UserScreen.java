@@ -185,7 +185,7 @@ public class UserScreen extends Menu {
     }
 
     private int getBannerPadding() {
-        return (int)(this.height * .16 > 160 ? 160 : this.height * .16) + 10;
+        return (int)(this.height * .22 > 160 ? 160 : this.height * .22) + 10;
     }
     private ResourceLocation defaultBannerLocation = new ResourceLocation("/chocomint/ui/banner/default.jpg");
 
