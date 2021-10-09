@@ -50,7 +50,7 @@ public class FriendsScreen extends Panel {
         AtomicInteger y = new AtomicInteger(43 + scroll);
         drawString(this.mc.fontRendererObj, "Amigos", margin + 5, y.get() - 15, Color.WHITE.getRGB());
         this.friendUserCardList.forEach(userCard -> {
-            userCard.drawCard(margin + 5, y.get(), mouseX, mouseY);
+            userCard.drawCard(margin + 5, y.get(), getPanelWidth() - 10, 38, mouseX, mouseY);
             y.set(y.get() + 40);
         });
 
@@ -66,7 +66,7 @@ public class FriendsScreen extends Panel {
         y.set(y.get() + 30);
 
         this.frUserCardList.forEach(userCard -> {
-            userCard.drawCard(margin + 5, y.get(), mouseX, mouseY);
+            userCard.drawCard(margin + 5, y.get(), getPanelWidth() - 10, 38, mouseX, mouseY);
             y.set(y.get() + 40);
         });
 
