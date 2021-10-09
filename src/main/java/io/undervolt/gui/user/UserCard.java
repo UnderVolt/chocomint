@@ -84,14 +84,13 @@ public class UserCard extends Gui {
             if(isMouseOver && this.user != null)
                 this.chocomint.getRenderUtils().
                         drawRoundedRect(x - 1, y - 1, width + 2,
-                                height + 2, 2, color);
+                                height + 2, 3, color);
 
             this.x = x;
             this.y = y;
 
-            this.chocomint.getRenderUtils().
-                    drawRoundedRect(x, y, width,
-                            height, 2, new Color(22, 22, 22).getRGB());
+            this.chocomint.getRenderUtils().drawRoundedRect(x, y, width, height, 3, new Color(32, 34, 36).getRGB());
+            mc.getChocomint().getRenderUtils().drawRoundedRect(x, y, x + 38, y + height, 3, 0, 3, 0, new Color(28, 32, 34).getRGB());
 
             GL11.glPushMatrix();
             GL11.glColor3f(1, 1, 1);
@@ -101,9 +100,13 @@ public class UserCard extends Gui {
                 if (this.mc.fontRendererObj.getStringWidth(alias) > width - 50) {
                     alias = alias.substring(0, Math.min(alias.length(), 10)) + "...";
                 }
-                drawString(mc.fontRendererObj, alias, x + 38, y + 8, Color.WHITE.getRGB());
-                this.chocomint.getRenderUtils().drawRoundedRect(x + 4, y + 4, 30, 30, 3, new Color(50, 50, 50).getRGB());
-                drawString(mc.fontRendererObj, "Cargando...", x + 38, y + 19, Color.WHITE.getRGB());
+                this.chocomint.getRenderUtils().drawRoundedRect(x + 6, y + 6, 26, 26, 3, new Color(50, 50, 50).getRGB());
+                this.mc.fontRendererObj.drawString(alias, x + 43, y + 11, new Color(77, 77, 77).getRGB());
+                GL11.glPushMatrix();
+                GL11.glTranslatef(x + 43, y + 22, 0);
+                GL11.glScaled(0.75, 0.75, 0);
+                this.mc.fontRendererObj.drawString("Cargando...", 0, 0, new Color(129, 129, 129).getRGB());
+                GL11.glPopMatrix();
             } else {
                 String alias = this.user.getAlias();
                 if (this.mc.fontRendererObj.getStringWidth(alias) > width - 50) {
@@ -112,24 +115,28 @@ public class UserCard extends Gui {
 
                 if (this.user.getImage() != null) {
                     this.mc.getTextureManager().bindTexture(this.mc.getTextureManager().getDynamicTextureLocation("Profile", this.dynamicTexture));
-                    Gui.drawModalRectWithCustomSizedTexture(x + 4, y + 4, 0, 0, 30, 30, 30, 30);
+                    Gui.drawModalRectWithCustomSizedTexture(x + 6, y + 6, 0, 0, 26, 26, 26, 26);
                 } else {
                     this.chocomint.getRenderUtils().drawRoundedRect(x + 4, y + 4, 30, 30, 3, Color.RED.getRGB());
                 }
 
-                drawString(mc.fontRendererObj, alias, x + 38, y + 8, Color.WHITE.getRGB());
-                drawString(mc.fontRendererObj, this.user.getStatusString().toUpperCase(), x + 38, y + 19, Color.WHITE.getRGB());
+                this.mc.fontRendererObj.drawString(alias, x + 43, y + 11, this.user.getStatusColor());
+                GL11.glPushMatrix();
+                GL11.glTranslatef(x + 50, y + 22, 0);
+                GL11.glScaled(0.75, 0.75, 0);
+                this.mc.fontRendererObj.drawString(this.user.getStatusString(), 0, 0, new Color(129, 129, 129).getRGB());
+                GL11.glPopMatrix();
 
 
                 this.chocomint.getRenderUtils().
-                        drawFilledCircle(x + 34, y + 33, 3, this.user.getStatusColor());
+                        drawFilledCircle(x + 45, y + 25, 1, this.user.getStatusColor());
 
 
                 if (this.isSelf) {
                     GL11.glPushMatrix();
                     GlStateManager.translate((x + 126 - (this.mc.fontRendererObj.getStringWidth("Opciones") * 0.825)), y + 36, 0);
                     GlStateManager.scale(0.825, 0.825, 0);
-                    drawString(this.mc.fontRendererObj, "Opciones", 0, 0, Color.LIGHT_GRAY.getRGB());
+                    this.mc.fontRendererObj.drawString("Opciones", 0, 0, Color.LIGHT_GRAY.getRGB());
                     GL11.glPopMatrix();
                 }
             }
