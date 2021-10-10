@@ -42,7 +42,7 @@ public class NotificationScreen extends Panel {
             AtomicInteger y = new AtomicInteger(scroll);
             this.notificationManager.getNotifications().forEach(notification -> {
                 notification.draw(this.mc, margin + 5, y.get() + 50, this.getPanelWidth() - 10, mouseX, mouseY);
-                y.set(y.get() + 45);
+                y.set(y.get() + 50);
             });
             this.pageSize = y.get();
         }
