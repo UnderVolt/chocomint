@@ -63,17 +63,16 @@ public class Notification extends Gui {
         this.y = y;
         this.width = width;
 
-        mc.getChocomint().getRenderUtils().drawRoundedRect(x, y, width, 35, 3, new Color(32, 34, 36).getRGB());
-        mc.getChocomint().getRenderUtils().drawRoundedRect(x, y, x + 16, y + 34, 3, 0, 3, 0, new Color(28, 32, 34).getRGB());
-        mc.getChocomint().getRenderUtils().drawFilledCircle(x + 8, y + 17, 2, this.getPriorityColor());
-        //mc.getChocomint().getRenderUtils().drawRoundedRect(x + 3, y + 3, 10, 29, 3, this.getPriorityColor());
+        mc.getChocomint().getRenderUtils().drawRoundedRect(x, y, width, 40, 3, new Color(32, 34, 36).getRGB());
+        mc.getChocomint().getRenderUtils().drawRoundedRect(x, y, x + 16, y + 40, 3, 0, 3, 0, new Color(28, 32, 34).getRGB());
+        mc.getChocomint().getRenderUtils().drawFilledCircle(x + 8, y + 20, 2, this.getPriorityColor());
 
         String title = this.title;
         if(mc.fontRendererObj.getStringWidth(title) > width - 35) {
             title = title.substring(0, Math.min(title.length(), 14)) + "...";
         }
 
-        mc.fontRendererObj.drawString(title, x + 23, y + 4, this.getPriorityColor());
+        mc.fontRendererObj.drawString(title, x + 23, y + 7, this.getPriorityColor());
 
         if(mc.fontRendererObj.getStringWidth(this.description) > width - 44 ) {
             String splitSeq = this.description.contains(" ") ? " " : "(?!^)";
@@ -92,20 +91,20 @@ public class Notification extends Gui {
                 secondLine = new StringBuilder(secondLine.substring(0, Math.min(secondLine.length(), 14)) + "...");
             }
 
-            mc.fontRendererObj.drawString(firstLine.toString(), x + 23, y + 15, new Color(111, 112, 113).getRGB());
-            mc.fontRendererObj.drawString(secondLine.toString(), x + 23, y + 23, new Color(111, 112, 113).getRGB());
+            mc.fontRendererObj.drawString(firstLine.toString(), x + 23, y + 18, new Color(111, 112, 113).getRGB());
+            mc.fontRendererObj.drawString(secondLine.toString(), x + 23, y + 26, new Color(111, 112, 113).getRGB());
         } else {
-            mc.fontRendererObj.drawString(this.description, x + 23, y + 15, new Color(111, 112, 113).getRGB());
+            mc.fontRendererObj.drawString(this.description, x + 23, y + 18, new Color(111, 112, 113).getRGB());
         }
 
         if(mouseX > this.x && mouseY > this.y && mouseX < this.x + this.width && mouseY < this.y + 35) {
-            mc.getChocomint().getRenderUtils().drawFilledCircle(this.x + this.width - 10, this.y + 17, 5,
-                    (mouseX > this.x + this.width - 15 && mouseY > this.y + 12 && mouseX < this.x + this.width - 5 && mouseY < this.y + 22)
-                    ? new Color(255, 81, 81).getRGB() : new Color(22, 24, 26).getRGB());
+            mc.getChocomint().getRenderUtils().drawFilledCircle(this.x + this.width - 10, this.y + 20, 5,
+                    (mouseX > this.x + this.width - 15 && mouseY > this.y + 15 && mouseX < this.x + this.width - 5 && mouseY < this.y + 25)
+                    ? new Color(255, 81, 81).getRGB() : new Color(28, 32, 34).getRGB());
             GL11.glPushMatrix();
-            GL11.glTranslatef(this.x + this.width - 13, this.y + 13.5f, 0);
+            GL11.glTranslatef(this.x + this.width - 13, this.y + 16.5f, 0);
             mc.fontRendererObj.drawString("\247l✕", 0, 0,
-                    (mouseX > this.x + this.width - 15 && mouseY > this.y + 12 && mouseX < this.x + this.width - 5 && mouseY < this.y + 22)
+                    (mouseX > this.x + this.width - 15 && mouseY > this.y + 15 && mouseX < this.x + this.width - 5 && mouseY < this.y + 25)
                     ? Color.white.getRGB() : Color.gray.getRGB());
             GL11.glPopMatrix();
         }
@@ -113,7 +112,7 @@ public class Notification extends Gui {
 
     public void click(int mouseX, int mouseY, int mouseButton) {
         if(mouseX > this.x && mouseY > this.y && mouseX < this.x + this.width && mouseY < this.y + 35) {
-            if(mouseX > this.x + this.width - 15 && mouseY > this.y + 12 && mouseX < this.x + this.width - 5 && mouseY < this.y + 22) {
+            if(mouseX > this.x + this.width - 15 && mouseY > this.y + 15 && mouseX < this.x + this.width - 5 && mouseY < this.y + 25) {
                 mc.getChocomint().getNotificationManager().scheduleNotificationDeletion(this);
             } else {
                 this.consumer.accept(mc.currentScreen);
