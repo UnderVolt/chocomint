@@ -20,12 +20,17 @@ public class FriendsScreen extends Panel {
     private final Chocomint chocomint;
     private final FriendsManager friendsManager;
 
+    private final UserCard currentSessionUserCard;
+
     private final List<UserCard> friendUserCardList = Lists.newArrayList();
     private final List<UserCard> frUserCardList = Lists.newArrayList();
 
     public FriendsScreen(GuiScreen previousScreen) {
         super(previousScreen, "", 0);
         this.chocomint = GameBridge.getChocomint();
+        this.currentSessionUserCard = new UserCard(GameBridge.getMinecraft(), this.chocomint.getUser(), true, false, user -> {
+            this.chocomint.displayMenuOrPanel(new UserScreen(this.mc.currentScreen, this.chocomint, this.chocomint.getUser()));
+        });
         this.friendsManager = this.chocomint.getFriendsManager();
     }
 
@@ -47,7 +52,13 @@ public class FriendsScreen extends Panel {
 
     @Override
     public void drawContent(int mouseX, int mouseY, float partialTicks, int margin, int scroll) {
-        AtomicInteger y = new AtomicInteger(43 + scroll);
+        AtomicInteger y = new AtomicInteger(113 + scroll);
+
+        this.mc.fontRendererObj.drawString("Sesión iniciada", margin + 5, 28 + scroll, Color.WHITE.getRGB());
+        this.currentSessionUserCard.drawCard(margin + 5, 43 + scroll, getPanelWidth() - 10, 38, mouseX, mouseY);
+
+        this.chocomint.getRenderUtils().drawLine(margin + 5, scroll + 90, margin + getPanelWidth() - 8, scroll + 91, 2, Color.LIGHT_GRAY.getRGB());
+
         drawString(this.mc.fontRendererObj, "Amigos", margin + 5, y.get() - 15, Color.WHITE.getRGB());
         this.friendUserCardList.forEach(userCard -> {
             userCard.drawCard(margin + 5, y.get(), getPanelWidth() - 10, 38, mouseX, mouseY);
@@ -81,6 +92,8 @@ public class FriendsScreen extends Panel {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        this.currentSessionUserCard.click(mouseY, mouseX);
+
         this.friendUserCardList.forEach(userCard -> {
             userCard.click(mouseY, mouseX);
         });
