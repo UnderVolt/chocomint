@@ -57,7 +57,6 @@ public class GameBar extends Gui implements Listener {
     public TextureGameBarButton notificationsButton;
     private UserGameBarButton userButton;
     private TextureGameBarButton chatButton;
-    private TextureGameBarButton friendsButton;
     private GameBarButton configButton;
     private TextureGameBarButton changeMinecraftAccountButton;
 
@@ -97,7 +96,7 @@ public class GameBar extends Gui implements Listener {
                 if (!this.chocomint.getUser().getAlias().equals("Logging in..."))
                     this.chocomint.displayMenuOrPanel(new LoginGUI(this.mc.currentScreen, this.chocomint));
             } else {
-                this.chocomint.displayMenuOrPanel(new UserScreen(this.mc.currentScreen, this.chocomint, this.chocomint.getUser()));
+                this.chocomint.displayMenuOrPanel(new FriendsScreen(this.mc.currentScreen));
             }
         });
 
@@ -106,17 +105,12 @@ public class GameBar extends Gui implements Listener {
             this.chocomint.displayMenuOrPanel(new MinecraftLoginGUI(this.mc.currentScreen, this.chocomint));
         });
 
-        this.friendsButton = new TextureGameBarButton(
-                width - 79 - this.userButton.width, 0, 20, 20, "friends", (a) -> {
-            this.chocomint.displayMenuOrPanel(new FriendsScreen(this.mc.currentScreen));
-        });
-
-        this.chatButton = new TextureGameBarButton(width - 101 - this.userButton.width, 0, 20, 20, "chat", (a) -> {
+        this.chatButton = new TextureGameBarButton(width - 79 - this.userButton.width, 0, 20, 20, "chat", (a) -> {
             this.contributorsPanel.setActive(false);
             this.chocomint.displayMenuOrPanel(new Chat("", this.mc.currentScreen, this.chocomint, this.mc.getCurrentServerData()));
         });
 
-        this.configButton = new GameBarButton(width - 123 - this.userButton.width, 0, 20, 20, "C",
+        this.configButton = new GameBarButton(width - 101 - this.userButton.width, 0, 20, 20, "C",
                 (a) -> {
                     this.mc.displayGuiScreen(new GuiMods(this.parentScreen, this.chocomint));
                 });
@@ -128,7 +122,6 @@ public class GameBar extends Gui implements Listener {
 
     private final FloatingLabel notificationContext = new FloatingLabel("Notificaciones (Ctrl + P)");
     private final FloatingLabel changeMinecraftAccountContext = new FloatingLabel("Cuenta de Minecraft (Ctrl + I)");
-    private final FloatingLabel friendsContext = new FloatingLabel("Amigos y solicitudes (Ctrl + U)");
     private final FloatingLabel chatContext = new FloatingLabel("Chat (Ctrl + Y)");
     private final FloatingLabel configContext = new FloatingLabel("Configuración de mods (Ctrl + T)");
 
@@ -146,7 +139,6 @@ public class GameBar extends Gui implements Listener {
 
         boolean isAuthenticated = this.chocomint.getAlmendra() != null && this.chocomint.getAlmendra().isAuthenticated();
 
-        this.friendsButton.setEnabled(isAuthenticated);
         this.chatButton.setEnabled(isAuthenticated);
 
         this.userButton.draw(mouseX, mouseY);
@@ -155,10 +147,8 @@ public class GameBar extends Gui implements Listener {
         this.changeMinecraftAccountButton.draw(mouseX, mouseY);
         this.changeMinecraftAccountButton.setX(width - 47 - this.userButton.width);
         if(!this.chocomint.getUser().getUsername().equalsIgnoreCase("Guest")) {
-            this.friendsButton.draw(mouseX, mouseY);
-            this.friendsButton.setX(width - 69 - this.userButton.width);
             this.chatButton.draw(mouseX, mouseY);
-            this.chatButton.setX(width - 91 - this.userButton.width);
+            this.chatButton.setX(width - 69 - this.userButton.width);
         }
 
         if(this.mc.theWorld != null && this.mc.thePlayer != null) {
@@ -169,7 +159,6 @@ public class GameBar extends Gui implements Listener {
         this.notificationsButton.appendLabel(notificationContext, mouseX, mouseY);
         this.changeMinecraftAccountButton.appendLabel(changeMinecraftAccountContext, mouseX, mouseY);
         if(!this.chocomint.getUser().getUsername().equalsIgnoreCase("Guest")) {
-            this.friendsButton.appendLabel(friendsContext, mouseX, mouseY);
             this.chatButton.appendLabel(chatContext, mouseX, mouseY);
         }
     }
@@ -182,17 +171,13 @@ public class GameBar extends Gui implements Listener {
                     break;
                 case Keyboard.KEY_O:
                     if(!this.chocomint.getUser().getUsername().equalsIgnoreCase("Guest"))
-                        this.chocomint.displayMenuOrPanel(new UserScreen(this.mc.currentScreen, this.chocomint, this.chocomint.getUser()));
+                        this.chocomint.displayMenuOrPanel(new FriendsScreen(this.mc.currentScreen));
                     else
                         if(!this.chocomint.getUser().getAlias().equalsIgnoreCase("Logging in..."))
                             this.chocomint.displayMenuOrPanel(new LoginGUI(this.mc.currentScreen, this.chocomint));
                     break;
                 case Keyboard.KEY_I:
                     this.chocomint.displayMenuOrPanel(new MinecraftLoginGUI(this.mc.currentScreen, this.chocomint));
-                    break;
-                case Keyboard.KEY_U:
-                    if(!this.chocomint.getUser().getUsername().equalsIgnoreCase("Guest"))
-                        this.chocomint.displayMenuOrPanel(new FriendsScreen(this.mc.currentScreen));
                     break;
                 case Keyboard.KEY_Y:
                     if(!this.chocomint.getUser().getUsername().equalsIgnoreCase("Guest"))
@@ -218,7 +203,6 @@ public class GameBar extends Gui implements Listener {
         this.notificationsButton.click(mouseX, mouseY, mouseButton);
         this.changeMinecraftAccountButton.click(mouseX, mouseY, mouseButton);
         if(!this.chocomint.getUser().getUsername().equalsIgnoreCase("Guest")) {
-            this.friendsButton.click(mouseX, mouseY, mouseButton);
             this.chatButton.click(mouseX, mouseY, mouseButton);
         }
         if(this.mc.theWorld != null && this.mc.thePlayer != null)
