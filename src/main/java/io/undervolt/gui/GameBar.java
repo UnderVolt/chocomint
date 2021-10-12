@@ -40,9 +40,6 @@ public class GameBar extends Gui implements Listener {
     /** Declare panel status */
     private final NotificationOverlay notificationOverlay;
 
-    /** Declare User card */
-    public UserCard userCard;
-
     /** Declare contributors panel */
     private final ContributorsManager contributorsManager;
     public ContributorsPanel contributorsPanel;
@@ -84,12 +81,6 @@ public class GameBar extends Gui implements Listener {
 
     public void init(int width, int height) {
 
-        // Initialize User Card
-        this.userCard = new UserCard(this.mc, this.chocomint.getUser(), false, false, (user) -> {
-            this.chocomint.displayMenuOrPanel(new UserScreen(this.mc.currentScreen, this.chocomint, this.chocomint.getUser()));
-            this.userCard.setActive(false);
-        });
-
         // Initialize Contributors Panel
         this.contributorsPanel = new ContributorsPanel(this.mc, this.contributorsManager, false);
 
@@ -106,8 +97,7 @@ public class GameBar extends Gui implements Listener {
                 if (!this.chocomint.getUser().getAlias().equals("Logging in..."))
                     this.chocomint.displayMenuOrPanel(new LoginGUI(this.mc.currentScreen, this.chocomint));
             } else {
-                this.userCard.toggleActive();
-                this.contributorsPanel.setActive(false);
+                this.chocomint.displayMenuOrPanel(new UserScreen(this.mc.currentScreen, this.chocomint, this.chocomint.getUser()));
             }
         });
 
@@ -123,7 +113,6 @@ public class GameBar extends Gui implements Listener {
 
         this.chatButton = new TextureGameBarButton(width - 101 - this.userButton.width, 0, 20, 20, "chat", (a) -> {
             this.contributorsPanel.setActive(false);
-            this.userCard.setActive(false);
             this.chocomint.displayMenuOrPanel(new Chat("", this.mc.currentScreen, this.chocomint, this.mc.getCurrentServerData()));
         });
 
@@ -135,7 +124,6 @@ public class GameBar extends Gui implements Listener {
 
     @EventHandler public void login(UserConnectEvent event) {
         this.userButton.setUser(event.getUser());
-        this.userCard.setUser(event.getUser());
     }
 
     private final FloatingLabel notificationContext = new FloatingLabel("Notificaciones (Ctrl + P)");
@@ -154,7 +142,6 @@ public class GameBar extends Gui implements Listener {
         drawRect(10, 4, 16, 16, new Color(63, 222, 160).getRGB());
         drawString(this.fontRendererObj, "chocomint", 20, 6, Color.WHITE.getRGB());
 
-        this.userCard.drawCard(width - 132, 22, mouseX, mouseY);
         this.contributorsPanel.drawPanel(width, height);
 
         boolean isAuthenticated = this.chocomint.getAlmendra() != null && this.chocomint.getAlmendra().isAuthenticated();
@@ -222,10 +209,8 @@ public class GameBar extends Gui implements Listener {
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton, int width, int height) {
         // Toggle off userCard's visibility if clicked outside of rendered area
-        this.userCard.click(mouseY, mouseX);
 
         if (mouseX >= 4 && mouseY >= 4 && mouseX <= 16 && mouseY <= 16) {
-            this.userCard.setActive(false);
             this.contributorsPanel.toggleActive();
         }
 
