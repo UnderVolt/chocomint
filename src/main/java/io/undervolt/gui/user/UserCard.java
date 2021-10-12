@@ -90,7 +90,7 @@ public class UserCard extends Gui {
             this.y = y;
 
             this.chocomint.getRenderUtils().drawRoundedRect(x, y, width, height, 3, new Color(32, 34, 36).getRGB());
-            mc.getChocomint().getRenderUtils().drawRoundedRect(x, y, x + 38, y + height, 3, 0, 3, 0, new Color(28, 32, 34).getRGB());
+            this.chocomint.getRenderUtils().drawRoundedRect(x, y, x + 38, y + height, 3, 0, 3, 0, new Color(28, 32, 34).getRGB());
 
             GL11.glPushMatrix();
             GL11.glColor3f(1, 1, 1);
