@@ -122,8 +122,8 @@ public class GameBar extends Gui implements Listener {
 
     private final FloatingLabel notificationContext = new FloatingLabel("Notificaciones (Ctrl + P)");
     private final FloatingLabel changeMinecraftAccountContext = new FloatingLabel("Cuenta de Minecraft (Ctrl + I)");
-    private final FloatingLabel chatContext = new FloatingLabel("Chat (Ctrl + Y)");
-    private final FloatingLabel configContext = new FloatingLabel("Configuración de mods (Ctrl + T)");
+    private final FloatingLabel chatContext = new FloatingLabel("Chat (Ctrl + U)");
+    private final FloatingLabel configContext = new FloatingLabel("Configuración de mods (Ctrl + Y)");
 
     public void draw(int mouseX, int mouseY, float partialTicks, int width, int height) {
 
@@ -179,13 +179,13 @@ public class GameBar extends Gui implements Listener {
                 case Keyboard.KEY_I:
                     this.chocomint.displayMenuOrPanel(new MinecraftLoginGUI(this.mc.currentScreen, this.chocomint));
                     break;
-                case Keyboard.KEY_Y:
+                case Keyboard.KEY_U:
                     if(!this.chocomint.getUser().getUsername().equalsIgnoreCase("Guest"))
                         if(this.chocomint.getAlmendra() != null)
                             if(this.chocomint.getAlmendra().getMOTD() != null)
                                 this.chocomint.displayMenuOrPanel(new Chat("", this.mc.currentScreen, this.chocomint, this.mc.getCurrentServerData()));
                     break;
-                case Keyboard.KEY_T:
+                case Keyboard.KEY_Y:
                     if(this.mc.theWorld != null && this.mc.thePlayer != null)
                         this.mc.displayGuiScreen(new GuiMods(this.parentScreen, this.chocomint));
                     break;
