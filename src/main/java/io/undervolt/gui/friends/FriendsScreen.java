@@ -109,8 +109,8 @@ public class FriendsScreen extends Panel {
         });
 
         if(friendUserCardList.isEmpty()) {
-            this.chocomint.getRenderUtils().drawRoundedRect(margin + 5, y.get() + this.profileOptions.height + 5, 130, 36, 4, new Color(22, 22, 22).getRGB());
-            drawCenteredString(this.mc.fontRendererObj, "No tenés amigos", margin + 5 + (this.getPanelWidth() - 10) / 2, y.get() + 13 + this.profileOptions.height + 5, Color.LIGHT_GRAY.getRGB());
+            this.chocomint.getRenderUtils().drawRoundedRect(margin + 5, y.get() + this.profileOptions.height + 5, getPanelWidth() - 10, 36, 4, new Color(22, 22, 22).getRGB());
+            drawCenteredString(this.mc.fontRendererObj, "No tenés amigos", margin + 5 + (this.getPanelWidth() - 10) / 2, y.get() + 18 + this.profileOptions.height, Color.LIGHT_GRAY.getRGB());
             y.set(y.get() + 45);
         }
 
@@ -125,7 +125,7 @@ public class FriendsScreen extends Panel {
         });
 
         if(frUserCardList.isEmpty()) {
-            this.chocomint.getRenderUtils().drawRoundedRect(margin + 5, y.get(), 130, 36, 4, new Color(22, 22, 22).getRGB());
+            this.chocomint.getRenderUtils().drawRoundedRect(margin + 5, y.get() + this.profileOptions.height + 5, getPanelWidth() - 10, 36, 4, new Color(22, 22, 22).getRGB());
             drawCenteredString(this.mc.fontRendererObj, "No hay solicitudes", margin + 5 + (this.getPanelWidth() - 10) / 2, y.get() + 18 + this.profileOptions.height, Color.LIGHT_GRAY.getRGB());
             y.set(y.get() + 65);
         }
