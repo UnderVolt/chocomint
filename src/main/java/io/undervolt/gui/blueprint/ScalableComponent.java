@@ -1,4 +1,4 @@
-package io.undervolt.gui.config;
+package io.undervolt.gui.blueprint;
 
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.RenderUtils;

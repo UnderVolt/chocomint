@@ -1,4 +1,4 @@
-package io.undervolt.gui.config;
+package io.undervolt.gui.blueprint;
 
 import com.google.common.collect.Lists;
 import io.undervolt.utils.AnimationUI;
