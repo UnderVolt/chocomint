@@ -32,7 +32,7 @@ public class LoginGUI extends Panel {
     private final Chocomint chocomint;
 
     private Button linkAccount = new Button(this.width - this.getPanelWidth() + 9, this.scroll + 185, this.getPanelWidth() - 20, 20, "Vincular cuenta", (a) -> this.login());;
-    private ClickableLabel createAccount;
+    private ClickableLabel createAccount = new ClickableLabel(this.width - this.getPanelWidth() + (this.getPanelWidth() / 2) - (this.mc.fontRendererObj.getStringWidth("¿No tenés cuenta?") / 2), this.scroll + 215, "¿No tenés cuenta?", a -> this.openCreateLink());;
 
     private GuiTextField user;
     private GuiTextField pass;
