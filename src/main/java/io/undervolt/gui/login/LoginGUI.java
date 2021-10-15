@@ -31,7 +31,7 @@ public class LoginGUI extends Panel {
     private final Config config;
     private final Chocomint chocomint;
 
-    private Button linkAccount;
+    private final Button linkAccount = new Button(this.width - this.getPanelWidth() + 9, this.scroll + 185, this.getPanelWidth() - 20, 20, "Vincular cuenta", (a) -> this.login());;
     private ClickableLabel createAccount;
 
     private GuiTextField user;
@@ -50,7 +50,6 @@ public class LoginGUI extends Panel {
         this.user = new GuiTextField(99, mc.fontRendererObj, this.width - this.getPanelWidth() + 10, this.scroll + 120, this.getPanelWidth() - 20, 18);
         this.pass = new GuiPasswordField(99, this.width - this.getPanelWidth() + 10, this.scroll + 150, this.getPanelWidth() - 20, 18);
         this.createAccount = new ClickableLabel(this.width - this.getPanelWidth() + (this.getPanelWidth() / 2) - (this.mc.fontRendererObj.getStringWidth("¿No tenés cuenta?") / 2), this.scroll + 215, "¿No tenés cuenta?", a -> this.openCreateLink());
-        this.linkAccount = new Button(this.width - this.getPanelWidth() + 9, this.scroll + 185, this.getPanelWidth() - 20, 20, "Vincular cuenta", (a) -> this.login());
         super.initGui();
     }
 
