@@ -27,23 +27,25 @@ public class ComponentBlueprint extends AnimationUI {
         resizeableComponents.forEach(resizeableComponent -> resizeableComponent.draw(mouseX, mouseY));
 
         if(currentComponent != null) {
+
             double rotationRad = Math.abs(Math.toRadians(this.currentComponent.rotation));
-            double scaledWidth = this.currentComponent.initialWidth;
+            double expectedWidth = Math.abs(this.currentComponent.initialWidth * Math.cos(rotationRad)) + Math.abs(this.currentComponent.initialHeight * Math.sin(rotationRad));
+
             switch(this.currentComponentAction) {
                 case DRAG:
                     this.currentComponent.x = this.currentComponent.x + mouseX - this.lastX;
                     this.currentComponent.y = this.currentComponent.y + mouseY - this.lastY;
                     break;
                 case RESIZE_00:
-                    float calc1 = (float)(this.currentComponent.width - mouseX + this.lastX) / (float) (scaledWidth * Math.cos(rotationRad));
+                    float calc1 = (float)(this.currentComponent.width - mouseX + this.lastX) / (float) expectedWidth;
                     if(calc1 > 0.2) {
-                        this.currentComponent.x = mouseX + 3;
+                        this.currentComponent.x = mouseX;
                         this.currentComponent.scale = calc1;
                         this.calculateBoxWidthAndHeight();
                     }
                     break;
                 case RESIZE_22:
-                    float calc2 = (float) (mouseX - this.currentComponent.x) / (float) (scaledWidth * Math.cos(rotationRad));
+                    float calc2 = (float) (mouseX - 3 - this.currentComponent.x) / (float) expectedWidth;
                     if(calc2 > 0.2) {
                         this.currentComponent.scale = calc2;
                         this.calculateBoxWidthAndHeight();
