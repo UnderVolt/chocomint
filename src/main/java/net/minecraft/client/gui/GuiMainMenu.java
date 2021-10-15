@@ -18,6 +18,7 @@ import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
 import io.undervolt.gui.chat.AvailableRooms;
 import io.undervolt.gui.chat.Chat;
+import io.undervolt.gui.config.ComponentBlueprint;
 import io.undervolt.gui.user.UserSearch;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.AnimationUI;
@@ -349,7 +350,8 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
 
         if (button.id == 1)
         {
-            this.mc.displayGuiScreen(new GuiSelectWorld(this));
+            this.chocomint.displayMenuOrPanel(new ComponentBlueprint());
+            //this.mc.displayGuiScreen(new GuiSelectWorld(this));
         }
 
         if (button.id == 2)
