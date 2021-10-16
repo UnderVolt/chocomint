@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.RenderUtils;
 import io.undervolt.gui.clickable.Clickable;
+import io.undervolt.gui.clickable.dropdown.Option;
+import io.undervolt.gui.clickable.floating.FloatingMenu;
 import org.lwjgl.opengl.GL11;
 import java.util.List;
 import java.awt.*;
@@ -18,12 +20,33 @@ public class ScalableComponent extends Clickable {
 
     private final List<ComponentOption> componentOptionList = Lists.newArrayList();
 
+    private final Option.OptionSet optionSet = Option.OptionSet.newOptionSet();
+    private final FloatingMenu floatingMenu;
+
     public ScalableComponent(int x, int y, int width, int height, ComponentBlueprint componentBlueprint) {
         super(x, y, width, height, a -> {});
         this.renderUtils = GameBridge.getChocomint().getRenderUtils();
         this.componentBlueprint = componentBlueprint;
         this.initialWidth = width;
         this.initialHeight = height;
+
+        this.optionSet.addOption(new Option(this.optionSet, "Esquina superior izquierda", a -> {
+            this.anchorX(AnchorType.POS0); this.anchorY(AnchorType.POS0);
+        }));
+
+        this.optionSet.addOption(new Option(this.optionSet, "Esquina superior derecha", a -> {
+            this.anchorX(AnchorType.POS100); this.anchorY(AnchorType.POS0);
+        }));
+
+        this.optionSet.addOption(new Option(this.optionSet, "Esquina inferior izquierda", a -> {
+            this.anchorX(AnchorType.POS0); this.anchorY(AnchorType.POS100);
+        }));
+
+        this.optionSet.addOption(new Option(this.optionSet, "Esquina inferior derecha", a -> {
+            this.anchorX(AnchorType.POS100); this.anchorY(AnchorType.POS100);
+        }));
+
+        this.floatingMenu = new FloatingMenu(150, this.optionSet);
 
         this.componentOptionList.add(new ComponentOption("R", a -> {
             this.rotation += 90;
@@ -70,14 +93,26 @@ public class ScalableComponent extends Clickable {
             componentOption.draw(this.x + x.get(), y + height + 7, mouseX, mouseY);
             x.set(x.get() + 12);
         });
+
+        this.floatingMenu.draw(mouseX, mouseY);
     }
 
     @Override
     public void click(int mouseX, int mouseY, int mouseButton) {
+        this.floatingMenu.click(mouseX, mouseY, mouseButton);
         if(mouseX > x && mouseY > y && mouseX < x + width && mouseY < y + height) {
             this.componentBlueprint.setSelectedComponent(this);
-            this.componentBlueprint.setCurrentComponentAction(ComponentBlueprint.BlueprintAction.DRAG);
-            this.componentBlueprint.setCurrentComponent(this);
+            if(mouseButton == 1) {
+                this.floatingMenu.setFittingX(mouseX);
+                this.floatingMenu.setFittingY(mouseY);
+                this.floatingMenu.setActive(true);
+            } else {
+                this.floatingMenu.setActive(false);
+                this.componentBlueprint.setCurrentComponentAction(ComponentBlueprint.BlueprintAction.DRAG);
+                this.componentBlueprint.setCurrentComponent(this);
+            }
+        } else {
+            this.floatingMenu.setActive(false);
         }
 
         if(this.componentBlueprint.getSelectedComponent() != null)
@@ -106,5 +141,37 @@ public class ScalableComponent extends Clickable {
                     this.componentBlueprint.setCurrentComponentAction(ComponentBlueprint.BlueprintAction.ROTATE);
                 }
             }
+    }
+
+    public void anchorX(AnchorType anchorType) {
+        switch(anchorType) {
+            case POS0:
+                this.x = 5;
+                break;
+            case POS100:
+                this.x = GameBridge.getScaledResolution().getScaledWidth() - 5 - this.width;
+                break;
+            case POS50:
+                this.x = GameBridge.getScaledResolution().getScaledWidth() / 2 - this.width / 2;
+                break;
+        }
+    }
+
+    public void anchorY(AnchorType anchorType) {
+        switch(anchorType) {
+            case POS0:
+                this.y = 5;
+                break;
+            case POS100:
+                this.y = GameBridge.getScaledResolution().getScaledHeight() - 5 - this.height;
+                break;
+            case POS50:
+                this.x = GameBridge.getScaledResolution().getScaledHeight() / 2 - this.height / 2;
+                break;
+        }
+    }
+
+    public enum AnchorType {
+        POS0, POS50, POS100
     }
 }
