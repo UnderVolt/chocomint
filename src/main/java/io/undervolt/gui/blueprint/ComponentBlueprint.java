@@ -59,7 +59,7 @@ public class ComponentBlueprint extends AnimationUI {
             }
         }
 
-        if(selectedComponent != null) selectedComponent.drawToolbox();
+        if(selectedComponent != null) selectedComponent.drawToolbox(mouseX, mouseY);
 
         this.lastX = mouseX;
         this.lastY = mouseY;
@@ -67,12 +67,20 @@ public class ComponentBlueprint extends AnimationUI {
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
-    private void calculateBoxWidthAndHeight() {
+    public void calculateBoxWidthAndHeight() {
         double rotationRad = Math.abs(Math.toRadians(this.currentComponent.rotation));
         double scaledWidth = this.currentComponent.initialWidth * this.currentComponent.scale;
         double scaledHeight = this.currentComponent.initialHeight * this.currentComponent.scale;
         this.currentComponent.width = (int)(Math.abs(scaledWidth * Math.cos(rotationRad)) + Math.abs(scaledHeight * Math.sin(rotationRad)));
         this.currentComponent.height = (int)(Math.abs(scaledWidth * Math.sin(rotationRad)) + Math.abs(scaledHeight * Math.cos(rotationRad)));
+    }
+
+    public void calculateBoxWidthAndHeight(ScalableComponent component) {
+        double rotationRad = Math.abs(Math.toRadians(component.rotation));
+        double scaledWidth = component.initialWidth * component.scale;
+        double scaledHeight = component.initialHeight * component.scale;
+        component.width = (int)(Math.abs(scaledWidth * Math.cos(rotationRad)) + Math.abs(scaledHeight * Math.sin(rotationRad)));
+        component.height = (int)(Math.abs(scaledWidth * Math.sin(rotationRad)) + Math.abs(scaledHeight * Math.cos(rotationRad)));
     }
 
     @Override

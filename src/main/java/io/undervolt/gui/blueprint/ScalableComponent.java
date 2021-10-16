@@ -1,11 +1,13 @@
 package io.undervolt.gui.blueprint;
 
+import com.google.common.collect.Lists;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.RenderUtils;
 import io.undervolt.gui.clickable.Clickable;
 import org.lwjgl.opengl.GL11;
-
+import java.util.List;
 import java.awt.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ScalableComponent extends Clickable {
 
@@ -14,12 +16,19 @@ public class ScalableComponent extends Clickable {
     public float scale = 1.0F, rotation = 0;
     public final int initialWidth, initialHeight;
 
+    private final List<ComponentOption> componentOptionList = Lists.newArrayList();
+
     public ScalableComponent(int x, int y, int width, int height, ComponentBlueprint componentBlueprint) {
         super(x, y, width, height, a -> {});
         this.renderUtils = GameBridge.getChocomint().getRenderUtils();
         this.componentBlueprint = componentBlueprint;
         this.initialWidth = width;
         this.initialHeight = height;
+
+        this.componentOptionList.add(new ComponentOption("R", a -> {
+            this.rotation += 90;
+            this.componentBlueprint.calculateBoxWidthAndHeight(this);
+        }));
     }
 
     public void drawComponent(int x, int y) {}
@@ -40,7 +49,7 @@ public class ScalableComponent extends Clickable {
         GL11.glPopMatrix();
     }
 
-    protected void drawToolbox() {
+    protected void drawToolbox(int mouseX, int mouseY) {
         // Initial box
         this.renderUtils.drawLine(x - 3, y - 3, x + width + 3, y - 3, 1, Color.ORANGE.getRGB());
         this.renderUtils.drawLine(x - 3, y - 3, x - 3, y + height + 3, 1, Color.ORANGE.getRGB());
@@ -54,6 +63,13 @@ public class ScalableComponent extends Clickable {
         this.renderUtils.drawFilledCircle(x + width + 3, y + height + 3, 3, Color.ORANGE.getRGB());
         this.renderUtils.drawLine(x + ((width) / 2), y - 15, x + ((width) / 2), y - 3, 1, Color.ORANGE.getRGB());
         this.renderUtils.drawFilledCircle(x + ((width) / 2), y - 15, 5, Color.ORANGE.getRGB());
+        // Buttons
+
+        AtomicInteger x = new AtomicInteger(-6);
+        this.componentOptionList.forEach(componentOption -> {
+            componentOption.draw(this.x + x.get(), y + height + 7, mouseX, mouseY);
+            x.set(x.get() + 12);
+        });
     }
 
     @Override
@@ -66,6 +82,9 @@ public class ScalableComponent extends Clickable {
 
         if(this.componentBlueprint.getSelectedComponent() != null)
             if(this.componentBlueprint.getSelectedComponent().equals(this)) {
+
+                this.componentOptionList.forEach(componentOption -> componentOption.click(mouseX, mouseY, mouseButton));
+
                 if(mouseX > x - 6 && mouseY > y - 6 && mouseX < x - 1 && mouseY < y - 1) {
                     this.componentBlueprint.setCurrentComponent(this);
                     this.componentBlueprint.setCurrentComponentAction(ComponentBlueprint.BlueprintAction.RESIZE_00);
