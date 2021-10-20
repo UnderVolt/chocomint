@@ -1,6 +1,6 @@
 package io.undervolt.api.ui.widgets;
 
-import io.undervolt.api.ui.UIView;
+import io.undervolt.api.ui.Screen;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.utils.GFXUtil;
 import org.lwjgl.opengl.GL11;
@@ -116,7 +116,7 @@ public class Container extends Drawable {
     }
 
     @Override
-    public void draw(UIView ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
+    public void draw(Screen ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glColor3f(1, 1, 1);
         if(this.backgroundColor != null){

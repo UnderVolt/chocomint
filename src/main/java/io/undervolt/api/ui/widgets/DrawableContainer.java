@@ -1,6 +1,6 @@
 package io.undervolt.api.ui.widgets;
 
-import io.undervolt.api.ui.UIView;
+import io.undervolt.api.ui.Screen;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.utils.GFXUtil;
 import org.lwjgl.opengl.GL11;
@@ -72,7 +72,7 @@ public class DrawableContainer extends Drawable {
     private Box tmp = new Box(0, 0);
 
     @Override
-    public void draw(UIView ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
+    public void draw(Screen ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
         if(this.backgroundColor != null){
             if(this.radius > 0){
                 if(this.box != null) {
@@ -119,7 +119,7 @@ public class DrawableContainer extends Drawable {
     }
 
     public interface Drawable{
-        Box onDraw(io.undervolt.api.ui.widgets.Drawable parent, UIView ui, int parentX, int parentY, int mouseX, int mouseY, float deltaTime);
+        Box onDraw(io.undervolt.api.ui.widgets.Drawable parent, Screen ui, int parentX, int parentY, int mouseX, int mouseY, float deltaTime);
     }
 
     public static class Box{

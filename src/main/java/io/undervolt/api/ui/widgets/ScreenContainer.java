@@ -1,14 +1,14 @@
 package io.undervolt.api.ui.widgets;
 
 import com.google.common.collect.Lists;
-import io.undervolt.api.ui.UIView;
+import io.undervolt.api.ui.Screen;
 import io.undervolt.utils.GFXUtil;
 import net.minecraft.client.gui.GuiButton;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
-public class UIMiniView extends Drawable {
+public class ScreenContainer extends Drawable {
 
     protected List<Drawable> widgets = Lists.newArrayList();
 
@@ -16,13 +16,13 @@ public class UIMiniView extends Drawable {
     protected int wX = 0;
     protected int wY = 0;
 
-    public UIMiniView(float width, float height){
+    public ScreenContainer(float width, float height){
         this.width = width;
         this.height = height;
     }
 
     public void initView(){}
-    public void drawScreen(UIView ui, int x, int y, float deltaTime){}
+    public void drawScreen(Screen ui, int x, int y, float deltaTime){}
 
     @Override
     public void init() {
@@ -31,7 +31,7 @@ public class UIMiniView extends Drawable {
     }
 
     @Override
-    public void draw(UIView ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
+    public void draw(Screen ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
         this.wX = x;
         this.wY = y;
 

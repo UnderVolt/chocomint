@@ -1,5 +1,5 @@
 package io.undervolt.api.ui.widgets;
-import io.undervolt.api.ui.UIView;
+import io.undervolt.api.ui.Screen;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -36,7 +36,7 @@ public class Column extends Drawable {
     }
 
     @Override
-    public void draw(UIView ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
+    public void draw(Screen ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
         int height = 0;
         int childHeight = 0;
         int width = (int) this.children.stream().sorted(Comparator.comparing(Drawable::getWidth)).collect(Collectors.toList()).get(0).getWidth();

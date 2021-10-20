@@ -1,6 +1,6 @@
 package io.undervolt.api.ui.widgets;
 
-import io.undervolt.api.ui.UIView;
+import io.undervolt.api.ui.Screen;
 import org.lwjgl.opengl.GL11;
 
 public class Opacity extends Drawable {
@@ -25,7 +25,7 @@ public class Opacity extends Drawable {
     }
 
     @Override
-    public void draw(UIView ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
+    public void draw(Screen ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
         if(this.opacity > 0){
             GL11.glPushMatrix();
             GL11.glColor4f(1, 1, 1, this.opacity);

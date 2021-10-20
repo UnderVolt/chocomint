@@ -1,7 +1,5 @@
 package io.undervolt.api.ui.widgets;
 
-import io.undervolt.api.ui.UIView;
-
 public class Screen extends Drawable {
 
     protected Drawable child;
@@ -17,7 +15,7 @@ public class Screen extends Drawable {
     }
 
     @Override
-    public void draw(UIView ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
+    public void draw(io.undervolt.api.ui.Screen ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
         this.width = ui.getWidth();
         this.height = ui.getHeight();
         this.child.draw(ui, x, y, mouseX, mouseY, deltaTime);

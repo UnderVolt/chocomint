@@ -1,6 +1,6 @@
 package io.undervolt.api.ui.widgets;
 
-import io.undervolt.api.ui.UIView;
+import io.undervolt.api.ui.Screen;
 
 import java.awt.*;
 
@@ -25,7 +25,7 @@ public class Circle extends Drawable {
     }
 
     @Override
-    public void draw(UIView ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
+    public void draw(Screen ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
         this.width = radius * 2;
         this.height = radius * 2;
         ui.chocomint.getRenderUtils().drawFilledCircle(x + (int) radius, y + (int) radius, radius, color.getRGB());
