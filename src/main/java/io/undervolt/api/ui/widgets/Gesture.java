@@ -2,7 +2,7 @@ package io.undervolt.api.ui.widgets;
 
 import io.undervolt.api.ui.UIView;
 
-public class Gesture extends IWidget {
+public class Gesture extends Drawable {
 
     protected Function onPress;
     protected Function onDoublePress;
@@ -13,9 +13,9 @@ public class Gesture extends IWidget {
     protected int wX = 0;
     protected int wY = 0;
 
-    protected IWidget child;
+    protected Drawable child;
 
-    public Gesture(IWidget child) {
+    public Gesture(Drawable child) {
         this.child = child;
         this.child.parent = this;
     }
@@ -103,15 +103,15 @@ public class Gesture extends IWidget {
     }
 
     public interface Function{
-        void onRun(IWidget child, int mouseX, int mouseY, int button);
+        void onRun(Drawable child, int mouseX, int mouseY, int button);
     }
 
     public interface HoverFunction{
-        void onRun(IWidget child, int mouseX, int mouseY);
+        void onRun(Drawable child, int mouseX, int mouseY);
     }
 
     public interface DragFunction{
-        void onRun(IWidget child, int mouseX, int mouseY, int button, long timeSinceLastClick);
+        void onRun(Drawable child, int mouseX, int mouseY, int button, long timeSinceLastClick);
     }
 
 }

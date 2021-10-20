@@ -2,9 +2,11 @@ package io.undervolt.api.ui;
 
 import com.google.common.collect.Lists;
 import io.undervolt.api.ui.widgets.Container;
-import io.undervolt.api.ui.widgets.IWidget;
+import io.undervolt.api.ui.widgets.Drawable;
+import io.undervolt.bridge.GameBridge;
+import io.undervolt.instance.Chocomint;
+import io.undervolt.utils.AnimationUI;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -12,11 +14,12 @@ import org.lwjgl.opengl.GL11;
 import java.io.IOException;
 import java.util.List;
 
-public abstract class UIView extends GuiScreen {
+public abstract class UIView extends AnimationUI {
 
-    protected List<IWidget> widgets = Lists.newArrayList();
+    protected List<Drawable> widgets = Lists.newArrayList();
 
     public final Minecraft minecraft = Minecraft.getMinecraft();
+    public final Chocomint chocomint = GameBridge.getChocomint();
     public float oldTime;
     public float newTime;
     public float deltaTime;
@@ -28,15 +31,16 @@ public abstract class UIView extends GuiScreen {
     private int tmpMouseX = 0;
     private int tmpMouseY = 0;
 
-    public void initUI(){}
-    public void drawUI(int mouseX, int mouseY, float deltaTime){}
+    public void load(){}
+    public void update(int mouseX, int mouseY, float deltaTime){}
+    protected void update() {}
     public void closeUI(){}
 
     @Override
     public void initGui() {
         this.oldTime = this.newTime;
         this.newTime = Minecraft.getSystemTime() / 1000.0f;
-        this.initUI();
+        this.load();
         this.deltaTime = this.newTime - this.oldTime;
     }
 
@@ -47,7 +51,7 @@ public abstract class UIView extends GuiScreen {
         this.buttonList.clear();
         this.widgets.clear();
         this.mc = mc;
-        this.sr = new ScaledResolution();
+        this.sr = new ScaledResolution(this.mc);
         if(this.forceUseScaleFactor){
             this.width = (int)Math.floor(Display.getWidth() / (float)this.forcedScaleFactor);
             this.height = (int)Math.floor(Display.getHeight() / (float)this.forcedScaleFactor);
@@ -63,10 +67,12 @@ public abstract class UIView extends GuiScreen {
         this.oldTime = this.newTime;
         this.newTime = Minecraft.getSystemTime() / 1000.0f;
 
-        this.sr = new ScaledResolution();
+        this.sr = new ScaledResolution(this.mc);
 
         if(this.forceUseScaleFactor){
             GL11.glPushMatrix();
+            GL11.glDisable(GL11.GL_BLEND);
+            GL11.glColor3f(1, 1, 1);
 
             float scaleWidthFactor = this.sr.getScaledWidth() / (Display.getWidth() / (float)this.forcedScaleFactor);
             float scaleHeightFactor = this.sr.getScaledHeight() / (Display.getHeight() / (float)this.forcedScaleFactor);
@@ -83,7 +89,8 @@ public abstract class UIView extends GuiScreen {
 
             super.drawScreen(this.tmpMouseX , this.tmpMouseY, partialTicks);
             this.widgets.forEach(w -> w.draw(this, 0, 0, this.tmpMouseX, this.tmpMouseY, deltaTime));
-            this.drawUI(this.tmpMouseX, this.tmpMouseY, this.deltaTime);
+            this.update(this.tmpMouseX, this.tmpMouseY, this.deltaTime);
+            this.update();
             this.deltaTime = this.newTime - this.oldTime;
             GL11.glPopMatrix();
         }else{
@@ -95,15 +102,18 @@ public abstract class UIView extends GuiScreen {
             this.tmpMouseX = mouseX;
             this.tmpMouseY = mouseY;
 
+            GL11.glDisable(GL11.GL_BLEND);
+            GL11.glColor3f(1, 1, 1);
             super.drawScreen(mouseX, mouseY, partialTicks);
             this.widgets.forEach(w -> w.draw(this, 0, 0, mouseX, mouseY, deltaTime));
-            this.drawUI(mouseX, mouseY, this.deltaTime);
+            this.update(mouseX, mouseY, this.deltaTime);
+            this.update();
             this.deltaTime = this.newTime - this.oldTime;
         }
     }
 
-    public void addWidgets(IWidget... widgets){
-        for (IWidget w : widgets) {
+    public void addWidgets(Drawable... widgets){
+        for (Drawable w : widgets) {
             this.widgets.add(new Container(this.getWidth(), this.getHeight()).setChild(w));
             w.init();
         }

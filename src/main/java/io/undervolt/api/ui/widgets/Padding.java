@@ -2,12 +2,12 @@ package io.undervolt.api.ui.widgets;
 
 import io.undervolt.api.ui.UIView;
 
-public class Padding extends IWidget {
+public class Padding extends Drawable {
 
-    protected IWidget child;
+    protected Drawable child;
     protected EdgeInsets padding;
 
-    public Padding(EdgeInsets padding, IWidget child) {
+    public Padding(EdgeInsets padding, Drawable child) {
         this.padding = padding;
         this.child = child;
         this.child.parent = this;

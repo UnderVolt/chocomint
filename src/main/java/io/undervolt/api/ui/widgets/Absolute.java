@@ -2,14 +2,14 @@ package io.undervolt.api.ui.widgets;
 
 import io.undervolt.api.ui.UIView;
 
-public class Absolute extends IWidget{
+public class Absolute extends Drawable {
 
     protected int x;
     protected int y;
     protected boolean relative;
-    protected IWidget child;
+    protected Drawable child;
 
-    public Absolute(int x, int y, IWidget child) {
+    public Absolute(int x, int y, Drawable child) {
         this.x = x;
         this.y = y;
         this.child = child;

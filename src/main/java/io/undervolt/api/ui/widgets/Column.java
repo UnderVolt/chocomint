@@ -6,13 +6,13 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Column extends IWidget {
+public class Column extends Drawable {
 
-    protected List<IWidget> children;
+    protected List<Drawable> children;
     protected AxisAlignment mainAxis = AxisAlignment.START;
     protected AxisAlignment crossAxis = AxisAlignment.START;
 
-    public Column(IWidget... childs){
+    public Column(Drawable... childs){
         this.children = Arrays.asList(childs);
         this.children.forEach(c -> c.parent = this);
     }
@@ -39,15 +39,15 @@ public class Column extends IWidget {
     public void draw(UIView ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
         int height = 0;
         int childHeight = 0;
-        int width = (int) this.children.stream().sorted(Comparator.comparing(IWidget::getWidth)).collect(Collectors.toList()).get(0).getWidth();
-        for (IWidget child : this.children) {
+        int width = (int) this.children.stream().sorted(Comparator.comparing(Drawable::getWidth)).collect(Collectors.toList()).get(0).getWidth();
+        for (Drawable child : this.children) {
             childHeight = (int) (childHeight + child.height);
         }
 
         this.width = this.parent.width;
         this.height = childHeight;
 
-        for (IWidget child : this.children) {
+        for (Drawable child : this.children) {
             if(mainAxis.equals(AxisAlignment.SPACE_BETWEEN)){
                 child.draw(ui, (int) (this.parent.width * crossAxis.getXModifier() - (x + width * crossAxis.getXModifier())), (int) (y + height + (child.height * 0.5f)), mouseX, mouseY, deltaTime);
                 height += this.parent.height / this.children.size() - 1;

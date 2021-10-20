@@ -6,13 +6,13 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Row extends IWidget {
+public class Row extends Drawable {
 
-    protected List<IWidget> children;
+    protected List<Drawable> children;
     protected AxisAlignment mainAxis = AxisAlignment.START;
     protected AxisAlignment crossAxis = AxisAlignment.START;
 
-    public Row(IWidget... childs){
+    public Row(Drawable... childs){
         this.children = Arrays.asList(childs);
         this.children.forEach(c -> c.parent = this);
     }
@@ -29,22 +29,22 @@ public class Row extends IWidget {
 
     @Override
     public void init() {
-        this.children.forEach(IWidget::init);
+        this.children.forEach(Drawable::init);
     }
 
     @Override
     public void draw(UIView ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
         int width = 0;
         int childWidth = 0;
-        this.height = (int) this.children.stream().sorted(Comparator.comparing(IWidget::getWidth)).collect(Collectors.toList()).get(0).getHeight();
-        for (IWidget child : this.children) {
+        this.height = (int) this.children.stream().sorted(Comparator.comparing(Drawable::getWidth)).collect(Collectors.toList()).get(0).getHeight();
+        for (Drawable child : this.children) {
             childWidth = (int) (childWidth + child.width);
         }
 
         this.width = childWidth;
         //this.height = this.parent.height;
 
-        for (IWidget child : this.children) {
+        for (Drawable child : this.children) {
             if(mainAxis.equals(AxisAlignment.SPACE_BETWEEN)){
                 int baswW = (int) (this.parent.width / this.children.size());
 

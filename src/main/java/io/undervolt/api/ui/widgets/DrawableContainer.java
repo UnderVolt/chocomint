@@ -1,13 +1,13 @@
 package io.undervolt.api.ui.widgets;
 
 import io.undervolt.api.ui.UIView;
-import io.undervolt.utils.DrawUtil;
+import io.undervolt.bridge.GameBridge;
 import io.undervolt.utils.GFXUtil;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
-public class DrawableContainer extends IWidget{
+public class DrawableContainer extends Drawable {
 
     protected Color backgroundColor;
     protected int radius;
@@ -76,18 +76,18 @@ public class DrawableContainer extends IWidget{
         if(this.backgroundColor != null){
             if(this.radius > 0){
                 if(this.box != null) {
-                    DrawUtil.drawRoundedRect(x, y, width, height, radius, this.box.color);
-                    DrawUtil.drawRoundedRect(x + this.box.lineWidth, y + this.box.lineWidth, width - this.box.lineWidth * 2, height - this.box.lineWidth * 2, radius, this.backgroundColor);
+                    GameBridge.getChocomint().getRenderUtils().drawRoundedRect(x, y, width, height, radius, this.box.color);
+                    GameBridge.getChocomint().getRenderUtils().drawRoundedRect(x + this.box.lineWidth, y + this.box.lineWidth, width - this.box.lineWidth * 2, height - this.box.lineWidth * 2, radius, this.backgroundColor);
                 }else{
-                    DrawUtil.drawRoundedRect(x, y, width, height, radius, this.backgroundColor);
+                    GameBridge.getChocomint().getRenderUtils().drawRoundedRect(x, y, width, height, radius, this.backgroundColor);
                 }
             }else{
                 if(this.box != null) {
                     GL11.glColor3f(1, 1, 1);
-                    DrawUtil.drawRect(x, y, width, height, this.box.color);
-                    DrawUtil.drawRect(x + this.box.lineWidth, y + this.box.lineWidth, width - this.box.lineWidth * 2, height - this.box.lineWidth * 2, this.backgroundColor);
+                    GameBridge.getChocomint().getRenderUtils().drawRect(x, y, width, height, this.box.color);
+                    GameBridge.getChocomint().getRenderUtils().drawRect(x + this.box.lineWidth, y + this.box.lineWidth, width - this.box.lineWidth * 2, height - this.box.lineWidth * 2, this.backgroundColor);
                 }else{
-                    DrawUtil.drawRect(x, y, width, height, this.backgroundColor);
+                    GameBridge.getChocomint().getRenderUtils().drawRect(x, y, width, height, this.backgroundColor);
                 }
             }
         }
@@ -119,7 +119,7 @@ public class DrawableContainer extends IWidget{
     }
 
     public interface Drawable{
-        Box onDraw(IWidget parent, UIView ui, int parentX, int parentY, int mouseX, int mouseY, float deltaTime);
+        Box onDraw(io.undervolt.api.ui.widgets.Drawable parent, UIView ui, int parentX, int parentY, int mouseX, int mouseY, float deltaTime);
     }
 
     public static class Box{

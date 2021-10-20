@@ -2,13 +2,13 @@ package io.undervolt.api.ui.widgets;
 
 import io.undervolt.api.ui.UIView;
 
-public class Positioned extends IWidget{
+public class Positioned extends Drawable {
 
     protected Alignment alignment;
-    protected IWidget child;
+    protected Drawable child;
     protected Alignment childAlign = Alignment.TOP_LEFT;
 
-    public Positioned(Alignment alignment, IWidget child) {
+    public Positioned(Alignment alignment, Drawable child) {
         this.alignment = alignment;
         this.child = child;
         this.child.parent = this;

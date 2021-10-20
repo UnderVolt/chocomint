@@ -2,12 +2,12 @@ package io.undervolt.api.ui.widgets;
 
 import io.undervolt.api.ui.UIView;
 
-public class Expanded extends IWidget {
+public class Expanded extends Drawable {
 
-    protected IWidget child;
+    protected Drawable child;
     protected ExpandedMode mode;
 
-    public Expanded(ExpandedMode mode, IWidget child) {
+    public Expanded(ExpandedMode mode, Drawable child) {
         this.child = child;
         this.child.parent = this;
         this.mode = mode;
