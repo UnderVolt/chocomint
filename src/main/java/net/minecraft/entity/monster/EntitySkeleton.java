@@ -73,7 +73,7 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob
     protected void entityInit()
     {
         super.entityInit();
-        this.dataWatcher.addObject(13, new Byte((byte)0));
+        this.dataWatcher.addObject(13, (byte)0);
     }
 
     /**
@@ -223,7 +223,7 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob
 
     /**
      * Drop 0-2 items of this living's type
-     *  
+     *
      * @param wasRecentlyHit true if this this entity was recently hit by appropriate entity (generally only if player
      * or tameable)
      * @param lootingModifier level of enchanment to be applied to this drop

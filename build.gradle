@@ -16,18 +16,15 @@ mainClassName = 'Start'
 group 'io.undervolt.chocomint'
 version '1.1-SNAPSHOT'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.17
 
 repositories {
     mavenCentral()
     jcenter()
     maven { url 'https://jitpack.io' }
-    ivy {
-        url 'https://libraries.minecraft.net/'
-        layout 'pattern', {
-            artifact "[organisation]/[module]/[revision].[ext]"
-            m2compatible = true
-        }
+    maven {
+        url 'http://ssh.undervolt.io:9452/'
+        allowInsecureProtocol true
     }
 }
 
@@ -56,52 +53,50 @@ jar {
 }
 
 dependencies {
-    runtime 'commons-lang:commons-lang:2.6'
-    compile 'com.mojang.netty:1.6:netty-1.6@jar',
-            'oshi-project.oshi-core:1.1:oshi-core-1.1@jar',
-            'net.java.dev.jna.jna:3.4.0:jna-3.4.0@jar',
-            'net.java.dev.jna.platform:3.4.0:platform-3.4.0@jar',
-            'com.ibm.icu.icu4j-core-mojang:51.2:icu4j-core-mojang-51.2@jar',
-            'net.sf.jopt-simple.jopt-simple:4.6:jopt-simple-4.6@jar',
-            'com.paulscode.codecjorbis:20101023:codecjorbis-20101023@jar',
-            'com.paulscode.codecwav:20101023:codecwav-20101023@jar',
-            'com.paulscode.libraryjavasound:20101123:libraryjavasound-20101123@jar',
-            'com.paulscode.librarylwjglopenal:20100824:librarylwjglopenal-20100824@jar',
-            'org.lwjgl.lwjgl.lwjgl:2.9.4-nightly-20150209:lwjgl-2.9.4-nightly-20150209@jar',
-            'org.lwjgl.lwjgl.lwjgl_util:2.9.4-nightly-20150209:lwjgl_util-2.9.4-nightly-20150209@jar',
-            'org.lwjgl.lwjgl.lwjgl_util:2.9.2-nightly-20140822:lwjgl_util-2.9.2-nightly-20140822@jar',
-            'com.paulscode.soundsystem:20120107:soundsystem-20120107@jar',
-            'io.netty.netty-all:4.0.23.Final:netty-all-4.0.23.Final@jar',
-            'com.google.guava.guava:17.0:guava-17.0@jar',
-            'org.apache.commons.commons-lang3:3.3.2:commons-lang3-3.3.2@jar',
-            'commons-io.commons-io:2.4:commons-io-2.4@jar',
-            'commons-codec.commons-codec:1.9:commons-codec-1.9@jar',
-            'net.java.jinput.jinput:2.0.5:jinput-2.0.5@jar',
-            'net.java.jutils.jutils:1.0.0:jutils-1.0.0@jar',
-            'com.google.code.gson.gson:2.2.4:gson-2.2.4@jar',
-            'com.mojang.authlib:1.5.21:authlib-1.5.21@jar',
-            'com.mojang.realms:1.7.59:realms-1.7.59@jar',
-            'org.apache.commons.commons-compress:1.8.1:commons-compress-1.8.1@jar',
-            'org.apache.httpcomponents.httpclient:4.3.3:httpclient-4.3.3@jar',
-            'commons-logging.commons-logging:1.1.3:commons-logging-1.1.3@jar',
-            'org.apache.httpcomponents.httpcore:4.3.2:httpcore-4.3.2@jar',
-            'org.apache.logging.log4j.log4j-api:2.0-beta9:log4j-api-2.0-beta9@jar',
-            'org.apache.logging.log4j.log4j-core:2.0-beta9:log4j-core-2.0-beta9@jar',
-            'tv.twitch.twitch:6.5:twitch-6.5@jar',
-            'tv.twitch.twitch-platform:6.5:twitch-platform-6.5-natives-windows-32@jar',
-            'tv.twitch.twitch-platform:6.5:twitch-platform-6.5-natives-windows-64@jar',
-            'tv.twitch.twitch-external-platform:4.5:twitch-external-platform-4.5-natives-windows-32@jar',
-            'tv.twitch.twitch-external-platform:4.5:twitch-external-platform-4.5-natives-windows-64@jar',
-            'net.java.jinput.jinput-platform:2.0.5:jinput-platform-2.0.5-natives-windows@jar',
-            'org.lwjgl.lwjgl.lwjgl-platform:2.9.2-nightly-20140822:lwjgl-platform-2.9.2-nightly-20140822-natives-linux@jar',
-            'org.lwjgl.lwjgl.lwjgl-platform:2.9.4-nightly-20150209:lwjgl-platform-2.9.4-nightly-20150209-natives-windows@jar',
-            'net.java.jinput.jinput-platform:2.0.5:jinput-platform-2.0.5-natives-linux@jar',
-            'org.jsoup:jsoup:1.12.1'
-
+    runtimeOnly 'commons-lang:commons-lang:2.6'
+    implementation 'com.mojang.netty:netty:1.6',
+                    'oshi-project.oshi-core:oshi-core:1.1',
+                    'net.java.dev.jna.jna:jna:3.4.0',
+                    'net.java.dev.jna.platform:platform:3.4.0',
+                    'com.ibm.icu.icu4j-core-mojang:icu4j-core-mojang:51.2',
+                    'net.sf.jopt-simple.jopt-simple:jopt-simple:4.6',
+                    'com.paulscode.codecjorbis:codecjorbis:20101023',
+                    'com.paulscode.codecwav:codecwav:20101023',
+                    'com.paulscode.libraryjavasound:libraryjavasound:20101123',
+                    'com.paulscode.librarylwjglopenal:librarylwjglopenal:20100824',
+                    'org.lwjgl.lwjgl.lwjgl:lwjgl:2.9.4-nightly-20150209',
+                    'org.lwjgl.lwjgl.lwjgl_util:lwjgl_util:2.9.4-nightly-20150209',
+                    'org.lwjgl.lwjgl.lwjgl_util:lwjgl_util:2.9.2-nightly-20140822',
+                    'com.paulscode.soundsystem:soundsystem:20120107',
+                    'io.netty.netty-all:netty-all:4.0.23.Final',
+                    'com.google.guava.guava:guava:17.0',
+                    'org.apache.commons.commons-lang3:commons-lang3:3.3.2',
+                    'commons-io.commons-io:commons-io:2.4',
+                    'commons-codec.commons-codec:commons-codec:1.9',
+                    'net.java.jinput.jinput:jinput:2.0.5',
+                    'net.java.jutils.jutils:jutils:1.0.0',
+                    'com.google.code.gson.gson:gson:2.2.4',
+                    'com.mojang.authlib:authlib:1.5.21',
+                    'com.mojang.realms:realms:1.7.59',
+                    'org.apache.commons.commons-compress:commons-compress:1.8.1',
+                    'org.apache.httpcomponents.httpclient:httpclient:4.3.3',
+                    'commons-logging.commons-logging:commons-logging:1.1.3',
+                    'org.apache.httpcomponents.httpcore:httpcore:4.3.2',
+                    'org.apache.logging.log4j.log4j-api:log4j-api:2.0-beta9',
+                    'org.apache.logging.log4j.log4j-core:log4j-core:2.0-beta9',
+                    'tv.twitch.twitch:twitch:6.5',
+                    'tv.twitch.twitch-platform:twitch-platform-6.5-natives-windows-64:6.5-vrq',
+                    'tv.twitch.twitch-external-platform:twitch-external-platform-4.5-natives-windows-64:4.5-vrq',
+                    'net.java.jinput.jinput-platform:jinput-platform-2.0.5-natives-windows:2.0.5-vrq',
+                    'org.lwjgl.lwjgl.lwjgl-platform:lwjgl-platform-2.9.2-nightly-20140822-natives-linux:2.9.2-nightly-20140822-vrq',
+                    'org.lwjgl.lwjgl.lwjgl-platform:lwjgl-platform-2.9.4-nightly-20150209-natives-windows:2.9.4-nightly-20150209-vrq',
+                    'net.java.jinput.jinput-platform:jinput-platform-2.0.5-natives-linux:2.0.5-vrq',
+                    'org.jsoup:jsoup:1.12.1'
     extraLibs 'com.google.guava:guava:28.1-jre',
             'com.github.Vatuu:discord-rpc:1.6.2',
             'io.socket:socket.io-client:1.0.0'
-    configurations.compile.extendsFrom(configurations.extraLibs)
+    configurations.implementation.extendsFrom(configurations.extraLibs)
+    configurations.runtime.extendsFrom(configurations.implementation)
 }
 
 run {
@@ -113,8 +108,9 @@ run {
 
 task unzipNatives(type: Copy) {
     println "Unzipping natives:"
-    configurations.runtime.each { 
-        if(it.name.contains("natives")){
+    duplicatesStrategy = 'include'
+    configurations.runtime.each {
+        if(it.name.contains("natives") && !it.name.contains(".dll")){
             println " * "+it.name
             from(zipTree(it))
         }
@@ -123,6 +119,7 @@ task unzipNatives(type: Copy) {
 }
 
 task copyAssets(type: Copy) {
+    duplicatesStrategy = 'exclude'
     println "Copying assets from: " + currentOs()
     from currentOs()+"/assets"
     into "jars/assets"

@@ -3,6 +3,8 @@ package net.minecraft.client.network;
 import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
 import java.io.File;
@@ -13,6 +15,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.Map.Entry;
+import java.util.concurrent.Executors;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.client.Minecraft;
@@ -1702,7 +1706,7 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
     {
         final String s = packetIn.getURL();
         final String s1 = packetIn.getHash();
-
+        ListeningExecutorService executor = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
         if (s.startsWith("level://"))
         {
             String s2 = s.substring("level://".length());
@@ -1722,7 +1726,7 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
                     {
                         NetHandlerPlayClient.this.netManager.sendPacket(new C19PacketResourcePackStatus(s1, C19PacketResourcePackStatus.Action.FAILED_DOWNLOAD));
                     }
-                });
+                }, executor);
             }
             else
             {
@@ -1744,7 +1748,7 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
                     {
                         NetHandlerPlayClient.this.netManager.sendPacket(new C19PacketResourcePackStatus(s1, C19PacketResourcePackStatus.Action.FAILED_DOWNLOAD));
                     }
-                });
+                }, executor);
             }
             else if (this.gameController.getCurrentServerData() != null && this.gameController.getCurrentServerData().getResourceMode() != ServerData.ServerResourceMode.PROMPT)
             {
@@ -1780,7 +1784,7 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
                                         {
                                             NetHandlerPlayClient.this.netManager.sendPacket(new C19PacketResourcePackStatus(s1, C19PacketResourcePackStatus.Action.FAILED_DOWNLOAD));
                                         }
-                                    });
+                                    }, executor);
                                 }
                                 else
                                 {

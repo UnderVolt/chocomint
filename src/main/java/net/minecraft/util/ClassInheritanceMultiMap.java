@@ -1,5 +1,6 @@
 package net.minecraft.util;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -138,7 +139,7 @@ public class ClassInheritanceMultiMap<T> extends AbstractSet<T>
 
                 if (list == null)
                 {
-                    return Iterators.<S>emptyIterator();
+                    return ImmutableSet.<S>of().iterator();
                 }
                 else
                 {
@@ -151,7 +152,7 @@ public class ClassInheritanceMultiMap<T> extends AbstractSet<T>
 
     public Iterator<T> iterator()
     {
-        return (Iterator<T>)(this.values.isEmpty() ? Iterators.emptyIterator() : IteratorCache.getReadOnly(this.values));
+        return (Iterator<T>)(this.values.isEmpty() ? ImmutableSet.of().iterator() : IteratorCache.getReadOnly(this.values));
     }
 
     public int size()

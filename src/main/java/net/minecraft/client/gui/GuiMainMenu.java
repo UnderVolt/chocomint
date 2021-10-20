@@ -16,8 +16,6 @@ import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
 import io.undervolt.gui.chat.Chat;
-import io.undervolt.gui.menu.DeclarativeMenu;
-import io.undervolt.gui.notifications.NotificationDeclarativeScreen;
 import io.undervolt.gui.user.UserDeclarativeMenu;
 import io.undervolt.gui.user.UserSearch;
 import io.undervolt.instance.Chocomint;
@@ -349,8 +347,8 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
 
         if (button.id == 1)
         {
-            this.chocomint.displayMenuOrPanel(new UserDeclarativeMenu(this));
-            //this.mc.displayGuiScreen(new GuiSelectWorld(this));
+            //this.chocomint.displayMenuOrPanel(new UserDeclarativeMenu(this));
+            this.mc.displayGuiScreen(new GuiSelectWorld(this));
         }
 
         if (button.id == 2)

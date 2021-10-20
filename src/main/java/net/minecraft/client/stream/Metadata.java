@@ -1,5 +1,6 @@
 package net.minecraft.client.stream;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
@@ -78,6 +79,6 @@ public class Metadata
 
     public String toString()
     {
-        return Objects.toStringHelper(this).add("name", this.name).add("description", this.description).add("data", this.func_152806_b()).toString();
+        return MoreObjects.toStringHelper(this).add("name", this.name).add("description", this.description).add("data", this.func_152806_b()).toString();
     }
 }

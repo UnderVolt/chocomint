@@ -108,12 +108,12 @@ public class EntitySheep extends EntityAnimal
     protected void entityInit()
     {
         super.entityInit();
-        this.dataWatcher.addObject(16, new Byte((byte)0));
+        this.dataWatcher.addObject(16, (byte)0);
     }
 
     /**
      * Drop 0-2 items of this living's type
-     *  
+     *
      * @param wasRecentlyHit true if this this entity was recently hit by appropriate entity (generally only if player
      * or tameable)
      * @param lootingModifier level of enchanment to be applied to this drop

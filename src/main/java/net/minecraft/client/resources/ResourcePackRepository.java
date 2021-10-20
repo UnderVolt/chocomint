@@ -7,6 +7,8 @@ import com.google.common.io.Files;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.SettableFuture;
 import java.awt.image.BufferedImage;
 import java.io.Closeable;
@@ -18,6 +20,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreenWorking;
@@ -228,6 +231,7 @@ public class ResourcePackRepository
             }));
             final SettableFuture<Object> settablefuture = SettableFuture.<Object>create();
             this.downloadingPacks = HttpUtil.downloadResourcePack(file1, url, map, 52428800, guiscreenworking, minecraft.getProxy());
+            ListeningExecutorService executor = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
             Futures.addCallback(this.downloadingPacks, new FutureCallback<Object>()
             {
                 public void onSuccess(Object p_onSuccess_1_)
@@ -239,10 +243,9 @@ public class ResourcePackRepository
                 {
                     settablefuture.setException(p_onFailure_1_);
                 }
-            });
-            ListenableFuture listenablefuture = this.downloadingPacks;
-            ListenableFuture listenablefuture11 = listenablefuture;
-            return listenablefuture11;
+            }, executor);
+            ListenableFuture<Object> listenablefuture = this.downloadingPacks;
+            return listenablefuture;
         }
         finally
         {

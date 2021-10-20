@@ -1251,7 +1251,7 @@ public class ConnectedParser
                 }
                 else
                 {
-                    set.add(new Integer(j));
+                    set.add(j);
                 }
             }
         }
@@ -1278,7 +1278,7 @@ public class ConnectedParser
             }
             else
             {
-                set.add(new Integer(j));
+                set.add(j);
             }
         }
 

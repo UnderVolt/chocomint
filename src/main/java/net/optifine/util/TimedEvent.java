@@ -14,9 +14,8 @@ public class TimedEvent
             long i = System.currentTimeMillis();
             Long olong = (Long)mapEventTimes.get(name);
 
-            if (olong == null)
-            {
-                olong = new Long(i);
+            if (olong == null) {
+                olong = i;
                 mapEventTimes.put(name, olong);
             }
 
@@ -28,7 +27,7 @@ public class TimedEvent
             }
             else
             {
-                mapEventTimes.put(name, new Long(i));
+                mapEventTimes.put(name, i);
                 return true;
             }
         }

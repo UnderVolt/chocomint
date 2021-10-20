@@ -2,7 +2,7 @@ package io.undervolt.api.event;
 
 
 import io.undervolt.api.event.event.Cancellable;
-import io.undervolt.api.event.event.Event;;
+import io.undervolt.api.event.event.Event;
 import io.undervolt.api.event.handler.EventHandler;
 import io.undervolt.api.event.handler.EventPriority;
 import io.undervolt.api.event.handler.Listener;
@@ -25,7 +25,7 @@ public class EventManager {
 			if(h == null)continue;
 			handlers.add(new RegistredHandler(l,m));
 		}
-		
+
 	}
 
 	public void unregisterEvents(Listener l){

@@ -4,9 +4,14 @@ import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CancellationException;
+import java.util.concurrent.Executors;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RegionRenderCacheBuilder;
 import net.minecraft.crash.CrashReport;
@@ -56,6 +61,7 @@ public class ChunkRenderWorker implements Runnable
 
     protected void processTask(final ChunkCompileTaskGenerator generator) throws InterruptedException
     {
+        ListeningExecutorService executor = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
         generator.getLock().lock();
 
         try
@@ -187,7 +193,7 @@ public class ChunkRenderWorker implements Runnable
                         Minecraft.getMinecraft().crashed(CrashReport.makeCrashReport(p_onFailure_1_, "Rendering chunk"));
                     }
                 }
-            });
+            }, executor);
         }
     }
 

@@ -186,7 +186,7 @@ public class DynamicLights
 
                         if (j >= 0 && j <= 15)
                         {
-                            mapLightLevels.put(object, new Integer(j));
+                            mapLightLevels.put(object, j);
                         }
                         else
                         {

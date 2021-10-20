@@ -1,5 +1,6 @@
 package net.optifine;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterators;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -144,7 +145,7 @@ public class NextTickHashSet extends TreeSet
         }
         else if (this.size() <= 0)
         {
-            return Iterators.emptyIterator();
+            return ImmutableSet.of().iterator();
         }
         else
         {
@@ -169,7 +170,7 @@ public class NextTickHashSet extends TreeSet
 
             if (list.size() <= 0)
             {
-                return Iterators.emptyIterator();
+                return ImmutableSet.of().iterator();
             }
             else if (list.size() == 1)
             {

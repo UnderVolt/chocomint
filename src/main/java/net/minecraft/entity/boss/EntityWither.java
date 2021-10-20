@@ -76,10 +76,10 @@ public class EntityWither extends EntityMob implements IBossDisplayData, IRanged
     protected void entityInit()
     {
         super.entityInit();
-        this.dataWatcher.addObject(17, new Integer(0));
-        this.dataWatcher.addObject(18, new Integer(0));
-        this.dataWatcher.addObject(19, new Integer(0));
-        this.dataWatcher.addObject(20, new Integer(0));
+        this.dataWatcher.addObject(17, 0);
+        this.dataWatcher.addObject(18, 0);
+        this.dataWatcher.addObject(19, 0);
+        this.dataWatcher.addObject(20, 0);
     }
 
     /**
@@ -555,7 +555,7 @@ public class EntityWither extends EntityMob implements IBossDisplayData, IRanged
 
     /**
      * Drop 0-2 items of this living's type
-     *  
+     *
      * @param wasRecentlyHit true if this this entity was recently hit by appropriate entity (generally only if player
      * or tameable)
      * @param lootingModifier level of enchanment to be applied to this drop

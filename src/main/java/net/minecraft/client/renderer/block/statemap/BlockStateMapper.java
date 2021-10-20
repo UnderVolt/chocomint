@@ -1,5 +1,6 @@
 package net.minecraft.client.renderer.block.statemap;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -33,7 +34,7 @@ public class BlockStateMapper
         {
             if (!this.setBuiltInBlocks.contains(block))
             {
-                map.putAll(((IStateMapper)Objects.firstNonNull(this.blockStateMap.get(block), new DefaultStateMapper())).putStateModelLocations(block));
+                map.putAll(((IStateMapper)MoreObjects.firstNonNull(this.blockStateMap.get(block), new DefaultStateMapper())).putStateModelLocations(block));
             }
         }
 
