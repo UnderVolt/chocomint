@@ -8,6 +8,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
+
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 
 public class RenderUtils extends Gui {
@@ -16,6 +18,14 @@ public class RenderUtils extends Gui {
 
     public RenderUtils(final Minecraft mc) {
         this.mc = mc;
+    }
+
+    public void drawRect(float x, float y, float width, float height, int color){
+        Gui.drawRect(x,y, x + width, y + height, color);
+    }
+
+    public void drawRect(float x, float y, float width, float height, Color c){
+        drawRect(x,y,width,height,c.getRGB());
     }
 
     public void drawFilledCircle(int xx, int yy, float radius, int col) {
@@ -127,6 +137,10 @@ public class RenderUtils extends Gui {
         GL11.glEnable(GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
+    }
+
+    public void drawRoundedRect(float x, float y, float w, float h, float radius, Color color){
+        this.drawRoundedRect(x, y, w, h, radius, color.getRGB());
     }
 
     public void drawRoundedRect(float x, float y, float w, float h, float radius, int color){
