@@ -1,6 +1,6 @@
 package io.undervolt.api.ui.widgets;
 
-import io.undervolt.api.ui.UIView;
+import io.undervolt.api.ui.Screen;
 import net.minecraft.client.Minecraft;
 
 public class Drawable implements Cloneable{
@@ -10,7 +10,7 @@ public class Drawable implements Cloneable{
     protected Drawable parent;
     protected final Minecraft mc = Minecraft.getMinecraft();
     public void init(){}
-    public void draw(UIView ui, int x, int y, int mouseX, int mouseY, float deltaTime){}
+    public void draw(Screen ui, int x, int y, int mouseX, int mouseY, float deltaTime){}
     public void onPress(int x, int y, int button){}
     public void onRelease(int x, int y, int button){}
     public void onDrag(int x, int y, int button, long timeSinceLastClick){}

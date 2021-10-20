@@ -1,6 +1,6 @@
 package io.undervolt.api.ui.widgets;
 
-import io.undervolt.api.ui.UIView;
+import io.undervolt.api.ui.Screen;
 
 public class Padding extends Drawable {
 
@@ -19,7 +19,7 @@ public class Padding extends Drawable {
     }
 
     @Override
-    public void draw(UIView ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
+    public void draw(Screen ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
         this.width = this.child.getWidth() + this.padding.right + this.padding.left;
         this.height = this.child.getHeight() + this.padding.bottom + this.padding.top;
         this.child.draw(ui, x + this.padding.left, y + this.padding.top, mouseX, mouseY, deltaTime);

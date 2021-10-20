@@ -1,6 +1,6 @@
 package io.undervolt.api.ui.widgets;
 
-import io.undervolt.api.ui.UIView;
+import io.undervolt.api.ui.Screen;
 import io.undervolt.utils.MathUtil;
 import org.lwjgl.input.Mouse;
 
@@ -18,7 +18,7 @@ public class Scrollable extends Drawable {
     }
 
     @Override
-    public void draw(UIView ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
+    public void draw(Screen ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
         float size = this.direction.equals(ScrollDirection.ROW) ? this.child.width : this.child.height;
         float parentSize = this.direction.equals(ScrollDirection.ROW) ? this.parent.width : this.parent.height;
         float pos = this.direction.equals(ScrollDirection.ROW) ? x : y;
@@ -33,7 +33,7 @@ public class Scrollable extends Drawable {
             if(size > parentSize && (pos - this.scrollModifier) >= pos){
                 if(tmp){
                     this.dWheelVal += Mouse.getDWheel();
-                    this.scrollModifier = MathUtil.Lerp(this.scrollModifier, this.dWheelVal, deltaTime * 2);
+                    this.scrollModifier = MathUtil.Lerp(this.scrollModifier, this.dWheelVal, 0.7f);
                 }else{
                     int tmp2 = (int) -Math.ceil(size - parentSize);
                     this.dWheelVal = tmp2;

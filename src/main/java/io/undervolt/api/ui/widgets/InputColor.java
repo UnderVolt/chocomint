@@ -1,7 +1,7 @@
 package io.undervolt.api.ui.widgets;
 
 import com.google.common.collect.Lists;
-import io.undervolt.api.ui.UIView;
+import io.undervolt.api.ui.Screen;
 import io.undervolt.api.ui.widgets.controllers.ColorSelectController;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.utils.OverlayUtils;
@@ -65,7 +65,7 @@ public class InputColor extends Drawable implements IgnoreOverflow {
     }
 
     @Override
-    public void draw(UIView ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
+    public void draw(Screen ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
 
         if(!this.alreadyInit){
             this.btns.add(new ICBtn("O", this.buttonDefaultColor, this.buttonHoverColor, (int) (x + this.width - 17),  (int) (y + this.height - 17), 15, 15, (c, mX, mY) -> {
@@ -231,7 +231,7 @@ public class InputColor extends Drawable implements IgnoreOverflow {
             this.loc = icon;
         }
 
-        public void drawBtn(UIView ui, int mouseX, int mouseY, float deltaTime){
+        public void drawBtn(Screen ui, int mouseX, int mouseY, float deltaTime){
             this.hovered = mouseX > this.x && mouseY > this.y && mouseX < this.x + this.w && mouseY < this.y + this.h;
 
             this.currentColor = VColor.Lerp(this.defaultColor, this.hoverColor, deltaTime * 1);

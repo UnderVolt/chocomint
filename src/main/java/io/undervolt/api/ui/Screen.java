@@ -12,11 +12,13 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
-public abstract class UIView extends AnimationUI {
+public abstract class Screen extends AnimationUI {
 
-    protected List<Drawable> widgets = Lists.newArrayList();
+    protected Drawable[] children;
+    private List<Drawable> widgets = Lists.newArrayList();
 
     public final Minecraft minecraft = Minecraft.getMinecraft();
     public final Chocomint chocomint = GameBridge.getChocomint();
@@ -41,6 +43,7 @@ public abstract class UIView extends AnimationUI {
         this.oldTime = this.newTime;
         this.newTime = Minecraft.getSystemTime() / 1000.0f;
         this.load();
+        this.addWidgets(children);
         this.deltaTime = this.newTime - this.oldTime;
     }
 

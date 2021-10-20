@@ -1,6 +1,6 @@
 package io.undervolt.gui.menu;
 
-import io.undervolt.api.ui.UIView;
+import io.undervolt.api.ui.Screen;
 import io.undervolt.api.ui.widgets.*;
 import io.undervolt.api.ui.widgets.Drawable;
 import io.undervolt.api.ui.widgets.Container;
@@ -15,7 +15,7 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 import java.io.IOException;
 
-public class DeclarativeMenu extends UIView {
+public class DeclarativeMenu extends Screen {
 
     private final GuiScreen previousScreen;
 
@@ -54,16 +54,15 @@ public class DeclarativeMenu extends UIView {
         this(prev, menuName, MenuColor.DEFAULT, menuIcon);
     }
 
-    public Drawable items() { return null; }
+    protected Drawable[] menuChildren;
 
-    @Override
-    public void load() {
+    @Override public void load() {
 
         this.bracketLayer1 = this.getBracket(1);
         this.bracketLayer2 = this.getBracket(2);
         this.bracketLayer3 = this.getBracket(3);
 
-        this.addWidgets(
+        children = new Drawable[] {
                 new Scrollable(
                         ScrollDirection.COLUMN,
                         new Padding(
@@ -88,12 +87,14 @@ public class DeclarativeMenu extends UIView {
                                                                 ).crossAxisAlign(AxisAlignment.END)
                                                         )
                                                 ).setBackgroundColor(getMenuTitleColor()),
-                                                this.items()
+                                                new Column(menuChildren)
                                         )
                                 ).setBackgroundColor(getMenuContentColor())
                         )
                 )
-        );
+        };
+
+        super.load();
     }
 
     @Override

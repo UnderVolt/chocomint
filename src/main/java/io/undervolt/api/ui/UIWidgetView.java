@@ -3,7 +3,7 @@ package io.undervolt.api.ui;
 import io.undervolt.api.ui.widgets.Drawable;
 import java.io.IOException;
 
-public abstract class UIWidgetView extends UIView {
+public abstract class UIWidgetView extends Screen {
 
     public void initView(){}
     public abstract Drawable build();

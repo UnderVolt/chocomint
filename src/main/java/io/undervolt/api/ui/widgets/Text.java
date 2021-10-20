@@ -1,6 +1,6 @@
 package io.undervolt.api.ui.widgets;
 
-import io.undervolt.api.ui.UIView;
+import io.undervolt.api.ui.Screen;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -16,7 +16,7 @@ public class Text extends Drawable {
     }
 
     @Override
-    public void draw(UIView ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
+    public void draw(Screen ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
         this.width = ui.fontRendererObj.getStringWidth(this.text) * this.style.scale;
         this.height = ui.fontRendererObj.FONT_HEIGHT * this.style.scale;
         switch (this.style.align){
