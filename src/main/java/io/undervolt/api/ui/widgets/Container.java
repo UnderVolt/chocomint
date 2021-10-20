@@ -1,32 +1,30 @@
 package io.undervolt.api.ui.widgets;
 
 import io.undervolt.api.ui.UIView;
-import io.undervolt.utils.DrawUtil;
+import io.undervolt.bridge.GameBridge;
 import io.undervolt.utils.GFXUtil;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
-public class Container extends IWidget{
+public class Container extends Drawable {
 
     protected Color backgroundColor;
     protected EdgeInsets radius;
     protected Alignment alignment;
     protected boolean overflowHidden;
     protected BorderBox box;
-    protected boolean limitWidthToParent = false;
-    protected boolean limitHeightToParent = false;
 
-    protected IWidget child;
+    protected Drawable child;
 
-    public Container(float width, float height, IWidget child) {
+    public Container(float width, float height, Drawable child) {
         this.width = width;
         this.height = height;
         this.child = child;
         this.child.parent = this;
     }
 
-    public Container(IWidget child) {
+    public Container(Drawable child) {
         this.child = child;
         this.child.parent = this;
     }
@@ -57,7 +55,7 @@ public class Container extends IWidget{
         return this;
     }
 
-    public Container setChild(IWidget child) {
+    public Container setChild(Drawable child) {
         this.child = child;
         this.child.parent = this;
         child.init();
@@ -79,13 +77,13 @@ public class Container extends IWidget{
         return this;
     }
 
-    public Container limitWidthToParent(boolean limitWidthToParent) {
-        this.limitWidthToParent = limitWidthToParent;
+    public Container limitWidthToParent() {
+        this.width = parent.width;
         return this;
     }
 
-    public Container limitHeightToParent(boolean limitHeightToParent) {
-        this.limitHeightToParent = limitHeightToParent;
+    public Container limitHeightToParent() {
+        this.height = parent.height;
         return this;
     }
 
@@ -119,21 +117,22 @@ public class Container extends IWidget{
 
     @Override
     public void draw(UIView ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
-
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glColor3f(1, 1, 1);
         if(this.backgroundColor != null){
              if(this.radius != null){
                  if(this.box != null) {
-                     DrawUtil.drawRoundedRect(x, y, x + width,  y +height, radius.top, radius.left, radius.right, radius.bottom, this.box.color.getRGB());
-                     DrawUtil.drawRoundedRect(x + this.box.lineWidth, y + this.box.lineWidth, x + width - this.box.lineWidth * 2, y + height - this.box.lineWidth * 2, radius.top, radius.left, radius.right, radius.bottom, this.backgroundColor.getRGB());
+                     GameBridge.getChocomint().getRenderUtils().drawRoundedRect(x, y, x + width,  y +height, radius.top, radius.left, radius.right, radius.bottom, this.box.color.getRGB());
+                     GameBridge.getChocomint().getRenderUtils().drawRoundedRect(x + this.box.lineWidth, y + this.box.lineWidth, x + width - this.box.lineWidth * 2, y + height - this.box.lineWidth * 2, radius.top, radius.left, radius.right, radius.bottom, this.backgroundColor.getRGB());
                  }else{
-                     DrawUtil.drawRoundedRect(x, y, x + width, y + height, radius.top, radius.left, radius.right, radius.bottom, this.backgroundColor.getRGB());
+                     GameBridge.getChocomint().getRenderUtils().drawRoundedRect(x, y, x + width, y + height, radius.top, radius.left, radius.right, radius.bottom, this.backgroundColor.getRGB());
                  }
              }else{
                  if(this.box != null) {
-                     DrawUtil.drawRect(x, y, width, height, this.box.color);
-                     DrawUtil.drawRect(x + this.box.lineWidth, y + this.box.lineWidth, width - this.box.lineWidth * 2, height - this.box.lineWidth * 2, this.backgroundColor);
+                     GameBridge.getChocomint().getRenderUtils().drawRect(x, y, width, height, this.box.color);
+                     GameBridge.getChocomint().getRenderUtils().drawRect(x + this.box.lineWidth, y + this.box.lineWidth, width - this.box.lineWidth * 2, height - this.box.lineWidth * 2, this.backgroundColor);
                  }else{
-                     DrawUtil.drawRect(x, y, width, height, this.backgroundColor);
+                     GameBridge.getChocomint().getRenderUtils().drawRect(x, y, width, height, this.backgroundColor);
                  }
              }
         }

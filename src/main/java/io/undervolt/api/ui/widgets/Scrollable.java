@@ -1,18 +1,17 @@
 package io.undervolt.api.ui.widgets;
 
-import com.google.common.collect.Lists;
 import io.undervolt.api.ui.UIView;
 import io.undervolt.utils.MathUtil;
 import org.lwjgl.input.Mouse;
 
-public class Scrollable extends IWidget {
+public class Scrollable extends Drawable {
 
     protected int dWheelVal = 0;
     protected float scrollModifier = 0;
     protected ScrollDirection direction;
-    protected IWidget child;
+    protected Drawable child;
 
-    public Scrollable(ScrollDirection direction, IWidget child) {
+    public Scrollable(ScrollDirection direction, Drawable child) {
         this.direction = direction;
         this.child = child;
         this.child.parent = this;

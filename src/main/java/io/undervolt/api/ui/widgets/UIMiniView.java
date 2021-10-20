@@ -8,9 +8,9 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
-public class UIMiniView extends IWidget{
+public class UIMiniView extends Drawable {
 
-    protected List<IWidget> widgets = Lists.newArrayList();
+    protected List<Drawable> widgets = Lists.newArrayList();
 
     protected List<GuiButton> buttonList = Lists.newArrayList();
     protected int wX = 0;
@@ -64,8 +64,8 @@ public class UIMiniView extends IWidget{
         this.widgets.forEach(w -> w.onDrag(x - this.wX, y - this.wY, button, timeSinceLastClick));
     }
 
-    public void addWidgets(IWidget... widgets){
-        for (IWidget w : widgets) {
+    public void addWidgets(Drawable... widgets){
+        for (Drawable w : widgets) {
             this.widgets.add(new Container(this.width, this.height).setChild(w));
             w.init();
         }

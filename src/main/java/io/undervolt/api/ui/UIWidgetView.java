@@ -1,16 +1,16 @@
 package io.undervolt.api.ui;
 
-import io.undervolt.api.ui.widgets.IWidget;
+import io.undervolt.api.ui.widgets.Drawable;
 import java.io.IOException;
 
 public abstract class UIWidgetView extends UIView {
 
     public void initView(){}
-    public abstract IWidget build();
-    private IWidget baseInstance;
+    public abstract Drawable build();
+    private Drawable baseInstance;
 
     @Override
-    public void initUI() {
+    public void load() {
         this.baseInstance = this.build();
         this.baseInstance.init();
     }
@@ -22,7 +22,7 @@ public abstract class UIWidgetView extends UIView {
     }
 
     @Override
-    public void drawUI(int mouseX, int mouseY, float deltaTime) {
+    public void update(int mouseX, int mouseY, float deltaTime) {
         if(this.minecraft.theWorld == null) this.drawDefaultBackground();
         this.baseInstance.draw(this, 0, 0, mouseX, mouseY, deltaTime);
     }

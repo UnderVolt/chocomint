@@ -3,11 +3,11 @@ package io.undervolt.api.ui.widgets;
 import io.undervolt.api.ui.UIView;
 import net.minecraft.client.Minecraft;
 
-public class  implements Cloneable{
+public class Drawable implements Cloneable{
 
     protected float width;
     protected float height;
-    protected  parent;
+    protected Drawable parent;
     protected final Minecraft mc = Minecraft.getMinecraft();
     public void init(){}
     public void draw(UIView ui, int x, int y, int mouseX, int mouseY, float deltaTime){}
@@ -15,7 +15,7 @@ public class  implements Cloneable{
     public void onRelease(int x, int y, int button){}
     public void onDrag(int x, int y, int button, long timeSinceLastClick){}
 
-    public  getParent() {
+    public Drawable getParent() {
         return parent;
     }
 
@@ -27,12 +27,12 @@ public class  implements Cloneable{
         return height;
     }
 
-    public  copyWidget(){
+    public Drawable copyWidget(){
         try {
-            return () super.clone();
+            return (Drawable) super.clone();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
-        return new ();
+        return new Drawable();
     }
 }

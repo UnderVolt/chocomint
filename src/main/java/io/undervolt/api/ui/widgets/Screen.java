@@ -2,11 +2,11 @@ package io.undervolt.api.ui.widgets;
 
 import io.undervolt.api.ui.UIView;
 
-public class Screen extends IWidget {
+public class Screen extends Drawable {
 
-    protected IWidget child;
+    protected Drawable child;
 
-    public Screen(IWidget child) {
+    public Screen(Drawable child) {
         this.child = child;
         this.child.parent = this;
     }

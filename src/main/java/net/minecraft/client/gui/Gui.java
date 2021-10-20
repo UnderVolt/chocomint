@@ -47,18 +47,18 @@ public class Gui
     /**
      * Draws a solid color rectangle with the specified coordinates and color (ARGB format). Args: x1, y1, x2, y2, color
      */
-    public static void drawRect(int left, int top, int right, int bottom, int color)
+    public static void drawRect(float left, float top, float right, float bottom, long color)
     {
         if (left < right)
         {
-            int i = left;
+            float i = left;
             left = right;
             right = i;
         }
 
         if (top < bottom)
         {
-            int j = top;
+            float j = top;
             top = bottom;
             bottom = j;
         }
@@ -74,10 +74,10 @@ public class Gui
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         GlStateManager.color(f, f1, f2, f3);
         worldrenderer.begin(7, DefaultVertexFormats.POSITION);
-        worldrenderer.pos((double)left, (double)bottom, 0.0D).endVertex();
-        worldrenderer.pos((double)right, (double)bottom, 0.0D).endVertex();
-        worldrenderer.pos((double)right, (double)top, 0.0D).endVertex();
-        worldrenderer.pos((double)left, (double)top, 0.0D).endVertex();
+        worldrenderer.pos(left, bottom, 0.0D).endVertex();
+        worldrenderer.pos(right, bottom, 0.0D).endVertex();
+        worldrenderer.pos(right, top, 0.0D).endVertex();
+        worldrenderer.pos(left, top, 0.0D).endVertex();
         tessellator.draw();
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
@@ -184,7 +184,7 @@ public class Gui
     /**
      * Draws a textured rectangle at z = 0. Args: x, y, u, v, width, height, textureWidth, textureHeight
      */
-    public static void drawModalRectWithCustomSizedTexture(int x, int y, float u, float v, int width, int height, float textureWidth, float textureHeight)
+    public static void drawModalRectWithCustomSizedTexture(float x, float y, float u, float v, int width, int height, float textureWidth, float textureHeight)
     {
         float f = 1.0F / textureWidth;
         float f1 = 1.0F / textureHeight;

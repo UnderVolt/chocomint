@@ -3,7 +3,7 @@ package io.undervolt.api.ui.widgets;
 import com.google.common.collect.Lists;
 import io.undervolt.api.ui.UIView;
 import io.undervolt.api.ui.widgets.controllers.ColorSelectController;
-import io.undervolt.utils.DrawUtil;
+import io.undervolt.bridge.GameBridge;
 import io.undervolt.utils.OverlayUtils;
 import io.undervolt.utils.VColor;
 import net.minecraft.client.Minecraft;
@@ -15,7 +15,7 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class InputColor extends IWidget implements IgnoreOverflow {
+public class InputColor extends Drawable implements IgnoreOverflow {
 
     protected ColorSelectController controller;
     protected Color indicatorColor = new VColor(50);
@@ -111,7 +111,7 @@ public class InputColor extends IWidget implements IgnoreOverflow {
 
             /* Vars & Background */
             this.currentColor = VColor.getHSBAColor(((this.width * 0.5f) - (sliderX + 15 - this.currentH)) / (this.width * 0.5f), (this.currentS - x) / this.width, (tmpHeight + y - this.currentL) / tmpHeight, (1 + ((sliderX + 15 - this.currentO) / (this.width * 0.5f))) * maxAlpha);
-            DrawUtil.drawRect(x, y, this.width, this.height, this.backgroundColor);
+            GameBridge.getChocomint().getRenderUtils().drawRect(x, y, this.width, this.height, this.backgroundColor);
 
             /* Rainbow */
             if(this.controller.isRainbow()){
@@ -125,13 +125,13 @@ public class InputColor extends IWidget implements IgnoreOverflow {
             for (float r = 0; r < this.width; r += tmpWidth){
                 for (float r1 = 0; r1 < tmpHeight; r1 += tmpWidth) {
                     Color c = Color.getHSBColor(((this.width * 0.5f) - (sliderX + 15 - this.currentH)) / (this.width * 0.5f), (r / this.width), (r1 / tmpHeight));
-                    DrawUtil.drawRect(x + r, (y + (tmpHeight - r1)) - tmpWidth, tmpWidth, tmpWidth, c.getRGB());
+                    GameBridge.getChocomint().getRenderUtils().drawRect(x + r, (y + (tmpHeight - r1)) - tmpWidth, tmpWidth, tmpWidth, c.getRGB());
                 }
             }
             /* HUE Slider */
 
             for (int r = 0; r < (this.width * 0.5f); r++){
-                DrawUtil.drawRect( sliderX + 15 + r, y + tmpHeight + 12, 1, 5, Color.getHSBColor(r / (this.width * 0.5f),0.75F, 1.0F).getRGB());
+                GameBridge.getChocomint().getRenderUtils().drawRect( sliderX + 15 + r, y + tmpHeight + 12, 1, 5, Color.getHSBColor(r / (this.width * 0.5f),0.75F, 1.0F).getRGB());
             }
 
             /* Opacity Slider */
@@ -142,18 +142,18 @@ public class InputColor extends IWidget implements IgnoreOverflow {
 
             for (int r = 0; r < (this.width * 0.5f); r += 2){
                 int alpha = (int) ((((this.width * 0.5f) - r) / (this.width * 0.5f)) * maxAlpha);
-                DrawUtil.drawRect( sliderX + 15 + r, y + tmpHeight + 21, 1, 5, new Color(this.currentColor.getRed(), this.currentColor.getBlue(), this.currentColor.getGreen(), alpha));
+                GameBridge.getChocomint().getRenderUtils().drawRect( sliderX + 15 + r, y + tmpHeight + 21, 1, 5, new Color(this.currentColor.getRed(), this.currentColor.getBlue(), this.currentColor.getGreen(), alpha));
             }
 
             /* Color Preview */
 
-            DrawUtil.drawRect(x + 11, y + tmpHeight + 11, 20, 20, new VColor(0, 30));
+            GameBridge.getChocomint().getRenderUtils().drawRect(x + 11, y + tmpHeight + 11, 20, 20, new VColor(0, 30));
 
             GL11.glColor3f(1, 1, 1);
             Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("volt/ui/colorpicker/TransparencyBG.png"));
             Gui.drawModalRectWithCustomSizedTexture(x + 10, y + tmpHeight + 10, 0, 0, 20, 20, 20, 20);
 
-            DrawUtil.drawRect(x + 10, y + tmpHeight + 10, 20, 20, this.currentColor.getRGB());
+            GameBridge.getChocomint().getRenderUtils().drawRect(x + 10, y + tmpHeight + 10, 20, 20, this.currentColor.getRGB());
 
             /* Indicators */
 
@@ -181,7 +181,7 @@ public class InputColor extends IWidget implements IgnoreOverflow {
 
             /* Design */
 
-            DrawUtil.drawRect(x, y + this.height - 20, this.getWidth(), 0.5f, this.separatorColor);
+            GameBridge.getChocomint().getRenderUtils().drawRect(x, y + this.height - 20, this.getWidth(), 0.5f, this.separatorColor);
 
             this.btns.forEach(bt -> bt.drawBtn(ui, mouseX, mouseY, deltaTime));
         }
@@ -236,7 +236,7 @@ public class InputColor extends IWidget implements IgnoreOverflow {
 
             this.currentColor = VColor.Lerp(this.defaultColor, this.hoverColor, deltaTime * 1);
 
-            DrawUtil.drawRect(this.x, this.y, this.w, this.h, this.hovered ? this.hoverColor : this.defaultColor);
+            GameBridge.getChocomint().getRenderUtils().drawRect(this.x, this.y, this.w, this.h, this.hovered ? this.hoverColor : this.defaultColor);
             if(this.icon != null)
                 ui.fontRendererObj.drawStringWithShadow(this.icon, this.x + (this.w * 0.5f) - (ui.fontRendererObj.getStringWidth(this.icon) * 0.5f), this.y + (this.h * 0.5f) - (ui.fontRendererObj.FONT_HEIGHT * 0.5f), -1);
             if(this.loc != null){

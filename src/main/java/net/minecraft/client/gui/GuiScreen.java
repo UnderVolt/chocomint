@@ -72,7 +72,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
     public boolean allowUserInput;
 
     /** The FontRenderer used by GuiScreen */
-    protected FontRenderer fontRendererObj;
+    public FontRenderer fontRendererObj;
 
     /** The button that was just pressed. */
     private GuiButton selectedButton;
@@ -679,7 +679,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
         if (this.mc.theWorld == null) {
             this.drawBackground(tint);
             try {
-                if(background.getBackground() != null) {
+                if(background != null && background.getBackground() != null) {
                     this.mc.getTextureManager().bindTexture(this.background.getBackground());
                     switch (background.drawType) {
                         case STRETCH:

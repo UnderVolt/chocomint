@@ -3,12 +3,12 @@ package io.undervolt.api.ui.widgets;
 import io.undervolt.api.ui.UIView;
 import org.lwjgl.opengl.GL11;
 
-public class Opacity extends IWidget {
+public class Opacity extends Drawable {
 
     protected float opacity;
-    protected IWidget child;
+    protected Drawable child;
 
-    public Opacity(float opacity, IWidget child) {
+    public Opacity(float opacity, Drawable child) {
         this.opacity = opacity;
         this.child = child;
         this.child.parent = this;
