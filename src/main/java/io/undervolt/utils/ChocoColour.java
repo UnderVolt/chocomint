@@ -4,32 +4,32 @@ package io.undervolt.utils;
 import java.awt.*;
 import java.awt.color.ColorSpace;
 
-public class VColor extends Color {
-    public VColor(int r, int g, int b) {
+public class ChocoColour extends Color {
+    public ChocoColour(int r, int g, int b) {
         super(r, g, b);
     }
 
-    public VColor(int r, int g, int b, int a) {
+    public ChocoColour(int r, int g, int b, int a) {
         super(r, g, b, a);
     }
 
-    public VColor(int color) {
+    public ChocoColour(int color) {
         super(color, color, color);
     }
 
-    public VColor(int color, int alpha) {
+    public ChocoColour(int color, int alpha) {
         super(color, color, color, alpha);
     }
 
-    public VColor(int rgba, boolean hasalpha) {
+    public ChocoColour(int rgba, boolean hasalpha) {
         super(rgba, hasalpha);
     }
 
-    public VColor(float r, float g, float b) {
+    public ChocoColour(float r, float g, float b) {
         super(r, g, b);
     }
 
-    public VColor(ColorSpace cspace, float[] components, float alpha) {
+    public ChocoColour(ColorSpace cspace, float[] components, float alpha) {
         super(cspace, components, alpha);
     }
 
@@ -38,18 +38,18 @@ public class VColor extends Color {
         return getColor(a, b, t);
     }
 
-    public VColor setAlpha(int alpha){
-        return new VColor(this.getRed(), this.getGreen(), this.getBlue(), alpha);
+    public ChocoColour setAlpha(int alpha){
+        return new ChocoColour(this.getRed(), this.getGreen(), this.getBlue(), alpha);
     }
 
-    public static VColor getHSBColor(float h, float s, float v){
+    public static ChocoColour getHSBColor(float h, float s, float v){
         Color tmp = Color.getHSBColor(h, s, v);
-        return new VColor(tmp.getRed(), tmp.getGreen(), tmp.getBlue());
+        return new ChocoColour(tmp.getRed(), tmp.getGreen(), tmp.getBlue());
     }
 
-    public static VColor getHSBAColor(float h, float s, float v, float o){
+    public static ChocoColour getHSBAColor(float h, float s, float v, float o){
         Color tmp = Color.getHSBColor(h, s, v);
-        return new VColor(tmp.getRed(), tmp.getGreen(), tmp.getBlue(), Math.round(o));
+        return new ChocoColour(tmp.getRed(), tmp.getGreen(), tmp.getBlue(), Math.round(o));
     }
 
     // Interpolates between colors /a/ and /b/ by /t/ without clamping the interpolant

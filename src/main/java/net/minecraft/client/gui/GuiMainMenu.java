@@ -348,7 +348,7 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
 
         if (button.id == 1)
         {
-            this.chocomint.displayMenuOrPanel(new UserDeclarativeMenu(this));
+            this.chocomint.displayMenuOrPanel(new NotificationOverlay(this));
             //this.mc.displayGuiScreen(new GuiSelectWorld(this));
         }
 

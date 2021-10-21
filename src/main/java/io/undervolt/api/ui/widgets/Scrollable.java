@@ -32,8 +32,8 @@ public class Scrollable extends Drawable {
         if(hovered){
             if(size > parentSize && (pos - this.scrollModifier) >= pos){
                 if(tmp){
-                    this.dWheelVal += Mouse.getDWheel();
-                    this.scrollModifier = MathUtil.Lerp(this.scrollModifier, this.dWheelVal, 0.7f);
+                    this.dWheelVal += Mouse.getDWheel() / 2;
+                    this.scrollModifier = MathUtil.Lerp(this.scrollModifier, this.dWheelVal, 0.15f);
                 }else{
                     int tmp2 = (int) -Math.ceil(size - parentSize);
                     this.dWheelVal = tmp2;

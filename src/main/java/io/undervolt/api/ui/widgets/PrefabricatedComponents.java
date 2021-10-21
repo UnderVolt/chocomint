@@ -2,18 +2,22 @@ package io.undervolt.api.ui.widgets;
 
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.notifications.Notification;
-import io.undervolt.utils.VColor;
+import io.undervolt.utils.ChocoColour;
 
 import java.awt.*;
-import java.util.Objects;
 
 public class PrefabricatedComponents {
 
-    public static Drawable closeButton() {
+    public static Drawable CloseButton() {
         return new Circle(
                 new Color(255, 81, 81),
                 5,
-                new Text("\247l✕")
+                new Padding(
+                     EdgeInsets.all(2),
+                     new Text("\247l✕").style(
+                          new Text.TextStyle().setDropShadow(false).setFontSize(8)
+                     )
+                )
         );
     }
 
@@ -27,7 +31,7 @@ public class PrefabricatedComponents {
                                                 new Text.TextStyle().setTextColor(new Color(notification.getPriorityColor()))
                                         ),
                                         new Text(notification.description).style(
-                                                new Text.TextStyle().setTextColor(new VColor(111))
+                                                new Text.TextStyle().setTextColor(new ChocoColour(111))
                                         )
                                 )
                         )
