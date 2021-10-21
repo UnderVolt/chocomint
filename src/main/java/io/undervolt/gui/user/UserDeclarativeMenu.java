@@ -4,7 +4,7 @@ import io.undervolt.api.ui.widgets.*;
 import io.undervolt.api.ui.widgets.Drawable;
 import io.undervolt.api.ui.widgets.Container;
 import io.undervolt.api.ui.widgets.Image;
-import io.undervolt.gui.menu.DeclarativeMenu;
+import io.undervolt.gui.menu.MenuOverlay;
 import io.undervolt.gui.notifications.Notification;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class UserDeclarativeMenu extends DeclarativeMenu {
+public class UserDeclarativeMenu extends MenuOverlay {
     public UserDeclarativeMenu(GuiScreen prev) {
         super(prev, "Perfil del usuario", MenuColor.PURPLE, "user");
     }
@@ -87,23 +87,23 @@ public class UserDeclarativeMenu extends DeclarativeMenu {
                               getContentWidth(),
                               44,
                               new Padding(
-                                      EdgeInsets.horizontal(18),
-                                      new Padding(
-                                              EdgeInsets.vertical(8),
-                                              new Column(
-                                                      new Text("Biografía").style(
-                                                              new Text.TextStyle().setFontSize(10)
-                                                      ),
-                                                      new Padding(
-                                                              EdgeInsets.vertical(5),
-                                                              new Text("No tengo biografía.")
-                                                      )
+                                      new EdgeInsets(8, 18, 8, 18),
+                                      new Column(
+                                              new Text("Biografía").style(
+                                                      new Text.TextStyle().setFontSize(10)
+                                              ),
+                                              new Padding(
+                                                      EdgeInsets.vertical(5),
+                                                      new Text("No tengo biografía.")
                                               )
                                       )
                               )
                       )
-              )
+              ),
+              new Container(1, height)
       };
+
+      super.load();
 
   }
 

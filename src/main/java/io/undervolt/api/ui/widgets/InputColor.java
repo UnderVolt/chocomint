@@ -5,7 +5,7 @@ import io.undervolt.api.ui.Screen;
 import io.undervolt.api.ui.widgets.controllers.ColorSelectController;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.utils.OverlayUtils;
-import io.undervolt.utils.VColor;
+import io.undervolt.utils.ChocoColour;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
@@ -18,11 +18,11 @@ import java.util.ArrayList;
 public class InputColor extends Drawable implements IgnoreOverflow {
 
     protected ColorSelectController controller;
-    protected Color indicatorColor = new VColor(50);
+    protected Color indicatorColor = new ChocoColour(50);
     protected Color backgroundColor = Color.white;
-    protected Color buttonDefaultColor = new VColor(0, 80);
-    protected Color buttonHoverColor = new VColor(0, 140);
-    protected Color separatorColor = new VColor(20, 50);
+    protected Color buttonDefaultColor = new ChocoColour(0, 80);
+    protected Color buttonHoverColor = new ChocoColour(0, 140);
+    protected Color separatorColor = new ChocoColour(20, 50);
 
     private ArrayList<ICBtn> btns;
     private int currentH = -1;
@@ -110,7 +110,7 @@ public class InputColor extends Drawable implements IgnoreOverflow {
             }
 
             /* Vars & Background */
-            this.currentColor = VColor.getHSBAColor(((this.width * 0.5f) - (sliderX + 15 - this.currentH)) / (this.width * 0.5f), (this.currentS - x) / this.width, (tmpHeight + y - this.currentL) / tmpHeight, (1 + ((sliderX + 15 - this.currentO) / (this.width * 0.5f))) * maxAlpha);
+            this.currentColor = ChocoColour.getHSBAColor(((this.width * 0.5f) - (sliderX + 15 - this.currentH)) / (this.width * 0.5f), (this.currentS - x) / this.width, (tmpHeight + y - this.currentL) / tmpHeight, (1 + ((sliderX + 15 - this.currentO) / (this.width * 0.5f))) * maxAlpha);
             GameBridge.getChocomint().getRenderUtils().drawRect(x, y, this.width, this.height, this.backgroundColor);
 
             /* Rainbow */
@@ -147,7 +147,7 @@ public class InputColor extends Drawable implements IgnoreOverflow {
 
             /* Color Preview */
 
-            GameBridge.getChocomint().getRenderUtils().drawRect(x + 11, y + tmpHeight + 11, 20, 20, new VColor(0, 30));
+            GameBridge.getChocomint().getRenderUtils().drawRect(x + 11, y + tmpHeight + 11, 20, 20, new ChocoColour(0, 30));
 
             GL11.glColor3f(1, 1, 1);
             Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("volt/ui/colorpicker/TransparencyBG.png"));
@@ -160,8 +160,8 @@ public class InputColor extends Drawable implements IgnoreOverflow {
             OverlayUtils.drawCircle(this.currentS, this.currentL, 2,  this.indicatorColor.getRGB());
             GL11.glPushMatrix();
             GL11.glTranslatef(0, -0.5f, 0);
-            OverlayUtils.drawCircle(this.currentH, (int) (y + tmpHeight + 15), 3, new VColor(50).getRGB());
-            OverlayUtils.drawCircle(this.currentO, (int) (y + tmpHeight + 24), 3, new VColor(50).getRGB());
+            OverlayUtils.drawCircle(this.currentH, (int) (y + tmpHeight + 15), 3, new ChocoColour(50).getRGB());
+            OverlayUtils.drawCircle(this.currentO, (int) (y + tmpHeight + 24), 3, new ChocoColour(50).getRGB());
             GL11.glPopMatrix();
 
             /* Color Handlers */
@@ -234,7 +234,7 @@ public class InputColor extends Drawable implements IgnoreOverflow {
         public void drawBtn(Screen ui, int mouseX, int mouseY, float deltaTime){
             this.hovered = mouseX > this.x && mouseY > this.y && mouseX < this.x + this.w && mouseY < this.y + this.h;
 
-            this.currentColor = VColor.Lerp(this.defaultColor, this.hoverColor, deltaTime * 1);
+            this.currentColor = ChocoColour.Lerp(this.defaultColor, this.hoverColor, deltaTime * 1);
 
             GameBridge.getChocomint().getRenderUtils().drawRect(this.x, this.y, this.w, this.h, this.hovered ? this.hoverColor : this.defaultColor);
             if(this.icon != null)

@@ -26,7 +26,7 @@ public abstract class Screen extends AnimationUI {
     public float newTime;
     public float deltaTime;
     protected ScaledResolution sr;
-    protected boolean forceUseScaleFactor = false;
+    protected boolean forceUseScaleFactor = true;
     protected int forcedScaleFactor = 2;
     private boolean startedDrawing = false;
     private long time = 0;
@@ -116,10 +116,11 @@ public abstract class Screen extends AnimationUI {
     }
 
     public void addWidgets(Drawable... widgets){
-        for (Drawable w : widgets) {
-            this.widgets.add(new Container(this.getWidth(), this.getHeight()).setChild(w));
-            w.init();
-        }
+        if(widgets != null)
+            for (Drawable w : widgets) {
+                this.widgets.add(new Container(this.getWidth(), this.getHeight()).setChild(w));
+                w.init();
+            }
     }
 
     @Override
