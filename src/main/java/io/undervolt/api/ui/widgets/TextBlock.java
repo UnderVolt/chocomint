@@ -3,6 +3,7 @@ package io.undervolt.api.ui.widgets;
 import io.undervolt.api.ui.Screen;
 
 import java.awt.*;
+import java.util.Arrays;
 
 public class TextBlock extends Drawable {
 
@@ -22,7 +23,6 @@ public class TextBlock extends Drawable {
       this.height = this.parent.height;
 
       this.lineAmount = (int) Math.ceil(mc.fontRendererObj.getStringWidth(this.text) / this.width);
-      System.out.println(lineAmount);
       this.lines = new String[lineAmount];
 
       String splitSeq = this.text.contains(" ") ? " " : "(?!^)";
@@ -33,14 +33,17 @@ public class TextBlock extends Drawable {
          processedText += word + " ";
          int processedTextLength = (int) Math.ceil(mc.fontRendererObj.getStringWidth(processedText) / this.width - 1);
 
-         System.out.println(word);
-         System.out.println(processedTextLength);
-
          if (lines[processedTextLength] == null) {
             lines[processedTextLength] = "";
          }
 
          lines[processedTextLength] += word + " ";
+      }
+
+      if(lines.length * 9 > height) {
+         int lastLine = (int) Math.ceil(height / 9) - 2;
+         lines[lastLine] = lines[lastLine].trim().substring(0, lines[lastLine].length() - 3) + "...";
+         lines = Arrays.copyOf(lines, lastLine + 1);
       }
    }
 
