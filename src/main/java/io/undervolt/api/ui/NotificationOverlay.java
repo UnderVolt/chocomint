@@ -46,7 +46,7 @@ public class NotificationOverlay extends PanelOverlay {
                      new Text("LIMPIAR").style(
                           new Text.TextStyle().setFontSize(7)
                      )
-                ).crossAxisAlign(AxisAlignment.SPACE_BETWEEN)
+                )
            ),
            new Container(
                 getPanelWidth(),
