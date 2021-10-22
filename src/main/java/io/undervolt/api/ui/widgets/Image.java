@@ -13,6 +13,8 @@ public class Image extends Drawable {
     protected BufferedImage bufferedImage;
     protected ResourceLocation resourceLocation;
 
+    protected int imageWidth, imageHeight;
+
     public Image(DynamicTexture dynamicTexture) {
         this.dynamicTexture = dynamicTexture;
     }
@@ -28,24 +30,36 @@ public class Image extends Drawable {
         if(this.dynamicTexture != null) {
             this.mc.getTextureManager().bindTexture(
                     this.mc.getTextureManager().getDynamicTextureLocation("pfp1", dynamicTexture));
-            Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 0, (int)width, (int)height, (int)width, (int)height);
+            Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 0, (int)width, (int)height, imageWidth, imageHeight);
         }
 
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glColor3f(1,1, 1);
         if(this.resourceLocation != null) {
             this.mc.getTextureManager().bindTexture(resourceLocation);
-            Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 0, (int)width, (int)height, (int)width, (int)height);
+            Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 0, (int)width, (int)height, imageWidth, imageHeight);
         }
     }
 
     public Image setWidth(int width) {
         this.width = width;
+        this.imageWidth = width;
         return this;
     }
 
     public Image setHeight(int height) {
         this.height = height;
+        this.imageHeight = height;
+        return this;
+    }
+
+    public Image setImageWidth(int imageWidth) {
+        this.imageWidth = imageWidth;
+        return this;
+    }
+
+    public Image setImageHeight(int imageHeight) {
+        this.imageHeight = imageHeight;
         return this;
     }
 
