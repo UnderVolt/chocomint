@@ -8,6 +8,7 @@ public class Circle extends Drawable {
     protected Color color;
     protected float radius;
     protected Drawable child;
+    protected boolean centeredRadius;
 
     public Circle(Color color, float radius, Drawable child) {
         this.color = color;
@@ -28,8 +29,15 @@ public class Circle extends Drawable {
     public void draw(Screen ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
         this.width = radius * 2;
         this.height = radius * 2;
-        ui.chocomint.getRenderUtils().drawFilledCircle(x + (int) radius, y + (int) radius, radius, color.getRGB());
+        if(centeredRadius)
+            ui.chocomint.getRenderUtils().drawFilledCircle(x, y, radius, color.getRGB());
+        else
+            ui.chocomint.getRenderUtils().drawFilledCircle(x + (int) radius, y + (int) radius, radius, color.getRGB());
 
         if(child != null) this.child.draw(ui, x, y, mouseX, mouseY, deltaTime);
+    }
+
+    public void setCenteredRadius(boolean centeredRadius) {
+        this.centeredRadius = centeredRadius;
     }
 }
