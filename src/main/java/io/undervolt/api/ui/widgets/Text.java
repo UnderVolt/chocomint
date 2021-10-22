@@ -52,6 +52,10 @@ public class Text extends Drawable {
         return this;
     }
 
+    public void setText(String text) {
+        this.text = text;
+    }
+
     public TextStyle getStyle() {
         return style;
     }
