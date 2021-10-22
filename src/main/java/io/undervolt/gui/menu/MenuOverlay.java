@@ -63,10 +63,8 @@ public class MenuOverlay extends Screen {
 
    protected Drawable[] menuChildren;
 
-   @Override
-   public void load() {
-
-      children = new Drawable[]{
+   private Drawable[] CreateOverlay() {
+      return new Drawable[]{
            new Padding(
                 EdgeInsets.horizontal(getContentMargin()),
                 new Container(
@@ -97,6 +95,14 @@ public class MenuOverlay extends Screen {
                 ).setBackgroundColor(getMenuContentColor())
            )
       };
+   }
+
+   @Override
+   public void load() {
+
+      children = CreateOverlay();
+
+      this.chocomint.getGameBar().init(width, height);
 
    }
 
@@ -217,6 +223,11 @@ public class MenuOverlay extends Screen {
       } else {
          return (this.width / 2) - 300;
       }
+   }
+
+   protected void reloadMenu(Drawable[] menuChildren) {
+      this.menuChildren = menuChildren;
+      this.reloadScreen(CreateOverlay());
    }
 
    public int getBannerPadding() {
