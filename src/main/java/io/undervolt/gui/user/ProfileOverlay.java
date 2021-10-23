@@ -285,7 +285,6 @@ public class ProfileOverlay extends MenuOverlay {
          if (countryFlag == null) {
             countryFlag = chocomint.getCountryFlagManager().getCachedCountryFlag(user.getCountryCode());
             reloadMenu(CreateOverlay());
-            System.out.println("Datos actualizados");
          }
          if (!username.equals("Guest")) {
             if (username.equals(chocomint.getUser().getUsername())) {
