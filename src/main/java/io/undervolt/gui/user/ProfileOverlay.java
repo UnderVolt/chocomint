@@ -60,6 +60,7 @@ public class ProfileOverlay extends MenuOverlay {
    private boolean isFriend;
 
    /**
+    * Screen crafted to display a specific user's information.
     * Constructor applied to prefabricated User objects.
     * @param parentScreen Screen to draw in the background
     * @param user Prefabricated User object
@@ -96,6 +97,7 @@ public class ProfileOverlay extends MenuOverlay {
    }
 
    /**
+    * Screen crafted to display a specific user's information.
     * Constructor applied to inexistent User objects, will fetch user's information.
     * @param parentScreen Screen to draw in the background
     * @param username User's username
