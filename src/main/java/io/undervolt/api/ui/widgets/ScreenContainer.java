@@ -66,7 +66,7 @@ public class ScreenContainer extends Drawable {
 
     public void addWidgets(Drawable... widgets){
         for (Drawable w : widgets) {
-            this.widgets.add(new Container(this.width, this.height).setChild(w));
+            this.widgets.add(new Box(this.width, this.height).setChild(w));
             w.init();
         }
     }
