@@ -1,10 +1,6 @@
 package io.undervolt.api.ui;
 
-import io.undervolt.api.ui.widgets.Container;
-import io.undervolt.api.ui.widgets.Drawable;
 import net.minecraft.client.gui.GuiScreen;
-
-import java.awt.*;
 
 public class Overlay extends Screen {
 
