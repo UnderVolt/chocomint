@@ -1,10 +1,9 @@
 package io.undervolt.gui.menu;
 
-import io.undervolt.api.ui.Overlay;
 import io.undervolt.api.ui.Screen;
 import io.undervolt.api.ui.widgets.*;
 import io.undervolt.api.ui.widgets.Drawable;
-import io.undervolt.api.ui.widgets.Container;
+import io.undervolt.api.ui.widgets.Box;
 import io.undervolt.api.ui.widgets.Image;
 import io.undervolt.utils.AnimationUI;
 import net.minecraft.client.Minecraft;
@@ -67,13 +66,13 @@ public class MenuOverlay extends Screen {
       return new Drawable[]{
            new Padding(
                 EdgeInsets.horizontal(getContentMargin()),
-                new Container(
+                new Box(
                      getContentWidth(),
                      height,
                      new Scrollable(
                           ScrollDirection.COLUMN,
                           new Column(
-                               new Container(
+                               new Box(
                                     getContentWidth(),
                                     50,
                                     new Padding(
@@ -123,7 +122,7 @@ public class MenuOverlay extends Screen {
    }
 
    @Override
-   protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+   public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
       super.mouseClicked(mouseX, mouseY, mouseButton);
       if (mouseY > 20 && (mouseX < getContentMargin() || mouseX > getContentMargin() + getContentWidth()))
          this.fadeOut();
