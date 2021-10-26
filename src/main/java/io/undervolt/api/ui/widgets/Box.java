@@ -7,88 +7,125 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
-public class Container extends Drawable {
+public class Box extends Drawable {
 
     protected Color backgroundColor;
     protected EdgeInsets radius;
     protected Alignment alignment;
     protected boolean overflowHidden;
     protected BorderBox box;
+    protected boolean adjustToChildSize = true;
 
     protected Drawable child;
 
-    public Container(float width, float height, Drawable child) {
+    public Box(float width, float height, Drawable child) {
         this.width = width;
         this.height = height;
         this.child = child;
         this.child.parent = this;
+        this.adjustToChildSize = false;
     }
 
-    public Container(Drawable child) {
+    public Box(Drawable child) {
+        this.width = child.width;
+        this.height = child.height;
         this.child = child;
         this.child.parent = this;
     }
 
-    public Container(float width, float height) {
+    public Box(float width, float height) {
         this.width = width;
         this.height = height;
         this.child = null;
+        this.adjustToChildSize = false;
     }
 
-    public Container setWidth(int width) {
+    public Box(float width, float height, Color colour, Drawable child) {
+        this.width = width;
+        this.height = height;
+        this.child = child;
+        this.backgroundColor = colour;
+        this.adjustToChildSize = false;
+    }
+
+    public Box(float width, float height, Color colour) {
+        this.width = width;
+        this.height = height;
+        this.backgroundColor = colour;
+        this.child = null;
+        this.adjustToChildSize = false;
+    }
+
+    public Box(Color colour, Drawable child) {
+        this.width = child.width;
+        this.height = child.height;
+        this.backgroundColor = colour;
+        this.child = child;
+        this.child.parent = this;
+    }
+
+    public Box setAdjustToChildSize(boolean adjustToChildSize) {
+        this.adjustToChildSize = adjustToChildSize;
+        return this;
+    }
+
+    public Box setWidth(int width) {
         this.width = width;
         return this;
     }
 
-    public Container setHeight(int height) {
+    public Box setHeight(int height) {
         this.height = height;
         return this;
     }
 
-    public Container setBackgroundColor(Color backgroundColor) {
+    public Box setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
         return this;
     }
 
-    public Container setBorderRadius(EdgeInsets radius) {
+    public Box setBorderRadius(EdgeInsets radius) {
         this.radius = radius;
         return this;
     }
 
-    public Container setChild(Drawable child) {
+    public Box setChild(Drawable child) {
         this.child = child;
         this.child.parent = this;
         child.init();
         return this;
     }
 
-    public Container setAlignment(Alignment alignment) {
+    public Box setAlignment(Alignment alignment) {
         this.alignment = alignment;
         return this;
     }
 
-    public Container setOverflowHidden(boolean overflowHidden) {
+    public Box setOverflowHidden(boolean overflowHidden) {
         this.overflowHidden = overflowHidden;
         return this;
     }
 
-    public Container setBorder(BorderBox box) {
+    public Box setBorder(BorderBox box) {
         this.box = box;
         return this;
     }
 
-    public Container limitWidthToParent() {
+    public Box limitWidthToParent() {
         this.width = parent.width;
         return this;
     }
 
-    public Container limitHeightToParent() {
+    public Box limitHeightToParent() {
         this.height = parent.height;
         return this;
     }
 
     @Override
     public void init() {
+        if(child instanceof Scrollable) {
+            this.setAdjustToChildSize(false);
+        }
         if(child != null){
             child.init();
         }
@@ -138,14 +175,24 @@ public class Container extends Drawable {
         }
 
         if(child != null){
+            if(adjustToChildSize) {
+                this.width = child.width;
+                this.height = child.height;
+            }
             if(alignment != null){
                 if(this.overflowHidden && !(child instanceof IgnoreOverflow)){
                     GFXUtil.enableScissor();
                     GFXUtil.applyScissor(x, y, (int)(x + this.width), (int)(y + this.height), ui);
-                    child.draw(ui, (int) ((int) (x + (width * alignment.xModifier)) - child.width * alignment.xModifier), (int) ((int) (y + (height * alignment.yModifier)) - child.height * alignment.yModifier), mouseX, mouseY, deltaTime);
+                    if(adjustToChildSize)
+                        child.draw(ui, (int) ((int) (x + width * alignment.xModifier)), (int) ((int) (y + height * alignment.yModifier)), mouseX, mouseY, deltaTime);
+                    else
+                        child.draw(ui, (int) ((int) (x + (width * alignment.xModifier)) - child.width * alignment.xModifier), (int) ((int) (y + (height * alignment.yModifier)) - child.height * alignment.yModifier), mouseX, mouseY, deltaTime);
                     GFXUtil.disableScissor();
                 }else {
-                    child.draw(ui, (int) ((int) (x + (width * alignment.xModifier)) - child.width * alignment.xModifier), (int) ((int) (y + (height * alignment.yModifier)) - child.height * alignment.yModifier), mouseX, mouseY, deltaTime);
+                    if(adjustToChildSize)
+                        child.draw(ui, (int) ((int) (x + width * alignment.xModifier)), (int) ((int) (y + height * alignment.yModifier)), mouseX, mouseY, deltaTime);
+                    else
+                        child.draw(ui, (int) ((int) (x + (width * alignment.xModifier)) - child.width * alignment.xModifier), (int) ((int) (y + (height * alignment.yModifier)) - child.height * alignment.yModifier), mouseX, mouseY, deltaTime);
                 }
             }else{
                 if(this.overflowHidden && !(child instanceof IgnoreOverflow)){
