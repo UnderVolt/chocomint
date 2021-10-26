@@ -28,7 +28,7 @@ public abstract class UIWidgetView extends Screen {
     }
 
     @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+    public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         this.baseInstance.onPress(mouseX, mouseY, mouseButton);
     }
 

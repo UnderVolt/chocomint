@@ -1,10 +1,10 @@
 package io.undervolt.api.ui;
 
 import io.undervolt.api.ui.widgets.*;
-import io.undervolt.api.ui.widgets.Container;
+import io.undervolt.api.ui.widgets.Box;
 import io.undervolt.api.ui.widgets.Drawable;
 import io.undervolt.gui.PanelOverlay;
-import io.undervolt.utils.ChocoColour;
+import io.undervolt.utils.Colour;
 import net.minecraft.client.gui.GuiScreen;
 
 public class NotificationOverlay extends PanelOverlay {
@@ -15,7 +15,7 @@ public class NotificationOverlay extends PanelOverlay {
 
    private Drawable not = new Padding(
         new EdgeInsets(0, 0, 0, 5),
-        new Container(
+        new Box(
              200, 40,
              new Padding(
                   EdgeInsets.all(7),
@@ -26,7 +26,7 @@ public class NotificationOverlay extends PanelOverlay {
                        )
                   )
              )
-        ).setBackgroundColor(new ChocoColour(11)).setBorderRadius(EdgeInsets.all(3))
+        ).setBackgroundColor(new Colour(11)).setBorderRadius(EdgeInsets.all(3))
    );
 
    @Override
@@ -48,7 +48,7 @@ public class NotificationOverlay extends PanelOverlay {
                      )
                 )
            ),
-           new Container(
+           new Box(
                 getPanelWidth(),
                 height,
                 new Scrollable(

@@ -2,14 +2,13 @@ package io.undervolt.gui.user;
 
 import io.undervolt.api.ui.widgets.*;
 import io.undervolt.api.ui.widgets.Drawable;
-import io.undervolt.api.ui.widgets.Container;
+import io.undervolt.api.ui.widgets.Box;
 import io.undervolt.api.ui.widgets.Image;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.menu.MenuOverlay;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.Multithreading;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.util.ResourceLocation;
@@ -145,7 +144,7 @@ public class ProfileOverlay extends MenuOverlay {
 
       if(user != null) {
          if (user.isDeveloper())
-            return new Container(
+            return new Box(
                  3 + this.fontRendererObj.getStringWidth("DEV"),
                  11,
                  new Padding(
@@ -155,7 +154,7 @@ public class ProfileOverlay extends MenuOverlay {
             ).setBackgroundColor(new Color(47, 56, 168)).setBorderRadius(EdgeInsets.all(3));
       }
 
-      return new Container(
+      return new Box(
            3 + this.fontRendererObj.getStringWidth("DEV"),
            11
       );
@@ -186,7 +185,7 @@ public class ProfileOverlay extends MenuOverlay {
 
       return new Drawable[] {
            Banner(),
-           new Container(
+           new Box(
                 getContentWidth(),
                 93,
                 new Padding(
@@ -244,7 +243,7 @@ public class ProfileOverlay extends MenuOverlay {
            ).setBackgroundColor(getMenuTitleColor()),
            new Padding(
                 EdgeInsets.vertical(6),
-                new Container(
+                new Box(
                      getContentWidth(),
                      44,
                      new Padding(
@@ -261,7 +260,7 @@ public class ProfileOverlay extends MenuOverlay {
                      )
                 )
            ),
-           new Container(1, height)
+           new Box(1, height)
       };
 
    }
