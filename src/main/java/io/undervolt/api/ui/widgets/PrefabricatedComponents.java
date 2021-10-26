@@ -2,7 +2,7 @@ package io.undervolt.api.ui.widgets;
 
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.notifications.Notification;
-import io.undervolt.utils.ChocoColour;
+import io.undervolt.utils.Colour;
 import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
@@ -11,7 +11,7 @@ public class PrefabricatedComponents {
 
    public static Drawable InterfaceTexturedButton(String iconName, Gesture.Function function) {
       return new Gesture(
-           new Container(
+           new Box(
                 20,
                 20,
                 new Padding(
@@ -38,7 +38,7 @@ public class PrefabricatedComponents {
    }
 
    public static Drawable Notification(Notification notification) {
-      return new Container(
+      return new Box(
            new Gesture(
                 new Padding(
                      EdgeInsets.all(5),
@@ -47,7 +47,7 @@ public class PrefabricatedComponents {
                                new Text.TextStyle().setTextColor(new Color(notification.getPriorityColor()))
                           ),
                           new Text(notification.description).style(
-                               new Text.TextStyle().setTextColor(new ChocoColour(111))
+                               new Text.TextStyle().setTextColor(new Colour(111))
                           )
                      )
                 )
