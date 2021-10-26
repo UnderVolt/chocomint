@@ -3,48 +3,48 @@ package io.undervolt.api.ui;
 import io.undervolt.api.ui.widgets.*;
 import io.undervolt.api.ui.widgets.Box;
 import io.undervolt.api.ui.widgets.Drawable;
+import io.undervolt.api.ui.widgets.prefabricated.NotificationCard;
+import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.PanelOverlay;
-import io.undervolt.utils.Colour;
+import io.undervolt.gui.notifications.Notification;
+import io.undervolt.gui.notifications.NotificationManager;
 import net.minecraft.client.gui.GuiScreen;
+
+import java.util.List;
 
 public class NotificationOverlay extends PanelOverlay {
 
+   private final NotificationManager notificationManager;
+
    public NotificationOverlay(GuiScreen previousScreen) {
       super(previousScreen);
+      this.notificationManager = GameBridge.getChocomint().getNotificationManager();
    }
 
-   private Drawable not = new Padding(
-        new EdgeInsets(0, 0, 0, 5),
-        new Box(
-             200, 40,
-             new Padding(
-                  EdgeInsets.all(7),
-                  new Row(
-                       new Column(
-                            new Text("Título"),
-                            new Text("Descripción")
-                       )
-                  )
-             )
-        ).setBackgroundColor(new Colour(11)).setBorderRadius(EdgeInsets.all(3))
-   );
+   protected List<Notification> notifications;
 
-   @Override
-   public void load() {
+   private Drawable[] CreatePanel(List<Notification> notifications) {
 
-      Drawable[] notifications = new Drawable[]{
-           not, not, not, not, not, not, not, not, not, not, not, not, not, not, not, not, not, not, not, not, not, not, not
-      };
+      Drawable[] drawableNotifications = new Drawable[notifications.size()];
 
-      panelChildren = new Drawable[]{
+      for(int i = 0; i < notifications.size(); i++)
+      {
+         Notification notification = notifications.get(i);
+         drawableNotifications[i] = new Padding(
+              EdgeInsets.vertical(7),
+              new NotificationCard(
+                   getPanelWidth() - 10,
+                   notification
+              )
+         );
+      }
+
+      return new Drawable[]{
            new Padding(
                 new EdgeInsets(0, 0, 0, 15),
                 new Row(
                      new Text("Notificaciones").style(
                           new Text.TextStyle().setFontSize(11)
-                     ),
-                     new Text("LIMPIAR").style(
-                          new Text.TextStyle().setFontSize(7)
                      )
                 )
            ),
@@ -54,12 +54,20 @@ public class NotificationOverlay extends PanelOverlay {
                 new Scrollable(
                      ScrollDirection.COLUMN,
                      new Column(
-                          notifications
+                          drawableNotifications
                      )
                 )
            ).setOverflowHidden(true)
       };
+   }
+
+   @Override
+   public void load()
+   {
+      notifications = notificationManager.getNotifications();
+      panelChildren = CreatePanel(notifications);
 
       super.load();
    }
+
 }
