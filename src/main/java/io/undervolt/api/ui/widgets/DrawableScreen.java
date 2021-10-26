@@ -38,8 +38,6 @@ public class DrawableScreen extends Drawable {
 
     @Override
     public void onPress(int x, int y, int button) {
-        System.out.println(x - xPos);
-        System.out.println(y - yPos);
         try {
             this.screen.mouseClicked(x - xPos, y - yPos, button);
         } catch (IOException e) {

@@ -10,6 +10,7 @@ import io.undervolt.api.event.handler.EventHandler;
 import io.undervolt.api.event.handler.Listener;
 import io.undervolt.api.sambayon.Sambayon;
 import io.undervolt.api.screenshot.ScreenshotUploader;
+import io.undervolt.api.ui.font.FontBridge;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.console.Console;
 import io.undervolt.console.commands.HelpCommand;
@@ -117,6 +118,9 @@ public class Chocomint implements Listener {
     public void init(LaunchType type){
         switch(type){
             case PREINIT:
+                // Load available fonts
+                FontBridge.loadFonts();
+
                 this.notificationManager = new NotificationManager(this);
                 this.getEventManager().registerEvents(this.notificationManager);
 
