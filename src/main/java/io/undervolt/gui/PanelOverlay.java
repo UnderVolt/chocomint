@@ -13,11 +13,9 @@ public class PanelOverlay extends AnimatedOverlay {
 
    protected Drawable[] panelChildren;
 
-   @Override public void load() {
-
-      overlayWidth = getPanelWidth();
-      overlayHeight = height;
-      children = new Drawable[]{
+   private Drawable[] CreateOverlay()
+   {
+      return new Drawable[]{
            new Padding(
                 new EdgeInsets(0, width - overlayWidth, 0, 0),
                 new Box(
@@ -30,6 +28,18 @@ public class PanelOverlay extends AnimatedOverlay {
                 ).setBackgroundColor(new Colour(22))
            )
       };
+   }
+
+   @Override public void load()
+   {
+      overlayWidth = getPanelWidth();
+      overlayHeight = height;
+      children = CreateOverlay();
+   }
+
+   protected void reloadOverlay(Drawable[] panelChildren) {
+      this.panelChildren = panelChildren;
+      this.reloadScreen(CreateOverlay());
    }
 
    protected int getPanelWidth() {
