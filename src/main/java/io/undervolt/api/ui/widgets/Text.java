@@ -1,6 +1,8 @@
 package io.undervolt.api.ui.widgets;
 
 import io.undervolt.api.ui.Screen;
+import io.undervolt.bridge.GameBridge;
+import net.minecraft.client.gui.FontRenderer;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -9,38 +11,64 @@ public class Text extends Drawable {
 
     protected String text;
     protected TextStyle style;
+    
+    private FontRenderer fontRendererObj;
 
     public Text(String text) {
         this.text = text;
         this.style = new TextStyle();
     }
 
+    public Text(String text, Color colour) {
+        this.text = text;
+        this.style = new TextStyle().setTextColor(colour);
+    }
+
+    public Text(String text, int fontSize, Color colour) {
+        this.text = text;
+        this.style = new TextStyle().setTextColor(colour).setFontSize(fontSize);
+    }
+
+    public Text(String text, int fontSize) {
+        this.text = text;
+        this.style = new TextStyle().setFontSize(fontSize);
+    }
+
+    public Text(String text, TextStyle textStyle) {
+        this.text = text;
+        this.style = textStyle;
+    }
+
+    @Override public void init() {
+        this.fontRendererObj = GameBridge.getFontRenderer();
+    }
+
     @Override
     public void draw(Screen ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
-        this.width = ui.fontRendererObj.getStringWidth(this.text) * this.style.scale;
-        this.height = ui.fontRendererObj.FONT_HEIGHT * this.style.scale;
+        this.width = this.fontRendererObj.getStringWidth(this.text) * this.style.scale;
+        this.height = this.fontRendererObj.FONT_HEIGHT * this.style.scale;
         switch (this.style.align){
             case LEFT:
                 GL11.glPushMatrix();
                 GL11.glTranslatef(x, y, 0);
                 GL11.glScalef(this.style.scale, this.style.scale, 0);
-                ui.fontRendererObj.drawString(this.text, 0, 0, this.style.textColor.getRGB(), this.style.dropShadow);
+                this.fontRendererObj.drawString(this.text, 0, 0, this.style.textColor.getRGB(), this.style.dropShadow);
                 GL11.glPopMatrix();
                 break;
             case RIGHT:
                 GL11.glPushMatrix();
                 GL11.glTranslatef(x, y, 0);
                 GL11.glScalef(this.style.scale, this.style.scale, 0);
-                ui.fontRendererObj.setBidiFlag(true);
-                ui.fontRendererObj.drawString(this.text, 0, 0, this.style.textColor.getRGB(), this.style.dropShadow);
+                this.fontRendererObj.setBidiFlag(true);
+                this.fontRendererObj.drawString(this.text, 0, 0, this.style.textColor.getRGB(), this.style.dropShadow);
                 GL11.glPopMatrix();
                 break;
             case CENTER:
-                this.width = ui.fontRendererObj.getStringWidth(this.text);
+                this.width = this.fontRendererObj.getStringWidth(this.text);
                 GL11.glPushMatrix();
                 GL11.glTranslatef(x - (this.width * 0.5f), y, 0);
                 GL11.glScalef(this.style.scale, this.style.scale, 0);
-                ui.fontRendererObj.drawString(this.text, 0, 0, this.style.textColor.getRGB(), this.style.dropShadow);
+                this.fontRendererObj.drawString(this.text, 0, 0, this.style.textColor.getRGB(), this.style.dropShadow);
                 GL11.glPopMatrix();
                 break;
         }
