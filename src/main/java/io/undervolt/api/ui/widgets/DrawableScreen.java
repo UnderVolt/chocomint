@@ -1,38 +1,49 @@
 package io.undervolt.api.ui.widgets;
 
-public class Screen extends Drawable {
+import io.undervolt.api.ui.Screen;
+import org.lwjgl.opengl.GL11;
 
-    protected Drawable child;
+import java.io.IOException;
 
-    public Screen(Drawable child) {
-        this.child = child;
-        this.child.parent = this;
+public class DrawableScreen extends Drawable {
+
+    protected Screen screen;
+    protected int xPos, yPos;
+
+    public DrawableScreen(float width, float height, Screen screen) {
+        this.width = width;
+        this.height = height;
+        this.screen = screen;
+        this.screen.width = (int) width;
+        this.screen.height = (int) height;
     }
 
-    @Override
-    public void init() {
-        this.child.init();
+    @Override public void init() {
+        this.screen.initGui();
     }
 
     @Override
     public void draw(io.undervolt.api.ui.Screen ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
-        this.width = ui.getWidth();
-        this.height = ui.getHeight();
-        this.child.draw(ui, x, y, mouseX, mouseY, deltaTime);
+        screen.width = (int) width;
+        screen.height = (int) height;
+        this.xPos = x;
+        this.yPos = y;
+        GL11.glPushMatrix();
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glColor3f(1, 1, 1);
+        GL11.glTranslatef(x, y, 0);
+        screen.drawScreen(mouseX - x, mouseY - y, deltaTime);
+        GL11.glPopMatrix();
     }
 
     @Override
     public void onPress(int x, int y, int button) {
-        this.child.onPress(x, y, button);
-    }
-
-    @Override
-    public void onRelease(int x, int y, int button) {
-        this.child.onRelease(x, y, button);
-    }
-
-    @Override
-    public void onDrag(int x, int y, int button, long timeSinceLastClick) {
-        this.child.onDrag(x, y, button, timeSinceLastClick);
+        System.out.println(x - xPos);
+        System.out.println(y - yPos);
+        try {
+            this.screen.mouseClicked(x - xPos, y - yPos, button);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
