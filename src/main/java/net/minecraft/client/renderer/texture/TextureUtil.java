@@ -260,7 +260,7 @@ public class TextureUtil
         dataBuffer.position(0).limit(p_110994_2_);
     }
 
-    static void bindTexture(int p_94277_0_)
+    public static void bindTexture(int p_94277_0_)
     {
         GlStateManager.bindTexture(p_94277_0_);
     }
