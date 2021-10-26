@@ -1,7 +1,7 @@
 package io.undervolt.api.ui;
 
 import com.google.common.collect.Lists;
-import io.undervolt.api.ui.widgets.Container;
+import io.undervolt.api.ui.widgets.Box;
 import io.undervolt.api.ui.widgets.Drawable;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.instance.Chocomint;
@@ -12,19 +12,19 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 public abstract class Screen extends AnimationUI {
 
    protected Drawable[] children;
-   private List<Drawable> widgets = Lists.newArrayList();
+   public List<Drawable> widgets = Lists.newArrayList();
 
    public final Minecraft minecraft = Minecraft.getMinecraft();
    public final Chocomint chocomint = GameBridge.getChocomint();
    public float oldTime;
    public float newTime;
    public float deltaTime;
+   public float unprocessedTicks;
    protected ScaledResolution sr;
    protected boolean forceUseScaleFactor = true;
    protected int forcedScaleFactor = 2;
@@ -50,7 +50,7 @@ public abstract class Screen extends AnimationUI {
       this.oldTime = this.newTime;
       this.newTime = Minecraft.getSystemTime() / 1000.0f;
       this.load();
-      this.addWidgets(children);
+      this.add(children);
       this.deltaTime = this.newTime - this.oldTime;
    }
 
@@ -61,7 +61,7 @@ public abstract class Screen extends AnimationUI {
       this.buttonList.clear();
       this.widgets.clear();
       this.mc = mc;
-      this.sr = new ScaledResolution(this.mc);
+      this.sr = GameBridge.getScaledResolution();
       if (this.forceUseScaleFactor) {
          this.width = (int) Math.floor(Display.getWidth() / (float) this.forcedScaleFactor);
          this.height = (int) Math.floor(Display.getHeight() / (float) this.forcedScaleFactor);
@@ -77,7 +77,9 @@ public abstract class Screen extends AnimationUI {
       this.oldTime = this.newTime;
       this.newTime = Minecraft.getSystemTime() / 1000.0f;
 
-      this.sr = new ScaledResolution(this.mc);
+      this.unprocessedTicks = partialTicks;
+
+      this.sr = GameBridge.getScaledResolution();
 
       if (this.forceUseScaleFactor) {
          GL11.glPushMatrix();
@@ -122,11 +124,11 @@ public abstract class Screen extends AnimationUI {
       }
    }
 
-   public void addWidgets(Drawable... widgets) {
+   public void add(Drawable... widgets) {
       if (widgets != null)
          for (Drawable w : widgets) {
             System.out.println(w.getWidth());
-            this.widgets.add(new Container(this.getWidth(), this.getHeight()).setChild(w));
+            this.widgets.add(new Box(this.getWidth(), this.getHeight()).setChild(w));
             w.init();
          }
    }
@@ -137,11 +139,11 @@ public abstract class Screen extends AnimationUI {
 
    protected void reloadScreen(Drawable[] children) {
       this.widgets.clear();
-      this.addWidgets(children);
+      this.add(children);
    }
 
    @Override
-   protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+   public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
       this.widgets.forEach(w -> w.onPress(this.tmpMouseX, this.tmpMouseY, mouseButton));
 
       super.mouseClicked(this.tmpMouseX, this.tmpMouseY, mouseButton);
