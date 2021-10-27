@@ -127,7 +127,6 @@ public abstract class Screen extends AnimationUI {
    public void add(Drawable... widgets) {
       if (widgets != null)
          for (Drawable w : widgets) {
-            System.out.println(w.getWidth());
             this.widgets.add(new Box(this.getWidth(), this.getHeight()).setChild(w));
             w.load();
          }
