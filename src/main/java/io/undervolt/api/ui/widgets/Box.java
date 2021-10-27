@@ -166,8 +166,11 @@ public class Box extends Drawable {
                  }
              }else{
                  if(this.box != null) {
-                     GameBridge.getChocomint().getRenderUtils().drawRect(x, y, width, height, this.box.color);
-                     GameBridge.getChocomint().getRenderUtils().drawRect(x + this.box.lineWidth, y + this.box.lineWidth, width - this.box.lineWidth * 2, height - this.box.lineWidth * 2, this.backgroundColor);
+                     GameBridge.getChocomint().getRenderUtils().drawLine(x, y, x + width, y, this.box.lineWidth, this.box.color.getRGB());
+                     GameBridge.getChocomint().getRenderUtils().drawLine(x, y, x, y + height, this.box.lineWidth, this.box.color.getRGB());
+                     GameBridge.getChocomint().getRenderUtils().drawLine(x + width, y, x + width, y + height, this.box.lineWidth, this.box.color.getRGB());
+                     GameBridge.getChocomint().getRenderUtils().drawLine(x, y + height, x + width, y + height, this.box.lineWidth, this.box.color.getRGB());
+                     GameBridge.getChocomint().getRenderUtils().drawRect(x, y, width, height, this.backgroundColor);
                  }else{
                      GameBridge.getChocomint().getRenderUtils().drawRect(x, y, width, height, this.backgroundColor);
                  }
