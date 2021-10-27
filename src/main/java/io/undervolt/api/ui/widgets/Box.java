@@ -92,7 +92,7 @@ public class Box extends Drawable {
     public Box setChild(Drawable child) {
         this.child = child;
         this.child.parent = this;
-        child.init();
+        child.load();
         return this;
     }
 
@@ -122,12 +122,12 @@ public class Box extends Drawable {
     }
 
     @Override
-    public void init() {
+    public void load() {
         if(child instanceof Scrollable) {
             this.setAdjustToChildSize(false);
         }
         if(child != null){
-            child.init();
+            child.load();
         }
     }
 

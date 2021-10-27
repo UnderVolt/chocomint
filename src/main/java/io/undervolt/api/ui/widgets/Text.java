@@ -43,7 +43,7 @@ public class Text extends Drawable {
    }
 
    @Override
-   public void init() {
+   public void load() {
       this.fontRendererObj = GameBridge.getFontRenderer();
       switch (this.style.fontType) {
          case ROBOTO:

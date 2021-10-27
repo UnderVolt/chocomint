@@ -28,10 +28,10 @@ public class Column extends Drawable {
     }
 
     @Override
-    public void init() {
+    public void load() {
         this.children.forEach(c -> {
             c.parent = this;
-            c.init();
+            c.load();
         });
     }
 

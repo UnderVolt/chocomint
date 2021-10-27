@@ -33,7 +33,7 @@ public class NotificationCard extends Drawable {
    }
 
    @Override
-   public void init() {
+   public void load() {
       this.font = FontBridge.Raleway;
    }
 

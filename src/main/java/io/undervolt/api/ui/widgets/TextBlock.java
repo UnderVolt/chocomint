@@ -18,7 +18,7 @@ public class TextBlock extends Drawable {
       this.style = new Text.TextStyle();
    }
 
-   @Override public void init() {
+   @Override public void load() {
       this.width = this.parent.width - 25;
       this.height = this.parent.height;
 
