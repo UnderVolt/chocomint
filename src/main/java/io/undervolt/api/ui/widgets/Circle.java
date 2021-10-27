@@ -14,6 +14,7 @@ public class Circle extends Drawable {
         this.color = color;
         this.radius = radius;
         this.child = child;
+        this.centeredRadius = false;
     }
 
     public Circle(Color color, float radius) {
@@ -22,7 +23,8 @@ public class Circle extends Drawable {
 
     @Override
     public void load() {
-        child.load();
+        if(child != null)
+            child.load();
     }
 
     @Override
@@ -37,7 +39,8 @@ public class Circle extends Drawable {
         if(child != null) this.child.draw(ui, x, y, mouseX, mouseY, deltaTime);
     }
 
-    public void setCenteredRadius(boolean centeredRadius) {
+    public Circle setCenteredRadius(boolean centeredRadius) {
         this.centeredRadius = centeredRadius;
+        return this;
     }
 }
