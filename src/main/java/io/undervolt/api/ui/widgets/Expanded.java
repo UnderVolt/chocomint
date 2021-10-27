@@ -14,8 +14,8 @@ public class Expanded extends Drawable {
     }
 
     @Override
-    public void init() {
-        this.child.init();
+    public void load() {
+        this.child.load();
     }
 
     @Override

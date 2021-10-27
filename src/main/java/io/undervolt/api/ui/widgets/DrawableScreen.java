@@ -18,7 +18,7 @@ public class DrawableScreen extends Drawable {
         this.screen.height = (int) height;
     }
 
-    @Override public void init() {
+    @Override public void load() {
         this.screen.initGui();
     }
 

@@ -58,8 +58,8 @@ public class Scrollable extends Drawable {
     }
 
     @Override
-    public void init() {
-        child.init();
+    public void load() {
+        child.load();
     }
 
     @Override

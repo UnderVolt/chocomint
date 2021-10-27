@@ -12,13 +12,13 @@ public abstract class UIWidgetView extends Screen {
     @Override
     public void load() {
         this.baseInstance = this.build();
-        this.baseInstance.init();
+        this.baseInstance.load();
     }
 
     public void updateVars(WidgetState ws){
         ws.onRun();
         this.baseInstance = this.build();
-        this.baseInstance.init();
+        this.baseInstance.load();
     }
 
     @Override

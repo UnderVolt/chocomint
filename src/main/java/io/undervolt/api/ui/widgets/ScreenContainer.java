@@ -25,7 +25,7 @@ public class ScreenContainer extends Drawable {
     public void drawScreen(Screen ui, int x, int y, float deltaTime){}
 
     @Override
-    public void init() {
+    public void load() {
         buttonList.clear();
         this.initView();
     }
@@ -67,7 +67,7 @@ public class ScreenContainer extends Drawable {
     public void addWidgets(Drawable... widgets){
         for (Drawable w : widgets) {
             this.widgets.add(new Box(this.width, this.height).setChild(w));
-            w.init();
+            w.load();
         }
     }
 

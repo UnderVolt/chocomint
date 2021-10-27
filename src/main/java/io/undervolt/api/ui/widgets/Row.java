@@ -28,8 +28,8 @@ public class Row extends Drawable {
     }
 
     @Override
-    public void init() {
-        this.children.forEach(Drawable::init);
+    public void load() {
+        this.children.forEach(Drawable::load);
     }
 
     @Override
