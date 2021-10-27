@@ -1,6 +1,7 @@
 package io.undervolt.api.ui.widgets;
 
 import io.undervolt.api.ui.Screen;
+import org.checkerframework.checker.units.qual.A;
 
 public class Absolute extends Drawable {
 
@@ -42,5 +43,21 @@ public class Absolute extends Drawable {
     @Override
     public void onDrag(int x, int y, int button, long timeSinceLastClick) {
         child.onDrag(x, y, button, timeSinceLastClick);
+    }
+
+    public Absolute setPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
+        return this;
+    }
+
+    public Absolute setX(int x) {
+        this.x = x;
+        return this;
+    }
+
+    public Absolute setY(int y) {
+        this.y = y;
+        return this;
     }
 }
