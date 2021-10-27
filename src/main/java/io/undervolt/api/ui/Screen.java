@@ -36,7 +36,7 @@ public abstract class Screen extends AnimationUI {
    public void load() {
    }
 
-   public void update(int mouseX, int mouseY, float deltaTime) {
+   public void draw(int mouseX, int mouseY, float deltaTime) {
    }
 
    protected void update() {
@@ -101,7 +101,7 @@ public abstract class Screen extends AnimationUI {
 
          super.drawScreen(this.tmpMouseX, this.tmpMouseY, partialTicks);
          this.widgets.forEach(w -> w.draw(this, 0, 0, this.tmpMouseX, this.tmpMouseY, deltaTime));
-         this.update(this.tmpMouseX, this.tmpMouseY, this.deltaTime);
+         this.draw(this.tmpMouseX, this.tmpMouseY, this.deltaTime);
          this.update();
          this.deltaTime = this.newTime - this.oldTime;
          GL11.glPopMatrix();
@@ -118,7 +118,7 @@ public abstract class Screen extends AnimationUI {
          GL11.glColor3f(1, 1, 1);
          super.drawScreen(mouseX, mouseY, partialTicks);
          this.widgets.forEach(w -> w.draw(this, 0, 0, mouseX, mouseY, deltaTime));
-         this.update(mouseX, mouseY, this.deltaTime);
+         this.draw(mouseX, mouseY, this.deltaTime);
          this.update();
          this.deltaTime = this.newTime - this.oldTime;
       }
