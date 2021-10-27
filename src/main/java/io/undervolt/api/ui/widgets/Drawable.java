@@ -4,6 +4,8 @@ import io.undervolt.api.ui.Screen;
 import net.minecraft.client.Minecraft;
 
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 public class Drawable implements Cloneable{
 
@@ -18,8 +20,13 @@ public class Drawable implements Cloneable{
             Arrays.asList(internal).forEach(Drawable::load);
     }
     public void draw(Screen ui, int x, int y, int mouseX, int mouseY, float deltaTime){
-        if(internal != null)
+        if(internal != null) {
             Arrays.asList(internal).forEach(drawable -> drawable.draw(ui, x, y, mouseX, mouseY, deltaTime));
+            this.width = (int) Arrays.stream(internal).sorted(Comparator.comparing(Drawable::getWidth))
+                 .collect(Collectors.toList()).get(0).getWidth();
+            this.height = (int) Arrays.stream(internal).sorted(Comparator.comparing(Drawable::getWidth))
+                 .collect(Collectors.toList()).get(0).getHeight();
+        }
     }
     public void onPress(int x, int y, int button){
         if(internal != null)
