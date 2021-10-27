@@ -22,7 +22,7 @@ public abstract class UIWidgetView extends Screen {
     }
 
     @Override
-    public void update(int mouseX, int mouseY, float deltaTime) {
+    public void draw(int mouseX, int mouseY, float deltaTime) {
         if(this.minecraft.theWorld == null) this.drawDefaultBackground();
         this.baseInstance.draw(this, 0, 0, mouseX, mouseY, deltaTime);
     }

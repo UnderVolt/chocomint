@@ -106,7 +106,7 @@ public class MenuOverlay extends Screen {
    }
 
    @Override
-   public void update(int mouseX, int mouseY, float deltaTime) {
+   public void draw(int mouseX, int mouseY, float deltaTime) {
       if (tw != 0) {
          tw = this.getAnimationTime(this.ftime, 3500.0D) * (height + 170);
          if (backwards) tw = this.getAnimationTime(this.ftime, 1600.0D) * height;
