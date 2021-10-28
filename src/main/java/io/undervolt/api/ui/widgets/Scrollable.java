@@ -11,6 +11,9 @@ public class Scrollable extends Drawable {
     protected ScrollDirection direction;
     protected Drawable child;
 
+    private int lastY;
+    private boolean isDragging = false;
+
     public Scrollable(ScrollDirection direction, Drawable child) {
         this.direction = direction;
         this.child = child;
@@ -55,6 +58,12 @@ public class Scrollable extends Drawable {
                 child.draw(ui, (int) (x + this.scrollModifier), y, mouseX, mouseY, deltaTime);
                 break;
         }
+
+        if(this.isDragging) {
+            this.dWheelVal += (mouseY - this.lastY);
+        }
+
+        this.lastY = mouseY;
     }
 
     @Override
@@ -65,11 +74,13 @@ public class Scrollable extends Drawable {
     @Override
     public void onPress(int x, int y, int button) {
         child.onPress(x, y, button);
+        this.isDragging = true;
     }
 
     @Override
     public void onRelease(int x, int y, int button) {
         child.onRelease(x, y, button);
+        this.isDragging = false;
     }
 
     @Override
