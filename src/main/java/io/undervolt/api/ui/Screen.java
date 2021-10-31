@@ -3,6 +3,8 @@ package io.undervolt.api.ui;
 import com.google.common.collect.Lists;
 import io.undervolt.api.ui.widgets.Box;
 import io.undervolt.api.ui.widgets.Drawable;
+import io.undervolt.api.ui.widgets.Selection;
+import io.undervolt.api.ui.widgets.SelectionHandler;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.AnimationUI;
@@ -33,6 +35,8 @@ public abstract class Screen extends AnimationUI {
    private int tmpMouseX = 0;
    private int tmpMouseY = 0;
 
+   protected SelectionHandler selectionHandler;
+
    public void load() {
    }
 
@@ -52,6 +56,7 @@ public abstract class Screen extends AnimationUI {
       this.load();
       this.add(children);
       this.deltaTime = this.newTime - this.oldTime;
+      this.selectionHandler = new SelectionHandler(this);
    }
 
    @Override
@@ -104,6 +109,12 @@ public abstract class Screen extends AnimationUI {
          this.draw(this.tmpMouseX, this.tmpMouseY, this.deltaTime);
          this.update();
          this.deltaTime = this.newTime - this.oldTime;
+
+         if(this instanceof Selection)
+         {
+            this.selectionHandler.draw(mouseX, mouseY, partialTicks);
+         }
+
          GL11.glPopMatrix();
       } else {
          if (!this.startedDrawing) {
@@ -121,6 +132,11 @@ public abstract class Screen extends AnimationUI {
          this.draw(mouseX, mouseY, this.deltaTime);
          this.update();
          this.deltaTime = this.newTime - this.oldTime;
+
+         if(this instanceof Selection)
+         {
+            this.selectionHandler.draw(mouseX, mouseY, partialTicks);
+         }
       }
    }
 
@@ -142,16 +158,25 @@ public abstract class Screen extends AnimationUI {
    }
 
    @Override
-   public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+   public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
+   {
       this.widgets.forEach(w -> w.onPress(this.tmpMouseX, this.tmpMouseY, mouseButton));
+      if(this instanceof Selection)
+      {
+         this.selectionHandler.click(mouseX, mouseY, mouseButton);
+      }
 
       super.mouseClicked(this.tmpMouseX, this.tmpMouseY, mouseButton);
    }
 
    @Override
-   protected void mouseReleased(int mouseX, int mouseY, int state) {
-
+   protected void mouseReleased(int mouseX, int mouseY, int state)
+   {
       this.widgets.forEach(w -> w.onRelease(this.tmpMouseX, this.tmpMouseY, state));
+      if(this instanceof Selection)
+      {
+         this.selectionHandler.release();
+      }
 
       super.mouseReleased(this.tmpMouseX, this.tmpMouseY, state);
    }
