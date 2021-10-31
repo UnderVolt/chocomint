@@ -1,8 +1,7 @@
-package io.undervolt.gui.clickable.dropdown;
+package io.undervolt.api.ui.widgets.prefabricated;
 
 import com.google.common.collect.Lists;
 import io.undervolt.bridge.GameBridge;
-import io.undervolt.gui.clickable.Clickable;
 import io.undervolt.instance.Chocomint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -13,42 +12,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class Option extends Gui {
+public class Option {
 
-    private final Minecraft mc;
-    private final Chocomint chocomint;
     private String optionName;
     private Consumer optionConsumer;
     private final OptionSet parentOptionSet;
-    private int x, y, width;
 
     public Option(OptionSet parentOptionSet, String optionText, Consumer optionConsumer) {
-        this.mc = GameBridge.getMinecraft();
         this.optionName = optionText;
         this.optionConsumer = optionConsumer;
         this.parentOptionSet = parentOptionSet;
-        this.chocomint = GameBridge.getChocomint();
-    }
-
-    public void draw(int x, int y, int width, int mouseX, int mouseY) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        if(mouseX > x + 3 && mouseY > y && mouseX < x + width - 3 && mouseY < y + 11) {
-            GL11.glColor3f(1, 1, 1);
-            this.chocomint.getRenderUtils().drawRoundedRect(x + 3, y, width - 6, 11, 2, new Color(47, 50, 52).getRGB());
-        }
-        GL11.glColor3f(1, 1, 1);
-        this.mc.fontRendererObj.drawString(optionName, x + 6, y + 2, Color.WHITE.getRGB());
-    }
-
-    public void click(boolean enabled, int mouseX, int mouseY, int mouseButton) {
-        if(enabled) {
-            if (mouseX > x && mouseY > y && mouseX < x + width && mouseY < y + 11) {
-                optionConsumer.accept(0);
-                this.parentOptionSet.selectOption(this.parentOptionSet.getOptions().indexOf(this));
-            }
-        }
     }
 
     public void setOptionName(String optionText) {
@@ -60,6 +33,8 @@ public class Option extends Gui {
     }
 
     public String getName() {
+        if(optionName == null)
+            return "Ninguna opción seleccionada";
         return optionName;
     }
 
