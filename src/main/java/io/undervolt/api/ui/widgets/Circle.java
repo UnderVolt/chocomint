@@ -37,6 +37,7 @@ public class Circle extends Drawable {
             ui.chocomint.getRenderUtils().drawFilledCircle(x + (int) radius, y + (int) radius, radius, color.getRGB());
 
         if(child != null) this.child.draw(ui, x, y, mouseX, mouseY, deltaTime);
+        super.draw(ui, x, y, mouseX, mouseY, deltaTime);
     }
 
     public Circle setCenteredRadius(boolean centeredRadius) {

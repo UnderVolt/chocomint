@@ -64,6 +64,7 @@ public class Scrollable extends Drawable {
         }
 
         this.lastY = mouseY;
+        super.draw(ui, x, y, mouseX, mouseY, deltaTime);
     }
 
     @Override

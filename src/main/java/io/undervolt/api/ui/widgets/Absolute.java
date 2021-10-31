@@ -28,6 +28,7 @@ public class Absolute extends Drawable {
         this.height = child.height;
 
         child.draw(ui, this.relative ? x + this.x : this.x, this.relative ? y + this.y : this.y, mouseX, mouseY, deltaTime);
+        super.draw(ui, this.relative ? x + this.x : this.x, this.relative ? y + this.y : this.y, mouseX, mouseY, deltaTime);
     }
 
     @Override
@@ -48,6 +49,8 @@ public class Absolute extends Drawable {
     public Absolute setPosition(int x, int y) {
         this.x = x;
         this.y = y;
+        this.child.x = x;
+        this.child.y = y;
         return this;
     }
 
@@ -59,5 +62,9 @@ public class Absolute extends Drawable {
     public Absolute setY(int y) {
         this.y = y;
         return this;
+    }
+
+    public Drawable getChild() {
+        return child;
     }
 }

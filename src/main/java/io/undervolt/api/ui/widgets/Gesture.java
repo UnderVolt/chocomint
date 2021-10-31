@@ -30,6 +30,7 @@ public class Gesture extends Drawable {
         if(mouseX > x && mouseY > y && mouseX < x + this.child.width && mouseY < y + this.child.height && this.onHover != null) this.onHover.onRun(child, mouseX, mouseY);
 
         this.child.draw(ui, x, y, mouseX, mouseY, deltaTime);
+        super.draw(ui, x, y, mouseX, mouseY, deltaTime);
     }
 
     public Gesture onPress(Function onPress) {
@@ -114,4 +115,7 @@ public class Gesture extends Drawable {
         void onRun(Drawable child, int mouseX, int mouseY, int button, long timeSinceLastClick);
     }
 
+    public Drawable getChild() {
+        return child;
+    }
 }

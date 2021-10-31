@@ -44,6 +44,7 @@ public class ScreenContainer extends Drawable {
         this.widgets.forEach(w -> w.draw(ui, 0, 0, mouseX - x, mouseY - y, deltaTime));
         GFXUtil.disableScissor();
         GL11.glPopMatrix();
+        super.draw(ui, x, y, mouseX, mouseY, deltaTime);
     }
 
     @Override

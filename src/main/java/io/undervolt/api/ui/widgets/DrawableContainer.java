@@ -116,6 +116,7 @@ public class DrawableContainer extends Drawable {
                 }
             }
         }
+        super.draw(ui, x, y, mouseX, mouseY, deltaTime);
     }
 
     public interface Drawable{

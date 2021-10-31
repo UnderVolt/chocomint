@@ -23,6 +23,13 @@ public class Image extends Drawable {
         this.resourceLocation = resourceLocation;
     }
 
+    public Image(int width, int height, ResourceLocation resourceLocation)
+    {
+        this.resourceLocation = resourceLocation;
+        this.width = width;
+        this.height = height;
+    }
+
     @Override
     public void draw(Screen ui, int x, int y, int mouseX, int mouseY, float deltaTime) {
         GL11.glDisable(GL11.GL_BLEND);
@@ -39,6 +46,7 @@ public class Image extends Drawable {
             this.mc.getTextureManager().bindTexture(resourceLocation);
             Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 0, (int)width, (int)height, imageWidth, imageHeight);
         }
+        super.draw(ui, x, y, mouseX, mouseY, deltaTime);
     }
 
     public Image setWidth(int width) {

@@ -185,6 +185,7 @@ public class InputColor extends Drawable implements IgnoreOverflow {
 
             this.btns.forEach(bt -> bt.drawBtn(ui, mouseX, mouseY, deltaTime));
         }
+        super.draw(ui, x, y, mouseX, mouseY, deltaTime);
     }
 
     @Override

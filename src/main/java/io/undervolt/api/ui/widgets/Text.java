@@ -105,6 +105,7 @@ public class Text extends Drawable {
             break;
       }
 
+      super.draw(ui, x, y, mouseX, mouseY, deltaTime);
    }
 
    public Text style(TextStyle style) {

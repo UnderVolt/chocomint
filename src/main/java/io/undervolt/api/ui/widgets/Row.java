@@ -57,6 +57,7 @@ public class Row extends Drawable {
                 width = (int) (width + child.width);
             }
         }
+        super.draw(ui, x, y, mouseX, mouseY, deltaTime);
     }
 
     @Override

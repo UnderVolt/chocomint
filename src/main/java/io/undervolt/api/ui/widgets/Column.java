@@ -57,6 +57,7 @@ public class Column extends Drawable {
                 height = (int) (height + child.height);
             }
         }
+        super.draw(ui, x, y, mouseX, mouseY, deltaTime);
     }
 
     @Override

@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 
 public class Drawable implements Cloneable{
 
-    protected float width;
-    protected float height;
+    protected float width, height;
+    protected int x, y;
     protected Drawable parent;
     protected final Minecraft mc = Minecraft.getMinecraft();
 
@@ -20,6 +20,8 @@ public class Drawable implements Cloneable{
             Arrays.asList(internal).forEach(Drawable::load);
     }
     public void draw(Screen ui, int x, int y, int mouseX, int mouseY, float deltaTime){
+        this.x = x;
+        this.y = y;
         if(internal != null) {
             Arrays.asList(internal).forEach(drawable -> drawable.draw(ui, x, y, mouseX, mouseY, deltaTime));
             this.width = (int) Arrays.stream(internal).sorted(Comparator.comparing(Drawable::getWidth))
@@ -51,6 +53,14 @@ public class Drawable implements Cloneable{
 
     public float getHeight() {
         return height;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
     }
 
     public Drawable copyWidget(){

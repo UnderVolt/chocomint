@@ -32,6 +32,7 @@ public class Opacity extends Drawable {
             this.child.draw(ui, x, y, mouseX, mouseY, deltaTime);
             GL11.glPopMatrix();
         }
+        super.draw(ui, x, y, mouseX, mouseY, deltaTime);
     }
 
     @Override

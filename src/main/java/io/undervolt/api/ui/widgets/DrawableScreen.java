@@ -34,6 +34,7 @@ public class DrawableScreen extends Drawable {
         GL11.glTranslatef(x, y, 0);
         screen.drawScreen(mouseX - x, mouseY - y, deltaTime);
         GL11.glPopMatrix();
+        super.draw(ui, x, y, mouseX, mouseY, deltaTime);
     }
 
     @Override

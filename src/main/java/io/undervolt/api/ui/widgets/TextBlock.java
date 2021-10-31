@@ -55,6 +55,7 @@ public class TextBlock extends Drawable {
          String line = this.lines[i];
          this.mc.fontRendererObj.drawString(line, x, y + 9 * i, style.textColor.getRGB());
       }
+      super.draw(ui, x, y, mouseX, mouseY, deltaTime);
    }
 
    public int getLineAmount() {
