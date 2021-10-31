@@ -51,5 +51,6 @@ public class Positioned extends Drawable {
                 this.child.draw(ui, (int)(this.parent.width * this.alignment.xModifier), (int)(this.parent.height * this.alignment.yModifier), mouseX, mouseY, deltaTime);
             }
         }
+        super.draw(ui, x, y, mouseX, mouseY, deltaTime);
     }
 }

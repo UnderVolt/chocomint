@@ -23,6 +23,7 @@ public class Padding extends Drawable {
         this.width = this.child.getWidth() + this.padding.right + this.padding.left;
         this.height = this.child.getHeight() + this.padding.bottom + this.padding.top;
         this.child.draw(ui, x + this.padding.left, y + this.padding.top, mouseX, mouseY, deltaTime);
+        super.draw(ui, x, y, mouseX, mouseY, deltaTime);
     }
 
     @Override

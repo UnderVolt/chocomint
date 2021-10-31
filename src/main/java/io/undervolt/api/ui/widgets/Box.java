@@ -208,5 +208,7 @@ public class Box extends Drawable {
                 }
             }
         }
+
+        super.draw(ui, x, y, mouseX, mouseY, deltaTime);
     }
 }

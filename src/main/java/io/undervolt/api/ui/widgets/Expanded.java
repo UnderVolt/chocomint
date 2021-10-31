@@ -43,6 +43,7 @@ public class Expanded extends Drawable {
         }
 
         this.child.draw(ui, x, y, mouseX, mouseY, deltaTime);
+        super.draw(ui, x, y, mouseX, mouseY, deltaTime);
     }
 
     @Override
