@@ -38,7 +38,7 @@ public class Colour extends Color {
         return getColor(a, b, t);
     }
 
-    public Colour setAlpha(int alpha){
+    public Colour alpha(int alpha){
         return new Colour(this.getRed(), this.getGreen(), this.getBlue(), alpha);
     }
 
