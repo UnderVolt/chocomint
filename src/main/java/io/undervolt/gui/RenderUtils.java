@@ -28,7 +28,7 @@ public class RenderUtils extends Gui {
         drawRect(x,y,width,height,c.getRGB());
     }
 
-    public void drawFilledCircle(int xx, int yy, float radius, int col) {
+    public void drawFilledCircle(float xx, float yy, float radius, int col) {
         float f = (col >> 24 & 0xFF) / 255.0F;
         float f2 = (col >> 16 & 0xFF) / 255.0F;
         float f3 = (col >> 8 & 0xFF) / 255.0F;
