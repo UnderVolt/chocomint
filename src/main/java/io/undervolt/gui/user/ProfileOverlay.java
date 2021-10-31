@@ -4,10 +4,12 @@ import io.undervolt.api.ui.widgets.*;
 import io.undervolt.api.ui.widgets.Drawable;
 import io.undervolt.api.ui.widgets.Box;
 import io.undervolt.api.ui.widgets.Image;
+import io.undervolt.api.ui.widgets.prefabricated.Loader;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.menu.MenuOverlay;
 import io.undervolt.gui.notifications.Notification;
 import io.undervolt.instance.Chocomint;
+import io.undervolt.utils.Colour;
 import io.undervolt.utils.Multithreading;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.texture.DynamicTexture;
@@ -181,6 +183,25 @@ public class ProfileOverlay extends MenuOverlay {
       return username;
    }
 
+   private Drawable[] LoaderOverlay()
+   {
+      return new Drawable[] {
+           new Box(
+                getContentWidth(),
+                height,
+                Colour.Black.alpha(100)
+           ),
+           new Box(
+                width,
+                height,
+                new Positioned(
+                     Alignment.CENTER,
+                     new Loader(35)
+                )
+           )
+      };
+   }
+
    private Drawable[] CreateOverlay() {
 
       return new Drawable[] {
@@ -260,14 +281,20 @@ public class ProfileOverlay extends MenuOverlay {
                      )
                 )
            ),
-           new Box(1, height)
       };
 
    }
 
-   @Override public void load() {
-
-      menuChildren = CreateOverlay();
+   @Override public void load()
+   {
+      if(user == null)
+      {
+         menuChildren = LoaderOverlay();
+      }
+      else
+      {
+         menuChildren = CreateOverlay();
+      }
 
       super.load();
 
