@@ -62,6 +62,16 @@ public class MenuOverlay extends Screen {
 
    protected Drawable[] menuChildren;
 
+   private Image MenuIcon() {
+      if(menuIcon != null)
+         return new Image(
+              new ResourceLocation("chocomint/icon/" + menuIcon + ".png")
+         ).setWidth(18).setHeight(18);
+      else return new Image(
+           new ResourceLocation("chocomint/icon/asd.png")
+      ).setWidth(0).setHeight(18);
+   }
+
    private Drawable[] CreateOverlay() {
       return new Drawable[]{
            new Padding(
@@ -75,19 +85,18 @@ public class MenuOverlay extends Screen {
                                new Box(
                                     getContentWidth(),
                                     50,
+                                    getMenuTitleColor(),
                                     new Padding(
                                          EdgeInsets.all(10),
                                          new Row(
-                                              new Image(
-                                                   new ResourceLocation("chocomint/icon/" + menuIcon + ".png")
-                                              ).setWidth(18).setHeight(18),
+                                              MenuIcon(),
                                               new Padding(
                                                    EdgeInsets.vertical(2),
                                                    new Text(menuName)
                                               )
                                          ).crossAxisAlign(AxisAlignment.END)
                                     )
-                               ).setBackgroundColor(getMenuTitleColor()),
+                               ),
                                new Column(menuChildren)
                           )
                      )
@@ -234,7 +243,7 @@ public class MenuOverlay extends Screen {
    }
 
    public enum MenuColor {
-      DEFAULT, GREEN, PURPLE, YELLOW;
+      DEFAULT, GREEN, PURPLE, YELLOW, DARK;
 
       public String getName() {
          switch (this) {
@@ -244,6 +253,8 @@ public class MenuOverlay extends Screen {
                return "yellow";
             case PURPLE:
                return "purple";
+            case DARK:
+               return "dark";
             default:
                return "default";
          }
@@ -258,6 +269,8 @@ public class MenuOverlay extends Screen {
             return new Color(42, 72, 41);
          case PURPLE:
             return new Color(61, 41, 73);
+         case DARK:
+            return new Color(47, 49, 54);
          default:
             return new Color(41, 55, 73);
       }
@@ -271,6 +284,8 @@ public class MenuOverlay extends Screen {
             return new Color(56, 105, 54);
          case PURPLE:
             return new Color(85, 54, 105);
+         case DARK:
+            return new Color(64, 68, 75);
          default:
             return new Color(54, 71, 105);
       }
