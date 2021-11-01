@@ -35,18 +35,24 @@ public class AnimatedOverlay extends Overlay {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         int hue;
+        int tilt;
 
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glColor3f(1, 1, 1);
 
         if(!backwards) {
             hue = 130 - (int)(this.getAnimationTime(this.ftime, 4000.0D) * 130);
+            tilt = 30 - (int)(this.getAnimationTime(this.ftime, 3500.0D) * 30);
         } else {
             hue = (int)(this.getAnimationTime(this.ftime, 4000.0D) * 130);
+            tilt = (int)(this.getAnimationTime(this.ftime, 3500.0D) * 30);
         }
 
+        GL11.glPushMatrix();
+        GlStateManager.translate(-tilt, 0, 0);
         if(this.mc.theWorld == null && this.mc.thePlayer == null)
-            parentScreen.drawScreen(mouseX, mouseY, partialTicks);
+            parentScreen.drawScreen(0, 0, partialTicks);
+        GL11.glPopMatrix();
 
         drawRect(0, 0, width, height, new Color(0, 0, 0, hue).getRGB());
 
