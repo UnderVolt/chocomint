@@ -113,7 +113,6 @@ public class ProfileOverlay extends MenuOverlay {
       // Create a new thread to fetch user's data asynchronously
       Multithreading.runAsync(() ->
       {
-
          user = userManager.getUser(username);
          chocomint.getUserProfilePictureManager().addImageToCache(user.getImage());
          chocomint.getCountryFlagManager().addToQueue(user.getCountryCode());
