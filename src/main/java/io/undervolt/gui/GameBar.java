@@ -20,6 +20,7 @@ import io.undervolt.gui.notifications.*;
 import io.undervolt.gui.user.UserCard;
 import io.undervolt.gui.user.UserScreen;
 import io.undervolt.instance.Chocomint;
+import io.undervolt.utils.MathUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.settings.KeyBinding;
@@ -125,6 +126,8 @@ public class GameBar extends Gui implements Listener {
     private final FloatingLabel chatContext = new FloatingLabel("Chat (Ctrl + U)");
     private final FloatingLabel configContext = new FloatingLabel("Configuración de mods (Ctrl + Y)");
 
+    private float currentAlpha = 0;
+
     public void draw(int mouseX, int mouseY, float partialTicks, int width, int height) {
 
         // Draw main rectangle (width x g20 res, #222)
@@ -155,6 +158,13 @@ public class GameBar extends Gui implements Listener {
             this.configButton.draw(mouseX, mouseY);
             this.configButton.appendLabel(configContext, mouseX, mouseY);
         }
+
+        boolean hovered = mouseY < 20;
+
+        int alpha = hovered ? 130 : 0;
+        this.currentAlpha = MathUtil.Lerp(this.currentAlpha, alpha, 0.15f);
+
+        drawGradientRect(0, 20, width, 40, new Color(0, 0, 0, (int) Math.floor(currentAlpha)).getRGB(), new Color(0, 0, 0, 0).getRGB());
 
         this.notificationsButton.appendLabel(notificationContext, mouseX, mouseY);
         this.changeMinecraftAccountButton.appendLabel(changeMinecraftAccountContext, mouseX, mouseY);
