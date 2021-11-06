@@ -147,7 +147,7 @@ public class MathUtil {
     public final float Rad2Deg = 1F / Deg2Rad;
 
     // Clamps a value between a minimum float and maximum float value.
-    public static float Clamp(float value, float min, float max)
+    public static double Clamp(double value, double min, double max)
     {
         if (value < min)
             value = min;
@@ -253,7 +253,7 @@ public class MathUtil {
 
         // Clamp maximum speed
         float maxChange = maxSpeed * smoothTime;
-        change = MathUtil.Clamp(change, -maxChange, maxChange);
+        change = (float) MathUtil.Clamp(change, -maxChange, maxChange);
         target = current - change;
 
         float temp = (currentVelocity + omega * change) * deltaTime;
@@ -293,7 +293,7 @@ public class MathUtil {
     // Loops the value t, so that it is never larger than length and never smaller than 0.
     public static float Repeat(float t, float length)
     {
-        return Clamp((float) (t - Math.floor(t / length) * length), 0.0f, length);
+        return (float) Clamp((float) (t - Math.floor(t / length) * length), 0.0f, length);
     }
 
     // PingPongs the value t, so that it is never larger than length and never smaller than 0.

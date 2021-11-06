@@ -1,5 +1,6 @@
 package io.undervolt.gui;
 
+import io.undervolt.api.animation.AnimationGuiScreen;
 import io.undervolt.api.event.events.NotificationEvent;
 import io.undervolt.api.event.events.UserConnectEvent;
 import io.undervolt.api.event.handler.EventHandler;
@@ -17,13 +18,10 @@ import io.undervolt.gui.friends.FriendsScreen;
 import io.undervolt.gui.login.LoginGUI;
 import io.undervolt.gui.login.MinecraftLoginGUI;
 import io.undervolt.gui.notifications.*;
-import io.undervolt.gui.user.UserCard;
-import io.undervolt.gui.user.UserScreen;
 import io.undervolt.instance.Chocomint;
 import io.undervolt.utils.MathUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -198,6 +196,9 @@ public class GameBar extends Gui implements Listener {
                 case Keyboard.KEY_Y:
                     if(this.mc.theWorld != null && this.mc.thePlayer != null)
                         this.mc.displayGuiScreen(new GuiMods(this.parentScreen, this.chocomint));
+                    break;
+                case Keyboard.KEY_T:
+                    this.mc.displayGuiScreen(new AnimationGuiScreen());
                     break;
             }
     }

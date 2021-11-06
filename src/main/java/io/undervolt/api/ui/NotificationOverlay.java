@@ -1,8 +1,10 @@
 package io.undervolt.api.ui;
 
+import io.undervolt.api.animation.Animations;
 import io.undervolt.api.ui.widgets.*;
 import io.undervolt.api.ui.widgets.Box;
 import io.undervolt.api.ui.widgets.Drawable;
+import io.undervolt.api.ui.widgets.controllers.AnimationController;
 import io.undervolt.api.ui.widgets.prefabricated.NotificationCard;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.PanelOverlay;
@@ -57,7 +59,7 @@ public class NotificationOverlay extends PanelOverlay {
                           drawableNotifications
                      )
                 )
-           ).setOverflowHidden(true)
+           ).setOverflowHidden(true),
       };
    }
 
