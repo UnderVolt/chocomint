@@ -17,7 +17,7 @@ import java.io.IOException;
 
 public class MenuOverlay extends Screen {
 
-   private final GuiScreen previousScreen;
+   protected final GuiScreen previousScreen;
 
    private double tw = Integer.MAX_VALUE;
    private double layer1Y = Integer.MAX_VALUE;

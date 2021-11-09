@@ -57,6 +57,8 @@ public abstract class Screen extends AnimationUI {
       this.add(children);
       this.deltaTime = this.newTime - this.oldTime;
       this.selectionHandler = new SelectionHandler(this);
+      if(this instanceof Selection && DebugOptions.verbose)
+         System.out.println("La pantalla está usando selección.");
    }
 
    @Override
@@ -143,8 +145,12 @@ public abstract class Screen extends AnimationUI {
    public void add(Drawable... widgets) {
       if (widgets != null)
          for (Drawable w : widgets) {
+            if(DebugOptions.verbose)
+               System.out.println("Se agregó un widget a la interface (" + w.getWidth() + "x" + w.getHeight() + ")");
             this.widgets.add(new Box(this.getWidth(), this.getHeight()).setChild(w));
             w.load();
+            if(DebugOptions.verbose)
+               System.out.println("Se cargó el widget con éxito.");
          }
    }
 

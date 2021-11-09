@@ -1,7 +1,11 @@
 package io.undervolt.api.ui.widgets;
 
+import io.undervolt.api.ui.DebugOptions;
 import io.undervolt.api.ui.Screen;
+import io.undervolt.bridge.GameBridge;
+import io.undervolt.utils.Colour;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -28,6 +32,13 @@ public class Drawable implements Cloneable{
                  .collect(Collectors.toList()).get(0).getWidth();
             this.height = (int) Arrays.stream(internal).sorted(Comparator.comparing(Drawable::getWidth))
                  .collect(Collectors.toList()).get(0).getHeight();
+        }
+        if(DebugOptions.showBounds)
+        {
+            GameBridge.getChocomint().getRenderUtils().drawLine(x, y, x + width, y, 1, Colour.Magenta.getRGB());
+            GameBridge.getChocomint().getRenderUtils().drawLine(x, y, x, y + height, 1, Colour.Magenta.getRGB());
+            GameBridge.getChocomint().getRenderUtils().drawLine(x + width, y, x + width, y + height, 1, Colour.Magenta.getRGB());
+            GameBridge.getChocomint().getRenderUtils().drawLine(x, y + height, x + width, y + height, 1, Colour.Magenta.getRGB());
         }
     }
     public void onPress(int x, int y, int button){

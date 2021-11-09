@@ -10,6 +10,7 @@ import io.undervolt.api.event.handler.EventHandler;
 import io.undervolt.api.event.handler.Listener;
 import io.undervolt.api.sambayon.Sambayon;
 import io.undervolt.api.screenshot.ScreenshotUploader;
+import io.undervolt.api.ui.DebugOptions;
 import io.undervolt.api.ui.font.FontBridge;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.console.Console;
@@ -186,6 +187,8 @@ public class Chocomint implements Listener {
     }
 
     public void displayMenuOrPanel(AnimationUI ui) {
+        if(DebugOptions.verbose)
+            System.out.println("Abriendo una pantalla (" + ui.width + "x" + ui.height + ")");
         if(this.mc.currentScreen instanceof Menu) {
             Menu menu = ((Menu) this.mc.currentScreen);
             if(ui instanceof Menu)
@@ -194,6 +197,7 @@ public class Chocomint implements Listener {
                 ((Panel) ui).previousScreen = menu.previous;
             else if (ui instanceof Chat)
                 ((Chat) ui).prev = menu.previous;
+            System.out.println("La pantalla era un Menu (legacy)");
             menu.displayNewUI(ui);
         } else if (this.mc.currentScreen instanceof Panel) {
             Panel panel = ((Panel) this.mc.currentScreen);
@@ -203,6 +207,7 @@ public class Chocomint implements Listener {
                 ((Panel) ui).previousScreen = panel.previousScreen;
             else if (ui instanceof Chat)
                 ((Chat) ui).prev = panel.previousScreen;
+            System.out.println("La pantalla era un Panel (legacy)");
             panel.displayNewUI(ui);
         } else if (this.mc.currentScreen instanceof Chat) {
             Chat chat = ((Chat) this.mc.currentScreen);
@@ -212,6 +217,7 @@ public class Chocomint implements Listener {
                 ((Panel) ui).previousScreen = chat.prev;
             else if (ui instanceof Chat)
                 ((Chat) ui).prev = chat.prev;
+            System.out.println("La pantalla era un chat");
             chat.displayNewUI(ui);
         } else this.mc.displayGuiScreen(ui);
     }
