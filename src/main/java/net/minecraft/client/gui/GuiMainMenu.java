@@ -12,11 +12,13 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import io.undervolt.api.ui.TestOverlay;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
 import io.undervolt.gui.SampleScreen;
 import io.undervolt.gui.chat.Chat;
+import io.undervolt.gui.friends.SocialOverlay;
 import io.undervolt.gui.user.ProfileOverlay;
 import io.undervolt.gui.user.UserSearch;
 import io.undervolt.instance.Chocomint;
@@ -348,7 +350,7 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
 
         if (button.id == 1)
         {
-            this.chocomint.displayMenuOrPanel(new SampleScreen());
+            this.chocomint.displayMenuOrPanel(new TestOverlay(this));
             //this.mc.displayGuiScreen(new GuiSelectWorld(this));
         }
 
