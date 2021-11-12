@@ -9,11 +9,14 @@ import net.minecraft.client.renderer.GlStateManager;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class AnimationGuiScreen extends GuiScreen {
 
     public ArrayList<AnimationVector> points = new ArrayList<AnimationVector>();
     public ArrayList<AnimationVector> renderPoints = new ArrayList<AnimationVector>();
+    Executor runner = Executors.newSingleThreadExecutor();
 
     private static double t = 0.01;
 
@@ -21,10 +24,21 @@ public class AnimationGuiScreen extends GuiScreen {
     @Override
     public void initGui() {
         super.initGui();
+
+        synchronized (runner){
+            runner.execute(() -> System.out.println("XD"));
+        }
     }
 
+    @Override
+    public void updateScreen() {
+        super.updateScreen();
+        controller.setFrame(frame -> {
+            System.out.println(frame);
+        });
+    }
 
-    AnimationController controller = new AnimationController(Animations.easeInOut());
+    AnimationController controller = new AnimationController(0.4, 0.0, 0.2, 1.0);
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
@@ -43,12 +57,8 @@ public class AnimationGuiScreen extends GuiScreen {
             drawRect(vector.getX(), vector.getY());
         }
 
-        if(points.size() == 4){
-            double s1 = controller.forward();
-            AnimationVector solution = new AnimationVector(MathUtil.Lerp(0, width, (float) s1), 50);
-            drawMainPoints(solution.getX(), solution.getY(), true);
-        }
-
+        AnimationVector solution = new AnimationVector(MathUtil.Lerp(0, width, (float) controller.value), 50);
+        drawMainPoints(solution.getX(), solution.getY(), true);
 
 
 
@@ -95,7 +105,7 @@ public class AnimationGuiScreen extends GuiScreen {
                 this.points.add(new AnimationVector(mouseX, mouseY));
             }
             if(points.size() == 4){
-                this.controller.setAnimations(this.points.get(1), this.points.get(2));
+                this.controller.setAnimations(this.points.get(1), this.points.get(2)).forward();
                 math();
             }
         }

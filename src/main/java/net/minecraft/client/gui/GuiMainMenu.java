@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import io.undervolt.bridge.GameBridge;
 import io.undervolt.gui.GameBar;
 import io.undervolt.gui.GameBarButton;
+import io.undervolt.gui.SampleMenu;
 import io.undervolt.gui.SampleScreen;
 import io.undervolt.gui.chat.Chat;
 import io.undervolt.gui.user.ProfileOverlay;
@@ -348,7 +349,7 @@ public class GuiMainMenu extends AnimationUI implements GuiYesNoCallback
 
         if (button.id == 1)
         {
-            this.chocomint.displayMenuOrPanel(new SampleScreen());
+            this.chocomint.displayMenuOrPanel(new SampleMenu(this));
             //this.mc.displayGuiScreen(new GuiSelectWorld(this));
         }
 

@@ -3,17 +3,19 @@ package io.undervolt.api.ui.widgets.controllers;
 import io.undervolt.api.animation.*;
 import io.undervolt.api.animation.curves.ICurve;
 import io.undervolt.utils.MathUtil;
+import io.undervolt.utils.Multithreading;
 import net.minecraft.client.Minecraft;
 
 import java.util.function.Function;
 
-public class AnimationController {
+public class AnimationController implements Runnable {
 
     private Double duration;
     private Long start;
-    private double value = 0;
+    public double value;
     private TransformFunction reverse;
     private ICurve animationTransform;
+    private PostFrame frame;
     private AnimationVector from, to;
     private AnimationStatus status = AnimationStatus.WAITING;
     private double lowerBound = 0, upperBound = 1;
@@ -25,7 +27,7 @@ public class AnimationController {
     }
 
     public AnimationController() {
-        this(10000.0, Animations.easeInOut()[0], Animations.easeInOut()[1]);
+        this(14.5, Animations.easeInOut()[0], Animations.easeInOut()[1]);
     }
 
     public AnimationController(Double duration) {
@@ -33,62 +35,46 @@ public class AnimationController {
     }
 
     public AnimationController(AnimationVector from, AnimationVector to) {
-       this(10000.0, from, to);
+        this(14.5, from, to);
     }
 
     public AnimationController(Double... points) {
-        this(10000.0, new AnimationVector(points[0], points[1]), new AnimationVector(points[2], points[3]));
+        this(14.5, new AnimationVector(points[0], points[1]), new AnimationVector(points[2], points[3]));
     }
 
     public AnimationController(AnimationVector... vectors) {
-        this(10000.0, vectors[0], vectors[1]);
+        this(14.5, vectors[0], vectors[1]);
 
     }
 
-    public double forward(){
-        switch (status){
-            case COMPLETED:
-                return value;
-            case ERROR:
-                status = AnimationStatus.WAITING;
-                throw new IllegalStateException();
-            case WAITING:
-                status = AnimationStatus.STARTED;
-                return value;
-            case STARTED:
-            default:
-                return animate();
-
-        }
+    public double forward() {
+        return this.animate();
     }
 
-    protected double create(Function<UnitBezier, Double> create){
+    protected double create(Function<UnitBezier, Double> create) {
         UnitBezier bezier = new UnitBezier(from, to);
         return create.apply(bezier);
     }
 
-    protected double animate(){
-        if(start == null) start = Minecraft.getSystemTime();
+    protected double animate() {
+        if (start == null) start = Minecraft.getSystemTime();
 
-        double timeFraction = MathUtil.Clamp(((Minecraft.getSystemTime() - start) / duration), 0.0, 1.0);
-
+        double timeFraction = ((Minecraft.getSystemTime() - start) / (duration * 1000.0));
         double value = this.create(unitBezier -> unitBezier.solve(timeFraction));
 
         this.value = this.animationTransform != null ? this.animationTransform.transform(value) : value;
 
-        if(status == AnimationStatus.REVERSE){
+        if (status == AnimationStatus.REVERSE) {
             System.out.println(value == lowerBound);
-            if(value >= upperBound){
-               this.value = this.reverse.onRun(value);
-               return this.value;
-            }else if(value == lowerBound){
+            if (value >= upperBound) {
+                this.value = this.reverse.onRun(value);
+                return this.value;
+            } else if (value == lowerBound) {
                 return this.value;
             }
         }
 
-        if(value == upperBound && this.reverse == null){
-            status = AnimationStatus.COMPLETED;
-        }
+        this.frame.onRun(value);
 
         return this.value;
     }
@@ -112,7 +98,7 @@ public class AnimationController {
     }
 
     public AnimationController setAnimations(Double... points) {
-        if(points.length != 4){
+        if (points.length != 4) {
             throw new IllegalArgumentException("Points length needs to be 4");
         }
 
@@ -123,7 +109,7 @@ public class AnimationController {
     }
 
     public AnimationController setAnimations(AnimationVector... vectors) {
-        if(vectors.length != 2){
+        if (vectors.length != 2) {
             throw new IllegalArgumentException("Vectors length needs to be 4");
         }
 
@@ -139,7 +125,7 @@ public class AnimationController {
     }
 
     public AnimationController setFrom(Double... points) {
-        if(points.length != 2){
+        if (points.length != 2) {
             throw new IllegalArgumentException("Points length needs to be 2");
         }
 
@@ -153,7 +139,7 @@ public class AnimationController {
     }
 
     public AnimationController setTo(Double... points) {
-        if(points.length != 2){
+        if (points.length != 2) {
             throw new IllegalArgumentException("Points length needs to be 2");
         }
 
@@ -161,7 +147,7 @@ public class AnimationController {
         return this;
     }
 
-    public AnimationController Reverse(double from){
+    public AnimationController Reverse(double from) {
         status = AnimationStatus.REVERSE;
         this.upperBound = from;
         this.reverse = new TransformFunction() {
@@ -174,12 +160,25 @@ public class AnimationController {
         return this;
     }
 
+    public void setFrame(PostFrame frame) {
+        this.frame = frame;
+    }
+
     public AnimationController setCurve(ICurve animationTransform) {
         this.animationTransform = animationTransform;
         return this;
     }
 
+    @Override
+    public void run() {
+        this.animate();
+    }
+
     public interface TransformFunction {
         double onRun(double fraction);
+    }
+
+    public interface PostFrame {
+        void onRun(double frame);
     }
 }
